@@ -8,6 +8,7 @@ from typing import Protocol
 
 import httpx
 
+from ai_engineering_showcase.citations import build_citations, citation_marker
 from ai_engineering_showcase.schemas import SearchResult
 
 
@@ -61,17 +62,23 @@ class DeterministicLLM:
             )
 
         keywords = self._top_keywords([result.chunk.text for result in results])
-        sources = ", ".join(result.chunk.source_id for result in results[:3])
+        cited = build_citations(results)
+        sources = ", ".join(
+            f"{citation.document_id} {citation_marker(citation.citation_id)}"
+            for citation in cited[:3]
+        )
         issue_phrase = self._issue_phrase(question, keywords)
+        lead_marker = citation_marker(cited[0].citation_id)
         answer = (
-            f"The strongest signal is around {issue_phrase}. "
+            f"The strongest signal is around {issue_phrase} {lead_marker}. "
             f"The retrieved feedback points to repeated friction in {', '.join(keywords[:4])}. "
             f"The answer is grounded in feedback sources {sources}."
         )
         actions = self._actions(keywords)
         citations = [
-            f"- {result.chunk.source_id}: {self._quote(result.chunk.text)}"
-            for result in results[:4]
+            f"- {citation_marker(citation.citation_id)} "
+            f"{citation.document_id}: {self._quote(citation.quote)}"
+            for citation in cited[:4]
         ]
         return "\n".join(
             [

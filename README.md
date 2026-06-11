@@ -211,24 +211,55 @@ This repository lets you discuss AI engineering from multiple angles:
 4. **Responsible AI**: generated answers include citations and simple grounding checks.
 5. **Extensibility**: each layer can be swapped without rewriting the whole system.
 
+## Citation-aware answers
+
+Every generated answer embeds bracketed citation markers (`[1]`, `[2]`) that refer to a
+machine-readable citation list built from the actually retrieved chunks. Each citation
+carries a stable `citation_id`, the `document_id` and `chunk_id` of the evidence, the
+`source` channel, a compact quoted evidence span, and the retrieval score. The agent never
+cites a document that was not retrieved, and the local deterministic provider emits the
+markers deterministically, so citation output is reproducible in tests and CI.
+
+The same metadata is returned by the API (`result.citations` in the `/query` response) and
+rendered as a readable block by the CLI `query` command.
+
 ## Example output
 
 ```text
-Question: Why are enterprise customers unhappy with onboarding?
+$ poetry run ai-showcase query "Why are enterprise customers unhappy with onboarding?"
 
-Answer:
-Enterprise customers are mainly unhappy because onboarding feels slow, handoffs are unclear,
-and success criteria are not visible inside the product. The strongest evidence comes from
-feedback mentioning setup delays, unclear ownership, and missing progress tracking.
-
-Recommended actions:
-- Add an onboarding progress dashboard.
-- Create clearer ownership between sales, support, and customer success.
-- Trigger proactive follow-ups when setup exceeds the expected timeline.
+{
+  "question": "Why are enterprise customers unhappy with onboarding?",
+  "answer": "The strongest signal is around onboarding [1]. The retrieved feedback points
+             to repeated friction in onboarding, checklist, did, know. The answer is
+             grounded in feedback sources fb-001 [1], fb-007 [2], fb-009 [3].",
+  "recommended_actions": [
+    "Create a clearer onboarding checklist with owners, milestones, and escalation rules.",
+    "Add proactive support when implementation or setup exceeds the expected timeline.",
+    "Group feedback by segment and quantify how often this issue appears."
+  ],
+  "citations": [
+    {
+      "citation_id": 1,
+      "document_id": "fb-001",
+      "chunk_id": "fb-001::chunk-0",
+      "source": "support_ticket",
+      "quote": "Implementation took three weeks longer than expected. We also had no clear
+                onboarding checklist and did not know who owned each setup step.",
+      "score": 0.532497
+    },
+    ...
+  ],
+  "route": "onboarding",
+  "confidence": 0.649
+}
 
 Citations:
-- fb-001: "Implementation took three weeks longer than expected..."
-- fb-009: "We did not know who owned the onboarding checklist..."
+  [1] fb-001 (support_ticket, chunk fb-001::chunk-0, score 0.532): "Implementation took
+      three weeks longer than expected. We also had no clear onboarding checklist..."
+  [2] fb-007 (nps_survey, chunk fb-007::chunk-0, score 0.502): "Onboarding felt fragmented..."
+  [3] fb-009 (support_ticket, chunk fb-009::chunk-0, score 0.435): "We did not know who
+      owned the onboarding checklist..."
 ```
 
 ## License

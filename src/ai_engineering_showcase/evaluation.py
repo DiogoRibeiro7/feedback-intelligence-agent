@@ -262,7 +262,7 @@ def evaluate_case_detailed(
     context_texts = [result.chunk.text for result in results]
     answer = agent.answer(case.question, top_k=top_k)
     refused = is_refusal(answer.answer)
-    cited_ids = {citation.source_id for citation in answer.citations}
+    cited_ids = {citation.document_id for citation in answer.citations}
     case_result = CaseResult(
         question=case.question,
         is_answerable=case.is_answerable,

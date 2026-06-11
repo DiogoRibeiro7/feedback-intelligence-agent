@@ -149,7 +149,7 @@ def run_experiment(config: ExperimentConfig) -> ExperimentResult:
             QueryResult(
                 question=case.question,
                 answer=answer.answer,
-                cited_source_ids=[citation.source_id for citation in answer.citations],
+                cited_source_ids=[citation.document_id for citation in answer.citations],
                 metrics=case_result,
             )
         )

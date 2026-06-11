@@ -55,9 +55,17 @@ class SearchResult(BaseModel):
 
 
 class Citation(BaseModel):
-    """Evidence citation exposed to API consumers."""
+    """Evidence citation exposed to agent and API consumers.
 
-    source_id: str
+    ``citation_id`` matches the bracketed markers (``[1]``, ``[2]``) embedded in
+    the generated answer text, so every claim can be traced back to the exact
+    retrieved document and chunk that supports it.
+    """
+
+    citation_id: int = Field(ge=1)
+    document_id: str
+    chunk_id: str
+    source: str
     quote: str
     score: float
 

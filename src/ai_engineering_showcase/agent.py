@@ -5,6 +5,7 @@ from __future__ import annotations
 import re
 from dataclasses import dataclass
 
+from ai_engineering_showcase.citations import build_citations
 from ai_engineering_showcase.llm import LLMProvider
 from ai_engineering_showcase.prompts import build_grounded_prompt
 from ai_engineering_showcase.retrieval import Retriever
@@ -45,7 +46,7 @@ class FeedbackInsightAgent:
         prompt = build_grounded_prompt(question, results, route=route)
         raw_response = self.llm.generate(prompt, question=question, results=results)
         parsed = self._parse_response(raw_response)
-        citations = self._citations(results)
+        citations = build_citations(results)
         confidence = self._confidence(results, citations)
 
         answer = AgentAnswer(
@@ -191,30 +192,6 @@ class FeedbackInsightAgent:
             if next_match:
                 end = min(end, next_match.start())
         return text[start:end].strip()
-
-    def _citations(self, results: list[SearchResult]) -> list[Citation]:
-        """Build citations from retrieved chunks."""
-        citations: list[Citation] = []
-        seen: set[str] = set()
-        for result in results:
-            if result.chunk.source_id in seen:
-                continue
-            seen.add(result.chunk.source_id)
-            citations.append(
-                Citation(
-                    source_id=result.chunk.source_id,
-                    quote=self._quote(result.chunk.text),
-                    score=result.score,
-                )
-            )
-        return citations
-
-    def _quote(self, text: str, *, max_chars: int = 180) -> str:
-        """Compact evidence text for API output."""
-        normalised = " ".join(text.split())
-        if len(normalised) <= max_chars:
-            return normalised
-        return f"{normalised[: max_chars - 1]}…"
 
     def _confidence(self, results: list[SearchResult], citations: list[Citation]) -> float:
         """Compute a simple confidence score from retrieval quality and citations."""

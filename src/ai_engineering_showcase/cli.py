@@ -8,6 +8,7 @@ from typing import Annotated
 
 import typer
 
+from ai_engineering_showcase.citations import render_citations
 from ai_engineering_showcase.config import Settings
 from ai_engineering_showcase.data_contracts import DataContractError, validate_feedback_csv
 from ai_engineering_showcase.evaluation import evaluate_system, load_evaluation_cases
@@ -101,6 +102,7 @@ def query(
     agent = build_agent(settings)
     answer = agent.answer(question, top_k=top_k)
     typer.echo(answer.model_dump_json(indent=2))
+    typer.echo(render_citations(answer.citations), err=True)
 
 
 @app.command()
