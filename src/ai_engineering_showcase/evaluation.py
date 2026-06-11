@@ -39,7 +39,9 @@ def load_evaluation_cases(path: str | Path) -> list[EvaluationCase]:
     """Load JSONL evaluation cases."""
     input_path = Path(path)
     cases: list[EvaluationCase] = []
-    for line_number, line in enumerate(input_path.read_text(encoding="utf-8").splitlines(), start=1):
+    for line_number, line in enumerate(
+        input_path.read_text(encoding="utf-8").splitlines(), start=1
+    ):
         if not line.strip():
             continue
         try:
@@ -92,7 +94,9 @@ def evaluate_answer_quality(
 ) -> AnswerQualityMetrics:
     """Evaluate citations and simple grounding for generated answers."""
     if not cases:
-        return AnswerQualityMetrics(citation_coverage=0.0, grounded_answer_rate=0.0, evaluated_cases=0)
+        return AnswerQualityMetrics(
+            citation_coverage=0.0, grounded_answer_rate=0.0, evaluated_cases=0
+        )
 
     citation_hits = 0
     grounded_hits = 0

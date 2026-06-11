@@ -12,8 +12,12 @@ from ai_engineering_showcase.vector_store import InMemoryVectorStore
 def build_query_engine_and_agent() -> tuple[QueryEngine, FeedbackInsightAgent]:
     model = HashingEmbeddingModel(dim=128)
     chunks = [
-        DocumentChunk(chunk_id="1", source_id="fb-a", text="export failed during reporting", metadata={}),
-        DocumentChunk(chunk_id="2", source_id="fb-b", text="onboarding setup checklist", metadata={}),
+        DocumentChunk(
+            chunk_id="1", source_id="fb-a", text="export failed during reporting", metadata={}
+        ),
+        DocumentChunk(
+            chunk_id="2", source_id="fb-b", text="onboarding setup checklist", metadata={}
+        ),
     ]
     store = InMemoryVectorStore(dim=128)
     store.add(chunks, model.embed([chunk.text for chunk in chunks]))

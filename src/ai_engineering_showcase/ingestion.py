@@ -48,12 +48,12 @@ def load_feedback_csv(path: str | Path) -> list[FeedbackRecord]:
     records: list[FeedbackRecord] = []
     errors: list[str] = []
 
-    for row_number, row in frame.iterrows():
+    for position, (_, row) in enumerate(frame.iterrows()):
         payload = row.to_dict()
         try:
             records.append(FeedbackRecord.model_validate(payload))
         except Exception as exc:  # noqa: BLE001 - aggregate validation details for the caller.
-            errors.append(f"row={row_number + 2}: {exc}")
+            errors.append(f"row={position + 2}: {exc}")
 
     if errors:
         joined_errors = "\n".join(errors[:10])

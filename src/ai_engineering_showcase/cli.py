@@ -8,10 +8,10 @@ from typing import Annotated
 import typer
 
 from ai_engineering_showcase.config import Settings
+from ai_engineering_showcase.embeddings import HashingEmbeddingModel
 from ai_engineering_showcase.evaluation import evaluate_system, load_evaluation_cases
 from ai_engineering_showcase.factory import build_agent, build_index, load_or_build_index
 from ai_engineering_showcase.retrieval import QueryEngine
-from ai_engineering_showcase.embeddings import HashingEmbeddingModel
 from ai_engineering_showcase.telemetry import configure_logging
 
 app = typer.Typer(help="AI Engineering Showcase CLI")
@@ -19,7 +19,9 @@ app = typer.Typer(help="AI Engineering Showcase CLI")
 
 @app.command()
 def index(
-    input: Annotated[Path, typer.Option(help="Path to feedback CSV.")] = Path("data/sample_feedback.csv"),
+    input: Annotated[Path, typer.Option(help="Path to feedback CSV.")] = Path(
+        "data/sample_feedback.csv"
+    ),
     index_path: Annotated[Path, typer.Option(help="Output path for vector index.")] = Path(
         ".artifacts/vector_store.json"
     ),

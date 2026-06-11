@@ -1,4 +1,6 @@
-.PHONY: install test lint typecheck quality demo api docker-build docker-run clean
+.PHONY: install test lint format-check typecheck coverage build quality ci demo api docker-build docker-run clean
+
+COVERAGE_THRESHOLD := 63
 
 install:
 	poetry install
@@ -7,12 +9,23 @@ test:
 	poetry run pytest
 
 lint:
-	poetry run ruff check src tests
+	poetry run ruff check .
+
+format-check:
+	poetry run ruff format --check .
 
 typecheck:
 	poetry run mypy src
 
+coverage:
+	poetry run pytest --cov=ai_engineering_showcase --cov-report=term-missing --cov-fail-under=$(COVERAGE_THRESHOLD)
+
+build:
+	poetry build
+
 quality: lint typecheck test
+
+ci: lint format-check typecheck coverage build
 
 demo:
 	poetry run python scripts/run_demo.py

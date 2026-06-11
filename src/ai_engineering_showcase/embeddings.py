@@ -58,7 +58,8 @@ class HashingEmbeddingModel:
 
         norms = np.linalg.norm(matrix, axis=1, keepdims=True)
         norms[norms == 0.0] = 1.0
-        return matrix / norms
+        matrix /= norms
+        return matrix
 
     def _features(self, text: str) -> Iterable[str]:
         """Yield unigram and bigram features from text."""

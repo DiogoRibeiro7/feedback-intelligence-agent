@@ -1,5 +1,9 @@
 # AI Engineering Showcase
 
+[![CI](https://github.com/DiogoRibeiro7/ai-engineering-showcase/actions/workflows/ci.yml/badge.svg)](https://github.com/DiogoRibeiro7/ai-engineering-showcase/actions/workflows/ci.yml)
+[![Python](https://img.shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.12-blue.svg)](pyproject.toml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+
 A production-style AI engineering repository that demonstrates how to build, evaluate, and serve an LLM-powered insight system.
 
 The project implements a **customer feedback intelligence agent**. It ingests raw feedback, builds a lightweight vector index, retrieves relevant evidence, generates grounded answers, exposes a FastAPI service, and includes evaluation tests for retrieval and answer quality.
@@ -82,11 +86,20 @@ Run tests:
 poetry run pytest
 ```
 
-Run quality checks:
+Run quality checks (the same gates as CI):
 
 ```bash
-poetry run ruff check src tests
+poetry run ruff check .
+poetry run ruff format --check .
 poetry run mypy src
+poetry run pytest --cov=ai_engineering_showcase --cov-fail-under=63
+poetry build
+```
+
+Or, with `make`:
+
+```bash
+make ci
 ```
 
 ## Docker

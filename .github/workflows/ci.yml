@@ -16,22 +16,33 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Install Poetry
+        run: pipx install poetry==1.8.3
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
-
-      - name: Install Poetry
-        run: pipx install poetry==1.8.3
+          cache: poetry
 
       - name: Install dependencies
-        run: poetry install
+        run: poetry install --with dev
 
       - name: Lint
-        run: poetry run ruff check src tests
+        run: poetry run ruff check .
+
+      - name: Format check
+        run: poetry run ruff format --check .
 
       - name: Type check
         run: poetry run mypy src
 
-      - name: Test
-        run: poetry run pytest --cov=ai_engineering_showcase --cov-report=term-missing
+      - name: Test with coverage
+        run: >-
+          poetry run pytest
+          --cov=ai_engineering_showcase
+          --cov-report=term-missing
+          --cov-fail-under=63
+
+      - name: Build package
+        run: poetry build

@@ -79,7 +79,6 @@ class FeedbackInsightAgent:
                 return rule.name
         return "general_insight"
 
-
     def _retrieve(self, question: str, *, route: str, top_k: int) -> list[SearchResult]:
         """Retrieve and rerank candidates with lightweight domain-aware signals.
 
@@ -184,7 +183,9 @@ class FeedbackInsightAgent:
         start = start_match.end()
         end = len(text)
         for next_heading in next_headings:
-            next_pattern = re.compile(rf"\n\s*{re.escape(next_heading)}\s*:\s*", flags=re.IGNORECASE)
+            next_pattern = re.compile(
+                rf"\n\s*{re.escape(next_heading)}\s*:\s*", flags=re.IGNORECASE
+            )
             next_match = next_pattern.search(text, pos=start)
             if next_match:
                 end = min(end, next_match.start())

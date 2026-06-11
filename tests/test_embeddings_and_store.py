@@ -16,7 +16,9 @@ def test_hashing_embeddings_are_deterministic() -> None:
 def test_vector_store_returns_most_similar_chunk() -> None:
     model = HashingEmbeddingModel(dim=128)
     chunks = [
-        DocumentChunk(chunk_id="1", source_id="fb-1", text="onboarding checklist setup", metadata={}),
+        DocumentChunk(
+            chunk_id="1", source_id="fb-1", text="onboarding checklist setup", metadata={}
+        ),
         DocumentChunk(chunk_id="2", source_id="fb-2", text="pricing renewal finance", metadata={}),
     ]
     vectors = model.embed([chunk.text for chunk in chunks])

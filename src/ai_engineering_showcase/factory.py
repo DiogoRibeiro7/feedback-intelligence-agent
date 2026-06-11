@@ -33,7 +33,9 @@ def chunk_to_embedding_text(chunk: DocumentChunk) -> str:
     return f"{metadata_text} {chunk.text}"
 
 
-def build_index(input_path: str | Path, index_path: str | Path, *, embedding_dim: int) -> InMemoryVectorStore:
+def build_index(
+    input_path: str | Path, index_path: str | Path, *, embedding_dim: int
+) -> InMemoryVectorStore:
     """Build and persist a vector index from feedback CSV data."""
     records = load_feedback_csv(input_path)
     chunks = feedback_to_chunks(records)

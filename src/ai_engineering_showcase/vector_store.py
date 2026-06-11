@@ -58,7 +58,9 @@ class InMemoryVectorStore:
         self._chunks.extend(chunks)
         self._vectors = np.vstack([self._vectors, vectors.astype(np.float64, copy=False)])
 
-    def search(self, query_vector: npt.NDArray[np.float64], *, top_k: int = 4) -> list[SearchResult]:
+    def search(
+        self, query_vector: npt.NDArray[np.float64], *, top_k: int = 4
+    ) -> list[SearchResult]:
         """Return the most similar chunks for a query vector."""
         if top_k <= 0:
             raise ValueError("top_k must be positive")
@@ -93,7 +95,7 @@ class InMemoryVectorStore:
         output_path.write_text(payload.model_dump_json(indent=2), encoding="utf-8")
 
     @classmethod
-    def load(cls, path: str | Path) -> "InMemoryVectorStore":
+    def load(cls, path: str | Path) -> InMemoryVectorStore:
         """Load a vector store from JSON."""
         input_path = Path(path)
         payload = PersistedVectorStore.model_validate_json(input_path.read_text(encoding="utf-8"))

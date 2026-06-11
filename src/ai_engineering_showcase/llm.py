@@ -27,13 +27,26 @@ class DeterministicLLM:
     """
 
     ACTION_LIBRARY = {
-        "onboarding": "Create a clearer onboarding checklist with owners, milestones, and escalation rules.",
-        "setup": "Add proactive support when implementation or setup exceeds the expected timeline.",
+        "onboarding": (
+            "Create a clearer onboarding checklist with owners, milestones, and escalation rules."
+        ),
+        "setup": (
+            "Add proactive support when implementation or setup exceeds the expected timeline."
+        ),
         "dashboard": "Expose a dashboard that shows progress, blockers, and next best actions.",
-        "pricing": "Review pricing communication and explain value by segment before renewal conversations.",
-        "integration": "Prioritise the most requested integrations and publish expected delivery timelines.",
-        "latency": "Add performance monitoring and investigate slow paths affecting high-value workflows.",
-        "support": "Improve support triage with severity labels and clearer response-time expectations.",
+        "pricing": (
+            "Review pricing communication and explain value by segment "
+            "before renewal conversations."
+        ),
+        "integration": (
+            "Prioritise the most requested integrations and publish expected delivery timelines."
+        ),
+        "latency": (
+            "Add performance monitoring and investigate slow paths affecting high-value workflows."
+        ),
+        "support": (
+            "Improve support triage with severity labels and clearer response-time expectations."
+        ),
         "export": "Improve export reliability and add clearer error messages for failed exports.",
     }
 
@@ -41,7 +54,11 @@ class DeterministicLLM:
         """Generate a deterministic answer based on retrieved evidence."""
         del prompt  # The deterministic implementation uses structured inputs directly.
         if not results:
-            return "Answer:\nI could not find enough evidence to answer this question.\n\nRecommended actions:\n- Collect more feedback related to this topic.\n\nCitations:\n"
+            return (
+                "Answer:\nI could not find enough evidence to answer this question.\n\n"
+                "Recommended actions:\n- Collect more feedback related to this topic.\n\n"
+                "Citations:\n"
+            )
 
         keywords = self._top_keywords([result.chunk.text for result in results])
         sources = ", ".join(result.chunk.source_id for result in results[:3])
@@ -52,7 +69,10 @@ class DeterministicLLM:
             f"The answer is grounded in feedback sources {sources}."
         )
         actions = self._actions(keywords)
-        citations = [f"- {result.chunk.source_id}: {self._quote(result.chunk.text)}" for result in results[:4]]
+        citations = [
+            f"- {result.chunk.source_id}: {self._quote(result.chunk.text)}"
+            for result in results[:4]
+        ]
         return "\n".join(
             [
                 "Answer:",
@@ -120,8 +140,10 @@ class DeterministicLLM:
             selected.extend(
                 [
                     "Group feedback by segment and quantify how often this issue appears.",
-                    "Create an owner for the highest-impact friction point and review progress weekly.",
-                    "Add follow-up instrumentation so product changes can be measured after release.",
+                    "Create an owner for the highest-impact friction point "
+                    "and review progress weekly.",
+                    "Add follow-up instrumentation so product changes "
+                    "can be measured after release.",
                 ]
             )
         return selected[:3]
