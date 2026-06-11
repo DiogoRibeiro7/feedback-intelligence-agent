@@ -30,6 +30,7 @@ ai-engineering-showcase/
 │   ├── chunking.py           # Text chunking utilities
 │   ├── cli.py                # Typer CLI
 │   ├── config.py             # Runtime configuration
+│   ├── data_contracts.py     # Dataset validation and data contracts
 │   ├── embeddings.py         # Hashing embedding model
 │   ├── evaluation.py         # Retrieval and answer-quality metrics
 │   ├── ingestion.py          # CSV feedback loader
@@ -59,6 +60,19 @@ poetry install
 poetry run ai-showcase index --input data/sample_feedback.csv --index-path .artifacts/vector_store.json
 poetry run ai-showcase query "Why are enterprise customers unhappy with onboarding?" --index-path .artifacts/vector_store.json
 ```
+
+## Data validation
+
+Ingested datasets are checked against a data contract (`data_contracts.py`) before indexing. The contract requires the columns `feedback_id`, `customer_segment`, `channel`, `rating`, `text`, and `created_at`, and accepts optional `sentiment` and `label` columns. Validation reports missing columns, empty text, duplicate IDs, and invalid timestamps.
+
+Validate a CSV from the CLI:
+
+```bash
+poetry run ai-showcase validate-data data/sample_feedback.csv
+poetry run ai-showcase validate-data data/sample_feedback.csv --strict
+```
+
+The command prints a JSON report with total, valid, and invalid row counts plus row-level errors and warnings. In strict mode (`--strict`, also the default during indexing) any contract violation fails the run; in non-strict mode invalid rows are skipped and the valid rows are kept.
 
 Run the demo:
 

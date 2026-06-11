@@ -4,59 +4,38 @@ from __future__ import annotations
 
 from pathlib import Path
 
-import pandas as pd
-
+from ai_engineering_showcase.data_contracts import (
+    REQUIRED_COLUMNS,
+    DataContractError,
+    validate_feedback_csv,
+)
 from ai_engineering_showcase.schemas import FeedbackRecord
 
-REQUIRED_COLUMNS = {
-    "feedback_id",
-    "customer_segment",
-    "channel",
-    "rating",
-    "text",
-    "created_at",
-}
+__all__ = ["REQUIRED_COLUMNS", "FeedbackIngestionError", "load_feedback_csv"]
 
 
 class FeedbackIngestionError(ValueError):
     """Raised when input feedback data cannot be loaded safely."""
 
 
-def load_feedback_csv(path: str | Path) -> list[FeedbackRecord]:
-    """Load feedback records from a CSV file.
+def load_feedback_csv(path: str | Path, *, strict: bool = True) -> list[FeedbackRecord]:
+    """Load feedback records from a CSV file, validating the data contract first.
 
     Args:
         path: Path to a CSV file containing the required feedback columns.
+        strict: When True (default), any contract violation aborts ingestion.
+            When False, invalid rows are skipped and the valid rows are returned.
 
     Returns:
         Validated feedback records.
 
     Raises:
         FileNotFoundError: If the file does not exist.
-        FeedbackIngestionError: If required columns are missing or rows are invalid.
+        FeedbackIngestionError: In strict mode, if required columns are missing
+            or any row violates the data contract.
     """
-    csv_path = Path(path)
-    if not csv_path.exists():
-        raise FileNotFoundError(f"Feedback CSV not found: {csv_path}")
-
-    frame = pd.read_csv(csv_path)
-    missing_columns = REQUIRED_COLUMNS.difference(frame.columns)
-    if missing_columns:
-        missing = ", ".join(sorted(missing_columns))
-        raise FeedbackIngestionError(f"Missing required columns: {missing}")
-
-    records: list[FeedbackRecord] = []
-    errors: list[str] = []
-
-    for position, (_, row) in enumerate(frame.iterrows()):
-        payload = row.to_dict()
-        try:
-            records.append(FeedbackRecord.model_validate(payload))
-        except Exception as exc:  # noqa: BLE001 - aggregate validation details for the caller.
-            errors.append(f"row={position + 2}: {exc}")
-
-    if errors:
-        joined_errors = "\n".join(errors[:10])
-        raise FeedbackIngestionError(f"Invalid feedback rows:\n{joined_errors}")
-
+    try:
+        _, records = validate_feedback_csv(path, strict=strict)
+    except DataContractError as exc:
+        raise FeedbackIngestionError(str(exc)) from exc
     return records

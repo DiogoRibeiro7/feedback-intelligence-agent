@@ -8,6 +8,7 @@ from typing import Annotated
 import typer
 
 from ai_engineering_showcase.config import Settings
+from ai_engineering_showcase.data_contracts import DataContractError, validate_feedback_csv
 from ai_engineering_showcase.embeddings import HashingEmbeddingModel
 from ai_engineering_showcase.evaluation import evaluate_system, load_evaluation_cases
 from ai_engineering_showcase.factory import build_agent, build_index, load_or_build_index
@@ -31,6 +32,25 @@ def index(
     configure_logging()
     vector_store = build_index(input, index_path, embedding_dim=embedding_dim)
     typer.echo(f"Indexed {vector_store.size} chunks into {index_path}")
+
+
+@app.command("validate-data")
+def validate_data(
+    input: Annotated[Path, typer.Argument(help="Path to feedback CSV to validate.")],
+    strict: Annotated[
+        bool, typer.Option(help="Fail with a non-zero exit code on any validation error.")
+    ] = False,
+) -> None:
+    """Validate a feedback CSV against the data contract and print a report."""
+    configure_logging()
+    try:
+        report, _ = validate_feedback_csv(input, strict=strict)
+    except DataContractError as exc:
+        typer.echo(exc.report.model_dump_json(indent=2))
+        typer.echo(exc.report.summary(), err=True)
+        raise typer.Exit(code=1) from exc
+    typer.echo(report.model_dump_json(indent=2))
+    typer.echo(report.summary(), err=True)
 
 
 @app.command()

@@ -17,6 +17,7 @@ pydantic-settings = "^2.3.0"
 python-dotenv = "^1.0.1"
 typer = { version = "^0.12.3", extras = ["all"] }
 uvicorn = { version = "^0.30.0", extras = ["standard"] }
+click = ">=8.1.7,<8.2"
 
 [tool.poetry.group.dev.dependencies]
 mypy = "^1.10.0"
