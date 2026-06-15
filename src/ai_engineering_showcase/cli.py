@@ -8,6 +8,7 @@ from typing import Annotated
 
 import typer
 
+from ai_engineering_showcase.benchmarking import run_benchmark, write_benchmark_outputs
 from ai_engineering_showcase.citations import render_citations
 from ai_engineering_showcase.config import Settings
 from ai_engineering_showcase.data_contracts import DataContractError, validate_feedback_csv
@@ -230,6 +231,40 @@ def evaluate(
     output.write_text(report.model_dump_json(indent=2), encoding="utf-8")
     typer.echo(report.model_dump_json(indent=2))
     typer.echo(f"Evaluation report written to {output}", err=True)
+
+
+@app.command()
+def benchmark(
+    queries: Annotated[Path, typer.Option(help="Path to JSONL benchmark queries.")] = Path(
+        "examples/queries.jsonl"
+    ),
+    output: Annotated[
+        Path, typer.Option(help="Directory for benchmark_results.json and .md.")
+    ] = Path(".artifacts/benchmark_results"),
+    dataset: Annotated[Path, typer.Option(help="Feedback CSV used to build the index.")] = Path(
+        "data/sample_feedback.csv"
+    ),
+    repetitions: Annotated[int, typer.Option(help="Measured repetitions per phase.")] = 5,
+    warmup: Annotated[int, typer.Option(help="Discarded warmup repetitions per phase.")] = 1,
+    top_k: Annotated[int, typer.Option(help="Number of chunks to retrieve.")] = 4,
+) -> None:
+    """Benchmark indexing, embedding, retrieval, and agent latency.
+
+    Runs fully locally with the deterministic provider and writes a JSON report
+    plus a Markdown results table into the output directory.
+    """
+    configure_logging()
+    report = run_benchmark(
+        dataset_path=dataset,
+        queries_path=queries,
+        repetitions=repetitions,
+        warmup=warmup,
+        top_k=top_k,
+    )
+    paths = write_benchmark_outputs(report, output)
+    typer.echo(report.model_dump_json(indent=2))
+    for filename, path in paths.items():
+        typer.echo(f"{filename} written to {path}", err=True)
 
 
 @experiment_app.command("run")

@@ -165,6 +165,37 @@ The run builds a fresh in-memory index from the configured dataset (the persiste
 
 With the local deterministic provider, `results.json` and `metrics.json` are bit-for-bit reproducible; environment-specific values live only in `run_metadata.json`. To compare configurations, copy `examples/experiment_config.yaml`, change one parameter (for example `retriever_type: dense` vs `hybrid`), point `output_dir` at a new folder, and diff the resulting `metrics.json` files.
 
+## Benchmarking
+
+The benchmark harness measures latency for the four phases that dominate cost in a
+RAG system — index building, query embedding, retrieval, and full agent response —
+and reports robust per-phase statistics (mean, median, p95, min, max). It runs fully
+locally with the deterministic provider, so no API keys are required.
+
+```bash
+poetry run ai-showcase benchmark \
+  --queries examples/queries.jsonl \
+  --output .artifacts/benchmark_results \
+  --repetitions 3 --warmup 1
+```
+
+Each phase is warmed up (`--warmup`) and then timed over `--repetitions` measured runs
+using `time.perf_counter`. The command writes two files into the output directory
+(default `.artifacts/benchmark_results/`):
+
+- `benchmark_results.json`: configuration plus per-phase summary statistics.
+- `benchmark_results.md`: a compact Markdown results table.
+
+p95 uses the nearest-rank percentile method (`rank = ceil(0.95 * n)`), which always
+returns an observed sample. Timing values are wall-clock and inherently
+non-deterministic, so only the report structure and the statistics functions are
+covered by tests, never the measured durations. A thin `scripts/benchmark.py` wrapper
+runs the same benchmark against the sample dataset in one command:
+
+```bash
+poetry run python scripts/benchmark.py
+```
+
 Run the API:
 
 ```bash
