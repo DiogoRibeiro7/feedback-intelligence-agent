@@ -4,12 +4,42 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
+from typing import Protocol, runtime_checkable
 
 import numpy as np
 import numpy.typing as npt
 from pydantic import BaseModel, Field
 
 from ai_engineering_showcase.schemas import DocumentChunk, SearchResult
+
+
+@runtime_checkable
+class VectorStore(Protocol):
+    """Interface shared by every vector store backend.
+
+    Both the default :class:`InMemoryVectorStore` (JSON persistence) and the
+    optional Qdrant-backed store satisfy this protocol, so the retrieval layer
+    can treat them interchangeably. Vectors are assumed to be L2-normalised and
+    scored by cosine similarity, with higher scores meaning more similar.
+    """
+
+    dim: int
+
+    @property
+    def size(self) -> int:
+        """Number of indexed chunks."""
+
+    @property
+    def chunks(self) -> list[DocumentChunk]:
+        """Return the indexed chunks."""
+
+    def add(self, chunks: list[DocumentChunk], vectors: npt.NDArray[np.float64]) -> None:
+        """Add chunks and their (L2-normalised) vectors to the store."""
+
+    def search(
+        self, query_vector: npt.NDArray[np.float64], *, top_k: int = 4
+    ) -> list[SearchResult]:
+        """Return the most similar chunks for a query vector, highest score first."""
 
 
 class PersistedVectorStore(BaseModel):

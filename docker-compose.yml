@@ -9,3 +9,17 @@ services:
       AI_SHOWCASE_LLM_PROVIDER: local
     volumes:
       - ./.artifacts:/app/.artifacts
+
+  # Optional local vector database. The app defaults to the JSON store and only
+  # uses Qdrant when AI_SHOWCASE_VECTOR_STORE=qdrant. Start it with:
+  #   docker compose up qdrant
+  qdrant:
+    image: qdrant/qdrant:latest
+    ports:
+      - "6333:6333"
+      - "6334:6334"
+    volumes:
+      - qdrant_storage:/qdrant/storage
+
+volumes:
+  qdrant_storage:

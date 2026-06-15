@@ -7,7 +7,7 @@ from typing import Protocol
 
 from ai_engineering_showcase.embeddings import EmbeddingModel
 from ai_engineering_showcase.schemas import DocumentChunk, SearchResult
-from ai_engineering_showcase.vector_store import InMemoryVectorStore
+from ai_engineering_showcase.vector_store import VectorStore
 
 
 class Retriever(Protocol):
@@ -21,7 +21,7 @@ class Retriever(Protocol):
 class QueryEngine:
     """Embed user questions and retrieve relevant document chunks."""
 
-    def __init__(self, embedding_model: EmbeddingModel, vector_store: InMemoryVectorStore) -> None:
+    def __init__(self, embedding_model: EmbeddingModel, vector_store: VectorStore) -> None:
         """Wire the embedding model used for queries to the vector store."""
         self.embedding_model = embedding_model
         self.vector_store = vector_store

@@ -22,7 +22,7 @@ from ai_engineering_showcase.retrieval import HybridRetriever, QueryEngine, Retr
 from ai_engineering_showcase.schemas import DocumentChunk
 from ai_engineering_showcase.telemetry import JsonlTelemetrySink, Telemetry
 from ai_engineering_showcase.tools import build_default_tools
-from ai_engineering_showcase.vector_store import InMemoryVectorStore
+from ai_engineering_showcase.vector_store import InMemoryVectorStore, VectorStore
 
 
 def build_telemetry(settings: Settings) -> Telemetry:
@@ -82,10 +82,37 @@ def build_index(
     return vector_store
 
 
-def load_or_build_index(
-    settings: Settings, *, telemetry: Telemetry | None = None
-) -> InMemoryVectorStore:
-    """Load an index from disk or build it from configured data."""
+def build_qdrant_index(settings: Settings, *, telemetry: Telemetry | None = None) -> VectorStore:
+    """Build (or refresh) a Qdrant-backed index from the configured data.
+
+    The Qdrant store is imported lazily here so the optional ``qdrant-client``
+    dependency is only required when ``AI_SHOWCASE_VECTOR_STORE=qdrant``.
+    """
+    from ai_engineering_showcase.qdrant_store import QdrantVectorStore
+
+    store = QdrantVectorStore(
+        dim=settings.embedding_dim,
+        url=settings.qdrant_url,
+        collection_name=settings.qdrant_collection,
+    )
+    if store.size == 0:
+        records = load_feedback_csv(settings.data_path, telemetry=telemetry)
+        chunks = feedback_to_chunks(records)
+        embedding_model = HashingEmbeddingModel(dim=settings.embedding_dim)
+        vectors = embedding_model.embed([chunk_to_embedding_text(chunk) for chunk in chunks])
+        store.add(chunks, vectors)
+    return store
+
+
+def load_or_build_index(settings: Settings, *, telemetry: Telemetry | None = None) -> VectorStore:
+    """Load the configured index, building it from data when needed.
+
+    With the default ``json`` store the index is loaded from (or built and
+    persisted to) ``AI_SHOWCASE_INDEX_PATH``. With ``qdrant`` the index lives in
+    the configured Qdrant collection.
+    """
+    if settings.vector_store == "qdrant":
+        return build_qdrant_index(settings, telemetry=telemetry)
     settings.ensure_artifact_dir()
     if settings.index_path.exists():
         return InMemoryVectorStore.load(settings.index_path)
@@ -97,7 +124,7 @@ def load_or_build_index(
     )
 
 
-def build_retriever(settings: Settings, vector_store: InMemoryVectorStore) -> Retriever:
+def build_retriever(settings: Settings, vector_store: VectorStore) -> Retriever:
     """Construct the configured retriever over an existing vector store.
 
     ``dense`` keeps the original vector-similarity behaviour, ``lexical`` uses

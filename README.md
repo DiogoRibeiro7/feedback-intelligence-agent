@@ -265,6 +265,37 @@ Or, with `make`:
 make ci
 ```
 
+## Vector stores
+
+Retrieval works against a pluggable vector store behind a common `VectorStore`
+interface (`vector_store.py`). Two backends are available, selected by
+`AI_SHOWCASE_VECTOR_STORE`:
+
+- **`json` (default)**: the local `InMemoryVectorStore` with JSON persistence
+  (`AI_SHOWCASE_INDEX_PATH`). No external service is needed — this is what the
+  CLI, demo, tests, and CI use.
+- **`qdrant`**: a [Qdrant](https://qdrant.tech/) collection, using cosine
+  distance to match the in-memory scoring orientation. `qdrant-client` ships as
+  an optional extra so the default install stays lean.
+
+Run a local Qdrant with Docker Compose and point the app at it:
+
+```bash
+# Start Qdrant (exposes 6333) from the bundled compose file.
+docker compose up -d qdrant
+
+poetry install --extras qdrant
+export AI_SHOWCASE_VECTOR_STORE=qdrant
+export AI_SHOWCASE_QDRANT_URL=http://localhost:6333          # default
+export AI_SHOWCASE_QDRANT_COLLECTION=ai_showcase_feedback    # default
+poetry run ai-showcase query "Why are enterprise customers unhappy with onboarding?"
+```
+
+The same retrieval interface (`dense`, `lexical`, `hybrid`) works for both
+stores. When the collection is empty, the configured dataset is embedded and
+upserted automatically on first use. Using the Qdrant store without the extra
+installed fails fast with an actionable message explaining how to install it.
+
 ## Docker
 
 ```bash
@@ -281,8 +312,11 @@ Environment variables:
 | Variable | Default | Description |
 |---|---:|---|
 | `AI_SHOWCASE_DATA_PATH` | `data/sample_feedback.csv` | CSV file loaded by the API at startup. |
-| `AI_SHOWCASE_INDEX_PATH` | `.artifacts/vector_store.json` | Local vector index path. |
+| `AI_SHOWCASE_INDEX_PATH` | `.artifacts/vector_store.json` | Local vector index path (JSON store). |
 | `AI_SHOWCASE_EMBEDDING_DIM` | `512` | Dimension used by the hashing embedding model. |
+| `AI_SHOWCASE_VECTOR_STORE` | `json` | Vector store backend: `json` (default, local) or `qdrant`. |
+| `AI_SHOWCASE_QDRANT_URL` | `http://localhost:6333` | Qdrant endpoint used when `AI_SHOWCASE_VECTOR_STORE=qdrant`. |
+| `AI_SHOWCASE_QDRANT_COLLECTION` | `ai_showcase_feedback` | Qdrant collection name. |
 | `AI_SHOWCASE_RETRIEVER_TYPE` | `dense` | Retrieval strategy: `dense`, `lexical`, or `hybrid`. |
 | `AI_SHOWCASE_DENSE_WEIGHT` | `0.6` | Dense score weight used by the hybrid retriever. |
 | `AI_SHOWCASE_LEXICAL_WEIGHT` | `0.4` | Lexical (BM25) score weight used by the hybrid retriever. |

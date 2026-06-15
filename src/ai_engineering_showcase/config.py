@@ -9,6 +9,7 @@ from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 RetrieverType = Literal["dense", "lexical", "hybrid"]
+VectorStoreType = Literal["json", "qdrant"]
 
 
 class Settings(BaseSettings):
@@ -23,6 +24,9 @@ class Settings(BaseSettings):
     data_path: Path = Field(default=Path("data/sample_feedback.csv"))
     index_path: Path = Field(default=Path(".artifacts/vector_store.json"))
     embedding_dim: int = Field(default=512, ge=64, le=8192)
+    vector_store: VectorStoreType = "json"
+    qdrant_url: str = Field(default="http://localhost:6333")
+    qdrant_collection: str = Field(default="ai_showcase_feedback")
     retriever_type: RetrieverType = "dense"
     dense_weight: float = Field(default=0.6, ge=0.0)
     lexical_weight: float = Field(default=0.4, ge=0.0)
