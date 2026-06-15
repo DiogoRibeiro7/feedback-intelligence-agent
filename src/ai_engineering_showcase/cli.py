@@ -23,10 +23,12 @@ from ai_engineering_showcase.factory import (
     build_agent,
     build_conversation_store,
     build_index,
+    build_job_store,
     build_retriever,
     build_telemetry,
     load_or_build_index,
 )
+from ai_engineering_showcase.jobs import JobRequest, run_ingestion_job
 from ai_engineering_showcase.prompt_registry import (
     LATEST_VERSION,
     PromptNotFoundError,
@@ -67,6 +69,43 @@ def index(
     telemetry = build_telemetry(Settings(index_path=index_path))
     vector_store = build_index(input, index_path, embedding_dim=embedding_dim, telemetry=telemetry)
     typer.echo(f"Indexed {vector_store.size} chunks into {index_path}")
+
+
+@app.command("ingest-job")
+def ingest_job(
+    input: Annotated[Path, typer.Option(help="Path to feedback CSV to ingest.")] = Path(
+        "data/sample_feedback.csv"
+    ),
+    index_path: Annotated[Path, typer.Option(help="Output path for vector index.")] = Path(
+        ".artifacts/vector_store.json"
+    ),
+    embedding_dim: Annotated[int, typer.Option(help="Hashing embedding dimension.")] = 512,
+    store_path: Annotated[
+        Path, typer.Option(help="Directory holding ingestion job JSON files.")
+    ] = Path(".artifacts/jobs"),
+) -> None:
+    """Run an ingestion job locally and print its JobResult.
+
+    Uses the same job pipeline the API schedules in the background, but runs it
+    synchronously so the terminal status (succeeded/failed) and the resulting
+    JobResult are printed immediately. Exits non-zero on a failed job.
+    """
+    configure_logging()
+    settings = Settings(
+        index_path=index_path, embedding_dim=embedding_dim, job_store_path=store_path
+    )
+    store = build_job_store(settings)
+    job = store.create(JobRequest(input_path=str(input), index_path=str(index_path)))
+    result = run_ingestion_job(
+        job.job_id,
+        store,
+        embedding_dim=settings.embedding_dim,
+        default_index_path=str(settings.index_path),
+        telemetry=build_telemetry(settings),
+    )
+    typer.echo(result.model_dump_json(indent=2))
+    if result.status.value == "failed":
+        raise typer.Exit(code=1)
 
 
 @app.command("validate-data")

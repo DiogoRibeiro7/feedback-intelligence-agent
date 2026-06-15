@@ -170,6 +170,18 @@ class IndexRequest(BaseModel):
     index_path: str | None = None
 
 
+class JobSubmitResponse(BaseModel):
+    """API response returned when an ingestion job is submitted.
+
+    The job runs asynchronously, so only the identifier and the initial status
+    are returned immediately. Poll ``GET /ingestion/jobs/{job_id}`` for the
+    terminal status and result.
+    """
+
+    job_id: str
+    status: str
+
+
 class EvaluationCase(BaseModel):
     """Single evaluation case covering retrieval and answer quality.
 

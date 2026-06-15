@@ -8,17 +8,24 @@ import time
 from collections.abc import Iterator
 from typing import Any
 
-from fastapi import FastAPI, HTTPException
+from fastapi import BackgroundTasks, FastAPI, HTTPException
 from fastapi.responses import StreamingResponse
 
 from ai_engineering_showcase.config import Settings
-from ai_engineering_showcase.factory import build_agent, build_conversation_store, build_index
+from ai_engineering_showcase.factory import (
+    build_agent,
+    build_conversation_store,
+    build_index,
+    build_job_store,
+)
+from ai_engineering_showcase.jobs import JobRequest, JobResult, run_ingestion_job
 from ai_engineering_showcase.memory import ConversationMemory
 from ai_engineering_showcase.schemas import (
     AgentAnswer,
     ChatRequest,
     ChatResponse,
     IndexRequest,
+    JobSubmitResponse,
     QueryRequest,
     QueryResponse,
     StreamMetadata,
@@ -84,6 +91,7 @@ def create_app() -> FastAPI:
     settings = Settings()
     agent = build_agent(settings)
     conversation_store = build_conversation_store(settings)
+    job_store = build_job_store(settings)
 
     app = FastAPI(
         title="AI Engineering Showcase API",
@@ -185,5 +193,38 @@ def create_app() -> FastAPI:
             log_event("index_failed", {"error": str(exc)})
             raise HTTPException(status_code=400, detail=str(exc)) from exc
         return {"status": "indexed", "chunks": vector_store.size, "index_path": index_path}
+
+    @app.post(
+        "/ingestion/jobs",
+        response_model=JobSubmitResponse,
+        status_code=202,
+    )
+    def submit_ingestion_job(
+        request: JobRequest, background_tasks: BackgroundTasks
+    ) -> JobSubmitResponse:
+        """Submit an asynchronous ingestion job.
+
+        Creates a ``pending`` job, schedules the ingestion pipeline (load +
+        validate CSV, chunk, embed, persist the vector store) via
+        ``BackgroundTasks``, and returns the job id immediately. Poll
+        ``GET /ingestion/jobs/{job_id}`` for the terminal status.
+        """
+        job = job_store.create(request)
+        background_tasks.add_task(
+            run_ingestion_job,
+            job.job_id,
+            job_store,
+            embedding_dim=settings.embedding_dim,
+            default_index_path=str(settings.index_path),
+        )
+        return JobSubmitResponse(job_id=job.job_id, status=job.status.value)
+
+    @app.get("/ingestion/jobs/{job_id}", response_model=JobResult)
+    def get_ingestion_job(job_id: str) -> JobResult:
+        """Return the status and result of an ingestion job; 404 if unknown."""
+        job = job_store.get(job_id)
+        if job is None:
+            raise HTTPException(status_code=404, detail="job not found")
+        return job
 
     return app

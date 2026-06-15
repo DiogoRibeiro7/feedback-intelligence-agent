@@ -29,6 +29,7 @@ def _parse_sse_events(payload: str) -> list[tuple[str, dict[str, Any]]]:
 def client(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> TestClient:
     monkeypatch.setenv("AI_SHOWCASE_INDEX_PATH", str(tmp_path / "vector_store.json"))
     monkeypatch.setenv("AI_SHOWCASE_CONVERSATION_STORE_PATH", str(tmp_path / "conversations"))
+    monkeypatch.setenv("AI_SHOWCASE_JOB_STORE_PATH", str(tmp_path / "jobs"))
     return TestClient(create_app())
 
 
@@ -188,3 +189,53 @@ def test_chat_with_invalid_conversation_id_returns_400(client: TestClient) -> No
     )
     assert response.status_code == 400
     assert "invalid conversation_id" in response.json()["detail"]
+
+
+def test_submit_ingestion_job_runs_and_succeeds(client: TestClient, tmp_path: Path) -> None:
+    index_path = tmp_path / "job_index.json"
+    submit = client.post(
+        "/ingestion/jobs",
+        json={"input_path": "data/sample_feedback.csv", "index_path": str(index_path)},
+    )
+    # 202 Accepted; the background task already ran (TestClient runs it
+    # synchronously after the response), so polling returns a terminal state.
+    assert submit.status_code == 202
+    body = submit.json()
+    job_id = body["job_id"]
+    assert job_id
+    assert body["status"] == "pending"
+
+    poll = client.get(f"/ingestion/jobs/{job_id}")
+    assert poll.status_code == 200
+    result = poll.json()
+    assert result["status"] == "succeeded"
+    assert result["chunks"] > 0
+    assert result["error"] is None
+    assert index_path.exists()
+
+
+def test_submit_ingestion_job_failure_is_clean(client: TestClient, tmp_path: Path) -> None:
+    submit = client.post(
+        "/ingestion/jobs",
+        json={"input_path": str(tmp_path / "missing.csv")},
+    )
+    assert submit.status_code == 202
+    job_id = submit.json()["job_id"]
+
+    poll = client.get(f"/ingestion/jobs/{job_id}")
+    assert poll.status_code == 200
+    result = poll.json()
+    assert result["status"] == "failed"
+    assert result["error"]
+    assert "missing.csv" not in result["error"]
+    assert "Traceback" not in result["error"]
+
+
+def test_get_unknown_job_returns_404(client: TestClient) -> None:
+    response = client.get("/ingestion/jobs/does-not-exist")
+    assert response.status_code == 404
+
+
+def test_submit_ingestion_job_rejects_empty_input_path(client: TestClient) -> None:
+    response = client.post("/ingestion/jobs", json={"input_path": ""})
+    assert response.status_code == 422

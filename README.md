@@ -324,6 +324,7 @@ Environment variables:
 | `AI_SHOWCASE_TELEMETRY_ENABLED` | `false` | Enable structured telemetry events. |
 | `AI_SHOWCASE_TELEMETRY_PATH` | `.artifacts/telemetry.jsonl` | JSONL file that telemetry events are appended to. |
 | `AI_SHOWCASE_CONVERSATION_STORE_PATH` | `.artifacts/conversations` | Directory holding one JSON file per chat conversation. |
+| `AI_SHOWCASE_JOB_STORE_PATH` | `.artifacts/jobs` | Directory holding one JSON file per ingestion job. |
 | `OPENAI_API_KEY` | empty | Required only when using the OpenAI-compatible provider. |
 | `OPENAI_MODEL` | `gpt-4o-mini` | Model name for the OpenAI-compatible provider. |
 | `OPENAI_BASE_URL` | `https://api.openai.com` | Base URL, so any OpenAI-compatible endpoint works (vLLM, LiteLLM, gateways). |
@@ -383,6 +384,47 @@ Each provider also advertises capability metadata (`provider.capabilities`):
 `supports_streaming`, `supports_tool_calling`, `supports_json_mode`, and an optional
 `max_context_tokens`, so callers can branch on provider features without
 provider-specific code.
+
+## Asynchronous ingestion jobs
+
+Ingestion is decoupled from the request/response cycle so large datasets do not
+block API clients. A client submits a job, gets a job id back immediately, and
+polls for the terminal status while the load -> chunk -> embed -> persist
+pipeline runs in the background (FastAPI `BackgroundTasks`, no Celery/Redis).
+
+Job models live in `jobs.py`: `JobStatus` (`pending` -> `running` ->
+`succeeded`/`failed`), `JobRequest`, `JobResult`, and a `JobStore` abstraction
+with two backends — a thread-safe in-memory store (lock-guarded, for the API)
+and a JSON-backed store (one file per job under `AI_SHOWCASE_JOB_STORE_PATH`,
+default `.artifacts/jobs`). The same `run_ingestion_job` pipeline reuses the
+existing ingestion + data-contract validation, so synchronous indexing is
+unaffected.
+
+Submit a job over the API and poll for its status:
+
+```bash
+curl -X POST http://127.0.0.1:8000/ingestion/jobs \
+  -H "Content-Type: application/json" \
+  -d '{"input_path":"data/sample_feedback.csv","index_path":".artifacts/vector_store.json"}'
+# -> 202 {"job_id":"…","status":"pending"}
+
+curl http://127.0.0.1:8000/ingestion/jobs/<job_id>
+# -> {"job_id":"…","status":"succeeded","chunks":12,"index_path":"…","error":null}
+# unknown id -> 404
+```
+
+On failure the job stores a clean, non-leaky message (for example
+`"Ingestion failed: the input data could not be loaded or validated. …"`); the
+full exception is logged server-side but never returned to the client, so no
+secrets, stack traces, or filesystem paths leak.
+
+Run the same pipeline synchronously from the CLI (prints the `JobResult`, exits
+non-zero on failure):
+
+```bash
+poetry run ai-showcase ingest-job --input data/sample_feedback.csv \
+  --index-path .artifacts/vector_store.json
+```
 
 ## Telemetry
 

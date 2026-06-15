@@ -44,6 +44,51 @@ def test_chat_command_single_message_then_followup(tmp_path: Path) -> None:
     ]
 
 
+def test_ingest_job_command_succeeds(tmp_path: Path) -> None:
+    index_path = tmp_path / "vector_store.json"
+    store_path = tmp_path / "jobs"
+    result = stdout_runner.invoke(
+        app,
+        [
+            "ingest-job",
+            "--input",
+            "data/sample_feedback.csv",
+            "--index-path",
+            str(index_path),
+            "--store-path",
+            str(store_path),
+        ],
+    )
+    assert result.exit_code == 0, result.output
+    payload = json.loads(result.stdout)
+    assert payload["status"] == "succeeded"
+    assert payload["chunks"] > 0
+    assert payload["error"] is None
+    assert index_path.exists()
+
+
+def test_ingest_job_command_failure_exits_nonzero_with_clean_error(tmp_path: Path) -> None:
+    missing = tmp_path / "missing.csv"
+    store_path = tmp_path / "jobs"
+    result = stdout_runner.invoke(
+        app,
+        [
+            "ingest-job",
+            "--input",
+            str(missing),
+            "--index-path",
+            str(tmp_path / "out.json"),
+            "--store-path",
+            str(store_path),
+        ],
+    )
+    assert result.exit_code == 1, result.output
+    payload = json.loads(result.stdout)
+    assert payload["status"] == "failed"
+    assert "missing.csv" not in payload["error"]
+    assert "Ingestion failed" in payload["error"]
+
+
 def test_chat_command_interactive_repl(tmp_path: Path) -> None:
     index_path = tmp_path / "vector_store.json"
     store_path = tmp_path / "conversations"

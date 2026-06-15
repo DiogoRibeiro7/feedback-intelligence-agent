@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from pathlib import Path
+from typing import TYPE_CHECKING
 
 from ai_engineering_showcase.agent import FeedbackInsightAgent
 from ai_engineering_showcase.chunking import feedback_to_chunks
@@ -24,6 +25,9 @@ from ai_engineering_showcase.telemetry import JsonlTelemetrySink, Telemetry
 from ai_engineering_showcase.tools import build_default_tools
 from ai_engineering_showcase.vector_store import InMemoryVectorStore, VectorStore
 
+if TYPE_CHECKING:
+    from ai_engineering_showcase.jobs import JsonJobStore
+
 
 def build_telemetry(settings: Settings) -> Telemetry:
     """Construct the telemetry emitter configured by the settings.
@@ -44,6 +48,19 @@ def build_conversation_store(settings: Settings) -> JsonConversationStore:
     ``AI_SHOWCASE_CONVERSATION_STORE_PATH`` (default ``.artifacts/conversations``).
     """
     return JsonConversationStore(settings.conversation_store_path)
+
+
+def build_job_store(settings: Settings) -> JsonJobStore:
+    """Construct the JSON-backed ingestion job store configured by the settings.
+
+    Jobs are persisted as one JSON file each under ``AI_SHOWCASE_JOB_STORE_PATH``
+    (default ``.artifacts/jobs``), so submitted ingestion jobs survive restarts
+    and are easy to inspect. Imported lazily to avoid a circular import, since
+    :mod:`ai_engineering_showcase.jobs` reuses :func:`chunk_to_embedding_text`.
+    """
+    from ai_engineering_showcase.jobs import JsonJobStore
+
+    return JsonJobStore(settings.job_store_path)
 
 
 def chunk_to_embedding_text(chunk: DocumentChunk) -> str:

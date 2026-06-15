@@ -45,6 +45,7 @@ class Settings(BaseSettings):
     telemetry_enabled: bool = Field(default=False)
     telemetry_path: Path = Field(default=Path(".artifacts/telemetry.jsonl"))
     conversation_store_path: Path = Field(default=Path(".artifacts/conversations"))
+    job_store_path: Path = Field(default=Path(".artifacts/jobs"))
 
     def ensure_artifact_dir(self) -> None:
         """Create the parent folder used by local artifacts."""
