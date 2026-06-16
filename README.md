@@ -10,6 +10,10 @@ The project implements a **customer feedback intelligence agent**. It ingests ra
 
 It is designed as a portfolio project: small enough to read, but structured like real production work.
 
+> **New here?** Start with the [portfolio case study](docs/case_study.md) for a
+> guided tour of the problem, architecture, RAG/agent design, evaluation, and
+> deployment path (with diagrams).
+
 ## What this showcases
 
 - Agentic RAG workflow with retrieval, routing, evidence selection, and cited responses.
