@@ -65,7 +65,7 @@ class QdrantVectorStore:
         dim: int,
         *,
         url: str = "http://localhost:6333",
-        collection_name: str = "ai_showcase_feedback",
+        collection_name: str = "feedback_intelligence",
         client: QdrantClient | None = None,
     ) -> None:
         """Connect to Qdrant and ensure the target collection exists.

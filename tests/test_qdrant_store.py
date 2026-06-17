@@ -3,7 +3,7 @@
 Unit tests use a fake ``qdrant_client`` module injected into ``sys.modules`` (and
 an injected fake client), so they never require a running Qdrant or the optional
 SDK. Integration tests against a real Qdrant are skipped unless
-``AI_SHOWCASE_QDRANT_TEST`` is set, keeping the default test run green with no
+``FEEDBACK_AGENT_QDRANT_TEST`` is set, keeping the default test run green with no
 external service.
 """
 
@@ -234,7 +234,7 @@ def test_qdrant_store_validates_inputs(fake_qdrant: ModuleType) -> None:
 def test_factory_defaults_to_json_store(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     from feedback_intelligence_agent.vector_store import InMemoryVectorStore
 
-    monkeypatch.delenv("AI_SHOWCASE_VECTOR_STORE", raising=False)
+    monkeypatch.delenv("FEEDBACK_AGENT_VECTOR_STORE", raising=False)
     settings = Settings(index_path=tmp_path / "vector_store.json")
     assert settings.vector_store == "json"
 
@@ -268,15 +268,15 @@ def test_factory_uses_qdrant_when_configured(
 # Integration tests (skipped unless a real Qdrant is available)
 # ---------------------------------------------------------------------------
 
-_QDRANT_TEST = os.environ.get("AI_SHOWCASE_QDRANT_TEST", "").lower() in {"1", "true", "yes"}
+_QDRANT_TEST = os.environ.get("FEEDBACK_AGENT_QDRANT_TEST", "").lower() in {"1", "true", "yes"}
 
 
-@pytest.mark.skipif(not _QDRANT_TEST, reason="set AI_SHOWCASE_QDRANT_TEST=1 to run")
+@pytest.mark.skipif(not _QDRANT_TEST, reason="set FEEDBACK_AGENT_QDRANT_TEST=1 to run")
 def test_qdrant_integration_roundtrip() -> None:
     from feedback_intelligence_agent.qdrant_store import QdrantVectorStore
 
-    url = os.environ.get("AI_SHOWCASE_QDRANT_URL", "http://localhost:6333")
-    collection = "ai_showcase_test_" + os.urandom(4).hex()
+    url = os.environ.get("FEEDBACK_AGENT_QDRANT_URL", "http://localhost:6333")
+    collection = "feedback_intelligence_test_" + os.urandom(4).hex()
     store = QdrantVectorStore(dim=64, url=url, collection_name=collection)
     model = HashingEmbeddingModel(dim=64)
     chunks = _sample_chunks()

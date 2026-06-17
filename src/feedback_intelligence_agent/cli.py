@@ -1,4 +1,4 @@
-"""Command-line interface for the AI engineering showcase."""
+"""Command-line interface for the feedback intelligence agent."""
 
 from __future__ import annotations
 
@@ -39,7 +39,7 @@ from feedback_intelligence_agent.schemas import ChatResponse
 from feedback_intelligence_agent.synthetic_data import SyntheticDataConfig, write_feedback_csv
 from feedback_intelligence_agent.telemetry import configure_logging
 
-app = typer.Typer(help="AI Engineering Showcase CLI")
+app = typer.Typer(help="Feedback Intelligence Agent CLI")
 experiment_app = typer.Typer(help="Run repeatable experiments over RAG configurations.")
 app.add_typer(experiment_app, name="experiment")
 prompts_app = typer.Typer(help="Inspect and render versioned prompt templates.")

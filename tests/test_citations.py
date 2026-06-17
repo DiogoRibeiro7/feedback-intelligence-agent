@@ -205,7 +205,7 @@ def test_query_command_renders_citation_block(tmp_path: Path) -> None:
 def test_api_query_response_includes_citation_metadata(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
-    monkeypatch.setenv("AI_SHOWCASE_INDEX_PATH", str(tmp_path / "vector_store.json"))
+    monkeypatch.setenv("FEEDBACK_AGENT_INDEX_PATH", str(tmp_path / "vector_store.json"))
     client = TestClient(create_app())
     response = client.post(
         "/query",

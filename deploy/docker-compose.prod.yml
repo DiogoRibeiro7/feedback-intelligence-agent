@@ -1,4 +1,4 @@
-# Production-like Docker Compose for the AI Engineering Showcase API.
+# Production-like Docker Compose for the Feedback Intelligence Agent API.
 #
 # Unlike the root docker-compose.yml (which builds locally and wires up the
 # Vite frontend for the demo), this file runs the already-built backend image
@@ -11,7 +11,7 @@
 #   docker compose -f deploy/docker-compose.prod.yml up -d
 #
 # The image already contains uvicorn[standard]; gunicorn is installed at start
-# via pip so the base image does not need to change. All AI_SHOWCASE_* settings
+# via pip so the base image does not need to change. All FEEDBACK_AGENT_* settings
 # come from the env file (see .env.example) — no secrets are baked into the image.
 
 services:
@@ -24,9 +24,9 @@ services:
       - ./.env.prod
     environment:
       # Sensible production defaults; override in .env.prod as needed.
-      AI_SHOWCASE_DATA_PATH: data/sample_feedback.csv
-      AI_SHOWCASE_INDEX_PATH: /app/.artifacts/vector_store.json
-      AI_SHOWCASE_LLM_PROVIDER: local
+      FEEDBACK_AGENT_DATA_PATH: data/sample_feedback.csv
+      FEEDBACK_AGENT_INDEX_PATH: /app/.artifacts/vector_store.json
+      FEEDBACK_AGENT_LLM_PROVIDER: local
     volumes:
       # Persist the JSON vector index and other local artifacts across restarts.
       - api_artifacts:/app/.artifacts

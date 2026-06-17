@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "feedback-intelligence-agent"
 version = "0.1.0"
-description = "A production-style AI engineering showcase repository with RAG, evaluation, FastAPI, and local deterministic LLM fallback."
+description = "A production-style AI engineering project with RAG, evaluation, FastAPI, and local deterministic LLM fallback."
 authors = ["Diogo Ribeiro <hansolo.dj@gmail.com>"]
 readme = "README.md"
 packages = [{ include = "feedback_intelligence_agent", from = "src" }]

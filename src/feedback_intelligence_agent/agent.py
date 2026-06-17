@@ -1,4 +1,4 @@
-"""Agent orchestration for the AI engineering showcase."""
+"""Agent orchestration for the feedback intelligence agent."""
 
 from __future__ import annotations
 

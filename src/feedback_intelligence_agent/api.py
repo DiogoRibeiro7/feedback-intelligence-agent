@@ -95,7 +95,7 @@ def create_app() -> FastAPI:
     job_store = build_job_store(settings)
 
     app = FastAPI(
-        title="AI Engineering Showcase API",
+        title="Feedback Intelligence Agent API",
         version="0.1.0",
         description="Evidence-grounded customer feedback intelligence agent.",
     )

@@ -260,7 +260,7 @@ def test_benign_telemetry_event_sequence_is_unchanged() -> None:
 
 
 def test_api_surfaces_guardrail_decision(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
-    monkeypatch.setenv("AI_SHOWCASE_INDEX_PATH", str(tmp_path / "vector_store.json"))
+    monkeypatch.setenv("FEEDBACK_AGENT_INDEX_PATH", str(tmp_path / "vector_store.json"))
     client = TestClient(create_app())
 
     blocked = client.post(

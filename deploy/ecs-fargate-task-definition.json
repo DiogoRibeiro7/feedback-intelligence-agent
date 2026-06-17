@@ -22,11 +22,11 @@
         }
       ],
       "environment": [
-        { "name": "AI_SHOWCASE_DATA_PATH", "value": "data/sample_feedback.csv" },
-        { "name": "AI_SHOWCASE_INDEX_PATH", "value": "/app/.artifacts/vector_store.json" },
-        { "name": "AI_SHOWCASE_LLM_PROVIDER", "value": "local" },
-        { "name": "AI_SHOWCASE_RETRIEVER_TYPE", "value": "dense" },
-        { "name": "AI_SHOWCASE_CORS_ALLOW_ORIGINS", "value": "https://<YOUR_FRONTEND_DOMAIN>" }
+        { "name": "FEEDBACK_AGENT_DATA_PATH", "value": "data/sample_feedback.csv" },
+        { "name": "FEEDBACK_AGENT_INDEX_PATH", "value": "/app/.artifacts/vector_store.json" },
+        { "name": "FEEDBACK_AGENT_LLM_PROVIDER", "value": "local" },
+        { "name": "FEEDBACK_AGENT_RETRIEVER_TYPE", "value": "dense" },
+        { "name": "FEEDBACK_AGENT_CORS_ALLOW_ORIGINS", "value": "https://<YOUR_FRONTEND_DOMAIN>" }
       ],
       "secrets": [
         {

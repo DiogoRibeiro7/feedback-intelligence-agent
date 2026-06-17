@@ -1,4 +1,4 @@
-# AI Engineering Showcase
+# Feedback Intelligence Agent
 
 [![CI](https://github.com/DiogoRibeiro7/feedback-intelligence-agent/actions/workflows/ci.yml/badge.svg)](https://github.com/DiogoRibeiro7/feedback-intelligence-agent/actions/workflows/ci.yml)
 [![Python](https://img.shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.12-blue.svg)](pyproject.toml)
@@ -14,7 +14,7 @@ It is designed as a portfolio project: small enough to read, but structured like
 > guided tour of the problem, architecture, RAG/agent design, evaluation, and
 > deployment path (with diagrams).
 
-## What this showcases
+## What this demonstrates
 
 - Agentic RAG workflow with retrieval, routing, evidence selection, and cited responses.
 - Deterministic guardrails that refuse prompt injection, system-prompt disclosure, and PII/data exfiltration requests.
@@ -98,7 +98,7 @@ The same options work for `feedback-agent evaluate`, so retrieval strategies can
 poetry run feedback-agent evaluate --queries examples/queries.jsonl --retriever hybrid
 ```
 
-The API uses the retriever configured through the environment (`AI_SHOWCASE_RETRIEVER_TYPE`, `AI_SHOWCASE_DENSE_WEIGHT`, `AI_SHOWCASE_LEXICAL_WEIGHT`).
+The API uses the retriever configured through the environment (`FEEDBACK_AGENT_RETRIEVER_TYPE`, `FEEDBACK_AGENT_DENSE_WEIGHT`, `FEEDBACK_AGENT_LEXICAL_WEIGHT`).
 
 ## Data validation
 
@@ -273,10 +273,10 @@ make ci
 
 Retrieval works against a pluggable vector store behind a common `VectorStore`
 interface (`vector_store.py`). Two backends are available, selected by
-`AI_SHOWCASE_VECTOR_STORE`:
+`FEEDBACK_AGENT_VECTOR_STORE`:
 
 - **`json` (default)**: the local `InMemoryVectorStore` with JSON persistence
-  (`AI_SHOWCASE_INDEX_PATH`). No external service is needed — this is what the
+  (`FEEDBACK_AGENT_INDEX_PATH`). No external service is needed — this is what the
   CLI, demo, tests, and CI use.
 - **`qdrant`**: a [Qdrant](https://qdrant.tech/) collection, using cosine
   distance to match the in-memory scoring orientation. `qdrant-client` ships as
@@ -289,9 +289,9 @@ Run a local Qdrant with Docker Compose and point the app at it:
 docker compose up -d qdrant
 
 poetry install --extras qdrant
-export AI_SHOWCASE_VECTOR_STORE=qdrant
-export AI_SHOWCASE_QDRANT_URL=http://localhost:6333          # default
-export AI_SHOWCASE_QDRANT_COLLECTION=ai_showcase_feedback    # default
+export FEEDBACK_AGENT_VECTOR_STORE=qdrant
+export FEEDBACK_AGENT_QDRANT_URL=http://localhost:6333          # default
+export FEEDBACK_AGENT_QDRANT_COLLECTION=feedback_intelligence    # default
 poetry run feedback-agent query "Why are enterprise customers unhappy with onboarding?"
 ```
 
@@ -324,7 +324,7 @@ docker compose up --build
 ```
 
 The backend enables CORS for the Vite dev (`5173`) and preview (`4173`) origins;
-the allowed origins are configurable via `AI_SHOWCASE_CORS_ALLOW_ORIGINS`. See
+the allowed origins are configurable via `FEEDBACK_AGENT_CORS_ALLOW_ORIGINS`. See
 [`frontend/README.md`](frontend/README.md) for full instructions.
 
 ## Docker
@@ -352,20 +352,20 @@ Environment variables:
 
 | Variable | Default | Description |
 |---|---:|---|
-| `AI_SHOWCASE_DATA_PATH` | `data/sample_feedback.csv` | CSV file loaded by the API at startup. |
-| `AI_SHOWCASE_INDEX_PATH` | `.artifacts/vector_store.json` | Local vector index path (JSON store). |
-| `AI_SHOWCASE_EMBEDDING_DIM` | `512` | Dimension used by the hashing embedding model. |
-| `AI_SHOWCASE_VECTOR_STORE` | `json` | Vector store backend: `json` (default, local) or `qdrant`. |
-| `AI_SHOWCASE_QDRANT_URL` | `http://localhost:6333` | Qdrant endpoint used when `AI_SHOWCASE_VECTOR_STORE=qdrant`. |
-| `AI_SHOWCASE_QDRANT_COLLECTION` | `ai_showcase_feedback` | Qdrant collection name. |
-| `AI_SHOWCASE_RETRIEVER_TYPE` | `dense` | Retrieval strategy: `dense`, `lexical`, or `hybrid`. |
-| `AI_SHOWCASE_DENSE_WEIGHT` | `0.6` | Dense score weight used by the hybrid retriever. |
-| `AI_SHOWCASE_LEXICAL_WEIGHT` | `0.4` | Lexical (BM25) score weight used by the hybrid retriever. |
-| `AI_SHOWCASE_LLM_PROVIDER` | `local` | `local`, `openai`, `anthropic`, or `ollama`. |
-| `AI_SHOWCASE_TELEMETRY_ENABLED` | `false` | Enable structured telemetry events. |
-| `AI_SHOWCASE_TELEMETRY_PATH` | `.artifacts/telemetry.jsonl` | JSONL file that telemetry events are appended to. |
-| `AI_SHOWCASE_CONVERSATION_STORE_PATH` | `.artifacts/conversations` | Directory holding one JSON file per chat conversation. |
-| `AI_SHOWCASE_JOB_STORE_PATH` | `.artifacts/jobs` | Directory holding one JSON file per ingestion job. |
+| `FEEDBACK_AGENT_DATA_PATH` | `data/sample_feedback.csv` | CSV file loaded by the API at startup. |
+| `FEEDBACK_AGENT_INDEX_PATH` | `.artifacts/vector_store.json` | Local vector index path (JSON store). |
+| `FEEDBACK_AGENT_EMBEDDING_DIM` | `512` | Dimension used by the hashing embedding model. |
+| `FEEDBACK_AGENT_VECTOR_STORE` | `json` | Vector store backend: `json` (default, local) or `qdrant`. |
+| `FEEDBACK_AGENT_QDRANT_URL` | `http://localhost:6333` | Qdrant endpoint used when `FEEDBACK_AGENT_VECTOR_STORE=qdrant`. |
+| `FEEDBACK_AGENT_QDRANT_COLLECTION` | `feedback_intelligence` | Qdrant collection name. |
+| `FEEDBACK_AGENT_RETRIEVER_TYPE` | `dense` | Retrieval strategy: `dense`, `lexical`, or `hybrid`. |
+| `FEEDBACK_AGENT_DENSE_WEIGHT` | `0.6` | Dense score weight used by the hybrid retriever. |
+| `FEEDBACK_AGENT_LEXICAL_WEIGHT` | `0.4` | Lexical (BM25) score weight used by the hybrid retriever. |
+| `FEEDBACK_AGENT_LLM_PROVIDER` | `local` | `local`, `openai`, `anthropic`, or `ollama`. |
+| `FEEDBACK_AGENT_TELEMETRY_ENABLED` | `false` | Enable structured telemetry events. |
+| `FEEDBACK_AGENT_TELEMETRY_PATH` | `.artifacts/telemetry.jsonl` | JSONL file that telemetry events are appended to. |
+| `FEEDBACK_AGENT_CONVERSATION_STORE_PATH` | `.artifacts/conversations` | Directory holding one JSON file per chat conversation. |
+| `FEEDBACK_AGENT_JOB_STORE_PATH` | `.artifacts/jobs` | Directory holding one JSON file per ingestion job. |
 | `OPENAI_API_KEY` | empty | Required only when using the OpenAI-compatible provider. |
 | `OPENAI_MODEL` | `gpt-4o-mini` | Model name for the OpenAI-compatible provider. |
 | `OPENAI_BASE_URL` | `https://api.openai.com` | Base URL, so any OpenAI-compatible endpoint works (vLLM, LiteLLM, gateways). |
@@ -379,7 +379,7 @@ Create a local `.env` from `.env.example` if needed.
 ### LLM providers
 
 The answer-generation step is provider-agnostic behind the `LLMProvider` protocol in
-`llm.py`. Four providers are available, selected by `AI_SHOWCASE_LLM_PROVIDER`:
+`llm.py`. Four providers are available, selected by `FEEDBACK_AGENT_LLM_PROVIDER`:
 
 - **`local` (default)**: the deterministic evidence-driven provider. No API key, no
   network access, fully reproducible — this is what CI, tests, and the demo use.
@@ -387,7 +387,7 @@ The answer-generation step is provider-agnostic behind the `LLMProvider` protoco
   (`POST {OPENAI_BASE_URL}/v1/chat/completions` with a bearer token):
 
   ```bash
-  export AI_SHOWCASE_LLM_PROVIDER=openai
+  export FEEDBACK_AGENT_LLM_PROVIDER=openai
   export OPENAI_API_KEY=sk-...
   export OPENAI_MODEL=gpt-4o-mini
   # Optional: point at a self-hosted OpenAI-compatible server.
@@ -400,7 +400,7 @@ The answer-generation step is provider-agnostic behind the `LLMProvider` protoco
 
   ```bash
   poetry install --extras anthropic
-  export AI_SHOWCASE_LLM_PROVIDER=anthropic
+  export FEEDBACK_AGENT_LLM_PROVIDER=anthropic
   export ANTHROPIC_API_KEY=sk-ant-...
   export ANTHROPIC_MODEL=claude-opus-4-8   # bare alias, e.g. claude-sonnet-4-6, claude-haiku-4-5
   poetry run feedback-agent query "Why are enterprise customers unhappy with onboarding?"
@@ -410,7 +410,7 @@ The answer-generation step is provider-agnostic behind the `LLMProvider` protoco
 
   ```bash
   ollama pull llama3.2 && ollama serve
-  export AI_SHOWCASE_LLM_PROVIDER=ollama
+  export FEEDBACK_AGENT_LLM_PROVIDER=ollama
   export OLLAMA_BASE_URL=http://localhost:11434
   export OLLAMA_MODEL=llama3.2
   poetry run feedback-agent query "Why are enterprise customers unhappy with onboarding?"
@@ -436,7 +436,7 @@ pipeline runs in the background (FastAPI `BackgroundTasks`, no Celery/Redis).
 Job models live in `jobs.py`: `JobStatus` (`pending` -> `running` ->
 `succeeded`/`failed`), `JobRequest`, `JobResult`, and a `JobStore` abstraction
 with two backends — a thread-safe in-memory store (lock-guarded, for the API)
-and a JSON-backed store (one file per job under `AI_SHOWCASE_JOB_STORE_PATH`,
+and a JSON-backed store (one file per job under `FEEDBACK_AGENT_JOB_STORE_PATH`,
 default `.artifacts/jobs`). The same `run_ingestion_job` pipeline reuses the
 existing ingestion + data-contract validation, so synchronous indexing is
 unaffected.
@@ -480,8 +480,8 @@ Telemetry is disabled by default and adds no side effects. Enable it via environ
 variables and run any command; one JSON object per event is appended to the JSONL trace file:
 
 ```bash
-export AI_SHOWCASE_TELEMETRY_ENABLED=true
-export AI_SHOWCASE_TELEMETRY_PATH=.artifacts/telemetry.jsonl
+export FEEDBACK_AGENT_TELEMETRY_ENABLED=true
+export FEEDBACK_AGENT_TELEMETRY_PATH=.artifacts/telemetry.jsonl
 
 poetry run feedback-agent query "Why are enterprise customers unhappy with onboarding?"
 cat .artifacts/telemetry.jsonl

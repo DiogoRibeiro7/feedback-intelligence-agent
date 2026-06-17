@@ -17,7 +17,7 @@ class Settings(BaseSettings):
 
     model_config = SettingsConfigDict(
         env_file=".env",
-        env_prefix="AI_SHOWCASE_",
+        env_prefix="FEEDBACK_AGENT_",
         extra="ignore",
     )
 
@@ -26,7 +26,7 @@ class Settings(BaseSettings):
     embedding_dim: int = Field(default=512, ge=64, le=8192)
     vector_store: VectorStoreType = "json"
     qdrant_url: str = Field(default="http://localhost:6333")
-    qdrant_collection: str = Field(default="ai_showcase_feedback")
+    qdrant_collection: str = Field(default="feedback_intelligence")
     retriever_type: RetrieverType = "dense"
     dense_weight: float = Field(default=0.6, ge=0.0)
     lexical_weight: float = Field(default=0.4, ge=0.0)

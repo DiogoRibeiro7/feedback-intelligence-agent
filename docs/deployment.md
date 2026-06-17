@@ -1,6 +1,6 @@
 # Deployment
 
-This document describes how to take the AI Engineering Showcase from a local
+This document describes how to take the Feedback Intelligence Agent from a local
 demo to a deployed service. The manifests under [`deploy/`](../deploy) are
 realistic starting points, not a turnkey production platform. Read the
 [Scope and honesty](#scope-and-honesty) section before relying on them.
@@ -23,13 +23,13 @@ remote LLM), extend `/ready` to verify it.
 
 ## Configuration and secrets
 
-All runtime configuration comes from `AI_SHOWCASE_*` environment variables
+All runtime configuration comes from `FEEDBACK_AGENT_*` environment variables
 (see [`config.py`](../src/feedback_intelligence_agent/config.py) and the table in
 the [README](../README.md#configuration)). The defaults run a fully local,
 deterministic pipeline that needs **no API keys**.
 
 Secrets (`OPENAI_API_KEY`, `ANTHROPIC_API_KEY`) are only required when you
-switch `AI_SHOWCASE_LLM_PROVIDER` away from `local`. They are **never** stored
+switch `FEEDBACK_AGENT_LLM_PROVIDER` away from `local`. They are **never** stored
 in the repository:
 
 - Docker Compose prod-like: a local `deploy/.env.prod` file (gitignored).
@@ -110,7 +110,7 @@ fly launch --no-deploy --copy-config --name <APP_NAME>   # first time only
 fly deploy --config deploy/fly.toml --dockerfile Dockerfile
 
 # Optional: switch to a hosted LLM provider with a secret.
-fly secrets set ANTHROPIC_API_KEY=sk-ant-... AI_SHOWCASE_LLM_PROVIDER=anthropic
+fly secrets set ANTHROPIC_API_KEY=sk-ant-... FEEDBACK_AGENT_LLM_PROVIDER=anthropic
 ```
 
 ## Scope and honesty
@@ -128,7 +128,7 @@ What they **do not** include:
 - No autoscaling, TLS termination config, or CDN.
 - No managed datastore by default — the JSON vector store lives on the
   container filesystem / a volume. For multi-instance deployments, switch to
-  the Qdrant backend (`AI_SHOWCASE_VECTOR_STORE=qdrant`) and point it at a
+  the Qdrant backend (`FEEDBACK_AGENT_VECTOR_STORE=qdrant`) and point it at a
   shared instance.
 - No authentication or rate limiting on the API (see the production
   considerations in [architecture.md](architecture.md)).

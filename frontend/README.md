@@ -1,6 +1,6 @@
 # Frontend demo
 
-A minimal, professional demo UI for the AI Engineering Showcase API, built with
+A minimal, professional demo UI for the Feedback Intelligence Agent API, built with
 plain **TypeScript + Vite** (no UI framework). It lets you ask a question and
 see the grounded answer, the retrieved sources/citations, latency and provider
 metadata, and supports an optional **streaming** mode that renders tokens as

@@ -249,8 +249,8 @@ def test_build_telemetry_enabled_writes_jsonl(tmp_path: Path) -> None:
 
 
 def test_settings_read_telemetry_env_vars(monkeypatch: pytest.MonkeyPatch) -> None:
-    monkeypatch.setenv("AI_SHOWCASE_TELEMETRY_ENABLED", "true")
-    monkeypatch.setenv("AI_SHOWCASE_TELEMETRY_PATH", "traces/run.jsonl")
+    monkeypatch.setenv("FEEDBACK_AGENT_TELEMETRY_ENABLED", "true")
+    monkeypatch.setenv("FEEDBACK_AGENT_TELEMETRY_PATH", "traces/run.jsonl")
     settings = Settings()
     assert settings.telemetry_enabled is True
     assert settings.telemetry_path == Path("traces/run.jsonl")

@@ -1,4 +1,4 @@
-// Typed client for the AI Engineering Showcase FastAPI backend.
+// Typed client for the Feedback Intelligence Agent FastAPI backend.
 // The types mirror the Pydantic schemas in
 // src/feedback_intelligence_agent/schemas.py.
 

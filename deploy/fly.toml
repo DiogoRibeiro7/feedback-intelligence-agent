@@ -1,11 +1,11 @@
-# Fly.io configuration for the AI Engineering Showcase API.
+# Fly.io configuration for the Feedback Intelligence Agent API.
 #
 # Deploys the FastAPI service straight from the repository Dockerfile. The
 # default `local` LLM provider needs no API keys, so this runs for free with no
 # secrets. To use a hosted LLM provider, set the key as a Fly secret instead of
 # committing it, e.g.:
 #   fly secrets set ANTHROPIC_API_KEY=sk-ant-...
-#   fly secrets set AI_SHOWCASE_LLM_PROVIDER=anthropic
+#   fly secrets set FEEDBACK_AGENT_LLM_PROVIDER=anthropic
 #
 # Deploy from the repo root:
 #   fly launch --no-deploy --copy-config --name <APP_NAME>   # first time
@@ -18,10 +18,10 @@ primary_region = "iad"
   dockerfile = "../Dockerfile"
 
 [env]
-  AI_SHOWCASE_DATA_PATH = "data/sample_feedback.csv"
-  AI_SHOWCASE_INDEX_PATH = "/app/.artifacts/vector_store.json"
-  AI_SHOWCASE_LLM_PROVIDER = "local"
-  AI_SHOWCASE_RETRIEVER_TYPE = "dense"
+  FEEDBACK_AGENT_DATA_PATH = "data/sample_feedback.csv"
+  FEEDBACK_AGENT_INDEX_PATH = "/app/.artifacts/vector_store.json"
+  FEEDBACK_AGENT_LLM_PROVIDER = "local"
+  FEEDBACK_AGENT_RETRIEVER_TYPE = "dense"
   # Non-secret config only. Set secrets with `fly secrets set ...`.
 
 [http_service]

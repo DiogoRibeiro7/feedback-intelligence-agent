@@ -30,7 +30,7 @@ def build_registry() -> PromptRegistry:
             version="v2",
             template="Hello {name}, welcome to {place}!",
             required_variables=("name",),
-            optional_variables={"place": "the showcase"},
+            optional_variables={"place": "the platform"},
             changelog="Added a place variable with a default.",
         )
     )
@@ -61,7 +61,7 @@ def test_old_versions_remain_available() -> None:
 
 def test_render_applies_optional_variable_defaults() -> None:
     registry = build_registry()
-    assert registry.render("greeting", name="Ada") == "Hello Ada, welcome to the showcase!"
+    assert registry.render("greeting", name="Ada") == "Hello Ada, welcome to the platform!"
     assert (
         registry.render("greeting", "v2", name="Ada", place="Lisbon")
         == "Hello Ada, welcome to Lisbon!"

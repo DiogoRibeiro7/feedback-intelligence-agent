@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.1.0",
   "type": "module",
-  "description": "Minimal TypeScript + Vite demo UI for the AI Engineering Showcase API.",
+  "description": "Minimal TypeScript + Vite demo UI for the Feedback Intelligence Agent API.",
   "scripts": {
     "dev": "vite",
     "build": "tsc --noEmit && vite build",

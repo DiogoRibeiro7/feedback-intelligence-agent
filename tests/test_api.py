@@ -27,9 +27,9 @@ def _parse_sse_events(payload: str) -> list[tuple[str, dict[str, Any]]]:
 
 @pytest.fixture()
 def client(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> TestClient:
-    monkeypatch.setenv("AI_SHOWCASE_INDEX_PATH", str(tmp_path / "vector_store.json"))
-    monkeypatch.setenv("AI_SHOWCASE_CONVERSATION_STORE_PATH", str(tmp_path / "conversations"))
-    monkeypatch.setenv("AI_SHOWCASE_JOB_STORE_PATH", str(tmp_path / "jobs"))
+    monkeypatch.setenv("FEEDBACK_AGENT_INDEX_PATH", str(tmp_path / "vector_store.json"))
+    monkeypatch.setenv("FEEDBACK_AGENT_CONVERSATION_STORE_PATH", str(tmp_path / "conversations"))
+    monkeypatch.setenv("FEEDBACK_AGENT_JOB_STORE_PATH", str(tmp_path / "jobs"))
     return TestClient(create_app())
 
 

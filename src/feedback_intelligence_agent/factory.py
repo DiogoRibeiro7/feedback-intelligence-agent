@@ -32,9 +32,9 @@ if TYPE_CHECKING:
 def build_telemetry(settings: Settings) -> Telemetry:
     """Construct the telemetry emitter configured by the settings.
 
-    Telemetry is disabled (a no-op emitter) unless ``AI_SHOWCASE_TELEMETRY_ENABLED``
+    Telemetry is disabled (a no-op emitter) unless ``FEEDBACK_AGENT_TELEMETRY_ENABLED``
     is set; when enabled, events are appended to the JSONL file configured by
-    ``AI_SHOWCASE_TELEMETRY_PATH``.
+    ``FEEDBACK_AGENT_TELEMETRY_PATH``.
     """
     if not settings.telemetry_enabled:
         return Telemetry()
@@ -45,7 +45,7 @@ def build_conversation_store(settings: Settings) -> JsonConversationStore:
     """Construct the JSON-backed conversation store configured by the settings.
 
     Conversations are persisted as one JSON file each under
-    ``AI_SHOWCASE_CONVERSATION_STORE_PATH`` (default ``.artifacts/conversations``).
+    ``FEEDBACK_AGENT_CONVERSATION_STORE_PATH`` (default ``.artifacts/conversations``).
     """
     return JsonConversationStore(settings.conversation_store_path)
 
@@ -53,7 +53,7 @@ def build_conversation_store(settings: Settings) -> JsonConversationStore:
 def build_job_store(settings: Settings) -> JsonJobStore:
     """Construct the JSON-backed ingestion job store configured by the settings.
 
-    Jobs are persisted as one JSON file each under ``AI_SHOWCASE_JOB_STORE_PATH``
+    Jobs are persisted as one JSON file each under ``FEEDBACK_AGENT_JOB_STORE_PATH``
     (default ``.artifacts/jobs``), so submitted ingestion jobs survive restarts
     and are easy to inspect. Imported lazily to avoid a circular import, since
     :mod:`feedback_intelligence_agent.jobs` reuses :func:`chunk_to_embedding_text`.
@@ -103,7 +103,7 @@ def build_qdrant_index(settings: Settings, *, telemetry: Telemetry | None = None
     """Build (or refresh) a Qdrant-backed index from the configured data.
 
     The Qdrant store is imported lazily here so the optional ``qdrant-client``
-    dependency is only required when ``AI_SHOWCASE_VECTOR_STORE=qdrant``.
+    dependency is only required when ``FEEDBACK_AGENT_VECTOR_STORE=qdrant``.
     """
     from feedback_intelligence_agent.qdrant_store import QdrantVectorStore
 
@@ -125,7 +125,7 @@ def load_or_build_index(settings: Settings, *, telemetry: Telemetry | None = Non
     """Load the configured index, building it from data when needed.
 
     With the default ``json`` store the index is loaded from (or built and
-    persisted to) ``AI_SHOWCASE_INDEX_PATH``. With ``qdrant`` the index lives in
+    persisted to) ``FEEDBACK_AGENT_INDEX_PATH``. With ``qdrant`` the index lives in
     the configured Qdrant collection.
     """
     if settings.vector_store == "qdrant":
@@ -165,7 +165,7 @@ def build_retriever(settings: Settings, vector_store: VectorStore) -> Retriever:
 
 
 def build_llm(settings: Settings) -> LLMProvider:
-    """Construct the LLM provider selected by ``AI_SHOWCASE_LLM_PROVIDER``.
+    """Construct the LLM provider selected by ``FEEDBACK_AGENT_LLM_PROVIDER``.
 
     ``local`` (the default) needs no API key and stays fully deterministic.
     ``openai`` targets any OpenAI-compatible endpoint (``OPENAI_BASE_URL``),
@@ -177,7 +177,7 @@ def build_llm(settings: Settings) -> LLMProvider:
         return DeterministicLLM()
     if settings.llm_provider == "openai":
         if not settings.openai_api_key:
-            raise ValueError("OPENAI_API_KEY is required when AI_SHOWCASE_LLM_PROVIDER=openai")
+            raise ValueError("OPENAI_API_KEY is required when FEEDBACK_AGENT_LLM_PROVIDER=openai")
         return OpenAIChatLLM(
             api_key=settings.openai_api_key,
             model=settings.openai_model,
@@ -186,7 +186,7 @@ def build_llm(settings: Settings) -> LLMProvider:
     if settings.llm_provider == "anthropic":
         if not settings.anthropic_api_key:
             raise ValueError(
-                "ANTHROPIC_API_KEY is required when AI_SHOWCASE_LLM_PROVIDER=anthropic"
+                "ANTHROPIC_API_KEY is required when FEEDBACK_AGENT_LLM_PROVIDER=anthropic"
             )
         return AnthropicLLM(api_key=settings.anthropic_api_key, model=settings.anthropic_model)
     if settings.llm_provider == "ollama":
