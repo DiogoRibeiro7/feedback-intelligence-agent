@@ -264,8 +264,7 @@ class OpenAIChatLLM:
         except httpx.HTTPStatusError as exc:
             if exc.response.status_code == 401:
                 raise LLMProviderError(
-                    "OpenAI-compatible API authentication failed (HTTP 401). "
-                    "Check OPENAI_API_KEY."
+                    "OpenAI-compatible API authentication failed (HTTP 401). Check OPENAI_API_KEY."
                 ) from exc
             raise LLMProviderError(
                 "OpenAI-compatible API request to "
