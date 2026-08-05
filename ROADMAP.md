@@ -38,7 +38,7 @@ This roadmap is designed to evolve the repository from a compact portfolio proje
 
 ## Phase 5 — Data engineering
 
-- [ ] Add streaming ingestion with Kafka or Kinesis.
+- [x] Add streaming ingestion with Kafka or Kinesis.
 - [ ] Add incremental index updates.
 - [x] Add data contracts for feedback producers.
 - [ ] Add PII redaction before storage.

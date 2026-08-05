@@ -55,16 +55,18 @@ without provisioning anything.
 
 ## System architecture
 
-The system is a set of small, typed modules behind explicit interfaces. The
-ingestion path builds an index; the query path retrieves evidence, runs
-guardrails and optional tools, generates a grounded answer, and returns
-citations plus diagnostics. A FastAPI service and a TypeScript/Vite frontend sit
-on top.
+The system is a set of small, typed modules behind explicit interfaces. Batch
+and stream ingestion paths validate feedback before indexing; the query path
+retrieves evidence, runs guardrails and optional tools, generates a grounded
+answer, and returns citations plus diagnostics. A FastAPI service and a
+TypeScript/Vite frontend sit on top.
 
 ```mermaid
 flowchart TB
   subgraph Ingest["Ingestion path"]
     CSV["CSV feedback"] --> DC["Data contract<br/>(data_contracts.py)"]
+    STREAM["Kafka / Kinesis / JSONL events"] --> SI["Streaming ingestion<br/>(streaming_ingestion.py)"]
+    SI --> DC
     DC --> ING["Ingestion<br/>(ingestion.py)"]
     ING --> CH["Chunking<br/>(chunking.py)"]
     CH --> EMB["Hashing embeddings<br/>(embeddings.py)"]
@@ -150,7 +152,11 @@ Ingestion validates each row against a data contract
 ([data_contracts.py](../src/feedback_intelligence_agent/data_contracts.py)) — the
 contract requires `feedback_id`, `customer_segment`, `channel`, `rating`,
 `text`, and `created_at` and reports missing columns, empty text, duplicate IDs,
-and invalid timestamps. Valid rows are chunked into overlapping word windows
+and invalid timestamps. Streaming ingestion
+([streaming_ingestion.py](../src/feedback_intelligence_agent/streaming_ingestion.py))
+validates bounded JSONL, Kafka, or Kinesis event batches through the same
+`FeedbackRecord` schema, checkpoints accepted offsets, and can write rejected
+messages to a dead-letter JSONL file. Valid rows are chunked into overlapping word windows
 ([chunking.py](../src/feedback_intelligence_agent/chunking.py)), embedded with
 deterministic feature hashing
 ([embeddings.py](../src/feedback_intelligence_agent/embeddings.py)), and persisted.
@@ -309,9 +315,9 @@ readable; each names what was given up.
 - **Deterministic-first hallucination checks.** Evidence overlap is cheap and
   reproducible, while the optional LLM-as-judge pass improves semantic review at
   the cost of latency and provider spend.
-- **Synchronous-by-default ingestion with a lightweight async path.** Simple and
-  dependency-free, but the in-process job store is not a substitute for a durable
-  queue in a multi-worker deployment.
+- **Deterministic local stream path.** JSONL stream ingestion exercises the same
+  validation and dead-letter behavior as Kafka/Kinesis adapters, but production
+  deployments still need durable consumer groups and operational monitoring.
 
 ## Future work
 
@@ -323,7 +329,7 @@ Tracked in [ROADMAP.md](../ROADMAP.md). High-value next steps:
   telemetry for malformed model responses.
 - **Evaluation & observability:** alerting and SLOs for latency, retrieval-score
   distribution, citation coverage, and hallucination rate.
-- **Data engineering:** streaming ingestion (Kafka/Kinesis), incremental index
-  updates, and PII redaction before indexing.
+- **Data engineering:** incremental index updates, PII redaction before indexing,
+  and lakehouse exports.
 - **Product & platform:** human feedback capture on answers, saved insight
   reports, multi-tenant isolation, and auth/rate limiting on the API.

@@ -16,6 +16,8 @@ All notable changes to this project are documented here.
   LLM-as-judge support.
 - Frontend session dashboard for latency, retrieval-score distribution, and
   citation coverage.
+- Streaming feedback ingestion primitives with local JSONL, Kafka, and Kinesis
+  adapters plus dead-letter handling.
 
 ## 0.2.0 - 2026-08-05
 

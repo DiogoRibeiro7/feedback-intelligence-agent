@@ -38,6 +38,11 @@ from feedback_intelligence_agent.prompt_registry import (
 )
 from feedback_intelligence_agent.prompts import PROMPT_REGISTRY
 from feedback_intelligence_agent.schemas import ChatResponse, FeedbackChannel, MetadataFilters
+from feedback_intelligence_agent.streaming_ingestion import (
+    JsonlFeedbackStream,
+    consume_feedback_stream,
+    write_stream_records_csv,
+)
 from feedback_intelligence_agent.synthetic_data import SyntheticDataConfig, write_feedback_csv
 from feedback_intelligence_agent.telemetry import configure_logging
 
@@ -129,6 +134,40 @@ def ingest_job(
     typer.echo(result.model_dump_json(indent=2))
     if result.status.value == "failed":
         raise typer.Exit(code=1)
+
+
+@app.command("stream-ingest")
+def stream_ingest(
+    input: Annotated[Path, typer.Option(help="JSONL stream file of feedback events.")],
+    output: Annotated[Path, typer.Option(help="CSV path for accepted feedback records.")] = Path(
+        ".artifacts/stream_feedback.csv"
+    ),
+    dead_letter: Annotated[
+        Path | None, typer.Option(help="Optional JSONL path for rejected stream messages.")
+    ] = Path(".artifacts/stream_dead_letters.jsonl"),
+    max_messages: Annotated[
+        int, typer.Option(help="Maximum stream messages to consume in this batch.")
+    ] = 100,
+) -> None:
+    """Consume a bounded local stream batch and write validated feedback records.
+
+    This command uses the same streaming validation path as Kafka/Kinesis adapters,
+    but reads from a JSONL file so local demos and CI remain deterministic.
+    """
+    configure_logging()
+    settings = Settings()
+    stream = JsonlFeedbackStream(input)
+    result = consume_feedback_stream(
+        stream,
+        max_messages=max_messages,
+        dead_letter_path=dead_letter,
+        telemetry=build_telemetry(settings),
+    )
+    if result.records:
+        write_stream_records_csv(result.records, output)
+    typer.echo(result.model_dump_json(indent=2))
+    if result.rejected_messages:
+        typer.echo(f"{result.rejected_messages} message(s) written to {dead_letter}", err=True)
 
 
 @app.command("validate-data")

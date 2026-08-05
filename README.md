@@ -74,6 +74,7 @@ feedback-intelligence-agent/
 │   ├── reranking.py          # Deterministic local judge reranker
 │   ├── retrieval.py          # Query engine and hybrid retriever
 │   ├── schemas.py            # Domain schemas
+│   ├── streaming_ingestion.py # JSONL/Kafka/Kinesis feedback stream validation
 │   ├── telemetry.py          # Structured logging helpers
 │   └── vector_store.py       # In-memory vector store with JSON persistence
 ├── data/sample_feedback.csv  # Demo dataset
@@ -636,6 +637,35 @@ non-zero on failure):
 poetry run feedback-agent ingest-job --input data/sample_feedback.csv \
   --index-path .artifacts/vector_store.json
 ```
+
+## Streaming ingestion
+
+Streaming ingestion lives in `streaming_ingestion.py`. It validates feedback events
+from bounded stream batches into the same `FeedbackRecord` schema used by CSV
+ingestion, checkpoints accepted offsets, and writes invalid messages to an optional
+JSONL dead-letter file. The default local path is deterministic and reads JSONL
+events, while optional adapters cover Kafka and Kinesis.
+
+Run the local stream path:
+
+```bash
+poetry run feedback-agent stream-ingest \
+  --input examples/stream_feedback.jsonl \
+  --output .artifacts/stream_feedback.csv \
+  --dead-letter .artifacts/stream_dead_letters.jsonl
+```
+
+For real streams, install the optional provider dependencies:
+
+```bash
+poetry install --extras streaming
+```
+
+`KafkaFeedbackStream` wraps `confluent-kafka` with manual commits; `KinesisFeedbackStream`
+wraps `boto3` `get_records` and tracks sequence-number checkpoints. Both feed the
+same `consume_feedback_stream(...)` validator, so tests and local demos exercise the
+same contract path as production consumers. Incremental index mutation is deliberately
+separate and tracked as the next roadmap item.
 
 ## Telemetry
 
