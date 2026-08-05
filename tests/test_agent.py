@@ -42,6 +42,7 @@ def test_agent_answer_contains_citations() -> None:
     assert answer.citations
     assert answer.confidence > 0
     assert answer.recommended_actions
+    assert answer.diagnostics["reranker"] == "DeterministicJudgeReranker"
 
 
 def test_agent_single_turn_answer_has_no_memory_diagnostics() -> None:

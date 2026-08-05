@@ -26,6 +26,7 @@ from feedback_intelligence_agent.memory import (
     new_conversation_id,
 )
 from feedback_intelligence_agent.prompts import build_grounded_prompt
+from feedback_intelligence_agent.reranking import DeterministicJudgeReranker, Reranker
 from feedback_intelligence_agent.retrieval import Retriever
 from feedback_intelligence_agent.schemas import (
     AgentAnswer,
@@ -65,6 +66,7 @@ class FeedbackInsightAgent:
         telemetry: Telemetry | None = None,
         tools: ToolRegistry | None = None,
         query_rewriter: QueryRewriter | None = None,
+        reranker: Reranker | None = None,
     ) -> None:
         """Wire the retriever (dense, lexical, or hybrid) to the LLM provider.
 
@@ -77,6 +79,8 @@ class FeedbackInsightAgent:
             query_rewriter: Optional rewriter that converts follow-up questions
                 into standalone questions when conversation history is passed
                 to :meth:`answer`; defaults to the deterministic local rewriter.
+            reranker: Optional candidate reranker; defaults to the deterministic
+                local judge reranker.
         """
         self.query_engine = query_engine
         self.llm = llm
@@ -84,6 +88,7 @@ class FeedbackInsightAgent:
         self.tools = tools
         self.tool_router = ToolRouter(tools) if tools is not None else None
         self.query_rewriter = query_rewriter or DeterministicQueryRewriter()
+        self.reranker = reranker or DeterministicJudgeReranker()
 
     def answer(
         self,
@@ -191,6 +196,7 @@ class FeedbackInsightAgent:
             "min_score": min((result.score for result in results), default=0.0),
             "guardrail_context_dropped": context_chunks_dropped,
             "metadata_filters": filters.model_dump(mode="json") if filters is not None else None,
+            "reranker": type(self.reranker).__name__,
             "tool_used": (
                 tool_record.tool_name
                 if tool_record is not None and tool_record.status == "ok"
@@ -419,11 +425,14 @@ class FeedbackInsightAgent:
                     if self._matches_metadata_filters(result.chunk.metadata, filters)
                 ]
             span["metadata_filtered_out"] = unfiltered_count - len(candidates)
-            scored: list[SearchResult] = []
-            for result in candidates:
-                adjusted_score = self._combined_score(question, route, result)
-                scored.append(SearchResult(chunk=result.chunk, score=adjusted_score))
-            ranked = sorted(scored, key=lambda item: item.score, reverse=True)[:top_k]
+            route_keywords = next((rule.patterns for rule in ROUTE_RULES if rule.name == route), ())
+            ranked = self.reranker.rerank(
+                question,
+                candidates,
+                top_k=top_k,
+                route_keywords=route_keywords,
+            )
+            span["reranker"] = type(self.reranker).__name__
             span["results"] = len(ranked)
             span["max_score"] = max((result.score for result in ranked), default=0.0)
             span["min_score"] = min((result.score for result in ranked), default=0.0)
@@ -485,72 +494,6 @@ class FeedbackInsightAgent:
         if value.tzinfo is None:
             return value
         return value.astimezone(timezone.utc).replace(tzinfo=None)
-
-    def _combined_score(self, question: str, route: str, result: SearchResult) -> float:
-        """Combine vector, lexical, route, and metadata features."""
-        question_terms = self._tokens(question)
-        metadata = result.chunk.metadata
-        searchable = " ".join(
-            [
-                result.chunk.text,
-                str(metadata.get("customer_segment", "")),
-                str(metadata.get("channel", "")),
-                str(metadata.get("rating", "")),
-            ]
-        ).lower()
-        overlap = 0.0
-        if question_terms:
-            overlap = sum(1 for term in question_terms if term in searchable) / len(question_terms)
-
-        route_keywords = next((rule.patterns for rule in ROUTE_RULES if rule.name == route), ())
-        route_hits = sum(1 for keyword in route_keywords if keyword in searchable)
-        route_score = min(route_hits / 3.0, 1.0)
-
-        segment_score = 0.0
-        segment = str(metadata.get("customer_segment", "")).lower()
-        if segment and segment.replace("_", " ") in question.lower():
-            segment_score = 1.0
-
-        low_rating_score = 0.0
-        risk_terms = {"unhappy", "complain", "complaints", "risk", "churn", "bad", "poor"}
-        if question_terms.intersection(risk_terms) and int(metadata.get("rating", 5)) <= 2:
-            low_rating_score = 1.0
-
-        return round(
-            result.score
-            + 0.22 * overlap
-            + 0.18 * route_score
-            + 0.08 * segment_score
-            + 0.06 * low_rating_score,
-            6,
-        )
-
-    def _tokens(self, text: str) -> set[str]:
-        """Return compact query tokens used by reranking."""
-        stopwords = {
-            "what",
-            "which",
-            "where",
-            "when",
-            "why",
-            "how",
-            "are",
-            "the",
-            "for",
-            "with",
-            "and",
-            "from",
-            "should",
-            "could",
-            "would",
-            "customers",
-            "customer",
-        }
-        return {
-            token
-            for token in re.findall(r"[a-zA-Z][a-zA-Z0-9_]{2,}", text.lower())
-            if token not in stopwords
-        }
 
     def _parse_response(self, raw_response: str) -> dict[str, list[str] | str]:
         """Parse a sectioned LLM response into answer and action fields."""

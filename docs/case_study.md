@@ -310,8 +310,8 @@ readable; each names what was given up.
 
 Tracked in [ROADMAP.md](../ROADMAP.md). High-value next steps:
 
-- **Retrieval:** cross-encoder / LLM-judge reranking and deeper retrieval
-  regression suites for known questions.
+- **Retrieval:** deeper retrieval regression suites for known questions and
+  optional external cross-encoder / LLM-judge rerankers.
 - **Generation:** structured JSON output validation with automatic repair, and
   retry/timeout/circuit-breaker policies for remote providers.
 - **Evaluation & observability:** experiment tracking (MLflow / W&B),

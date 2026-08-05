@@ -70,6 +70,8 @@ feedback-intelligence-agent/
 │   ├── llm.py                # LLM abstraction and local fallback
 │   ├── prompt_registry.py    # Versioned prompt registry
 │   ├── prompts.py            # Prompt definitions and construction
+│   ├── query_expansion.py    # Deterministic product terminology expansion
+│   ├── reranking.py          # Deterministic local judge reranker
 │   ├── retrieval.py          # Query engine and hybrid retriever
 │   ├── schemas.py            # Domain schemas
 │   ├── telemetry.py          # Structured logging helpers
@@ -157,6 +159,11 @@ retrieval. This lets shorthand such as `CRM connector`, `BI report`, `CSM`, or
 `NPS` match feedback written with terms such as `Salesforce`, `HubSpot`,
 `integration`, `dashboard`, `customer success`, or `survey`, without calling an
 external model.
+
+After candidate retrieval, a deterministic local judge reranker combines the
+retrieval score with transparent lexical, route, segment, and low-rating signals.
+It is implemented behind a small `Reranker` protocol, so a cross-encoder or
+LLM-judge reranker can replace it without changing the agent orchestration.
 
 ## Metadata filters
 

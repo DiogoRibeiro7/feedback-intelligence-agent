@@ -71,7 +71,7 @@ The full agent flow per question is:
 
 1. **Input guardrail gate** (`guardrails.check_input`): unsafe questions are refused before any retrieval or tool use.
 2. **Route selection**: a keyword router classifies the question into a stable route for observability and prompts.
-3. **Retrieval + reranking**: the configured retriever gathers candidate chunks; lightweight domain signals rerank them.
+3. **Retrieval + reranking**: the configured retriever gathers candidate chunks; `reranking.py` applies a deterministic local judge using lexical, route, segment, and low-rating signals.
 4. **Context guardrail gate** (`guardrails.check_context`): retrieved chunks carrying injection-style content are dropped.
 5. **Tool routing** (`tools.ToolRouter`): a deterministic keyword router selects at most one local tool. Explicit requests for unknown tools (`use the <name> tool`) are refused gracefully and the run continues as plain RAG.
 6. **Tool execution**: the selected tool validates its Pydantic input schema and runs locally, wrapped in `tool_run_started`/`tool_run_finished` telemetry spans. Tool failures degrade to an `error` record instead of failing the run.
@@ -112,6 +112,7 @@ Routing is keyword/intent based (`TOOL_ROUTES`) with no function-calling API, so
 - Add tracing with OpenTelemetry.
 - Add human feedback capture for answer quality.
 - Add regression tests for prompts and retrieval behavior.
+- Replace the deterministic reranker with a cross-encoder or external LLM judge.
 - Add role-based access control around the API.
 
 ## Production considerations
