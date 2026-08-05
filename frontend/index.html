@@ -36,6 +36,25 @@
 
       <section id="status" class="status" hidden></section>
 
+      <section id="dashboard-panel" class="panel dashboard" hidden>
+        <h2 class="panel__title">Session dashboard</h2>
+        <div id="dashboard-summary" class="dashboard__summary"></div>
+        <div class="dashboard__charts">
+          <div class="dashboard__chart">
+            <h3>Latency</h3>
+            <div id="latency-chart" class="bar-chart"></div>
+          </div>
+          <div class="dashboard__chart">
+            <h3>Retrieval scores</h3>
+            <div id="score-chart" class="score-chart"></div>
+          </div>
+          <div class="dashboard__chart">
+            <h3>Citation coverage</h3>
+            <div id="coverage-chart" class="coverage-chart"></div>
+          </div>
+        </div>
+      </section>
+
       <section id="answer-panel" class="panel" hidden>
         <h2 class="panel__title">Answer</h2>
         <div id="answer" class="panel__body answer"></div>

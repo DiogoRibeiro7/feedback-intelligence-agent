@@ -13,6 +13,8 @@ they arrive over Server-Sent Events.
   channel, retrieval score, and the quoted evidence span).
 - **Metadata**: route, confidence, and — in streaming mode — provider and
   `latency_ms`.
+- **Session dashboard**: latency trend, retrieval-score distribution, and citation
+  marker coverage across the queries run in the current browser session.
 - A **streaming toggle**: off calls `POST /query`; on calls `POST /query/stream`
   and appends `content` chunks live, then renders the final `metadata` event.
 

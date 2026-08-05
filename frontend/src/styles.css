@@ -7,6 +7,8 @@
   --muted: #94a3b8;
   --accent: #38bdf8;
   --accent-strong: #0ea5e9;
+  --ok: #34d399;
+  --warn: #f59e0b;
   --error: #f87171;
   --radius: 10px;
   font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
@@ -152,6 +154,144 @@ body {
   color: var(--muted);
 }
 
+.dashboard__summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr));
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.dashboard__metric {
+  min-height: 4.25rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.15rem;
+  background: var(--panel-soft);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.7rem 0.8rem;
+}
+
+.dashboard__metric strong {
+  font-size: 1.15rem;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+}
+
+.dashboard__metric span {
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
+.dashboard__charts {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.dashboard__chart {
+  min-width: 0;
+}
+
+.dashboard__chart h3 {
+  margin: 0 0 0.65rem;
+  font-size: 0.88rem;
+  color: var(--text);
+}
+
+.bar-chart,
+.score-chart,
+.coverage-chart {
+  min-height: 9.5rem;
+}
+
+.bar-chart,
+.score-chart {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.bar-chart__row,
+.score-chart__row {
+  display: grid;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 1.15rem;
+  font-size: 0.78rem;
+}
+
+.bar-chart__row {
+  grid-template-columns: 2rem minmax(3rem, 1fr) 3.8rem;
+}
+
+.score-chart__row {
+  grid-template-columns: 3.5rem minmax(3rem, 1fr) 1.5rem;
+}
+
+.bar-chart__bar,
+.score-chart__track {
+  display: block;
+  height: 0.55rem;
+  border-radius: 999px;
+}
+
+.bar-chart__bar {
+  background: linear-gradient(90deg, var(--ok), var(--accent));
+}
+
+.bar-chart__value,
+.score-chart__row > span:first-child,
+.score-chart__row > span:last-child {
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.score-chart__track {
+  overflow: hidden;
+  background: rgba(148, 163, 184, 0.18);
+}
+
+.score-chart__fill {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--warn), var(--ok));
+}
+
+.coverage-chart {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(3.75rem, 1fr));
+  align-items: start;
+  gap: 0.65rem;
+}
+
+.coverage-chart__item {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
+.coverage-chart__ring {
+  width: 3.25rem;
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at center, var(--panel) 54%, transparent 56%),
+    conic-gradient(var(--ok) var(--coverage), rgba(148, 163, 184, 0.2) 0);
+  color: var(--text);
+  font-size: 0.72rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
 .meta {
   display: grid;
   grid-template-columns: auto 1fr;
@@ -209,4 +349,10 @@ body {
   border-left: 3px solid var(--accent-strong);
   color: var(--text);
   font-style: italic;
+}
+
+@media (max-width: 760px) {
+  .dashboard__charts {
+    grid-template-columns: 1fr;
+  }
 }

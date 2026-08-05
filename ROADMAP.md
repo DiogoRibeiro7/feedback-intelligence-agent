@@ -34,7 +34,7 @@ This roadmap is designed to evolve the repository from a compact portfolio proje
 - [x] Add OpenTelemetry traces for retrieval and generation.
 - [x] Add deterministic guardrails with prompt-injection test cases.
 - [x] Add hallucination checks using evidence overlap and LLM-as-judge.
-- [ ] Add dashboards for latency, retrieval score distribution, and citation coverage.
+- [x] Add dashboards for latency, retrieval score distribution, and citation coverage.
 
 ## Phase 5 — Data engineering
 

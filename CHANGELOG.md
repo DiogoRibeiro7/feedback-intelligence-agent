@@ -14,6 +14,8 @@ All notable changes to this project are documented here.
   and response parsing traces.
 - Hallucination diagnostics using deterministic evidence overlap plus optional
   LLM-as-judge support.
+- Frontend session dashboard for latency, retrieval-score distribution, and
+  citation coverage.
 
 ## 0.2.0 - 2026-08-05
 

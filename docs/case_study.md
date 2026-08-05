@@ -321,7 +321,7 @@ Tracked in [ROADMAP.md](../ROADMAP.md). High-value next steps:
   larger query suites for retrieval drift monitoring.
 - **Generation:** provider-specific structured output modes and richer repair
   telemetry for malformed model responses.
-- **Evaluation & observability:** dashboards for latency, retrieval-score
+- **Evaluation & observability:** alerting and SLOs for latency, retrieval-score
   distribution, citation coverage, and hallucination rate.
 - **Data engineering:** streaming ingestion (Kafka/Kinesis), incremental index
   updates, and PII redaction before indexing.

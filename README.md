@@ -409,7 +409,9 @@ installed fails fast with an actionable message explaining how to install it.
 A minimal, professional **TypeScript + Vite** demo UI lives in
 [`frontend/`](frontend/README.md). It calls the FastAPI backend and renders the
 grounded answer, the retrieved sources/citations, latency and provider
-metadata, and supports an optional streaming mode (`POST /query/stream`).
+metadata, and supports an optional streaming mode (`POST /query/stream`). It
+also keeps a browser-session dashboard for latency trend, retrieval-score
+distribution, and citation marker coverage while an analyst explores queries.
 
 Run it locally against a running backend:
 
