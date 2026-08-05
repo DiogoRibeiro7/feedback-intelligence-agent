@@ -20,6 +20,7 @@ import platform
 import subprocess
 from datetime import datetime, timezone
 from pathlib import Path
+from types import ModuleType
 from typing import Literal
 
 import yaml
@@ -45,6 +46,7 @@ from feedback_intelligence_agent.vector_store import InMemoryVectorStore
 RESULTS_FILENAME = "results.json"
 METRICS_FILENAME = "metrics.json"
 METADATA_FILENAME = "run_metadata.json"
+TrackingProvider = Literal["none", "mlflow"]
 
 
 class ExperimentConfig(BaseModel):
@@ -69,6 +71,9 @@ class ExperimentConfig(BaseModel):
     retriever_type: RetrieverType = "dense"
     dense_weight: float = Field(default=0.6, ge=0.0)
     lexical_weight: float = Field(default=0.4, ge=0.0)
+    tracking_provider: TrackingProvider = "none"
+    tracking_uri: str | None = None
+    tracking_experiment_name: str = "feedback-intelligence-agent"
 
     @model_validator(mode="after")
     def check_chunk_overlap(self) -> ExperimentConfig:
@@ -204,6 +209,98 @@ def write_experiment_outputs(
         path.write_text(payload + "\n", encoding="utf-8")
         paths[filename] = path
     return paths
+
+
+class ExperimentTrackingError(RuntimeError):
+    """Raised when an optional experiment tracker cannot log a run."""
+
+
+def track_experiment_run(
+    result: ExperimentResult,
+    metadata: RunMetadata,
+    artifacts: dict[str, Path],
+) -> str | None:
+    """Log an experiment run to the configured tracking backend.
+
+    ``tracking_provider='none'`` is the default and returns ``None``. The MLflow
+    backend is imported lazily so the default install remains lightweight.
+    """
+    if result.config.tracking_provider == "none":
+        return None
+    if result.config.tracking_provider == "mlflow":
+        return _track_with_mlflow(result, metadata, artifacts)
+    raise ExperimentTrackingError(
+        f"Unsupported tracking provider: {result.config.tracking_provider}"
+    )
+
+
+def _track_with_mlflow(
+    result: ExperimentResult,
+    metadata: RunMetadata,
+    artifacts: dict[str, Path],
+) -> str:
+    """Log params, metrics, tags, and artifacts to MLflow."""
+    mlflow = _import_mlflow()
+    config = result.config
+    if config.tracking_uri:
+        mlflow.set_tracking_uri(config.tracking_uri)
+    mlflow.set_experiment(config.tracking_experiment_name)
+    with mlflow.start_run(run_name=config.name) as run:
+        mlflow.log_params(_tracking_params(config))
+        mlflow.log_metrics(_tracking_metrics(result.metrics))
+        if metadata.git_commit:
+            mlflow.set_tag("git_commit", metadata.git_commit)
+        mlflow.set_tag("package_version", metadata.package_version)
+        mlflow.set_tag("description", config.description)
+        for path in artifacts.values():
+            mlflow.log_artifact(str(path))
+    run_id = getattr(getattr(run, "info", None), "run_id", None)
+    return str(run_id) if run_id else ""
+
+
+def _import_mlflow() -> ModuleType:
+    """Import optional MLflow with an actionable setup message."""
+    try:
+        import mlflow
+    except ImportError as exc:
+        raise ExperimentTrackingError(
+            "The 'mlflow' package is required for experiment tracking. "
+            "Install it with: poetry install --extras mlflow (or: pip install mlflow)."
+        ) from exc
+    module: ModuleType = mlflow
+    return module
+
+
+def _tracking_params(config: ExperimentConfig) -> dict[str, str | int | float]:
+    """Flatten experiment config fields into MLflow-safe parameters."""
+    return {
+        "dataset_path": str(config.dataset_path),
+        "queries_path": str(config.queries_path),
+        "chunk_size": config.chunk_size,
+        "chunk_overlap": config.chunk_overlap,
+        "top_k": config.top_k,
+        "embedding_provider": config.embedding_provider,
+        "embedding_dim": config.embedding_dim,
+        "llm_provider": config.llm_provider,
+        "retriever_type": config.retriever_type,
+        "dense_weight": config.dense_weight,
+        "lexical_weight": config.lexical_weight,
+    }
+
+
+def _tracking_metrics(metrics: AggregateMetrics) -> dict[str, float]:
+    """Flatten aggregate metrics into MLflow scalar metrics."""
+    return {
+        "total_cases": float(metrics.total_cases),
+        "retrieval_precision_at_k": metrics.retrieval.precision_at_k,
+        "retrieval_recall_at_k": metrics.retrieval.recall_at_k,
+        "retrieval_mrr": metrics.retrieval.mean_reciprocal_rank,
+        "retrieval_context_hit_rate": metrics.retrieval.context_hit_rate,
+        "answer_keyword_coverage": metrics.answers.keyword_coverage,
+        "answer_groundedness": metrics.answers.groundedness,
+        "answer_refusal_correctness": metrics.answers.refusal_correctness,
+        "answer_citation_alignment": metrics.answers.citation_alignment,
+    }
 
 
 def _build_in_memory_index(config: ExperimentConfig) -> InMemoryVectorStore:

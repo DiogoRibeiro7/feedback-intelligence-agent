@@ -254,6 +254,21 @@ The run builds a fresh in-memory index from the configured dataset (the persiste
 
 With the local deterministic provider, `results.json` and `metrics.json` are bit-for-bit reproducible; environment-specific values live only in `run_metadata.json`. To compare configurations, copy `examples/experiment_config.yaml`, change one parameter (for example `retriever_type: dense` vs `hybrid`), point `output_dir` at a new folder, and diff the resulting `metrics.json` files.
 
+Experiment runs can also be logged to MLflow without changing the standard JSON
+artifacts:
+
+```yaml
+tracking_provider: mlflow
+tracking_uri: file:.artifacts/mlruns
+tracking_experiment_name: feedback-intelligence-agent
+```
+
+Install the optional dependency with `poetry install --extras mlflow`. The
+tracker logs configuration parameters, aggregate retrieval/answer metrics, run
+metadata, and the generated `results.json`, `metrics.json`, and
+`run_metadata.json` artifacts. The default `tracking_provider: none` keeps
+experiments fully local and dependency-light.
+
 ## Benchmarking
 
 The benchmark harness measures latency for the four phases that dominate cost in a

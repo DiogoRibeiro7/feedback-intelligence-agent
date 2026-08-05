@@ -14,3 +14,8 @@ llm_provider: local
 retriever_type: hybrid
 dense_weight: 0.6
 lexical_weight: 0.4
+tracking_provider: none
+# Optional MLflow tracking:
+# tracking_provider: mlflow
+# tracking_uri: file:.artifacts/mlruns
+# tracking_experiment_name: feedback-intelligence-agent

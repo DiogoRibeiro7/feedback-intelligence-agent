@@ -18,6 +18,7 @@ from feedback_intelligence_agent.experiments import (
     ExperimentConfig,
     collect_run_metadata,
     run_experiment,
+    track_experiment_run,
     write_experiment_outputs,
 )
 from feedback_intelligence_agent.factory import (
@@ -401,9 +402,12 @@ def experiment_run(
     result = run_experiment(experiment_config)
     metadata = collect_run_metadata(experiment_config)
     paths = write_experiment_outputs(result, metadata)
+    tracking_run_id = track_experiment_run(result, metadata, paths)
     typer.echo(result.metrics.model_dump_json(indent=2))
     for filename, path in paths.items():
         typer.echo(f"{filename} written to {path}", err=True)
+    if tracking_run_id is not None:
+        typer.echo(f"tracking run id: {tracking_run_id}", err=True)
 
 
 @prompts_app.command("list")

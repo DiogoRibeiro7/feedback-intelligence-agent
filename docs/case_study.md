@@ -238,8 +238,10 @@ gate** and for A/B comparison of configurations. The
 [experiment runner](../src/feedback_intelligence_agent/experiments.py) builds a fresh
 index from a YAML-described configuration and writes reproducible
 `results.json` / `metrics.json` plus environment-only `run_metadata.json`,
-making it easy to diff, for example, dense vs. hybrid retrieval. Full metric
-rationale is in [evaluation.md](evaluation.md).
+making it easy to diff, for example, dense vs. hybrid retrieval. Optional MLflow
+tracking logs the same parameters, aggregate metrics, and JSON artifacts when
+`tracking_provider: mlflow` is enabled. Full metric rationale is in
+[evaluation.md](evaluation.md).
 
 ## Observability strategy
 
@@ -316,9 +318,8 @@ Tracked in [ROADMAP.md](../ROADMAP.md). High-value next steps:
   larger query suites for retrieval drift monitoring.
 - **Generation:** provider-specific structured output modes and richer repair
   telemetry for malformed model responses.
-- **Evaluation & observability:** experiment tracking (MLflow / W&B),
-  OpenTelemetry trace export, and dashboards for latency, retrieval-score
-  distribution, and citation coverage.
+- **Evaluation & observability:** OpenTelemetry trace export and dashboards for
+  latency, retrieval-score distribution, and citation coverage.
 - **Data engineering:** streaming ingestion (Kafka/Kinesis), incremental index
   updates, and PII redaction before indexing.
 - **Product & platform:** human feedback capture on answers, saved insight

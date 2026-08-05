@@ -2,7 +2,9 @@ from __future__ import annotations
 
 import json
 import re
+import sys
 from pathlib import Path
+from types import ModuleType
 
 import pytest
 from pydantic import ValidationError
@@ -19,6 +21,7 @@ from feedback_intelligence_agent.experiments import (
     RunMetadata,
     collect_run_metadata,
     run_experiment,
+    track_experiment_run,
     write_experiment_outputs,
 )
 
@@ -69,6 +72,8 @@ def test_from_yaml_parses_fields_and_defaults(tmp_path: Path) -> None:
     assert config.embedding_provider == "hashing"
     assert config.embedding_dim == 512
     assert config.llm_provider == "local"
+    assert config.tracking_provider == "none"
+    assert config.tracking_experiment_name == "feedback-intelligence-agent"
     assert config.dataset_path == Path("data/sample_feedback.csv")
 
 
@@ -91,6 +96,8 @@ def test_config_rejects_unknown_providers() -> None:
         ExperimentConfig(embedding_provider="openai")  # type: ignore[arg-type]
     with pytest.raises(ValidationError):
         ExperimentConfig(retriever_type="graph")  # type: ignore[arg-type]
+    with pytest.raises(ValidationError):
+        ExperimentConfig(tracking_provider="wandb")  # type: ignore[arg-type]
 
 
 # ---------------------------------------------------------------------------
@@ -211,6 +218,59 @@ def test_write_experiment_outputs_creates_three_files(tmp_path: Path) -> None:
     assert "timestamp" not in metrics_payload
 
 
+def test_tracking_provider_none_is_noop(tmp_path: Path) -> None:
+    config = ExperimentConfig(name="tracking-none", output_dir=tmp_path / "out")
+    result = build_small_result()
+    result.config = config
+    metadata = collect_run_metadata(config)
+
+    run_id = track_experiment_run(result, metadata, {})
+
+    assert run_id is None
+
+
+def test_mlflow_tracking_logs_params_metrics_tags_and_artifacts(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    fake_mlflow = _make_fake_mlflow()
+    monkeypatch.setitem(sys.modules, "mlflow", fake_mlflow)
+    config = ExperimentConfig(
+        name="mlflow-test",
+        description="compare hybrid retrieval",
+        output_dir=tmp_path / "out",
+        tracking_provider="mlflow",
+        tracking_uri=tmp_path.as_uri(),
+        tracking_experiment_name="feedback-agent-tests",
+    )
+    result = build_small_result()
+    result.config = config
+    metadata = collect_run_metadata(config)
+    artifact = tmp_path / "metrics.json"
+    artifact.write_text("{}", encoding="utf-8")
+
+    run_id = track_experiment_run(result, metadata, {"metrics.json": artifact})
+
+    assert run_id == "run-123"
+    assert fake_mlflow.tracking_uri == tmp_path.as_uri()  # type: ignore[attr-defined]
+    assert fake_mlflow.experiment_name == "feedback-agent-tests"  # type: ignore[attr-defined]
+    assert fake_mlflow.run_names == ["mlflow-test"]  # type: ignore[attr-defined]
+    assert fake_mlflow.params["retriever_type"] == "dense"  # type: ignore[attr-defined]
+    assert fake_mlflow.metrics["answer_groundedness"] == 0.8  # type: ignore[attr-defined]
+    assert fake_mlflow.tags["description"] == "compare hybrid retrieval"  # type: ignore[attr-defined]
+    assert fake_mlflow.artifacts == [str(artifact)]  # type: ignore[attr-defined]
+
+
+def test_mlflow_tracking_reports_missing_package(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setitem(sys.modules, "mlflow", None)
+    result = build_small_result()
+    result.config = ExperimentConfig(tracking_provider="mlflow")
+    metadata = collect_run_metadata(result.config)
+
+    with pytest.raises(RuntimeError, match="poetry install --extras mlflow"):
+        track_experiment_run(result, metadata, {})
+
+
 def test_experiment_run_cli_command(tmp_path: Path) -> None:
     output_dir = tmp_path / "run-a"
     config_path = write_config_yaml(tmp_path / "config.yaml", output_dir)
@@ -231,8 +291,90 @@ def test_experiment_run_cli_command(tmp_path: Path) -> None:
     ).read_text(encoding="utf-8")
 
 
+def test_experiment_run_cli_logs_to_mlflow(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    fake_mlflow = _make_fake_mlflow()
+    monkeypatch.setitem(sys.modules, "mlflow", fake_mlflow)
+    output_dir = tmp_path / "tracked"
+    config_path = write_config_yaml(
+        tmp_path / "tracked.yaml",
+        output_dir,
+        tracking_provider="mlflow",
+        tracking_experiment_name="cli-tests",
+    )
+
+    result = runner.invoke(app, ["experiment", "run", "--config", str(config_path)])
+
+    assert result.exit_code == 0, result.output
+    assert "tracking run id: run-123" in result.output
+    assert fake_mlflow.experiment_name == "cli-tests"  # type: ignore[attr-defined]
+
+
 def test_experiment_run_cli_fails_on_invalid_config(tmp_path: Path) -> None:
     config_path = tmp_path / "bad.yaml"
     config_path.write_text("chunk_size: 10\nchunk_overlap: 99\n", encoding="utf-8")
     result = runner.invoke(app, ["experiment", "run", "--config", str(config_path)])
     assert result.exit_code != 0
+
+
+def _make_fake_mlflow() -> ModuleType:
+    """Build a minimal fake MLflow fluent module for tracking tests."""
+
+    class RunInfo:
+        run_id = "run-123"
+
+    class Run:
+        info = RunInfo()
+
+        def __enter__(self) -> Run:
+            return self
+
+        def __exit__(
+            self,
+            exc_type: object,
+            exc: object,
+            traceback: object,
+        ) -> None:
+            return None
+
+    module = type(sys)("mlflow")
+    module.tracking_uri = None  # type: ignore[attr-defined]
+    module.experiment_name = None  # type: ignore[attr-defined]
+    module.run_names = []  # type: ignore[attr-defined]
+    module.params = {}  # type: ignore[attr-defined]
+    module.metrics = {}  # type: ignore[attr-defined]
+    module.tags = {}  # type: ignore[attr-defined]
+    module.artifacts = []  # type: ignore[attr-defined]
+
+    def set_tracking_uri(uri: str) -> None:
+        module.tracking_uri = uri  # type: ignore[attr-defined]
+
+    def set_experiment(name: str) -> None:
+        module.experiment_name = name  # type: ignore[attr-defined]
+
+    def start_run(*, run_name: str) -> Run:
+        module.run_names.append(run_name)  # type: ignore[attr-defined]
+        return Run()
+
+    def log_params(params: dict[str, object]) -> None:
+        module.params.update(params)  # type: ignore[attr-defined]
+
+    def log_metrics(metrics: dict[str, float]) -> None:
+        module.metrics.update(metrics)  # type: ignore[attr-defined]
+
+    def set_tag(key: str, value: str) -> None:
+        module.tags[key] = value  # type: ignore[attr-defined]
+
+    def log_artifact(path: str) -> None:
+        module.artifacts.append(path)  # type: ignore[attr-defined]
+
+    module.set_tracking_uri = set_tracking_uri  # type: ignore[attr-defined]
+    module.set_experiment = set_experiment  # type: ignore[attr-defined]
+    module.start_run = start_run  # type: ignore[attr-defined]
+    module.log_params = log_params  # type: ignore[attr-defined]
+    module.log_metrics = log_metrics  # type: ignore[attr-defined]
+    module.set_tag = set_tag  # type: ignore[attr-defined]
+    module.log_artifact = log_artifact  # type: ignore[attr-defined]
+    return module
