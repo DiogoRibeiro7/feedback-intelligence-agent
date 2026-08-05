@@ -310,8 +310,8 @@ readable; each names what was given up.
 
 Tracked in [ROADMAP.md](../ROADMAP.md). High-value next steps:
 
-- **Retrieval:** metadata filters (segment, rating, channel, date), query
-  expansion for product terminology, and cross-encoder / LLM-judge reranking.
+- **Retrieval:** cross-encoder / LLM-judge reranking and deeper retrieval
+  regression suites for known questions.
 - **Generation:** structured JSON output validation with automatic repair, and
   retry/timeout/circuit-breaker policies for remote providers.
 - **Evaluation & observability:** experiment tracking (MLflow / W&B),

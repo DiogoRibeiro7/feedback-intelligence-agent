@@ -15,7 +15,7 @@ This roadmap is designed to evolve the repository from a compact portfolio proje
 
 - [x] Add hybrid retrieval with lexical BM25 plus vector search.
 - [x] Add metadata filters by segment, rating, channel, and date.
-- [ ] Add query expansion for product-specific terminology.
+- [x] Add query expansion for product-specific terminology.
 - [ ] Add reranking with a cross-encoder or LLM judge.
 - [ ] Add retrieval regression tests for known questions.
 

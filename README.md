@@ -152,6 +152,12 @@ poetry run feedback-agent evaluate --queries examples/queries.jsonl --retriever 
 
 The API uses the retriever configured through the environment (`FEEDBACK_AGENT_RETRIEVER_TYPE`, `FEEDBACK_AGENT_DENSE_WEIGHT`, `FEEDBACK_AGENT_LEXICAL_WEIGHT`).
 
+Queries are expanded with a deterministic product-terminology map before
+retrieval. This lets shorthand such as `CRM connector`, `BI report`, `CSM`, or
+`NPS` match feedback written with terms such as `Salesforce`, `HubSpot`,
+`integration`, `dashboard`, `customer success`, or `survey`, without calling an
+external model.
+
 ## Metadata filters
 
 Queries can restrict retrieved feedback before the final ranking step. Filters

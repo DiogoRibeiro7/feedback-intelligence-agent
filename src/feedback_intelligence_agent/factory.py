@@ -19,6 +19,7 @@ from feedback_intelligence_agent.llm import (
     OpenAIChatLLM,
 )
 from feedback_intelligence_agent.memory import JsonConversationStore
+from feedback_intelligence_agent.query_expansion import ProductTerminologyExpander
 from feedback_intelligence_agent.retrieval import HybridRetriever, QueryEngine, Retriever
 from feedback_intelligence_agent.schemas import DocumentChunk
 from feedback_intelligence_agent.telemetry import JsonlTelemetrySink, Telemetry
@@ -149,11 +150,20 @@ def build_retriever(settings: Settings, vector_store: VectorStore) -> Retriever:
     ``dense_weight`` and ``lexical_weight``.
     """
     embedding_model = HashingEmbeddingModel(dim=vector_store.dim)
-    dense = QueryEngine(embedding_model=embedding_model, vector_store=vector_store)
+    query_expander = ProductTerminologyExpander()
+    dense = QueryEngine(
+        embedding_model=embedding_model,
+        vector_store=vector_store,
+        query_expander=query_expander,
+    )
     if settings.retriever_type == "dense":
         return dense
     chunks = vector_store.chunks
-    lexical = BM25Retriever(chunks, texts=[chunk_to_embedding_text(chunk) for chunk in chunks])
+    lexical = BM25Retriever(
+        chunks,
+        texts=[chunk_to_embedding_text(chunk) for chunk in chunks],
+        query_expander=query_expander,
+    )
     if settings.retriever_type == "lexical":
         return lexical
     return HybridRetriever(

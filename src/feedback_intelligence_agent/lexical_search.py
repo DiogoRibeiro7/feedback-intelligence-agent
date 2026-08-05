@@ -12,6 +12,7 @@ import re
 from collections import Counter
 from collections.abc import Sequence
 
+from feedback_intelligence_agent.query_expansion import QueryExpander
 from feedback_intelligence_agent.schemas import DocumentChunk, SearchResult
 
 TOKEN_PATTERN = re.compile(r"[a-zA-Z0-9_]+")
@@ -37,6 +38,7 @@ class BM25Retriever:
         texts: Sequence[str] | None = None,
         k1: float = 1.5,
         b: float = 0.75,
+        query_expander: QueryExpander | None = None,
     ) -> None:
         """Build the BM25 index from chunks (or enriched ``texts``) once."""
         if texts is not None and len(texts) != len(chunks):
@@ -47,6 +49,7 @@ class BM25Retriever:
             raise ValueError("b must be between 0 and 1")
         self.k1 = k1
         self.b = b
+        self.query_expander = query_expander
         self._chunks = list(chunks)
         corpus_texts = texts if texts is not None else [chunk.text for chunk in self._chunks]
         corpus = [tokenize(text) for text in corpus_texts]
@@ -76,7 +79,12 @@ class BM25Retriever:
         if self._avg_doc_length == 0.0:
             return []
 
-        query_terms = tokenize(question)
+        retrieval_question = (
+            self.query_expander.expand(question).expanded_query
+            if self.query_expander is not None
+            else question
+        )
+        query_terms = tokenize(retrieval_question)
         scored: list[tuple[float, int]] = []
         for index, (term_frequency, doc_length) in enumerate(
             zip(self._term_frequencies, self._doc_lengths, strict=True)
