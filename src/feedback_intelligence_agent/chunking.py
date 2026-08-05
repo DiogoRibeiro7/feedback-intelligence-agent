@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Iterable
 
+from feedback_intelligence_agent.privacy import redact_pii
 from feedback_intelligence_agent.schemas import DocumentChunk, FeedbackRecord
 
 
@@ -59,7 +60,12 @@ def feedback_to_chunks(
     """
     chunks: list[DocumentChunk] = []
     for record in records:
-        chunk_texts = chunk_text(record.text, max_words=max_words, overlap_words=overlap_words)
+        text_for_storage = redact_pii(record.text)
+        chunk_texts = chunk_text(
+            text_for_storage,
+            max_words=max_words,
+            overlap_words=overlap_words,
+        )
         for index, text in enumerate(chunk_texts):
             chunks.append(
                 DocumentChunk(

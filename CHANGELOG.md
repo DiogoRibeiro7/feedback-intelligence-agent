@@ -19,6 +19,8 @@ All notable changes to this project are documented here.
 - Streaming feedback ingestion primitives with local JSONL, Kafka, and Kinesis
   adapters plus dead-letter handling.
 - Incremental JSON vector index updates for CSV batches and accepted stream events.
+- Deterministic PII and credential redaction before chunking, indexing, and
+  stream artifact persistence.
 
 ## 0.2.0 - 2026-08-05
 

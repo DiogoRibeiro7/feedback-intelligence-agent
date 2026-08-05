@@ -107,6 +107,49 @@ def test_write_stream_records_csv_round_trip(tmp_path: Path) -> None:
     assert "csv-1" in text
 
 
+def test_write_stream_records_csv_redacts_pii(tmp_path: Path) -> None:
+    result = consume_feedback_stream(
+        InMemoryFeedbackStream(
+            [
+                {
+                    **valid_payload("csv-pii"),
+                    "text": "Contact owner@example.com with token=abc123def456ghi789.",
+                }
+            ]
+        ),
+        max_messages=1,
+    )
+
+    output = write_stream_records_csv(result.records, tmp_path / "accepted.csv")
+    text = output.read_text(encoding="utf-8")
+
+    assert "owner@example.com" not in text
+    assert "abc123def456ghi789" not in text
+    assert "[REDACTED_EMAIL]" in text
+    assert "[REDACTED_TOKEN]" in text
+
+
+def test_dead_letters_redact_string_payload_values(tmp_path: Path) -> None:
+    dead_letter = tmp_path / "dead.jsonl"
+    stream = InMemoryFeedbackStream(
+        [
+            {
+                **valid_payload("bad-pii"),
+                "rating": 9,
+                "text": "Contact owner@example.com or +1 (555) 123-4567.",
+            }
+        ]
+    )
+
+    consume_feedback_stream(stream, max_messages=1, dead_letter_path=dead_letter)
+
+    text = dead_letter.read_text(encoding="utf-8")
+    assert "owner@example.com" not in text
+    assert "555" not in text
+    assert "[REDACTED_EMAIL]" in text
+    assert "[REDACTED_PHONE]" in text
+
+
 def test_kafka_stream_decodes_injected_consumer_and_commits() -> None:
     consumer = FakeKafkaConsumer([FakeKafkaMessage(valid_payload("kafka-1"))])
     stream = KafkaFeedbackStream(

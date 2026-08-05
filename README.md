@@ -28,6 +28,7 @@ changing the rest of the system.
 | Retrieval | Dense hashing embeddings, BM25 lexical search, configurable hybrid ranking |
 | Evaluation | Retrieval metrics, answer-quality metrics, repeatable experiments, benchmark reports |
 | Serving | Typer CLI, FastAPI API, SSE streaming endpoint, TypeScript/Vite frontend |
+| Privacy | Deterministic PII and credential redaction before chunking and index storage |
 | Operations | Docker, deployment manifests, optional telemetry, async ingestion jobs |
 | Local default | No API key, no network dependency, deterministic outputs for tests and demos |
 
@@ -69,6 +70,7 @@ feedback-intelligence-agent/
 │   ├── ingestion.py          # CSV feedback loader
 │   ├── lexical_search.py     # BM25 lexical retriever
 │   ├── llm.py                # LLM abstraction and local fallback
+│   ├── privacy.py            # PII and credential redaction helpers
 │   ├── prompt_registry.py    # Versioned prompt registry
 │   ├── prompts.py            # Prompt definitions and construction
 │   ├── query_expansion.py    # Deterministic product terminology expansion
@@ -201,6 +203,18 @@ poetry run feedback-agent validate-data data/sample_feedback.csv --strict
 ```
 
 The command prints a JSON report with total, valid, and invalid row counts plus row-level errors and warnings. In strict mode (`--strict`, also the default during indexing) any contract violation fails the run; in non-strict mode invalid rows are skipped and the valid rows are kept.
+
+## PII redaction
+
+`privacy.py` redacts emails, phone numbers, and obvious access tokens from
+feedback text before chunking, embedding, and vector-store persistence. The same
+redaction is applied to accepted stream CSV output and dead-letter payloads, so
+local artifacts do not retain raw contact details or pasted credentials.
+
+Redaction is deterministic and regex-based, using placeholders such as
+`[REDACTED_EMAIL]`, `[REDACTED_PHONE]`, and `[REDACTED_TOKEN]`. Data-contract
+validation still runs on the original schema fields, but stored chunks and
+stream files carry the redacted text.
 
 ## Synthetic data generation
 
@@ -644,8 +658,9 @@ poetry run feedback-agent ingest-job --input data/sample_feedback.csv \
 Streaming ingestion lives in `streaming_ingestion.py`. It validates feedback events
 from bounded stream batches into the same `FeedbackRecord` schema used by CSV
 ingestion, checkpoints accepted offsets, and writes invalid messages to an optional
-JSONL dead-letter file. The default local path is deterministic and reads JSONL
-events, while optional adapters cover Kafka and Kinesis.
+JSONL dead-letter file. Accepted CSV output and dead-letter payload strings are
+PII-redacted before they are written. The default local path is deterministic and
+reads JSONL events, while optional adapters cover Kafka and Kinesis.
 
 Run the local stream path:
 
@@ -670,7 +685,7 @@ same contract path as production consumers.
 ## Incremental index updates
 
 Incremental updates live in `index_updates.py`. Validated feedback records are
-chunked, embedded, and merged into the persisted JSON vector index by
+redacted, chunked, embedded, and merged into the persisted JSON vector index by
 `feedback_id`; existing chunks for the same source document are replaced before
 new chunks are appended. This supports append-only event streams and corrected
 feedback records without rebuilding the full index.

@@ -15,6 +15,9 @@ CSV feedback / feedback streams
 Validation and ingestion
    │
    ▼
+PII redaction
+   │
+   ▼
 Chunking
    │
    ▼
@@ -53,7 +56,11 @@ Cited answer + tool metadata + recommended actions + diagnostics
 
 ### Chunking
 
-`chunking.py` splits feedback into overlapping word chunks. The current dataset has short feedback, but the logic also works for longer support tickets or interview transcripts.
+`chunking.py` splits feedback into overlapping word chunks. Before chunking, `privacy.py` redacts emails, phone numbers, and obvious access tokens so persisted chunks do not carry raw PII or pasted credentials. The current dataset has short feedback, but the logic also works for longer support tickets or interview transcripts.
+
+### Privacy
+
+`privacy.py` provides deterministic regex redaction for emails, phone numbers, and obvious access tokens. It is applied before chunking/indexing and when writing accepted stream CSVs or dead-letter payloads.
 
 ### Embeddings
 
@@ -121,7 +128,7 @@ Routing is keyword/intent based (`TOOL_ROUTES`) with no function-calling API, so
 A production version should include:
 
 - Tenant isolation.
-- PII redaction before indexing.
+- Broader privacy policy coverage for names, addresses, and tenant-specific identifiers.
 - Rate limiting and authentication.
 - Prompt injection checks (a deterministic baseline ships in `guardrails.py`).
 - Data lineage for every generated answer.

@@ -41,6 +41,22 @@ def test_update_json_index_creates_new_index(tmp_path: Path) -> None:
     assert store.chunks[0].source_id == "fb-new"
 
 
+def test_update_json_index_redacts_pii_before_persistence(tmp_path: Path) -> None:
+    index_path = tmp_path / "vector_store.json"
+
+    update_json_index(
+        [make_record("fb-pii", "Email owner@example.com with sk-test123456789012.")],
+        index_path,
+        embedding_dim=64,
+    )
+
+    stored_text = InMemoryVectorStore.load(index_path).chunks[0].text
+    assert "owner@example.com" not in stored_text
+    assert "sk-test123456789012" not in stored_text
+    assert "[REDACTED_EMAIL]" in stored_text
+    assert "[REDACTED_TOKEN]" in stored_text
+
+
 def test_update_json_index_replaces_existing_source_without_rebuilding_all(
     tmp_path: Path,
 ) -> None:

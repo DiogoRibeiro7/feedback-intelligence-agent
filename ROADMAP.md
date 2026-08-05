@@ -41,7 +41,7 @@ This roadmap is designed to evolve the repository from a compact portfolio proje
 - [x] Add streaming ingestion with Kafka or Kinesis.
 - [x] Add incremental index updates.
 - [x] Add data contracts for feedback producers.
-- [ ] Add PII redaction before storage.
+- [x] Add PII redaction before storage.
 - [ ] Add lakehouse export to Iceberg or Delta tables.
 
 ## Phase 6 — Product layer

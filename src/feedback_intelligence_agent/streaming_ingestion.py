@@ -18,6 +18,7 @@ from typing import Any, Protocol, cast
 from pydantic import BaseModel, Field, ValidationError
 
 from feedback_intelligence_agent.data_contracts import REQUIRED_COLUMNS, ValidationIssue
+from feedback_intelligence_agent.privacy import redact_feedback_record, redact_pii
 from feedback_intelligence_agent.schemas import FeedbackRecord
 from feedback_intelligence_agent.telemetry import Telemetry
 
@@ -350,7 +351,7 @@ def write_stream_records_csv(records: list[FeedbackRecord], path: str | Path) ->
         writer = csv.DictWriter(handle, fieldnames=list(REQUIRED_COLUMNS))
         writer.writeheader()
         for record in records:
-            row = record.model_dump(mode="json")
+            row = redact_feedback_record(record).model_dump(mode="json")
             writer.writerow({column: row[column] for column in REQUIRED_COLUMNS})
     return output
 
@@ -426,7 +427,11 @@ def _write_dead_letters(path: str | Path, issues: list[StreamIngestionIssue]) ->
 
 def _clean_payload(payload: dict[str, Any]) -> dict[str, Any]:
     """Remove non-serialisable transport objects from a payload copy."""
-    return {key: value for key, value in payload.items() if not key.startswith("_")}
+    return {
+        key: redact_pii(value) if isinstance(value, str) else value
+        for key, value in payload.items()
+        if not key.startswith("_")
+    }
 
 
 def _kafka_envelope(message: object, source: str) -> StreamEnvelope:

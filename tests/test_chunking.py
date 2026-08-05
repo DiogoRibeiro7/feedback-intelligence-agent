@@ -36,3 +36,23 @@ def test_feedback_to_chunks_preserves_metadata() -> None:
     assert len(chunks) == 1
     assert chunks[0].source_id == "fb-test"
     assert chunks[0].metadata["customer_segment"] == "enterprise"
+
+
+def test_feedback_to_chunks_redacts_pii_before_storage() -> None:
+    record = FeedbackRecord.model_validate(
+        {
+            "feedback_id": "fb-pii",
+            "customer_segment": "enterprise",
+            "channel": "support_ticket",
+            "rating": 2,
+            "text": "Contact owner@example.com or +1 555-123-4567 about setup.",
+            "created_at": "2026-01-01T10:00:00",
+        }
+    )
+
+    chunks = feedback_to_chunks([record])
+
+    assert "owner@example.com" not in chunks[0].text
+    assert "555-123-4567" not in chunks[0].text
+    assert "[REDACTED_EMAIL]" in chunks[0].text
+    assert "[REDACTED_PHONE]" in chunks[0].text
