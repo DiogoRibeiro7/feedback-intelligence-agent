@@ -1,0 +1,46 @@
+name: Feature request
+description: Propose a new capability or improvement.
+title: "feat: "
+labels: ["enhancement", "needs-triage"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What user or engineering problem should this solve?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: Describe the behavior, API, CLI command, or workflow you want.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Agent / RAG
+        - Evaluation
+        - API
+        - CLI
+        - Frontend
+        - Data / ingestion
+        - Deployment
+        - Documentation
+    validations:
+      required: true
+  - type: checkboxes
+    id: acceptance
+    attributes:
+      label: Definition of done
+      options:
+        - label: New behavior can be tested deterministically without external APIs.
+        - label: Documentation or examples are updated where relevant.
+        - label: Existing local demo behavior remains working.

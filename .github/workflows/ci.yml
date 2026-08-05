@@ -6,6 +6,13 @@ on:
   pull_request:
     branches: [main, develop]
 
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
 jobs:
   quality:
     runs-on: ubuntu-latest
@@ -17,7 +24,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Install Poetry
-        run: pipx install poetry==1.8.3
+        run: pipx install poetry==2.2.1
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -43,6 +50,9 @@ jobs:
           --cov=feedback_intelligence_agent
           --cov-report=term-missing
           --cov-fail-under=63
+
+      - name: Run deterministic demo
+        run: poetry run python scripts/run_demo.py
 
       - name: Build package
         run: poetry build

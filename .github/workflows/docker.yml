@@ -1,0 +1,49 @@
+name: Docker
+
+on:
+  push:
+    branches: [main, develop]
+    paths:
+      - Dockerfile
+      - docker-compose.yml
+      - pyproject.toml
+      - poetry.lock
+      - src/**
+      - scripts/**
+      - data/sample_feedback.csv
+      - .github/workflows/docker.yml
+  pull_request:
+    branches: [main, develop]
+    paths:
+      - Dockerfile
+      - docker-compose.yml
+      - pyproject.toml
+      - poetry.lock
+      - src/**
+      - scripts/**
+      - data/sample_feedback.csv
+      - .github/workflows/docker.yml
+
+concurrency:
+  group: docker-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build image
+        run: docker build -t feedback-intelligence-agent:ci .
+
+      - name: Smoke test container
+        run: >-
+          docker run --rm
+          --entrypoint python
+          feedback-intelligence-agent:ci
+          -c "import feedback_intelligence_agent; print(feedback_intelligence_agent.__name__)"

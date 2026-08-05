@@ -1,0 +1,70 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - v*
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Poetry
+        run: pipx install poetry==2.2.1
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: poetry
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install Python dependencies
+        run: poetry install --with dev
+
+      - name: Install frontend dependencies
+        working-directory: frontend
+        run: npm ci
+
+      - name: Validate Zenodo metadata
+        run: python -m json.tool .zenodo.json
+
+      - name: Validate citation metadata
+        run: >-
+          poetry run python -c
+          "from pathlib import Path; import yaml; yaml.safe_load(Path('CITATION.cff').read_text(encoding='utf-8'))"
+
+      - name: Run deterministic demo
+        run: poetry run python scripts/run_demo.py
+
+      - name: Build Python package
+        run: poetry build
+
+      - name: Build frontend
+        working-directory: frontend
+        run: npm run build
+
+      - name: Upload Python distributions
+        uses: actions/upload-artifact@v4
+        with:
+          name: python-dist
+          path: dist/*
+
+      - name: Upload frontend build
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-dist
+          path: frontend/dist

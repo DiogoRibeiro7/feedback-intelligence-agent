@@ -1,18 +1,43 @@
 # Feedback Intelligence Agent
 
 [![CI](https://github.com/DiogoRibeiro7/feedback-intelligence-agent/actions/workflows/ci.yml/badge.svg)](https://github.com/DiogoRibeiro7/feedback-intelligence-agent/actions/workflows/ci.yml)
+[![Frontend CI](https://github.com/DiogoRibeiro7/feedback-intelligence-agent/actions/workflows/frontend.yml/badge.svg)](https://github.com/DiogoRibeiro7/feedback-intelligence-agent/actions/workflows/frontend.yml)
+[![Security](https://github.com/DiogoRibeiro7/feedback-intelligence-agent/actions/workflows/security.yml/badge.svg)](https://github.com/DiogoRibeiro7/feedback-intelligence-agent/actions/workflows/security.yml)
 [![Python](https://img.shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.12-blue.svg)](pyproject.toml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21804219.svg)](https://doi.org/10.5281/zenodo.21804219)
 
-A production-style AI engineering repository that demonstrates how to build, evaluate, and serve an LLM-powered insight system.
+A local-first, production-shaped AI engineering project for turning raw customer
+feedback into cited product insights. It demonstrates the full loop behind an
+LLM application: data validation, indexing, hybrid retrieval, guarded answer
+generation, evaluation, serving, telemetry, and deployment.
 
-The project implements a **customer feedback intelligence agent**. It ingests raw feedback, builds a lightweight vector index, retrieves relevant evidence, generates grounded answers, exposes a FastAPI service, and includes evaluation tests for retrieval and answer quality.
-
-It is designed as a portfolio project: small enough to read, but structured like real production work.
+The default path is fully deterministic and runs without API keys or managed
+services. Optional providers can swap in external LLMs or Qdrant without
+changing the rest of the system.
 
 > **New here?** Start with the [portfolio case study](docs/case_study.md) for a
 > guided tour of the problem, architecture, RAG/agent design, evaluation, and
 > deployment path (with diagrams).
+
+## At a glance
+
+| Area | What is included |
+|---|---|
+| Agent workflow | Query routing, retrieval, guardrails, local tools, prompt rendering, generation, citations, diagnostics |
+| Retrieval | Dense hashing embeddings, BM25 lexical search, configurable hybrid ranking |
+| Evaluation | Retrieval metrics, answer-quality metrics, repeatable experiments, benchmark reports |
+| Serving | Typer CLI, FastAPI API, SSE streaming endpoint, TypeScript/Vite frontend |
+| Operations | Docker, deployment manifests, optional telemetry, async ingestion jobs |
+| Local default | No API key, no network dependency, deterministic outputs for tests and demos |
+
+## Documentation map
+
+- [Case study](docs/case_study.md): portfolio walkthrough and design narrative.
+- [Architecture](docs/architecture.md): module responsibilities and system flow.
+- [Evaluation](docs/evaluation.md): metrics, dataset format, and regression strategy.
+- [Deployment](docs/deployment.md): local, Docker Compose, ECS Fargate, and Fly.io paths.
+- [Prompt registry](docs/prompts.md): prompt versioning and snapshot workflow.
 
 ## What this demonstrates
 
@@ -64,10 +89,37 @@ feedback-intelligence-agent/
 
 ## Quick start
 
+Install dependencies, run the deterministic demo, and query the sample feedback
+dataset:
+
 ```bash
 poetry install
+poetry run python scripts/run_demo.py
+
 poetry run feedback-agent index --input data/sample_feedback.csv --index-path .artifacts/vector_store.json
 poetry run feedback-agent query "Why are enterprise customers unhappy with onboarding?" --index-path .artifacts/vector_store.json
+```
+
+Run the API locally:
+
+```bash
+poetry run uvicorn feedback_intelligence_agent.api:create_app --factory --reload
+```
+
+Then call it:
+
+```bash
+curl -X POST http://127.0.0.1:8000/query \
+  -H "Content-Type: application/json" \
+  -d '{"question":"What should we improve in onboarding?","top_k":4}'
+```
+
+Run the frontend against the API:
+
+```bash
+cd frontend
+npm install
+npm run dev
 ```
 
 ## Retrieval strategies
@@ -112,12 +164,6 @@ poetry run feedback-agent validate-data data/sample_feedback.csv --strict
 ```
 
 The command prints a JSON report with total, valid, and invalid row counts plus row-level errors and warnings. In strict mode (`--strict`, also the default during indexing) any contract violation fails the run; in non-strict mode invalid rows are skipped and the valid rows are kept.
-
-Run the demo:
-
-```bash
-poetry run python scripts/run_demo.py
-```
 
 ## Synthetic data generation
 
@@ -200,6 +246,8 @@ runs the same benchmark against the sample dataset in one command:
 poetry run python scripts/benchmark.py
 ```
 
+## API server
+
 Run the API:
 
 ```bash
@@ -246,6 +294,8 @@ data: {"provider": "DeterministicLLM", "latency_ms": 12.3, "route": "onboarding"
 Providers without true token streaming (including the deterministic local provider,
 so this works without any API key) are supported transparently: the final answer is
 replayed as small whitespace-preserving chunks.
+
+## Development checks
 
 Run tests:
 
@@ -672,6 +722,11 @@ Citations:
   [3] fb-009 (support_ticket, chunk fb-009::chunk-0, score 0.435): "We did not know who
       owned the onboarding checklist..."
 ```
+
+## Citation
+
+Cite all versions by using the DOI
+[10.5281/zenodo.21804219](https://doi.org/10.5281/zenodo.21804219).
 
 ## License
 
