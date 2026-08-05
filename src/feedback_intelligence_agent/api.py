@@ -12,6 +12,7 @@ from fastapi import BackgroundTasks, FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
 
+from feedback_intelligence_agent import __version__
 from feedback_intelligence_agent.config import Settings
 from feedback_intelligence_agent.factory import (
     build_agent,
@@ -96,7 +97,7 @@ def create_app() -> FastAPI:
 
     app = FastAPI(
         title="Feedback Intelligence Agent API",
-        version="0.1.0",
+        version=__version__,
         description="Evidence-grounded customer feedback intelligence agent.",
     )
 
