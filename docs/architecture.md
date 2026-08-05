@@ -49,7 +49,7 @@ Cited answer + tool metadata + recommended actions + diagnostics
 
 ### Ingestion
 
-`ingestion.py` loads CSV data and validates each row with Pydantic. `streaming_ingestion.py` validates bounded JSONL, Kafka, or Kinesis feedback batches against the same schema, checkpoints accepted offsets, and can write invalid messages to a dead-letter JSONL file. Invalid rows or messages are reported with clear locations, which makes data quality issues easier to debug.
+`ingestion.py` loads CSV data and validates each row with Pydantic. `streaming_ingestion.py` validates bounded JSONL, Kafka, or Kinesis feedback batches against the same schema, checkpoints accepted offsets, and can write invalid messages to a dead-letter JSONL file. `index_updates.py` merges validated records into the persisted JSON vector index by replacing chunks for matching `feedback_id`s. Invalid rows or messages are reported with clear locations, which makes data quality issues easier to debug.
 
 ### Chunking
 
@@ -61,7 +61,7 @@ Cited answer + tool metadata + recommended actions + diagnostics
 
 ### Vector store
 
-`vector_store.py` provides cosine search and JSON persistence. It is deliberately simple. Production alternatives include pgvector, OpenSearch, Pinecone, Weaviate, Qdrant, or FAISS.
+`vector_store.py` provides cosine search, JSON persistence, and source-level upsert support for incremental updates. It is deliberately simple. Production alternatives include pgvector, OpenSearch, Pinecone, Weaviate, Qdrant, or FAISS.
 
 ### Agent
 
@@ -109,7 +109,7 @@ Routing is keyword/intent based (`TOOL_ROUTES`) with no function-calling API, so
 
 - Replace the hashing embedding model with a neural embedding provider.
 - Replace the local vector store with a managed vector database.
-- Add incremental index updates for accepted stream records.
+- Add durable stream checkpoints across process restarts.
 - Export telemetry spans through additional OpenTelemetry collectors or vendors.
 - Add human feedback capture for answer quality.
 - Add regression tests for prompts and retrieval behavior.

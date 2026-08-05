@@ -68,7 +68,8 @@ flowchart TB
     STREAM["Kafka / Kinesis / JSONL events"] --> SI["Streaming ingestion<br/>(streaming_ingestion.py)"]
     SI --> DC
     DC --> ING["Ingestion<br/>(ingestion.py)"]
-    ING --> CH["Chunking<br/>(chunking.py)"]
+    ING --> UPD["Incremental updates<br/>(index_updates.py)"]
+    UPD --> CH["Chunking<br/>(chunking.py)"]
     CH --> EMB["Hashing embeddings<br/>(embeddings.py)"]
     EMB --> VS[("Vector store<br/>JSON / Qdrant<br/>(vector_store.py)")]
   end
@@ -156,7 +157,10 @@ and invalid timestamps. Streaming ingestion
 ([streaming_ingestion.py](../src/feedback_intelligence_agent/streaming_ingestion.py))
 validates bounded JSONL, Kafka, or Kinesis event batches through the same
 `FeedbackRecord` schema, checkpoints accepted offsets, and can write rejected
-messages to a dead-letter JSONL file. Valid rows are chunked into overlapping word windows
+messages to a dead-letter JSONL file. Incremental updates
+([index_updates.py](../src/feedback_intelligence_agent/index_updates.py)) merge
+validated records into the persisted JSON index by replacing existing chunks for
+matching `feedback_id`s before appending fresh chunks. Valid rows are chunked into overlapping word windows
 ([chunking.py](../src/feedback_intelligence_agent/chunking.py)), embedded with
 deterministic feature hashing
 ([embeddings.py](../src/feedback_intelligence_agent/embeddings.py)), and persisted.
@@ -315,9 +319,10 @@ readable; each names what was given up.
 - **Deterministic-first hallucination checks.** Evidence overlap is cheap and
   reproducible, while the optional LLM-as-judge pass improves semantic review at
   the cost of latency and provider spend.
-- **Deterministic local stream path.** JSONL stream ingestion exercises the same
-  validation and dead-letter behavior as Kafka/Kinesis adapters, but production
-  deployments still need durable consumer groups and operational monitoring.
+- **Deterministic local stream path.** JSONL stream ingestion and incremental
+  JSON index updates exercise the same validation and merge behavior as
+  Kafka/Kinesis adapters, but production deployments still need durable
+  checkpoints and operational monitoring.
 
 ## Future work
 
@@ -329,7 +334,7 @@ Tracked in [ROADMAP.md](../ROADMAP.md). High-value next steps:
   telemetry for malformed model responses.
 - **Evaluation & observability:** alerting and SLOs for latency, retrieval-score
   distribution, citation coverage, and hallucination rate.
-- **Data engineering:** incremental index updates, PII redaction before indexing,
-  and lakehouse exports.
+- **Data engineering:** PII redaction before indexing, durable stream
+  checkpoints, and lakehouse exports.
 - **Product & platform:** human feedback capture on answers, saved insight
   reports, multi-tenant isolation, and auth/rate limiting on the API.

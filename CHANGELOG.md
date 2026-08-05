@@ -18,6 +18,7 @@ All notable changes to this project are documented here.
   citation coverage.
 - Streaming feedback ingestion primitives with local JSONL, Kafka, and Kinesis
   adapters plus dead-letter handling.
+- Incremental JSON vector index updates for CSV batches and accepted stream events.
 
 ## 0.2.0 - 2026-08-05
 

@@ -65,6 +65,7 @@ feedback-intelligence-agent/
 │   ├── evaluation.py         # Retrieval and answer-quality metrics
 │   ├── experiments.py        # Repeatable experiment runner
 │   ├── guardrails.py         # Deterministic safety guardrails
+│   ├── index_updates.py      # Incremental JSON vector index updates
 │   ├── ingestion.py          # CSV feedback loader
 │   ├── lexical_search.py     # BM25 lexical retriever
 │   ├── llm.py                # LLM abstraction and local fallback
@@ -664,8 +665,32 @@ poetry install --extras streaming
 `KafkaFeedbackStream` wraps `confluent-kafka` with manual commits; `KinesisFeedbackStream`
 wraps `boto3` `get_records` and tracks sequence-number checkpoints. Both feed the
 same `consume_feedback_stream(...)` validator, so tests and local demos exercise the
-same contract path as production consumers. Incremental index mutation is deliberately
-separate and tracked as the next roadmap item.
+same contract path as production consumers.
+
+## Incremental index updates
+
+Incremental updates live in `index_updates.py`. Validated feedback records are
+chunked, embedded, and merged into the persisted JSON vector index by
+`feedback_id`; existing chunks for the same source document are replaced before
+new chunks are appended. This supports append-only event streams and corrected
+feedback records without rebuilding the full index.
+
+Merge a CSV batch into the local JSON index:
+
+```bash
+poetry run feedback-agent update-index \
+  --input .artifacts/stream_feedback.csv \
+  --index-path .artifacts/vector_store.json
+```
+
+Or update the index directly from accepted stream events:
+
+```bash
+poetry run feedback-agent stream-ingest \
+  --input examples/stream_feedback.jsonl \
+  --update-index \
+  --index-path .artifacts/vector_store.json
+```
 
 ## Telemetry
 

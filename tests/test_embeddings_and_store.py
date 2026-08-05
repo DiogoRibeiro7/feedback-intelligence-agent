@@ -29,3 +29,36 @@ def test_vector_store_returns_most_similar_chunk() -> None:
     results = store.search(query_vector, top_k=1)
 
     assert results[0].chunk.source_id == "fb-1"
+
+
+def test_vector_store_upsert_replaces_existing_source_chunks() -> None:
+    model = HashingEmbeddingModel(dim=128)
+    initial = [
+        DocumentChunk(
+            chunk_id="fb-1::chunk-0", source_id="fb-1", text="old onboarding", metadata={}
+        ),
+        DocumentChunk(
+            chunk_id="fb-2::chunk-0", source_id="fb-2", text="pricing renewal", metadata={}
+        ),
+    ]
+    store = InMemoryVectorStore(dim=128)
+    store.add(initial, model.embed([chunk.text for chunk in initial]))
+    replacement = [
+        DocumentChunk(
+            chunk_id="fb-1::chunk-0",
+            source_id="fb-1",
+            text="new export dashboard",
+            metadata={},
+        )
+    ]
+
+    removed = store.upsert_sources(
+        replacement,
+        model.embed([chunk.text for chunk in replacement]),
+    )
+
+    assert removed == 1
+    assert store.size == 2
+    assert {chunk.text for chunk in store.chunks} == {"new export dashboard", "pricing renewal"}
+    results = store.search(model.embed(["export dashboard"])[0], top_k=1)
+    assert results[0].chunk.source_id == "fb-1"

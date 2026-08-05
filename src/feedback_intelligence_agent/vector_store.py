@@ -88,6 +88,43 @@ class InMemoryVectorStore:
         self._chunks.extend(chunks)
         self._vectors = np.vstack([self._vectors, vectors.astype(np.float64, copy=False)])
 
+    def remove_source_ids(self, source_ids: set[str]) -> int:
+        """Remove all chunks whose source document ID is in ``source_ids``.
+
+        Returns the number of chunks removed. This supports incremental updates:
+        a refreshed feedback record can replace every old chunk for the same
+        ``feedback_id`` before the new chunks are appended.
+        """
+        if not source_ids or not self._chunks:
+            return 0
+        keep_indices = [
+            index for index, chunk in enumerate(self._chunks) if chunk.source_id not in source_ids
+        ]
+        removed = len(self._chunks) - len(keep_indices)
+        if removed == 0:
+            return 0
+        self._chunks = [self._chunks[index] for index in keep_indices]
+        self._vectors = self._vectors[keep_indices, :]
+        return removed
+
+    def upsert_sources(
+        self,
+        chunks: list[DocumentChunk],
+        vectors: npt.NDArray[np.float64],
+    ) -> int:
+        """Replace existing source documents and append the new chunks.
+
+        The replacement key is ``DocumentChunk.source_id``. All old chunks for
+        any incoming source are removed first, which handles changed text that
+        produces a different number of chunks.
+
+        Returns:
+            Number of chunks removed before adding the new chunks.
+        """
+        removed = self.remove_source_ids({chunk.source_id for chunk in chunks})
+        self.add(chunks, vectors)
+        return removed
+
     def search(
         self, query_vector: npt.NDArray[np.float64], *, top_k: int = 4
     ) -> list[SearchResult]:

@@ -6,6 +6,7 @@ from pathlib import Path
 from typer.testing import CliRunner
 
 from feedback_intelligence_agent.cli import app
+from feedback_intelligence_agent.vector_store import InMemoryVectorStore
 
 runner = CliRunner()
 stdout_runner = CliRunner(mix_stderr=False)
@@ -87,6 +88,85 @@ def test_ingest_job_command_failure_exits_nonzero_with_clean_error(tmp_path: Pat
     assert payload["status"] == "failed"
     assert "missing.csv" not in payload["error"]
     assert "Ingestion failed" in payload["error"]
+
+
+def test_update_index_command_merges_csv_batch(tmp_path: Path) -> None:
+    batch = tmp_path / "batch.csv"
+    index_path = tmp_path / "vector_store.json"
+    batch.write_text(
+        "\n".join(
+            [
+                "feedback_id,customer_segment,channel,rating,text,created_at",
+                (
+                    "inc-1,enterprise,support_ticket,2,"
+                    "Incremental onboarding update,2026-08-01T09:00:00Z"
+                ),
+            ]
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+
+    result = stdout_runner.invoke(
+        app,
+        [
+            "update-index",
+            "--input",
+            str(batch),
+            "--index-path",
+            str(index_path),
+            "--embedding-dim",
+            "128",
+        ],
+    )
+
+    assert result.exit_code == 0, result.output
+    payload = json.loads(result.stdout)
+    assert payload["inserted_records"] == 1
+    assert payload["total_chunks"] == 1
+    assert InMemoryVectorStore.load(index_path).chunks[0].source_id == "inc-1"
+
+
+def test_stream_ingest_command_can_update_index(tmp_path: Path) -> None:
+    stream = tmp_path / "events.jsonl"
+    index_path = tmp_path / "vector_store.json"
+    output = tmp_path / "accepted.csv"
+    stream.write_text(
+        json.dumps(
+            {
+                "feedback_id": "stream-inc-1",
+                "customer_segment": "enterprise",
+                "channel": "support_ticket",
+                "rating": 2,
+                "text": "Streamed incremental index update",
+                "created_at": "2026-08-01T09:00:00Z",
+            }
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+
+    result = stdout_runner.invoke(
+        app,
+        [
+            "stream-ingest",
+            "--input",
+            str(stream),
+            "--output",
+            str(output),
+            "--update-index",
+            "--index-path",
+            str(index_path),
+            "--embedding-dim",
+            "128",
+        ],
+    )
+
+    assert result.exit_code == 0, result.output
+    payload = json.loads(result.stdout)
+    assert payload["accepted_records"] == 1
+    assert output.exists()
+    assert InMemoryVectorStore.load(index_path).chunks[0].source_id == "stream-inc-1"
 
 
 def test_query_command_applies_metadata_filters(tmp_path: Path) -> None:

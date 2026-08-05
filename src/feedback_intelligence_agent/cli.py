@@ -30,6 +30,8 @@ from feedback_intelligence_agent.factory import (
     build_telemetry,
     load_or_build_index,
 )
+from feedback_intelligence_agent.index_updates import update_json_index
+from feedback_intelligence_agent.ingestion import load_feedback_csv
 from feedback_intelligence_agent.jobs import JobRequest, run_ingestion_job
 from feedback_intelligence_agent.prompt_registry import (
     LATEST_VERSION,
@@ -148,6 +150,13 @@ def stream_ingest(
     max_messages: Annotated[
         int, typer.Option(help="Maximum stream messages to consume in this batch.")
     ] = 100,
+    update_index: Annotated[
+        bool, typer.Option(help="Merge accepted stream records into a JSON vector index.")
+    ] = False,
+    index_path: Annotated[Path, typer.Option(help="JSON vector index path to update.")] = Path(
+        ".artifacts/vector_store.json"
+    ),
+    embedding_dim: Annotated[int, typer.Option(help="Hashing embedding dimension.")] = 512,
 ) -> None:
     """Consume a bounded local stream batch and write validated feedback records.
 
@@ -165,9 +174,42 @@ def stream_ingest(
     )
     if result.records:
         write_stream_records_csv(result.records, output)
+    if update_index and result.records:
+        index_result = update_json_index(
+            result.records,
+            index_path,
+            embedding_dim=embedding_dim,
+            telemetry=build_telemetry(settings),
+        )
+        typer.echo(f"index update: {index_result.model_dump_json()}", err=True)
     typer.echo(result.model_dump_json(indent=2))
     if result.rejected_messages:
         typer.echo(f"{result.rejected_messages} message(s) written to {dead_letter}", err=True)
+
+
+@app.command("update-index")
+def update_index(
+    input: Annotated[Path, typer.Option(help="Feedback CSV batch to merge into the index.")],
+    index_path: Annotated[Path, typer.Option(help="JSON vector index path to update.")] = Path(
+        ".artifacts/vector_store.json"
+    ),
+    embedding_dim: Annotated[int, typer.Option(help="Hashing embedding dimension.")] = 512,
+    chunk_size: Annotated[int, typer.Option(help="Maximum words per chunk.")] = 80,
+    chunk_overlap: Annotated[int, typer.Option(help="Words shared between adjacent chunks.")] = 16,
+) -> None:
+    """Incrementally merge a validated feedback CSV batch into a JSON index."""
+    configure_logging()
+    settings = Settings(index_path=index_path, embedding_dim=embedding_dim)
+    records = load_feedback_csv(input, telemetry=build_telemetry(settings))
+    result = update_json_index(
+        records,
+        index_path,
+        embedding_dim=embedding_dim,
+        chunk_size=chunk_size,
+        chunk_overlap=chunk_overlap,
+        telemetry=build_telemetry(settings),
+    )
+    typer.echo(result.model_dump_json(indent=2))
 
 
 @app.command("validate-data")
