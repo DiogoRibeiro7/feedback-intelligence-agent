@@ -208,6 +208,8 @@ def test_evaluate_case_answerable_question() -> None:
     assert result.reciprocal_rank == 1.0
     assert result.context_hit is True
     assert result.keyword_coverage == 1.0
+    assert 0.0 <= result.evidence_overlap <= 1.0
+    assert result.hallucination_risk in {"low", "medium", "high"}
     assert result.refused is False
     assert result.refusal_correct is True
 
@@ -246,6 +248,9 @@ def test_evaluate_system_aggregates_and_excludes_unanswerable_from_retrieval() -
     assert report.retrieval.mean_reciprocal_rank == 1.0
     assert report.retrieval.context_hit_rate == 1.0
     assert 0.0 <= report.answers.groundedness <= 1.0
+    assert 0.0 <= report.answers.evidence_overlap <= 1.0
+    assert 0.0 <= report.answers.hallucination_rate <= 1.0
+    assert 0.0 <= report.answers.judge_supported_rate <= 1.0
     assert 0.0 <= report.answers.refusal_correctness <= 1.0
     assert len(report.cases) == 2
 

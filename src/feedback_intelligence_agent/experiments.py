@@ -300,6 +300,9 @@ def _tracking_metrics(metrics: AggregateMetrics) -> dict[str, float]:
         "answer_groundedness": metrics.answers.groundedness,
         "answer_refusal_correctness": metrics.answers.refusal_correctness,
         "answer_citation_alignment": metrics.answers.citation_alignment,
+        "answer_evidence_overlap": metrics.answers.evidence_overlap,
+        "answer_hallucination_rate": metrics.answers.hallucination_rate,
+        "answer_judge_supported_rate": metrics.answers.judge_supported_rate,
     }
 
 

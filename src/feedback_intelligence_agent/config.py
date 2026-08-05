@@ -62,6 +62,7 @@ class Settings(BaseSettings):
     llm_retry_backoff_seconds: float = Field(default=0.25, ge=0.0)
     llm_circuit_failure_threshold: int = Field(default=3, ge=1)
     llm_circuit_recovery_seconds: float = Field(default=30.0, gt=0.0)
+    hallucination_judge_enabled: bool = Field(default=False)
     ollama_base_url: str = Field(
         default="http://localhost:11434", validation_alias="OLLAMA_BASE_URL"
     )

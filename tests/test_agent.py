@@ -2,6 +2,10 @@ from __future__ import annotations
 
 from feedback_intelligence_agent.agent import FeedbackInsightAgent
 from feedback_intelligence_agent.embeddings import HashingEmbeddingModel
+from feedback_intelligence_agent.hallucination import (
+    EvidenceOverlapHallucinationChecker,
+    JudgeVerdict,
+)
 from feedback_intelligence_agent.llm import DeterministicLLM, LLMProvider
 from feedback_intelligence_agent.memory import ConversationTurn, InMemoryConversationStore
 from feedback_intelligence_agent.retrieval import QueryEngine
@@ -17,6 +21,23 @@ class JsonAnswerLLM:
         return (
             '{"answer": "JSON answer grounded in evidence [1].", '
             '"recommended_actions": ["Use structured parsing.", "Keep citations."]}'
+        )
+
+
+class UnsupportedJudge:
+    def judge(
+        self,
+        answer: str,
+        *,
+        question: str,
+        results: list[SearchResult],
+    ) -> JudgeVerdict:
+        del answer, question, results
+        return JudgeVerdict(
+            label="unsupported",
+            confidence=0.88,
+            reason="answer adds unsupported claims",
+            provider="UnsupportedJudge",
         )
 
 
@@ -58,6 +79,26 @@ def build_test_agent_with_llm(llm: LLMProvider) -> FeedbackInsightAgent:
     return FeedbackInsightAgent(query_engine=query_engine, llm=llm)
 
 
+def build_test_agent_with_hallucination_judge() -> FeedbackInsightAgent:
+    model = HashingEmbeddingModel(dim=128)
+    chunks = [
+        DocumentChunk(
+            chunk_id="1",
+            source_id="fb-1",
+            text="Onboarding checklist was unclear and setup took too long.",
+            metadata={"rating": 2},
+        )
+    ]
+    store = InMemoryVectorStore(dim=128)
+    store.add(chunks, model.embed([chunk.text for chunk in chunks]))
+    query_engine = QueryEngine(embedding_model=model, vector_store=store)
+    return FeedbackInsightAgent(
+        query_engine=query_engine,
+        llm=DeterministicLLM(),
+        hallucination_checker=EvidenceOverlapHallucinationChecker(judge=UnsupportedJudge()),
+    )
+
+
 def test_agent_routes_onboarding_question() -> None:
     agent = build_test_agent()
     assert agent.route("What is wrong with onboarding?") == "onboarding"
@@ -72,6 +113,9 @@ def test_agent_answer_contains_citations() -> None:
     assert answer.diagnostics["reranker"] == "DeterministicJudgeReranker"
     assert answer.diagnostics["output_format"] == "sectioned"
     assert answer.diagnostics["output_repair_applied"] is True
+    hallucination = answer.diagnostics["hallucination"]
+    assert hallucination["risk"] in {"low", "medium"}
+    assert hallucination["evidence_overlap"]["score"] >= 0.0
 
 
 def test_agent_accepts_structured_json_llm_output() -> None:
@@ -84,6 +128,18 @@ def test_agent_accepts_structured_json_llm_output() -> None:
     assert answer.diagnostics["output_format"] == "json"
     assert answer.diagnostics["output_repair_applied"] is False
     assert answer.diagnostics["output_validation_error"] is None
+
+
+def test_agent_surfaces_hallucination_judge_diagnostics() -> None:
+    agent = build_test_agent_with_hallucination_judge()
+
+    answer = agent.answer("Why is onboarding slow?", top_k=1)
+
+    hallucination = answer.diagnostics["hallucination"]
+    assert hallucination["risk"] == "high"
+    assert hallucination["hallucination_detected"] is True
+    assert hallucination["judge"]["label"] == "unsupported"
+    assert hallucination["judge"]["provider"] == "UnsupportedJudge"
 
 
 def test_agent_single_turn_answer_has_no_memory_diagnostics() -> None:

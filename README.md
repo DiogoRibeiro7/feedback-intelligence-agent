@@ -487,6 +487,7 @@ Environment variables:
 | `FEEDBACK_AGENT_LLM_RETRY_BACKOFF_SECONDS` | `0.25` | Base backoff between retry attempts. |
 | `FEEDBACK_AGENT_LLM_CIRCUIT_FAILURE_THRESHOLD` | `3` | Consecutive failed attempts before opening the circuit. |
 | `FEEDBACK_AGENT_LLM_CIRCUIT_RECOVERY_SECONDS` | `30.0` | Time before an open circuit allows a half-open trial call. |
+| `FEEDBACK_AGENT_HALLUCINATION_JUDGE_ENABLED` | `false` | Also use the configured LLM as a semantic support judge after deterministic evidence-overlap checks. |
 | `OLLAMA_BASE_URL` | `http://localhost:11434` | Base URL of a local Ollama server. |
 | `OLLAMA_MODEL` | `llama3.2` | Model name for the Ollama provider. |
 
@@ -580,6 +581,19 @@ assembled. Providers may return a JSON object with `answer` and
 repaired deterministically. Parse diagnostics are exposed as `output_format`,
 `output_repair_applied`, and `output_validation_error`.
 
+Every generated answer also receives hallucination diagnostics. The default check
+is deterministic and local: it scores sentence-level evidence overlap against the
+retrieved chunks and records unsupported sentences, an overlap score, a risk label,
+and `hallucination_detected` in `answer.diagnostics["hallucination"]`. Deployments
+can add a semantic LLM-as-judge pass with:
+
+```bash
+export FEEDBACK_AGENT_HALLUCINATION_JUDGE_ENABLED=true
+```
+
+When enabled, the configured LLM provider returns a support label
+(`supported`, `unsupported`, or `uncertain`) and reason after the overlap check.
+
 ## Asynchronous ingestion jobs
 
 Ingestion is decoupled from the request/response cycle so large datasets do not
@@ -624,11 +638,12 @@ poetry run feedback-agent ingest-job --input data/sample_feedback.csv \
 ## Telemetry
 
 The project emits structured telemetry around ingestion, embedding, retrieval,
-LLM generation, response parsing, tool runs, agent runs, and evaluation. Each event
-carries a name, an ISO-8601 UTC timestamp, a `correlation_id` shared by all events
-of one logical operation, a `duration_ms` for finished events, and a metadata
-dictionary (latency, retrieval counts and scores, provider name, route, confidence,
-evaluation aggregates).
+LLM generation, response parsing, hallucination checks, tool runs, agent runs,
+and evaluation. Each event carries a name, an ISO-8601 UTC timestamp, a
+`correlation_id` shared by all events of one logical operation, a `duration_ms`
+for finished events, and a metadata dictionary (latency, retrieval counts and
+scores, provider name, route, confidence, evidence-overlap score, evaluation
+aggregates).
 
 Telemetry is disabled by default and adds no side effects. Enable it via environment
 variables and run any command; one JSON object per event is appended to the JSONL trace file:
@@ -671,7 +686,8 @@ This repository lets you discuss AI engineering from multiple angles:
 1. **Product thinking**: the system turns unstructured feedback into evidence-backed decisions.
 2. **ML engineering**: retrieval, ranking, evaluation, and deterministic tests are first-class components.
 3. **Software engineering**: code is typed, modular, tested, and deployable.
-4. **Responsible AI**: generated answers include citations and simple grounding checks.
+4. **Responsible AI**: generated answers include citations, evidence-overlap checks,
+   and optional LLM-as-judge hallucination review.
 5. **Extensibility**: each layer can be swapped without rewriting the whole system.
 
 ## Citation-aware answers

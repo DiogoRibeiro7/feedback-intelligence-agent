@@ -12,6 +12,8 @@ All notable changes to this project are documented here.
 - Optional MLflow experiment tracking for experiment runs.
 - Optional OpenTelemetry span backend for ingestion, embedding, retrieval, generation,
   and response parsing traces.
+- Hallucination diagnostics using deterministic evidence overlap plus optional
+  LLM-as-judge support.
 
 ## 0.2.0 - 2026-08-05
 

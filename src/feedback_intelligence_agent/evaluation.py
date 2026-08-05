@@ -19,8 +19,12 @@ from pathlib import Path
 from pydantic import BaseModel, Field
 
 from feedback_intelligence_agent.agent import FeedbackInsightAgent
+from feedback_intelligence_agent.hallucination import (
+    EvidenceOverlapHallucinationChecker,
+    HallucinationCheck,
+)
 from feedback_intelligence_agent.retrieval import Retriever
-from feedback_intelligence_agent.schemas import AgentAnswer, EvaluationCase
+from feedback_intelligence_agent.schemas import AgentAnswer, EvaluationCase, SearchResult
 from feedback_intelligence_agent.telemetry import Telemetry
 
 REFUSAL_MARKERS = (
@@ -201,6 +205,9 @@ class AnswerMetrics(BaseModel):
     groundedness: float = Field(ge=0.0, le=1.0)
     refusal_correctness: float = Field(ge=0.0, le=1.0)
     citation_alignment: float = Field(ge=0.0, le=1.0)
+    evidence_overlap: float = Field(default=0.0, ge=0.0, le=1.0)
+    hallucination_rate: float = Field(default=0.0, ge=0.0, le=1.0)
+    judge_supported_rate: float = Field(default=0.0, ge=0.0, le=1.0)
     evaluated_cases: int = Field(ge=0)
 
 
@@ -217,6 +224,10 @@ class CaseResult(BaseModel):
     keyword_coverage: float
     groundedness: float
     citation_aligned: bool
+    evidence_overlap: float = Field(default=0.0, ge=0.0, le=1.0)
+    hallucination_detected: bool = False
+    hallucination_risk: str = "low"
+    judge_label: str | None = None
     refused: bool
     refusal_correct: bool
 
@@ -265,6 +276,7 @@ def evaluate_case_detailed(
     answer = agent.answer(case.question, top_k=top_k)
     refused = is_refusal(answer.answer)
     cited_ids = {citation.document_id for citation in answer.citations}
+    hallucination = _hallucination_from_answer(answer, case.question, results)
     case_result = CaseResult(
         question=case.question,
         is_answerable=case.is_answerable,
@@ -276,6 +288,10 @@ def evaluate_case_detailed(
         keyword_coverage=round(keyword_coverage(answer.answer, case.expected_keywords), 4),
         groundedness=round(groundedness_score(answer.answer, context_texts), 4),
         citation_aligned=bool(cited_ids.intersection(case.relevant_document_ids)),
+        evidence_overlap=hallucination.evidence_overlap.score,
+        hallucination_detected=hallucination.hallucination_detected,
+        hallucination_risk=hallucination.risk,
+        judge_label=hallucination.judge.label if hallucination.judge is not None else None,
         refused=refused,
         refusal_correct=refused != case.is_answerable,
     )
@@ -328,6 +344,9 @@ def evaluate_system(
             "groundedness": report.answers.groundedness,
             "refusal_correctness": report.answers.refusal_correctness,
             "citation_alignment": report.answers.citation_alignment,
+            "evidence_overlap": report.answers.evidence_overlap,
+            "hallucination_rate": report.answers.hallucination_rate,
+            "judge_supported_rate": report.answers.judge_supported_rate,
         },
     )
     return report
@@ -356,6 +375,13 @@ def aggregate_report(case_results: list[CaseResult], *, top_k: int = 4) -> Evalu
         citation_alignment=_mean(
             [1.0 if result.citation_aligned else 0.0 for result in answerable]
         ),
+        evidence_overlap=_mean([result.evidence_overlap for result in case_results]),
+        hallucination_rate=_mean(
+            [1.0 if result.hallucination_detected else 0.0 for result in case_results]
+        ),
+        judge_supported_rate=_mean(
+            [1.0 if result.judge_label == "supported" else 0.0 for result in case_results]
+        ),
         evaluated_cases=len(case_results),
     )
     return EvaluationReport(
@@ -372,3 +398,19 @@ def _mean(values: list[float]) -> float:
     if not values:
         return 0.0
     return round(sum(values) / len(values), 4)
+
+
+def _hallucination_from_answer(
+    answer: AgentAnswer,
+    question: str,
+    results: list[SearchResult],
+) -> HallucinationCheck:
+    """Read agent hallucination diagnostics or compute a deterministic fallback."""
+    raw = answer.diagnostics.get("hallucination")
+    if isinstance(raw, dict):
+        return HallucinationCheck.model_validate(raw)
+    return EvidenceOverlapHallucinationChecker().check(
+        answer.answer,
+        question=question,
+        results=results,
+    )

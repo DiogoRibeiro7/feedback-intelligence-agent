@@ -14,6 +14,10 @@ from feedback_intelligence_agent.guardrails import (
     check_input,
     is_suspicious_context,
 )
+from feedback_intelligence_agent.hallucination import (
+    EvidenceOverlapHallucinationChecker,
+    HallucinationCheck,
+)
 from feedback_intelligence_agent.llm import LLMProvider
 from feedback_intelligence_agent.memory import (
     ConversationMemory,
@@ -67,6 +71,7 @@ class FeedbackInsightAgent:
         tools: ToolRegistry | None = None,
         query_rewriter: QueryRewriter | None = None,
         reranker: Reranker | None = None,
+        hallucination_checker: EvidenceOverlapHallucinationChecker | None = None,
     ) -> None:
         """Wire the retriever (dense, lexical, or hybrid) to the LLM provider.
 
@@ -81,6 +86,8 @@ class FeedbackInsightAgent:
                 to :meth:`answer`; defaults to the deterministic local rewriter.
             reranker: Optional candidate reranker; defaults to the deterministic
                 local judge reranker.
+            hallucination_checker: Optional evidence-support checker; defaults to
+                deterministic lexical evidence overlap.
         """
         self.query_engine = query_engine
         self.llm = llm
@@ -89,6 +96,7 @@ class FeedbackInsightAgent:
         self.tool_router = ToolRouter(tools) if tools is not None else None
         self.query_rewriter = query_rewriter or DeterministicQueryRewriter()
         self.reranker = reranker or DeterministicJudgeReranker()
+        self.hallucination_checker = hallucination_checker or EvidenceOverlapHallucinationChecker()
 
     def answer(
         self,
@@ -185,10 +193,19 @@ class FeedbackInsightAgent:
                 parsing_span["repair_applied"] = parsed.repair_applied
                 parsing_span["validation_error"] = parsed.validation_error
             citations = build_citations(results)
+            hallucination = self._check_hallucination(
+                parsed.payload.answer,
+                question=effective_question,
+                results=results,
+                correlation_id=correlation_id,
+            )
             confidence = self._confidence(results, citations)
             run_span["citations"] = len(citations)
             run_span["confidence"] = confidence
             run_span["retrieved_chunks"] = len(results)
+            run_span["hallucination_risk"] = hallucination.risk
+            run_span["hallucination_detected"] = hallucination.hallucination_detected
+            run_span["evidence_overlap_score"] = hallucination.evidence_overlap.score
 
         answer_text = parsed.payload.answer
         if tool_record is not None:
@@ -209,6 +226,7 @@ class FeedbackInsightAgent:
             "output_format": parsed.output_format,
             "output_repair_applied": parsed.repair_applied,
             "output_validation_error": parsed.validation_error,
+            "hallucination": hallucination.model_dump(mode="json"),
             "tool_used": (
                 tool_record.tool_name
                 if tool_record is not None and tool_record.status == "ok"
@@ -388,6 +406,31 @@ class FeedbackInsightAgent:
             guardrail=decision,
             diagnostics={"retrieved_chunks": 0, "max_score": 0.0, "min_score": 0.0},
         )
+
+    def _check_hallucination(
+        self,
+        answer: str,
+        *,
+        question: str,
+        results: list[SearchResult],
+        correlation_id: str,
+    ) -> HallucinationCheck:
+        """Run answer support checks with telemetry."""
+        with self.telemetry.span(
+            "hallucination_check_started",
+            "hallucination_check_finished",
+            correlation_id=correlation_id,
+            metadata={"retrieved_chunks": len(results)},
+        ) as span:
+            check = self.hallucination_checker.check(answer, question=question, results=results)
+            span["risk"] = check.risk
+            span["hallucination_detected"] = check.hallucination_detected
+            span["evidence_overlap_score"] = check.evidence_overlap.score
+            span["unsupported_sentences"] = len(check.evidence_overlap.unsupported_sentences)
+            if check.judge is not None:
+                span["judge_label"] = check.judge.label
+                span["judge_confidence"] = check.judge.confidence
+        return check
 
     def route(self, question: str) -> str:
         """Classify a question into a stable route for observability and prompts."""

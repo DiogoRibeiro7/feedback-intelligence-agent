@@ -65,7 +65,7 @@ Cited answer + tool metadata + recommended actions + diagnostics
 
 ### Agent
 
-`agent.py` performs query routing, retrieval, tool routing and execution, prompt building, generation, structured output parsing and repair, citation construction, and confidence scoring.
+`agent.py` performs query routing, retrieval, tool routing and execution, prompt building, generation, structured output parsing and repair, citation construction, hallucination checks, and confidence scoring.
 
 The full agent flow per question is:
 
@@ -76,7 +76,8 @@ The full agent flow per question is:
 5. **Tool routing** (`tools.ToolRouter`): a deterministic keyword router selects at most one local tool. Explicit requests for unknown tools (`use the <name> tool`) are refused gracefully and the run continues as plain RAG.
 6. **Tool execution**: the selected tool validates its Pydantic input schema and runs locally, wrapped in `tool_run_started`/`tool_run_finished` telemetry spans. Tool failures degrade to an `error` record instead of failing the run.
 7. **Answer generation**: the LLM provider produces the cited answer; a successful tool run appends a `Tool insight (...)` line to the answer text.
-8. **Response assembly**: the answer carries citations, the guardrail decision, the `tool_run` record (name, status, summary, structured output), parser diagnostics, and retrieval diagnostics. The same metadata is returned by the API `/query` response.
+8. **Hallucination checks**: `hallucination.py` scores sentence-level evidence overlap and can optionally use the configured LLM as a semantic judge.
+9. **Response assembly**: the answer carries citations, the guardrail decision, the `tool_run` record (name, status, summary, structured output), parser diagnostics, hallucination diagnostics, and retrieval diagnostics. The same metadata is returned by the API `/query` response.
 
 ### Tools
 
@@ -98,7 +99,7 @@ Routing is keyword/intent based (`TOOL_ROUTES`) with no function-calling API, so
 
 ### Evaluation
 
-`evaluation.py` measures retrieval quality (precision@k, recall@k, MRR, context hit rate) and answer quality (keyword coverage, groundedness, citation alignment, refusal correctness) and aggregates them into a typed `EvaluationReport`. This is important because AI engineering should not stop at prompt writing: retrieval quality, grounding, and abstention behaviour need continuous measurement. See [evaluation.md](evaluation.md) for details.
+`evaluation.py` measures retrieval quality (precision@k, recall@k, MRR, context hit rate) and answer quality (keyword coverage, groundedness, citation alignment, evidence overlap, hallucination rate, judge support, refusal correctness) and aggregates them into a typed `EvaluationReport`. This is important because AI engineering should not stop at prompt writing: retrieval quality, grounding, and abstention behaviour need continuous measurement. See [evaluation.md](evaluation.md) for details.
 
 ### API
 

@@ -9,6 +9,10 @@ from feedback_intelligence_agent.agent import FeedbackInsightAgent
 from feedback_intelligence_agent.chunking import feedback_to_chunks
 from feedback_intelligence_agent.config import Settings
 from feedback_intelligence_agent.embeddings import HashingEmbeddingModel
+from feedback_intelligence_agent.hallucination import (
+    EvidenceOverlapHallucinationChecker,
+    LLMHallucinationJudge,
+)
 from feedback_intelligence_agent.ingestion import load_feedback_csv
 from feedback_intelligence_agent.lexical_search import BM25Retriever
 from feedback_intelligence_agent.llm import (
@@ -305,9 +309,16 @@ def build_agent(settings: Settings, *, telemetry: Telemetry | None = None) -> Fe
     telemetry = telemetry or build_telemetry(settings)
     vector_store = load_or_build_index(settings, telemetry=telemetry)
     retriever = build_retriever(settings, vector_store)
+    llm = build_llm(settings)
+    hallucination_checker = (
+        EvidenceOverlapHallucinationChecker(judge=LLMHallucinationJudge(llm))
+        if settings.hallucination_judge_enabled
+        else EvidenceOverlapHallucinationChecker()
+    )
     return FeedbackInsightAgent(
         query_engine=retriever,
-        llm=build_llm(settings),
+        llm=llm,
         telemetry=telemetry,
         tools=build_default_tools(vector_store.chunks),
+        hallucination_checker=hallucination_checker,
     )

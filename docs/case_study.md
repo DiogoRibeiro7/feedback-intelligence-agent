@@ -229,8 +229,8 @@ each stage separately over a JSONL dataset and emits a typed `EvaluationReport`:
 - **Retrieval:** `precision_at_k`, `recall_at_k`, `mean_reciprocal_rank`,
   `context_hit_rate`.
 - **Answer quality:** `keyword_coverage`, `groundedness`, `citation_alignment`,
-  and `refusal_correctness` (does the system abstain on unanswerable
-  questions?).
+  `evidence_overlap`, `hallucination_rate`, `judge_supported_rate`, and
+  `refusal_correctness` (does the system abstain on unanswerable questions?).
 
 Because the local provider is deterministic, two runs over the same index and
 dataset produce identical reports, so the report works as a **CI regression
@@ -247,10 +247,11 @@ tracking logs the same parameters, aggregate metrics, and JSON artifacts when
 
 Telemetry ([telemetry.py](../src/feedback_intelligence_agent/telemetry.py)) emits
 structured events around ingestion, embedding, retrieval, LLM calls, response
-parsing, tool runs, agent runs, and evaluation. Each event carries a name, an
-ISO-8601 UTC timestamp, a `correlation_id` shared across one logical operation,
-a `duration_ms` for finished spans, and a metadata dictionary (latency,
-retrieval counts and scores, provider, route, confidence, guardrail decisions).
+parsing, hallucination checks, tool runs, agent runs, and evaluation. Each event
+carries a name, an ISO-8601 UTC timestamp, a `correlation_id` shared across one
+logical operation, a `duration_ms` for finished spans, and a metadata dictionary
+(latency, retrieval counts and scores, provider, route, confidence, guardrail
+decisions, evidence-overlap score).
 
 Telemetry is **disabled by default and side-effect-free**; sinks are injected
 explicitly. The default enabled backend appends one JSON object per event to a
@@ -305,9 +306,9 @@ readable; each names what was given up.
 - **Rule-based routing, tool selection, and guardrails.** Auditable and
   reproducible, but less flexible than learned/function-calling approaches; they
   rely on maintained keyword and regex lists.
-- **Lexical groundedness proxy in evaluation.** Cheap and deterministic, but a
-  proxy — it does not catch semantically-grounded paraphrase failures the way an
-  NLI model or LLM-as-judge would.
+- **Deterministic-first hallucination checks.** Evidence overlap is cheap and
+  reproducible, while the optional LLM-as-judge pass improves semantic review at
+  the cost of latency and provider spend.
 - **Synchronous-by-default ingestion with a lightweight async path.** Simple and
   dependency-free, but the in-process job store is not a substitute for a durable
   queue in a multi-worker deployment.
@@ -320,8 +321,8 @@ Tracked in [ROADMAP.md](../ROADMAP.md). High-value next steps:
   larger query suites for retrieval drift monitoring.
 - **Generation:** provider-specific structured output modes and richer repair
   telemetry for malformed model responses.
-- **Evaluation & observability:** hallucination checks and dashboards for
-  latency, retrieval-score distribution, and citation coverage.
+- **Evaluation & observability:** dashboards for latency, retrieval-score
+  distribution, citation coverage, and hallucination rate.
 - **Data engineering:** streaming ingestion (Kafka/Kinesis), incremental index
   updates, and PII redaction before indexing.
 - **Product & platform:** human feedback capture on answers, saved insight

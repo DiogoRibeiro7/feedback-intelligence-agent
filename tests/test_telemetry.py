@@ -173,6 +173,8 @@ def test_agent_run_emits_correlated_events_in_order() -> None:
         "llm_call_finished",
         "response_parsing_started",
         "response_parsing_finished",
+        "hallucination_check_started",
+        "hallucination_check_finished",
         "agent_run_finished",
     ]
     correlation_ids = {event.correlation_id for event in sink.events}
@@ -182,6 +184,7 @@ def test_agent_run_emits_correlated_events_in_order() -> None:
     assert finished["llm_call_finished"].metadata["provider"] == "DeterministicLLM"
     assert finished["llm_call_finished"].metadata["response_chars"] > 0
     assert finished["response_parsing_finished"].metadata["output_format"] == "sectioned"
+    assert finished["hallucination_check_finished"].metadata["risk"] in {"low", "medium"}
     assert finished["agent_run_finished"].metadata["route"] == "onboarding"
     assert finished["agent_run_finished"].metadata["citations"] >= 1
     for name in ("retrieval_finished", "llm_call_finished", "agent_run_finished"):
