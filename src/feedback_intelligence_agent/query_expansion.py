@@ -34,6 +34,8 @@ TOKEN_PATTERN = re.compile(r"[a-zA-Z0-9_]+")
 
 PRODUCT_TERMINOLOGY: dict[str, tuple[str, ...]] = {
     "crm": ("salesforce", "hubspot", "integration", "sync"),
+    "integration": ("salesforce", "hubspot", "crm", "sync"),
+    "integrations": ("integration", "salesforce", "hubspot", "crm", "sync"),
     "connector": ("integration", "salesforce", "hubspot", "sync"),
     "connectors": ("integration", "salesforce", "hubspot", "sync"),
     "sfdc": ("salesforce", "integration", "sync"),

@@ -26,6 +26,7 @@ from feedback_intelligence_agent.llm import (
     LLMProviderError,
     OllamaLLM,
     OpenAIChatLLM,
+    OpenAIResponsesLLM,
     ProviderCapabilities,
 )
 
@@ -55,6 +56,8 @@ def test_anthropic_llm_capabilities() -> None:
 def test_openai_and_ollama_capabilities() -> None:
     assert OpenAIChatLLM.capabilities.supports_tool_calling is True
     assert OpenAIChatLLM.capabilities.supports_json_mode is True
+    assert OpenAIResponsesLLM.capabilities.supports_tool_calling is True
+    assert OpenAIResponsesLLM.capabilities.supports_json_mode is True
     assert OllamaLLM.capabilities.supports_tool_calling is False
     assert OllamaLLM.capabilities.supports_json_mode is True
 
@@ -118,6 +121,94 @@ def test_openai_chat_llm_reports_unreachable_endpoint() -> None:
         raise httpx.ConnectError("connection refused")
 
     llm = OpenAIChatLLM(
+        "sk-test",
+        "my-model",
+        base_url="https://down.example.com",
+        transport=httpx.MockTransport(handler),
+    )
+    with pytest.raises(LLMProviderError, match="https://down.example.com"):
+        llm.generate("p", question="q", results=[])
+
+
+# ---------------------------------------------------------------------------
+# OpenAI Responses provider (mocked HTTP)
+# ---------------------------------------------------------------------------
+
+
+def test_openai_responses_llm_requires_api_key_and_model() -> None:
+    with pytest.raises(ValueError, match="api_key"):
+        OpenAIResponsesLLM("", "gpt-4o-mini")
+    with pytest.raises(ValueError, match="model"):
+        OpenAIResponsesLLM("sk-test", "")
+
+
+def test_openai_responses_llm_posts_to_responses_endpoint() -> None:
+    captured: dict[str, Any] = {}
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        captured["url"] = str(request.url)
+        captured["authorization"] = request.headers["Authorization"]
+        captured["payload"] = json.loads(request.content)
+        return httpx.Response(
+            200,
+            json={
+                "output": [
+                    {
+                        "type": "message",
+                        "content": [{"type": "output_text", "text": "the answer"}],
+                    }
+                ]
+            },
+        )
+
+    llm = OpenAIResponsesLLM(
+        "sk-test",
+        "my-model",
+        base_url="https://api.example.com/",
+        transport=httpx.MockTransport(handler),
+    )
+    answer = llm.generate("the prompt", question="q", results=[])
+
+    assert answer == "the answer"
+    assert captured["url"] == "https://api.example.com/v1/responses"
+    assert captured["authorization"] == "Bearer sk-test"
+    assert captured["payload"]["model"] == "my-model"
+    assert captured["payload"]["input"] == "the prompt"
+    assert captured["payload"]["instructions"] == "You produce concise, evidence-grounded analysis."
+
+
+def test_openai_responses_llm_extracts_top_level_output_text() -> None:
+    def handler(request: httpx.Request) -> httpx.Response:
+        return httpx.Response(200, json={"output_text": "compact answer"})
+
+    llm = OpenAIResponsesLLM("sk-test", "my-model", transport=httpx.MockTransport(handler))
+
+    assert llm.generate("p", question="q", results=[]) == "compact answer"
+
+
+def test_openai_responses_llm_converts_auth_failure() -> None:
+    def handler(request: httpx.Request) -> httpx.Response:
+        return httpx.Response(401, json={"error": "bad key"})
+
+    llm = OpenAIResponsesLLM("sk-bad", "my-model", transport=httpx.MockTransport(handler))
+    with pytest.raises(LLMProviderError, match="OPENAI_API_KEY"):
+        llm.generate("p", question="q", results=[])
+
+
+def test_openai_responses_llm_reports_malformed_response() -> None:
+    def handler(request: httpx.Request) -> httpx.Response:
+        return httpx.Response(200, json={"id": "resp_123"})
+
+    llm = OpenAIResponsesLLM("sk-test", "my-model", transport=httpx.MockTransport(handler))
+    with pytest.raises(LLMProviderError, match="text output"):
+        llm.generate("p", question="q", results=[])
+
+
+def test_openai_responses_llm_reports_unreachable_endpoint() -> None:
+    def handler(request: httpx.Request) -> httpx.Response:
+        raise httpx.ConnectError("connection refused")
+
+    llm = OpenAIResponsesLLM(
         "sk-test",
         "my-model",
         base_url="https://down.example.com",
@@ -319,6 +410,25 @@ def test_build_llm_openai_uses_configured_base_url() -> None:
     assert llm.model == "my-model"
 
 
+def test_build_llm_openai_responses_requires_api_key() -> None:
+    settings = Settings(llm_provider="openai_responses", OPENAI_API_KEY="")
+    with pytest.raises(ValueError, match="OPENAI_API_KEY"):
+        build_llm(settings)
+
+
+def test_build_llm_openai_responses_uses_configured_base_url() -> None:
+    settings = Settings(
+        llm_provider="openai_responses",
+        OPENAI_API_KEY="sk-test",
+        OPENAI_MODEL="my-model",
+        OPENAI_BASE_URL="https://api.example.com",
+    )
+    llm = build_llm(settings)
+    assert isinstance(llm, OpenAIResponsesLLM)
+    assert llm.base_url == "https://api.example.com"
+    assert llm.model == "my-model"
+
+
 def test_build_llm_anthropic_requires_api_key() -> None:
     settings = Settings(llm_provider="anthropic", ANTHROPIC_API_KEY="")
     with pytest.raises(ValueError, match="ANTHROPIC_API_KEY"):
@@ -354,5 +464,5 @@ def test_settings_reject_unknown_provider_listing_options() -> None:
     with pytest.raises(ValidationError) as exc_info:
         Settings(llm_provider="bogus")
     message = str(exc_info.value)
-    for option in ("local", "openai", "anthropic", "ollama"):
+    for option in ("local", "openai", "openai_responses", "anthropic", "ollama"):
         assert option in message

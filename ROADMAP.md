@@ -17,11 +17,11 @@ This roadmap is designed to evolve the repository from a compact portfolio proje
 - [x] Add metadata filters by segment, rating, channel, and date.
 - [x] Add query expansion for product-specific terminology.
 - [x] Add reranking with a cross-encoder or LLM judge.
-- [ ] Add retrieval regression tests for known questions.
+- [x] Add retrieval regression tests for known questions.
 
 ## Phase 3 — Production LLM integration
 
-- [ ] Add OpenAI Responses API provider.
+- [x] Add OpenAI Responses API provider.
 - [ ] Add AWS Bedrock provider.
 - [ ] Add retry, timeout, and circuit-breaker policies.
 - [x] Add prompt versioning with a validated registry, CLI inspection, and snapshot tests.

@@ -153,6 +153,9 @@ poetry run feedback-agent evaluate --queries examples/queries.jsonl --retriever 
 ```
 
 The API uses the retriever configured through the environment (`FEEDBACK_AGENT_RETRIEVER_TYPE`, `FEEDBACK_AGENT_DENSE_WEIGHT`, `FEEDBACK_AGENT_LEXICAL_WEIGHT`).
+Known sample questions in `examples/queries.jsonl` are also covered by retrieval
+regression tests, so relevant cited evidence cannot drift silently as retrieval
+logic changes.
 
 Queries are expanded with a deterministic product-terminology map before
 retrieval. This lets shorthand such as `CRM connector`, `BI report`, `CSM`, or
@@ -230,6 +233,10 @@ poetry run feedback-agent evaluate --queries examples/queries.jsonl --output eva
 ```
 
 The default output path is `.artifacts/evaluation_report.json`. The run is fully deterministic with the local provider, so the report can be used as a CI regression gate. See [docs/evaluation.md](docs/evaluation.md) for the dataset format and why each metric matters in production RAG systems.
+
+Known retrieval behavior is also pinned in `tests/test_retrieval_regressions.py`.
+Those tests use the real sample feedback index and assert that stable questions
+continue to surface the expected evidence documents.
 
 ## Experiments
 
@@ -443,14 +450,14 @@ Environment variables:
 | `FEEDBACK_AGENT_RETRIEVER_TYPE` | `dense` | Retrieval strategy: `dense`, `lexical`, or `hybrid`. |
 | `FEEDBACK_AGENT_DENSE_WEIGHT` | `0.6` | Dense score weight used by the hybrid retriever. |
 | `FEEDBACK_AGENT_LEXICAL_WEIGHT` | `0.4` | Lexical (BM25) score weight used by the hybrid retriever. |
-| `FEEDBACK_AGENT_LLM_PROVIDER` | `local` | `local`, `openai`, `anthropic`, or `ollama`. |
+| `FEEDBACK_AGENT_LLM_PROVIDER` | `local` | `local`, `openai`, `openai_responses`, `anthropic`, or `ollama`. |
 | `FEEDBACK_AGENT_TELEMETRY_ENABLED` | `false` | Enable structured telemetry events. |
 | `FEEDBACK_AGENT_TELEMETRY_PATH` | `.artifacts/telemetry.jsonl` | JSONL file that telemetry events are appended to. |
 | `FEEDBACK_AGENT_CONVERSATION_STORE_PATH` | `.artifacts/conversations` | Directory holding one JSON file per chat conversation. |
 | `FEEDBACK_AGENT_JOB_STORE_PATH` | `.artifacts/jobs` | Directory holding one JSON file per ingestion job. |
-| `OPENAI_API_KEY` | empty | Required only when using the OpenAI-compatible provider. |
-| `OPENAI_MODEL` | `gpt-4o-mini` | Model name for the OpenAI-compatible provider. |
-| `OPENAI_BASE_URL` | `https://api.openai.com` | Base URL, so any OpenAI-compatible endpoint works (vLLM, LiteLLM, gateways). |
+| `OPENAI_API_KEY` | empty | Required only when using an OpenAI provider. |
+| `OPENAI_MODEL` | `gpt-4o-mini` | Model name for the OpenAI provider. |
+| `OPENAI_BASE_URL` | `https://api.openai.com` | Base URL for OpenAI or OpenAI-compatible endpoints. |
 | `ANTHROPIC_API_KEY` | empty | Required only when using the Anthropic provider. |
 | `ANTHROPIC_MODEL` | `claude-opus-4-8` | Model alias for the Anthropic provider. |
 | `OLLAMA_BASE_URL` | `http://localhost:11434` | Base URL of a local Ollama server. |
@@ -461,7 +468,7 @@ Create a local `.env` from `.env.example` if needed.
 ### LLM providers
 
 The answer-generation step is provider-agnostic behind the `LLMProvider` protocol in
-`llm.py`. Four providers are available, selected by `FEEDBACK_AGENT_LLM_PROVIDER`:
+`llm.py`. Five providers are available, selected by `FEEDBACK_AGENT_LLM_PROVIDER`:
 
 - **`local` (default)**: the deterministic evidence-driven provider. No API key, no
   network access, fully reproducible — this is what CI, tests, and the demo use.
@@ -474,6 +481,18 @@ The answer-generation step is provider-agnostic behind the `LLMProvider` protoco
   export OPENAI_MODEL=gpt-4o-mini
   # Optional: point at a self-hosted OpenAI-compatible server.
   export OPENAI_BASE_URL=http://localhost:8001
+  poetry run feedback-agent query "Why are enterprise customers unhappy with onboarding?"
+  ```
+
+- **`openai_responses`**: OpenAI's Responses API over `httpx`
+  (`POST {OPENAI_BASE_URL}/v1/responses`). This is the best fit for current
+  OpenAI-native integrations; keep `openai` for gateways that only emulate Chat
+  Completions:
+
+  ```bash
+  export FEEDBACK_AGENT_LLM_PROVIDER=openai_responses
+  export OPENAI_API_KEY=sk-...
+  export OPENAI_MODEL=gpt-4o-mini
   poetry run feedback-agent query "Why are enterprise customers unhappy with onboarding?"
   ```
 

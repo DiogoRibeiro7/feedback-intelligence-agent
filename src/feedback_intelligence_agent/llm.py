@@ -12,7 +12,7 @@ import re
 from collections import Counter
 from dataclasses import dataclass
 from types import ModuleType
-from typing import Protocol
+from typing import Any, Protocol
 
 import httpx
 
@@ -276,6 +276,111 @@ class OpenAIChatLLM:
                 "Check the base URL and your network connection."
             ) from exc
         return str(data["choices"][0]["message"]["content"])
+
+
+def _extract_openai_response_text(data: dict[str, Any]) -> str:
+    """Extract assistant text from an OpenAI Responses API response payload."""
+    output_text = data.get("output_text")
+    if isinstance(output_text, str) and output_text:
+        return output_text
+
+    output = data.get("output")
+    text_parts: list[str] = []
+    refusal_parts: list[str] = []
+    if isinstance(output, list):
+        for item in output:
+            if not isinstance(item, dict):
+                continue
+            content = item.get("content")
+            if not isinstance(content, list):
+                continue
+            for part in content:
+                if not isinstance(part, dict):
+                    continue
+                if part.get("type") == "output_text" and isinstance(part.get("text"), str):
+                    text_parts.append(part["text"])
+                if part.get("type") == "refusal" and isinstance(part.get("refusal"), str):
+                    refusal_parts.append(part["refusal"])
+    if text_parts:
+        return "".join(text_parts)
+    if refusal_parts:
+        return "".join(refusal_parts)
+    raise LLMProviderError("OpenAI Responses API response did not include text output.")
+
+
+class OpenAIResponsesLLM:
+    """Optional provider backed by OpenAI's Responses API.
+
+    This provider targets ``POST /v1/responses`` and is separate from
+    :class:`OpenAIChatLLM`, because many OpenAI-compatible gateways support Chat
+    Completions without implementing Responses.
+    """
+
+    capabilities = ProviderCapabilities(
+        supports_streaming=True,
+        supports_tool_calling=True,
+        supports_json_mode=True,
+        max_context_tokens=None,
+    )
+
+    def __init__(
+        self,
+        api_key: str,
+        model: str,
+        *,
+        base_url: str = "https://api.openai.com",
+        timeout_seconds: float = 30.0,
+        transport: httpx.BaseTransport | None = None,
+    ) -> None:
+        """Validate configuration and store connection parameters."""
+        if not api_key:
+            raise ValueError("api_key is required for OpenAIResponsesLLM")
+        if not model:
+            raise ValueError("model is required for OpenAIResponsesLLM")
+        self.api_key = api_key
+        self.model = model
+        self.base_url = base_url.rstrip("/")
+        self.timeout_seconds = timeout_seconds
+        self._transport = transport
+
+    def generate(self, prompt: str, *, question: str, results: list[SearchResult]) -> str:
+        """Generate text using the OpenAI Responses API."""
+        del question, results
+        headers = {
+            "Authorization": f"Bearer {self.api_key}",
+            "Content-Type": "application/json",
+        }
+        payload = {
+            "model": self.model,
+            "instructions": _PROVIDER_SYSTEM_PROMPT,
+            "input": prompt,
+            "temperature": 0.2,
+        }
+        try:
+            with httpx.Client(timeout=self.timeout_seconds, transport=self._transport) as client:
+                response = client.post(
+                    f"{self.base_url}/v1/responses",
+                    headers=headers,
+                    json=payload,
+                )
+                response.raise_for_status()
+                data = response.json()
+        except httpx.HTTPStatusError as exc:
+            if exc.response.status_code == 401:
+                raise LLMProviderError(
+                    "OpenAI Responses API authentication failed (HTTP 401). "
+                    "Check OPENAI_API_KEY."
+                ) from exc
+            raise LLMProviderError(
+                "OpenAI Responses API request to "
+                f"{self.base_url} failed with HTTP {exc.response.status_code}."
+            ) from exc
+        except httpx.TransportError as exc:
+            raise LLMProviderError(
+                f"Could not reach the OpenAI Responses API at {self.base_url}. "
+                "Check the base URL and your network connection."
+            ) from exc
+        return _extract_openai_response_text(data)
 
 
 def _import_anthropic() -> ModuleType:

@@ -30,7 +30,7 @@ class Settings(BaseSettings):
     retriever_type: RetrieverType = "dense"
     dense_weight: float = Field(default=0.6, ge=0.0)
     lexical_weight: float = Field(default=0.4, ge=0.0)
-    llm_provider: Literal["local", "openai", "anthropic", "ollama"] = "local"
+    llm_provider: Literal["local", "openai", "openai_responses", "anthropic", "ollama"] = "local"
     openai_api_key: str | None = Field(default=None, validation_alias="OPENAI_API_KEY")
     openai_model: str = Field(default="gpt-4o-mini", validation_alias="OPENAI_MODEL")
     openai_base_url: str = Field(

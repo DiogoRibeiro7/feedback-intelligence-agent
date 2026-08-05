@@ -121,8 +121,8 @@ fails fast with actionable errors on misconfiguration.
    snapshot-tested prompts and an evaluation report usable as a CI gate.
 2. **Provider behind a protocol.** Answer generation is gated by the
    `LLMProvider` protocol in [llm.py](../src/feedback_intelligence_agent/llm.py),
-   with four implementations (`local`, `openai`-compatible, `anthropic`,
-   `ollama`) and per-provider capability metadata (`supports_streaming`,
+   with five implementations (`local`, `openai`, `openai_responses`,
+   `anthropic`, `ollama`) and per-provider capability metadata (`supports_streaming`,
    `supports_tool_calling`, `supports_json_mode`, `max_context_tokens`).
    Optional SDKs are extras so the default install stays lean.
 3. **Pluggable vector store.** A common `VectorStore` interface
@@ -310,8 +310,8 @@ readable; each names what was given up.
 
 Tracked in [ROADMAP.md](../ROADMAP.md). High-value next steps:
 
-- **Retrieval:** deeper retrieval regression suites for known questions and
-  optional external cross-encoder / LLM-judge rerankers.
+- **Retrieval:** optional external cross-encoder / LLM-judge rerankers and
+  larger query suites for retrieval drift monitoring.
 - **Generation:** structured JSON output validation with automatic repair, and
   retry/timeout/circuit-breaker policies for remote providers.
 - **Evaluation & observability:** experiment tracking (MLflow / W&B),

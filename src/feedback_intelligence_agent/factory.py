@@ -17,6 +17,7 @@ from feedback_intelligence_agent.llm import (
     LLMProvider,
     OllamaLLM,
     OpenAIChatLLM,
+    OpenAIResponsesLLM,
 )
 from feedback_intelligence_agent.memory import JsonConversationStore
 from feedback_intelligence_agent.query_expansion import ProductTerminologyExpander
@@ -178,10 +179,11 @@ def build_llm(settings: Settings) -> LLMProvider:
     """Construct the LLM provider selected by ``FEEDBACK_AGENT_LLM_PROVIDER``.
 
     ``local`` (the default) needs no API key and stays fully deterministic.
-    ``openai`` targets any OpenAI-compatible endpoint (``OPENAI_BASE_URL``),
+    ``openai`` targets any OpenAI-compatible Chat Completions endpoint
+    (``OPENAI_BASE_URL``), ``openai_responses`` targets OpenAI's Responses API,
     ``anthropic`` uses the official SDK (optional ``anthropic`` extra), and
-    ``ollama`` talks to a local Ollama server. Missing credentials raise a
-    clear configuration error at construction time.
+    ``ollama`` talks to a local Ollama server. Missing credentials raise a clear
+    configuration error at construction time.
     """
     if settings.llm_provider == "local":
         return DeterministicLLM()
@@ -189,6 +191,16 @@ def build_llm(settings: Settings) -> LLMProvider:
         if not settings.openai_api_key:
             raise ValueError("OPENAI_API_KEY is required when FEEDBACK_AGENT_LLM_PROVIDER=openai")
         return OpenAIChatLLM(
+            api_key=settings.openai_api_key,
+            model=settings.openai_model,
+            base_url=settings.openai_base_url,
+        )
+    if settings.llm_provider == "openai_responses":
+        if not settings.openai_api_key:
+            raise ValueError(
+                "OPENAI_API_KEY is required when FEEDBACK_AGENT_LLM_PROVIDER=openai_responses"
+            )
+        return OpenAIResponsesLLM(
             api_key=settings.openai_api_key,
             model=settings.openai_model,
             base_url=settings.openai_base_url,
@@ -203,7 +215,7 @@ def build_llm(settings: Settings) -> LLMProvider:
         return OllamaLLM(base_url=settings.ollama_base_url, model=settings.ollama_model)
     raise ValueError(
         f"Unknown LLM provider {settings.llm_provider!r}. "
-        "Valid options: local, openai, anthropic, ollama."
+        "Valid options: local, openai, openai_responses, anthropic, ollama."
     )
 
 
