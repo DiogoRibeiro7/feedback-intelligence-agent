@@ -124,7 +124,9 @@ fails fast with actionable errors on misconfiguration.
    with six implementations (`local`, `openai`, `openai_responses`,
    `anthropic`, `bedrock`, `ollama`) and per-provider capability metadata (`supports_streaming`,
    `supports_tool_calling`, `supports_json_mode`, `max_context_tokens`).
-   Optional SDKs are extras so the default install stays lean.
+   Optional SDKs are extras so the default install stays lean. Remote providers
+   are wrapped with retry, timeout, and circuit-breaker policies in
+   [resilience.py](../src/feedback_intelligence_agent/resilience.py).
 3. **Pluggable vector store.** A common `VectorStore` interface
    ([vector_store.py](../src/feedback_intelligence_agent/vector_store.py)) backs
    both the default in-memory JSON store and an optional Qdrant backend, with no
@@ -312,8 +314,8 @@ Tracked in [ROADMAP.md](../ROADMAP.md). High-value next steps:
 
 - **Retrieval:** optional external cross-encoder / LLM-judge rerankers and
   larger query suites for retrieval drift monitoring.
-- **Generation:** structured JSON output validation with automatic repair, and
-  retry/timeout/circuit-breaker policies for remote providers.
+- **Generation:** structured JSON output validation with automatic repair and
+  provider-specific structured output modes.
 - **Evaluation & observability:** experiment tracking (MLflow / W&B),
   OpenTelemetry trace export, and dashboards for latency, retrieval-score
   distribution, and citation coverage.

@@ -166,7 +166,7 @@ class FeedbackInsightAgent:
                 "llm_call_finished",
                 correlation_id=correlation_id,
                 metadata={
-                    "provider": type(self.llm).__name__,
+                    "provider": getattr(self.llm, "provider_name", type(self.llm).__name__),
                     "prompt_chars": len(prompt),
                 },
             ) as llm_span:

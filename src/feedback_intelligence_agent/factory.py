@@ -22,6 +22,7 @@ from feedback_intelligence_agent.llm import (
 )
 from feedback_intelligence_agent.memory import JsonConversationStore
 from feedback_intelligence_agent.query_expansion import ProductTerminologyExpander
+from feedback_intelligence_agent.resilience import ResiliencePolicy, ResilientLLMProvider
 from feedback_intelligence_agent.retrieval import HybridRetriever, QueryEngine, Retriever
 from feedback_intelligence_agent.schemas import DocumentChunk
 from feedback_intelligence_agent.telemetry import JsonlTelemetrySink, Telemetry
@@ -192,39 +193,70 @@ def build_llm(settings: Settings) -> LLMProvider:
     if settings.llm_provider == "openai":
         if not settings.openai_api_key:
             raise ValueError("OPENAI_API_KEY is required when FEEDBACK_AGENT_LLM_PROVIDER=openai")
-        return OpenAIChatLLM(
-            api_key=settings.openai_api_key,
-            model=settings.openai_model,
-            base_url=settings.openai_base_url,
+        return _with_resilience(
+            OpenAIChatLLM(
+                api_key=settings.openai_api_key,
+                model=settings.openai_model,
+                base_url=settings.openai_base_url,
+            ),
+            settings,
         )
     if settings.llm_provider == "openai_responses":
         if not settings.openai_api_key:
             raise ValueError(
                 "OPENAI_API_KEY is required when FEEDBACK_AGENT_LLM_PROVIDER=openai_responses"
             )
-        return OpenAIResponsesLLM(
-            api_key=settings.openai_api_key,
-            model=settings.openai_model,
-            base_url=settings.openai_base_url,
+        return _with_resilience(
+            OpenAIResponsesLLM(
+                api_key=settings.openai_api_key,
+                model=settings.openai_model,
+                base_url=settings.openai_base_url,
+            ),
+            settings,
         )
     if settings.llm_provider == "anthropic":
         if not settings.anthropic_api_key:
             raise ValueError(
                 "ANTHROPIC_API_KEY is required when FEEDBACK_AGENT_LLM_PROVIDER=anthropic"
             )
-        return AnthropicLLM(api_key=settings.anthropic_api_key, model=settings.anthropic_model)
+        return _with_resilience(
+            AnthropicLLM(api_key=settings.anthropic_api_key, model=settings.anthropic_model),
+            settings,
+        )
     if settings.llm_provider == "bedrock":
-        return BedrockConverseLLM(
-            model=settings.bedrock_model,
-            region_name=settings.bedrock_region,
-            max_tokens=settings.bedrock_max_tokens,
-            temperature=settings.bedrock_temperature,
+        return _with_resilience(
+            BedrockConverseLLM(
+                model=settings.bedrock_model,
+                region_name=settings.bedrock_region,
+                max_tokens=settings.bedrock_max_tokens,
+                temperature=settings.bedrock_temperature,
+            ),
+            settings,
         )
     if settings.llm_provider == "ollama":
-        return OllamaLLM(base_url=settings.ollama_base_url, model=settings.ollama_model)
+        return _with_resilience(
+            OllamaLLM(base_url=settings.ollama_base_url, model=settings.ollama_model),
+            settings,
+        )
     raise ValueError(
         f"Unknown LLM provider {settings.llm_provider!r}. "
         "Valid options: local, openai, openai_responses, anthropic, bedrock, ollama."
+    )
+
+
+def _with_resilience(provider: LLMProvider, settings: Settings) -> LLMProvider:
+    """Wrap remote LLM providers with the configured resilience policy."""
+    if not settings.llm_resilience_enabled:
+        return provider
+    return ResilientLLMProvider(
+        provider,
+        policy=ResiliencePolicy(
+            max_attempts=settings.llm_retry_max_attempts,
+            timeout_seconds=settings.llm_timeout_seconds,
+            backoff_seconds=settings.llm_retry_backoff_seconds,
+            circuit_failure_threshold=settings.llm_circuit_failure_threshold,
+            circuit_recovery_seconds=settings.llm_circuit_recovery_seconds,
+        ),
     )
 
 

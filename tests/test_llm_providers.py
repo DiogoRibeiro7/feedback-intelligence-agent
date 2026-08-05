@@ -30,6 +30,7 @@ from feedback_intelligence_agent.llm import (
     OpenAIResponsesLLM,
     ProviderCapabilities,
 )
+from feedback_intelligence_agent.resilience import ResilientLLMProvider
 
 # ---------------------------------------------------------------------------
 # Capability metadata
@@ -549,9 +550,10 @@ def test_build_llm_openai_uses_configured_base_url() -> None:
         OPENAI_BASE_URL="https://llm.example.com",
     )
     llm = build_llm(settings)
-    assert isinstance(llm, OpenAIChatLLM)
-    assert llm.base_url == "https://llm.example.com"
-    assert llm.model == "my-model"
+    assert isinstance(llm, ResilientLLMProvider)
+    assert isinstance(llm.provider, OpenAIChatLLM)
+    assert llm.provider.base_url == "https://llm.example.com"
+    assert llm.provider.model == "my-model"
 
 
 def test_build_llm_openai_responses_requires_api_key() -> None:
@@ -568,9 +570,10 @@ def test_build_llm_openai_responses_uses_configured_base_url() -> None:
         OPENAI_BASE_URL="https://api.example.com",
     )
     llm = build_llm(settings)
-    assert isinstance(llm, OpenAIResponsesLLM)
-    assert llm.base_url == "https://api.example.com"
-    assert llm.model == "my-model"
+    assert isinstance(llm, ResilientLLMProvider)
+    assert isinstance(llm.provider, OpenAIResponsesLLM)
+    assert llm.provider.base_url == "https://api.example.com"
+    assert llm.provider.model == "my-model"
 
 
 def test_build_llm_anthropic_requires_api_key() -> None:
@@ -588,8 +591,9 @@ def test_build_llm_anthropic_uses_configured_model(monkeypatch: pytest.MonkeyPat
         ANTHROPIC_MODEL="claude-haiku-4-5",
     )
     llm = build_llm(settings)
-    assert isinstance(llm, AnthropicLLM)
-    assert llm.model == "claude-haiku-4-5"
+    assert isinstance(llm, ResilientLLMProvider)
+    assert isinstance(llm.provider, AnthropicLLM)
+    assert llm.provider.model == "claude-haiku-4-5"
 
 
 def test_build_llm_bedrock_uses_configured_model_and_region(
@@ -607,11 +611,12 @@ def test_build_llm_bedrock_uses_configured_model_and_region(
         AWS_BEDROCK_TEMPERATURE=0.3,
     )
     llm = build_llm(settings)
-    assert isinstance(llm, BedrockConverseLLM)
-    assert llm.model == "anthropic.claude-test-v1:0"
-    assert llm.region_name == "eu-west-1"
-    assert llm.max_tokens == 256
-    assert llm.temperature == 0.3
+    assert isinstance(llm, ResilientLLMProvider)
+    assert isinstance(llm.provider, BedrockConverseLLM)
+    assert llm.provider.model == "anthropic.claude-test-v1:0"
+    assert llm.provider.region_name == "eu-west-1"
+    assert llm.provider.max_tokens == 256
+    assert llm.provider.temperature == 0.3
     assert fake_boto3.calls == [("bedrock-runtime", "eu-west-1")]  # type: ignore[attr-defined]
 
 
@@ -622,9 +627,38 @@ def test_build_llm_ollama_uses_configured_endpoint() -> None:
         OLLAMA_MODEL="mistral",
     )
     llm = build_llm(settings)
-    assert isinstance(llm, OllamaLLM)
-    assert llm.base_url == "http://gpu-box:11434"
-    assert llm.model == "mistral"
+    assert isinstance(llm, ResilientLLMProvider)
+    assert isinstance(llm.provider, OllamaLLM)
+    assert llm.provider.base_url == "http://gpu-box:11434"
+    assert llm.provider.model == "mistral"
+
+
+def test_build_llm_can_disable_remote_resilience_wrapper() -> None:
+    settings = Settings(
+        llm_provider="openai",
+        OPENAI_API_KEY="sk-test",
+        llm_resilience_enabled=False,
+    )
+    llm = build_llm(settings)
+    assert isinstance(llm, OpenAIChatLLM)
+
+
+def test_settings_read_llm_resilience_env_vars(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setenv("FEEDBACK_AGENT_LLM_RESILIENCE_ENABLED", "false")
+    monkeypatch.setenv("FEEDBACK_AGENT_LLM_TIMEOUT_SECONDS", "12.5")
+    monkeypatch.setenv("FEEDBACK_AGENT_LLM_RETRY_MAX_ATTEMPTS", "4")
+    monkeypatch.setenv("FEEDBACK_AGENT_LLM_RETRY_BACKOFF_SECONDS", "0.75")
+    monkeypatch.setenv("FEEDBACK_AGENT_LLM_CIRCUIT_FAILURE_THRESHOLD", "5")
+    monkeypatch.setenv("FEEDBACK_AGENT_LLM_CIRCUIT_RECOVERY_SECONDS", "60")
+
+    settings = Settings()
+
+    assert settings.llm_resilience_enabled is False
+    assert settings.llm_timeout_seconds == 12.5
+    assert settings.llm_retry_max_attempts == 4
+    assert settings.llm_retry_backoff_seconds == 0.75
+    assert settings.llm_circuit_failure_threshold == 5
+    assert settings.llm_circuit_recovery_seconds == 60
 
 
 def test_settings_reject_unknown_provider_listing_options() -> None:

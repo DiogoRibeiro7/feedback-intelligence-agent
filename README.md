@@ -464,6 +464,12 @@ Environment variables:
 | `AWS_BEDROCK_MODEL` | `anthropic.claude-3-haiku-20240307-v1:0` | Bedrock model ID used by the Converse API provider. |
 | `AWS_BEDROCK_MAX_TOKENS` | `1024` | Maximum generated tokens for Bedrock. |
 | `AWS_BEDROCK_TEMPERATURE` | `0.2` | Bedrock generation temperature. |
+| `FEEDBACK_AGENT_LLM_RESILIENCE_ENABLED` | `true` | Wrap remote LLM providers with retry, timeout, and circuit-breaker policies. |
+| `FEEDBACK_AGENT_LLM_TIMEOUT_SECONDS` | `30.0` | Per-attempt timeout for remote LLM calls. |
+| `FEEDBACK_AGENT_LLM_RETRY_MAX_ATTEMPTS` | `3` | Maximum total attempts for a remote LLM call. |
+| `FEEDBACK_AGENT_LLM_RETRY_BACKOFF_SECONDS` | `0.25` | Base backoff between retry attempts. |
+| `FEEDBACK_AGENT_LLM_CIRCUIT_FAILURE_THRESHOLD` | `3` | Consecutive failed attempts before opening the circuit. |
+| `FEEDBACK_AGENT_LLM_CIRCUIT_RECOVERY_SECONDS` | `30.0` | Time before an open circuit allows a half-open trial call. |
 | `OLLAMA_BASE_URL` | `http://localhost:11434` | Base URL of a local Ollama server. |
 | `OLLAMA_MODEL` | `llama3.2` | Model name for the Ollama provider. |
 
@@ -544,6 +550,12 @@ Each provider also advertises capability metadata (`provider.capabilities`):
 `supports_streaming`, `supports_tool_calling`, `supports_json_mode`, and an optional
 `max_context_tokens`, so callers can branch on provider features without
 provider-specific code.
+
+Remote providers are wrapped by a small resilience layer by default. Each LLM call
+gets a per-attempt timeout, retry attempts with deterministic backoff, and an
+in-memory circuit breaker that opens after repeated failures and later allows a
+half-open recovery call. The local deterministic provider is intentionally not
+wrapped, so tests, demos, and offline evaluations remain fully reproducible.
 
 ## Asynchronous ingestion jobs
 
