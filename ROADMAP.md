@@ -22,7 +22,7 @@ This roadmap is designed to evolve the repository from a compact portfolio proje
 ## Phase 3 — Production LLM integration
 
 - [x] Add OpenAI Responses API provider.
-- [ ] Add AWS Bedrock provider.
+- [x] Add AWS Bedrock provider.
 - [ ] Add retry, timeout, and circuit-breaker policies.
 - [x] Add prompt versioning with a validated registry, CLI inspection, and snapshot tests.
 - [ ] Add structured JSON output validation with automatic repair.

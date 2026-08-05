@@ -13,6 +13,7 @@ from feedback_intelligence_agent.ingestion import load_feedback_csv
 from feedback_intelligence_agent.lexical_search import BM25Retriever
 from feedback_intelligence_agent.llm import (
     AnthropicLLM,
+    BedrockConverseLLM,
     DeterministicLLM,
     LLMProvider,
     OllamaLLM,
@@ -181,7 +182,8 @@ def build_llm(settings: Settings) -> LLMProvider:
     ``local`` (the default) needs no API key and stays fully deterministic.
     ``openai`` targets any OpenAI-compatible Chat Completions endpoint
     (``OPENAI_BASE_URL``), ``openai_responses`` targets OpenAI's Responses API,
-    ``anthropic`` uses the official SDK (optional ``anthropic`` extra), and
+    ``anthropic`` uses the official SDK (optional ``anthropic`` extra),
+    ``bedrock`` uses AWS Bedrock Runtime (optional ``bedrock`` extra), and
     ``ollama`` talks to a local Ollama server. Missing credentials raise a clear
     configuration error at construction time.
     """
@@ -211,11 +213,18 @@ def build_llm(settings: Settings) -> LLMProvider:
                 "ANTHROPIC_API_KEY is required when FEEDBACK_AGENT_LLM_PROVIDER=anthropic"
             )
         return AnthropicLLM(api_key=settings.anthropic_api_key, model=settings.anthropic_model)
+    if settings.llm_provider == "bedrock":
+        return BedrockConverseLLM(
+            model=settings.bedrock_model,
+            region_name=settings.bedrock_region,
+            max_tokens=settings.bedrock_max_tokens,
+            temperature=settings.bedrock_temperature,
+        )
     if settings.llm_provider == "ollama":
         return OllamaLLM(base_url=settings.ollama_base_url, model=settings.ollama_model)
     raise ValueError(
         f"Unknown LLM provider {settings.llm_provider!r}. "
-        "Valid options: local, openai, openai_responses, anthropic, ollama."
+        "Valid options: local, openai, openai_responses, anthropic, bedrock, ollama."
     )
 
 

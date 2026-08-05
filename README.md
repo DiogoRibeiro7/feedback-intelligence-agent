@@ -450,7 +450,7 @@ Environment variables:
 | `FEEDBACK_AGENT_RETRIEVER_TYPE` | `dense` | Retrieval strategy: `dense`, `lexical`, or `hybrid`. |
 | `FEEDBACK_AGENT_DENSE_WEIGHT` | `0.6` | Dense score weight used by the hybrid retriever. |
 | `FEEDBACK_AGENT_LEXICAL_WEIGHT` | `0.4` | Lexical (BM25) score weight used by the hybrid retriever. |
-| `FEEDBACK_AGENT_LLM_PROVIDER` | `local` | `local`, `openai`, `openai_responses`, `anthropic`, or `ollama`. |
+| `FEEDBACK_AGENT_LLM_PROVIDER` | `local` | `local`, `openai`, `openai_responses`, `anthropic`, `bedrock`, or `ollama`. |
 | `FEEDBACK_AGENT_TELEMETRY_ENABLED` | `false` | Enable structured telemetry events. |
 | `FEEDBACK_AGENT_TELEMETRY_PATH` | `.artifacts/telemetry.jsonl` | JSONL file that telemetry events are appended to. |
 | `FEEDBACK_AGENT_CONVERSATION_STORE_PATH` | `.artifacts/conversations` | Directory holding one JSON file per chat conversation. |
@@ -460,6 +460,10 @@ Environment variables:
 | `OPENAI_BASE_URL` | `https://api.openai.com` | Base URL for OpenAI or OpenAI-compatible endpoints. |
 | `ANTHROPIC_API_KEY` | empty | Required only when using the Anthropic provider. |
 | `ANTHROPIC_MODEL` | `claude-opus-4-8` | Model alias for the Anthropic provider. |
+| `AWS_REGION` | SDK default | AWS region used by the Bedrock provider. |
+| `AWS_BEDROCK_MODEL` | `anthropic.claude-3-haiku-20240307-v1:0` | Bedrock model ID used by the Converse API provider. |
+| `AWS_BEDROCK_MAX_TOKENS` | `1024` | Maximum generated tokens for Bedrock. |
+| `AWS_BEDROCK_TEMPERATURE` | `0.2` | Bedrock generation temperature. |
 | `OLLAMA_BASE_URL` | `http://localhost:11434` | Base URL of a local Ollama server. |
 | `OLLAMA_MODEL` | `llama3.2` | Model name for the Ollama provider. |
 
@@ -468,7 +472,7 @@ Create a local `.env` from `.env.example` if needed.
 ### LLM providers
 
 The answer-generation step is provider-agnostic behind the `LLMProvider` protocol in
-`llm.py`. Five providers are available, selected by `FEEDBACK_AGENT_LLM_PROVIDER`:
+`llm.py`. Six providers are available, selected by `FEEDBACK_AGENT_LLM_PROVIDER`:
 
 - **`local` (default)**: the deterministic evidence-driven provider. No API key, no
   network access, fully reproducible — this is what CI, tests, and the demo use.
@@ -507,6 +511,18 @@ The answer-generation step is provider-agnostic behind the `LLMProvider` protoco
   poetry run feedback-agent query "Why are enterprise customers unhappy with onboarding?"
   ```
 
+- **`bedrock`**: AWS Bedrock Runtime's Converse API through the optional `boto3`
+  SDK. AWS credentials are resolved by the standard AWS SDK chain, so local
+  profiles, SSO sessions, environment variables, and IAM roles all work:
+
+  ```bash
+  poetry install --extras bedrock
+  export FEEDBACK_AGENT_LLM_PROVIDER=bedrock
+  export AWS_REGION=eu-west-1
+  export AWS_BEDROCK_MODEL=anthropic.claude-3-haiku-20240307-v1:0
+  poetry run feedback-agent query "Why are enterprise customers unhappy with onboarding?"
+  ```
+
 - **`ollama`**: a local Ollama server; no API key required:
 
   ```bash
@@ -520,7 +536,9 @@ The answer-generation step is provider-agnostic behind the `LLMProvider` protoco
 Misconfiguration fails fast with actionable errors: a missing API key raises at
 construction time, an unknown provider name lists the valid options, an unreachable
 local server reports the configured base URL, and using the Anthropic provider without
-the extra installed explains how to install it.
+the extra installed explains how to install it. The Bedrock provider delegates
+credentials to the AWS SDK and reports AWS credential, region, and model-access
+failures as `LLMProviderError`.
 
 Each provider also advertises capability metadata (`provider.capabilities`):
 `supports_streaming`, `supports_tool_calling`, `supports_json_mode`, and an optional

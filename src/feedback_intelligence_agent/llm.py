@@ -2,8 +2,8 @@
 
 The deterministic local provider is the default and keeps the project fully
 runnable without API keys. Optional remote providers (OpenAI-compatible,
-Anthropic, Ollama) plug into the same :class:`LLMProvider` protocol and are
-selected through configuration (see ``factory.build_llm``).
+Anthropic, AWS Bedrock, Ollama) plug into the same :class:`LLMProvider`
+protocol and are selected through configuration (see ``factory.build_llm``).
 """
 
 from __future__ import annotations
@@ -12,7 +12,7 @@ import re
 from collections import Counter
 from dataclasses import dataclass
 from types import ModuleType
-from typing import Any, Protocol
+from typing import Any, Protocol, cast
 
 import httpx
 
@@ -48,6 +48,20 @@ class LLMProvider(Protocol):
 
     def generate(self, prompt: str, *, question: str, results: list[SearchResult]) -> str:
         """Generate a response from a grounded prompt."""
+
+
+class BedrockRuntimeClient(Protocol):
+    """Small protocol for the Bedrock Runtime client methods used here."""
+
+    def converse(self, **kwargs: object) -> dict[str, Any]:
+        """Call AWS Bedrock Runtime's Converse API."""
+
+
+class BedrockExceptionTypes(Protocol):
+    """Exception classes exposed by ``botocore.exceptions``."""
+
+    ClientError: type[Exception]
+    BotoCoreError: type[Exception]
 
 
 class DeterministicLLM:
@@ -397,6 +411,33 @@ def _import_anthropic() -> ModuleType:
     return module
 
 
+def _import_boto3() -> ModuleType:
+    """Import optional ``boto3`` with an actionable Bedrock setup message."""
+    try:
+        import boto3
+    except ImportError as exc:
+        raise LLMProviderError(
+            "The 'boto3' package is required for the AWS Bedrock provider. "
+            "Install it with: poetry install --extras bedrock "
+            "(or: pip install boto3)."
+        ) from exc
+    module: ModuleType = boto3
+    return module
+
+
+def _import_botocore_exceptions() -> BedrockExceptionTypes:
+    """Import botocore exception classes used by the Bedrock provider."""
+    try:
+        import botocore.exceptions as exceptions
+    except ImportError as exc:
+        raise LLMProviderError(
+            "The 'botocore' package is required for the AWS Bedrock provider. "
+            "Install it with: poetry install --extras bedrock "
+            "(or: pip install boto3)."
+        ) from exc
+    return cast(BedrockExceptionTypes, exceptions)
+
+
 class AnthropicLLM:
     """Optional Anthropic provider backed by the official ``anthropic`` SDK.
 
@@ -454,6 +495,104 @@ class AnthropicLLM:
             ) from exc
         # Response content is a list of typed blocks; keep only text blocks.
         parts = [block.text for block in message.content if block.type == "text"]
+        return "".join(parts)
+
+
+class BedrockConverseLLM:
+    """Optional AWS Bedrock provider backed by the Converse API.
+
+    Credentials are resolved by the standard AWS SDK chain: environment
+    variables, shared profiles, SSO, IAM roles, or workload identity. The
+    provider imports ``boto3`` lazily, so local tests and demos do not need AWS
+    dependencies installed.
+    """
+
+    DEFAULT_MODEL = "anthropic.claude-3-haiku-20240307-v1:0"
+
+    capabilities = ProviderCapabilities(
+        supports_streaming=True,
+        supports_tool_calling=True,
+        supports_json_mode=False,
+        max_context_tokens=None,
+    )
+
+    def __init__(
+        self,
+        *,
+        model: str = DEFAULT_MODEL,
+        region_name: str | None = None,
+        max_tokens: int = 1024,
+        temperature: float = 0.2,
+        client: BedrockRuntimeClient | None = None,
+        exceptions_module: BedrockExceptionTypes | None = None,
+    ) -> None:
+        """Validate configuration and construct a Bedrock Runtime client."""
+        if not model:
+            raise ValueError("model is required for BedrockConverseLLM")
+        if max_tokens < 1:
+            raise ValueError("max_tokens must be at least 1 for BedrockConverseLLM")
+        if temperature < 0.0:
+            raise ValueError("temperature must be non-negative for BedrockConverseLLM")
+        self.model = model
+        self.region_name = region_name or None
+        self.max_tokens = max_tokens
+        self.temperature = temperature
+        self._exceptions = exceptions_module or _import_botocore_exceptions()
+        if client is not None:
+            self._client = client
+            return
+        boto3 = _import_boto3()
+        self._client = cast(
+            BedrockRuntimeClient,
+            boto3.client("bedrock-runtime", region_name=self.region_name),
+        )
+
+    def generate(self, prompt: str, *, question: str, results: list[SearchResult]) -> str:
+        """Generate text using AWS Bedrock Runtime's Converse API."""
+        del question, results
+        try:
+            response = self._client.converse(
+                modelId=self.model,
+                system=[{"text": _PROVIDER_SYSTEM_PROMPT}],
+                messages=[{"role": "user", "content": [{"text": prompt}]}],
+                inferenceConfig={
+                    "maxTokens": self.max_tokens,
+                    "temperature": self.temperature,
+                },
+            )
+        except self._exceptions.ClientError as exc:
+            response = getattr(exc, "response", {})
+            error = response.get("Error", {}) if isinstance(response, dict) else {}
+            code = str(error.get("Code", "unknown")) if isinstance(error, dict) else "unknown"
+            raise LLMProviderError(
+                "AWS Bedrock Converse request failed "
+                f"({code}). Check AWS credentials, region, and model access."
+            ) from exc
+        except self._exceptions.BotoCoreError as exc:
+            raise LLMProviderError(
+                "Could not call AWS Bedrock Runtime. Check AWS credentials, "
+                "region configuration, and network access."
+            ) from exc
+        return self._extract_text(response)
+
+    def _extract_text(self, response: dict[str, Any]) -> str:
+        """Extract assistant text from a Bedrock Converse response."""
+        output = response.get("output")
+        if not isinstance(output, dict):
+            raise LLMProviderError("AWS Bedrock response did not include output.")
+        message = output.get("message")
+        if not isinstance(message, dict):
+            raise LLMProviderError("AWS Bedrock response did not include a message.")
+        content = message.get("content")
+        if not isinstance(content, list):
+            raise LLMProviderError("AWS Bedrock response did not include message content.")
+        parts = [
+            block["text"]
+            for block in content
+            if isinstance(block, dict) and isinstance(block.get("text"), str)
+        ]
+        if not parts:
+            raise LLMProviderError("AWS Bedrock response did not include text output.")
         return "".join(parts)
 
 

@@ -30,7 +30,9 @@ class Settings(BaseSettings):
     retriever_type: RetrieverType = "dense"
     dense_weight: float = Field(default=0.6, ge=0.0)
     lexical_weight: float = Field(default=0.4, ge=0.0)
-    llm_provider: Literal["local", "openai", "openai_responses", "anthropic", "ollama"] = "local"
+    llm_provider: Literal[
+        "local", "openai", "openai_responses", "anthropic", "bedrock", "ollama"
+    ] = "local"
     openai_api_key: str | None = Field(default=None, validation_alias="OPENAI_API_KEY")
     openai_model: str = Field(default="gpt-4o-mini", validation_alias="OPENAI_MODEL")
     openai_base_url: str = Field(
@@ -38,6 +40,21 @@ class Settings(BaseSettings):
     )
     anthropic_api_key: str | None = Field(default=None, validation_alias="ANTHROPIC_API_KEY")
     anthropic_model: str = Field(default="claude-opus-4-8", validation_alias="ANTHROPIC_MODEL")
+    bedrock_model: str = Field(
+        default="anthropic.claude-3-haiku-20240307-v1:0",
+        validation_alias="AWS_BEDROCK_MODEL",
+    )
+    bedrock_region: str | None = Field(default=None, validation_alias="AWS_REGION")
+    bedrock_max_tokens: int = Field(
+        default=1024,
+        ge=1,
+        validation_alias="AWS_BEDROCK_MAX_TOKENS",
+    )
+    bedrock_temperature: float = Field(
+        default=0.2,
+        ge=0.0,
+        validation_alias="AWS_BEDROCK_TEMPERATURE",
+    )
     ollama_base_url: str = Field(
         default="http://localhost:11434", validation_alias="OLLAMA_BASE_URL"
     )

@@ -22,6 +22,7 @@ from feedback_intelligence_agent.config import Settings
 from feedback_intelligence_agent.factory import build_llm
 from feedback_intelligence_agent.llm import (
     AnthropicLLM,
+    BedrockConverseLLM,
     DeterministicLLM,
     LLMProviderError,
     OllamaLLM,
@@ -58,6 +59,8 @@ def test_openai_and_ollama_capabilities() -> None:
     assert OpenAIChatLLM.capabilities.supports_json_mode is True
     assert OpenAIResponsesLLM.capabilities.supports_tool_calling is True
     assert OpenAIResponsesLLM.capabilities.supports_json_mode is True
+    assert BedrockConverseLLM.capabilities.supports_tool_calling is True
+    assert BedrockConverseLLM.capabilities.supports_json_mode is False
     assert OllamaLLM.capabilities.supports_tool_calling is False
     assert OllamaLLM.capabilities.supports_json_mode is True
 
@@ -215,6 +218,147 @@ def test_openai_responses_llm_reports_unreachable_endpoint() -> None:
         transport=httpx.MockTransport(handler),
     )
     with pytest.raises(LLMProviderError, match="https://down.example.com"):
+        llm.generate("p", question="q", results=[])
+
+
+# ---------------------------------------------------------------------------
+# AWS Bedrock provider (fake boto3 client)
+# ---------------------------------------------------------------------------
+
+
+class _FakeBedrockClientError(Exception):
+    def __init__(self, code: str = "AccessDeniedException") -> None:
+        super().__init__(code)
+        self.response = {"Error": {"Code": code}}
+
+
+class _FakeBedrockCoreError(Exception):
+    pass
+
+
+class _FakeBedrockExceptions:
+    ClientError = _FakeBedrockClientError
+    BotoCoreError = _FakeBedrockCoreError
+
+
+class _FakeBedrockClient:
+    def __init__(
+        self,
+        response: dict[str, Any] | None = None,
+        error: Exception | None = None,
+    ) -> None:
+        self.response: dict[str, object] = response or {
+            "output": {"message": {"content": [{"text": "bedrock answer"}]}}
+        }
+        self.error = error
+        self.calls: list[dict[str, object]] = []
+
+    def converse(self, **kwargs: object) -> dict[str, object]:
+        self.calls.append(kwargs)
+        if self.error is not None:
+            raise self.error
+        return self.response
+
+
+def _install_fake_botocore(monkeypatch: pytest.MonkeyPatch) -> None:
+    botocore = type(sys)("botocore")
+    exceptions = type(sys)("botocore.exceptions")
+    exceptions.ClientError = _FakeBedrockClientError  # type: ignore[attr-defined]
+    exceptions.BotoCoreError = _FakeBedrockCoreError  # type: ignore[attr-defined]
+    botocore.exceptions = exceptions  # type: ignore[attr-defined]
+    monkeypatch.setitem(sys.modules, "botocore", botocore)
+    monkeypatch.setitem(sys.modules, "botocore.exceptions", exceptions)
+
+
+def _make_fake_boto3(client: _FakeBedrockClient) -> ModuleType:
+    module = type(sys)("boto3")
+    module.calls = []  # type: ignore[attr-defined]
+
+    def client_factory(service_name: str, *, region_name: str | None = None) -> object:
+        module.calls.append((service_name, region_name))  # type: ignore[attr-defined]
+        return client
+
+    module.client = client_factory  # type: ignore[attr-defined]
+    return module
+
+
+def test_bedrock_llm_requires_model_and_valid_generation_options() -> None:
+    with pytest.raises(ValueError, match="model"):
+        BedrockConverseLLM(
+            model="",
+            client=_FakeBedrockClient(),
+            exceptions_module=_FakeBedrockExceptions,
+        )
+    with pytest.raises(ValueError, match="max_tokens"):
+        BedrockConverseLLM(
+            max_tokens=0,
+            client=_FakeBedrockClient(),
+            exceptions_module=_FakeBedrockExceptions,
+        )
+    with pytest.raises(ValueError, match="temperature"):
+        BedrockConverseLLM(
+            temperature=-0.1,
+            client=_FakeBedrockClient(),
+            exceptions_module=_FakeBedrockExceptions,
+        )
+
+
+def test_bedrock_llm_calls_converse_api() -> None:
+    client = _FakeBedrockClient(
+        response={"output": {"message": {"content": [{"text": "Hello "}, {"text": "world."}]}}}
+    )
+    llm = BedrockConverseLLM(
+        model="anthropic.claude-test-v1:0",
+        region_name="eu-west-1",
+        max_tokens=512,
+        temperature=0.1,
+        client=client,
+        exceptions_module=_FakeBedrockExceptions,
+    )
+    answer = llm.generate("the prompt", question="q", results=[])
+
+    assert answer == "Hello world."
+    assert client.calls == [
+        {
+            "modelId": "anthropic.claude-test-v1:0",
+            "system": [{"text": "You produce concise, evidence-grounded analysis."}],
+            "messages": [{"role": "user", "content": [{"text": "the prompt"}]}],
+            "inferenceConfig": {"maxTokens": 512, "temperature": 0.1},
+        }
+    ]
+
+
+def test_bedrock_llm_reports_missing_package(monkeypatch: pytest.MonkeyPatch) -> None:
+    _install_fake_botocore(monkeypatch)
+    monkeypatch.setitem(sys.modules, "boto3", None)
+    with pytest.raises(LLMProviderError, match="poetry install --extras bedrock"):
+        BedrockConverseLLM()
+
+
+def test_bedrock_llm_converts_client_errors() -> None:
+    llm = BedrockConverseLLM(
+        client=_FakeBedrockClient(error=_FakeBedrockClientError("ValidationException")),
+        exceptions_module=_FakeBedrockExceptions,
+    )
+    with pytest.raises(LLMProviderError, match="ValidationException"):
+        llm.generate("p", question="q", results=[])
+
+
+def test_bedrock_llm_converts_core_errors() -> None:
+    llm = BedrockConverseLLM(
+        client=_FakeBedrockClient(error=_FakeBedrockCoreError("no credentials")),
+        exceptions_module=_FakeBedrockExceptions,
+    )
+    with pytest.raises(LLMProviderError, match="Bedrock Runtime"):
+        llm.generate("p", question="q", results=[])
+
+
+def test_bedrock_llm_reports_malformed_response() -> None:
+    llm = BedrockConverseLLM(
+        client=_FakeBedrockClient(response={"output": {"message": {"content": []}}}),
+        exceptions_module=_FakeBedrockExceptions,
+    )
+    with pytest.raises(LLMProviderError, match="text output"):
         llm.generate("p", question="q", results=[])
 
 
@@ -448,6 +592,29 @@ def test_build_llm_anthropic_uses_configured_model(monkeypatch: pytest.MonkeyPat
     assert llm.model == "claude-haiku-4-5"
 
 
+def test_build_llm_bedrock_uses_configured_model_and_region(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    client = _FakeBedrockClient()
+    fake_boto3 = _make_fake_boto3(client)
+    _install_fake_botocore(monkeypatch)
+    monkeypatch.setitem(sys.modules, "boto3", fake_boto3)
+    settings = Settings(
+        llm_provider="bedrock",
+        AWS_BEDROCK_MODEL="anthropic.claude-test-v1:0",
+        AWS_REGION="eu-west-1",
+        AWS_BEDROCK_MAX_TOKENS=256,
+        AWS_BEDROCK_TEMPERATURE=0.3,
+    )
+    llm = build_llm(settings)
+    assert isinstance(llm, BedrockConverseLLM)
+    assert llm.model == "anthropic.claude-test-v1:0"
+    assert llm.region_name == "eu-west-1"
+    assert llm.max_tokens == 256
+    assert llm.temperature == 0.3
+    assert fake_boto3.calls == [("bedrock-runtime", "eu-west-1")]  # type: ignore[attr-defined]
+
+
 def test_build_llm_ollama_uses_configured_endpoint() -> None:
     settings = Settings(
         llm_provider="ollama",
@@ -464,5 +631,5 @@ def test_settings_reject_unknown_provider_listing_options() -> None:
     with pytest.raises(ValidationError) as exc_info:
         Settings(llm_provider="bogus")
     message = str(exc_info.value)
-    for option in ("local", "openai", "openai_responses", "anthropic", "ollama"):
+    for option in ("local", "openai", "openai_responses", "anthropic", "bedrock", "ollama"):
         assert option in message

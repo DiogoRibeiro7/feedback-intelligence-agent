@@ -65,7 +65,7 @@ class ExperimentConfig(BaseModel):
     top_k: int = Field(default=4, ge=1, le=12)
     embedding_provider: Literal["hashing"] = "hashing"
     embedding_dim: int = Field(default=512, ge=64, le=8192)
-    llm_provider: Literal["local", "openai", "openai_responses"] = "local"
+    llm_provider: Literal["local", "openai", "openai_responses", "bedrock"] = "local"
     retriever_type: RetrieverType = "dense"
     dense_weight: float = Field(default=0.6, ge=0.0)
     lexical_weight: float = Field(default=0.4, ge=0.0)

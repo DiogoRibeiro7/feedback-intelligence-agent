@@ -28,9 +28,9 @@ All runtime configuration comes from `FEEDBACK_AGENT_*` environment variables
 the [README](../README.md#configuration)). The defaults run a fully local,
 deterministic pipeline that needs **no API keys**.
 
-Secrets (`OPENAI_API_KEY`, `ANTHROPIC_API_KEY`) are only required when you
-switch `FEEDBACK_AGENT_LLM_PROVIDER` away from `local`. They are **never** stored
-in the repository:
+Secrets (`OPENAI_API_KEY`, `ANTHROPIC_API_KEY`, AWS credentials when not using
+IAM roles) are only required when you switch `FEEDBACK_AGENT_LLM_PROVIDER` away
+from `local`. They are **never** stored in the repository:
 
 - Docker Compose prod-like: a local `deploy/.env.prod` file (gitignored).
 - ECS Fargate: AWS Secrets Manager, referenced by ARN via `secrets[].valueFrom`.
@@ -111,6 +111,9 @@ fly deploy --config deploy/fly.toml --dockerfile Dockerfile
 
 # Optional: switch to a hosted LLM provider with a secret.
 fly secrets set ANTHROPIC_API_KEY=sk-ant-... FEEDBACK_AGENT_LLM_PROVIDER=anthropic
+
+# Or use Bedrock with AWS credentials/secrets or workload identity.
+fly secrets set FEEDBACK_AGENT_LLM_PROVIDER=bedrock AWS_REGION=eu-west-1
 ```
 
 ## Scope and honesty

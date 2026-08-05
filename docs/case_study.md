@@ -121,8 +121,8 @@ fails fast with actionable errors on misconfiguration.
    snapshot-tested prompts and an evaluation report usable as a CI gate.
 2. **Provider behind a protocol.** Answer generation is gated by the
    `LLMProvider` protocol in [llm.py](../src/feedback_intelligence_agent/llm.py),
-   with five implementations (`local`, `openai`, `openai_responses`,
-   `anthropic`, `ollama`) and per-provider capability metadata (`supports_streaming`,
+   with six implementations (`local`, `openai`, `openai_responses`,
+   `anthropic`, `bedrock`, `ollama`) and per-provider capability metadata (`supports_streaming`,
    `supports_tool_calling`, `supports_json_mode`, `max_context_tokens`).
    Optional SDKs are extras so the default install stays lean.
 3. **Pluggable vector store.** A common `VectorStore` interface
@@ -292,7 +292,7 @@ readable; each names what was given up.
   `EmbeddingModel` for a real embedding service.
 - **Deterministic local LLM by default.** Reproducible and free, but it is a
   structured evidence-driven generator, not a fluent model. Real fluency comes
-  from the optional `openai`/`anthropic`/`ollama` providers.
+  from the optional `openai`/`anthropic`/`bedrock`/`ollama` providers.
 - **In-memory JSON vector store by default.** Zero-setup and easy to inspect,
   but single-node and not built for large corpora — switch to the Qdrant backend
   for scale or multi-instance deployments.

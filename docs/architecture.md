@@ -94,7 +94,7 @@ Routing is keyword/intent based (`TOOL_ROUTES`) with no function-calling API, so
 
 ### LLM provider
 
-`llm.py` defines an `LLMProvider` protocol with per-provider capability metadata (streaming, tool calling, JSON mode, context size). The default provider is deterministic and local, so no API key is ever required. Optional providers — OpenAI Chat Completions-compatible endpoints, OpenAI's Responses API, Anthropic via the official SDK (optional `anthropic` extra), and a local Ollama server — connect to external inference while keeping the rest of the system unchanged. `factory.build_llm` selects the provider from configuration and fails fast with actionable errors on missing keys or unknown provider names.
+`llm.py` defines an `LLMProvider` protocol with per-provider capability metadata (streaming, tool calling, JSON mode, context size). The default provider is deterministic and local, so no API key is ever required. Optional providers — OpenAI Chat Completions-compatible endpoints, OpenAI's Responses API, Anthropic via the official SDK (optional `anthropic` extra), AWS Bedrock Runtime via the optional `bedrock` extra, and a local Ollama server — connect to external inference while keeping the rest of the system unchanged. `factory.build_llm` selects the provider from configuration and fails fast with actionable errors on missing keys or unknown provider names.
 
 ### Evaluation
 
