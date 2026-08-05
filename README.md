@@ -557,6 +557,12 @@ in-memory circuit breaker that opens after repeated failures and later allows a
 half-open recovery call. The local deterministic provider is intentionally not
 wrapped, so tests, demos, and offline evaluations remain fully reproducible.
 
+LLM output is validated through a typed parser before the public `AgentAnswer` is
+assembled. Providers may return a JSON object with `answer` and
+`recommended_actions`; legacy sectioned responses and embedded JSON blocks are
+repaired deterministically. Parse diagnostics are exposed as `output_format`,
+`output_repair_applied`, and `output_validation_error`.
+
 ## Asynchronous ingestion jobs
 
 Ingestion is decoupled from the request/response cycle so large datasets do not

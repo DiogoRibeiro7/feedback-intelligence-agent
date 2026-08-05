@@ -8,6 +8,7 @@ All notable changes to this project are documented here.
 
 - AWS Bedrock Runtime Converse API provider via `FEEDBACK_AGENT_LLM_PROVIDER=bedrock`.
 - Retry, timeout, and circuit-breaker wrapper for remote LLM providers.
+- Structured LLM output validation with deterministic repair diagnostics.
 
 ## 0.2.0 - 2026-08-05
 

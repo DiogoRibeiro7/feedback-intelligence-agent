@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import re
 from collections.abc import Sequence
 from dataclasses import dataclass
 from datetime import datetime, timezone
@@ -25,6 +24,7 @@ from feedback_intelligence_agent.memory import (
     QueryRewriter,
     new_conversation_id,
 )
+from feedback_intelligence_agent.output_parser import parse_llm_output
 from feedback_intelligence_agent.prompts import build_grounded_prompt
 from feedback_intelligence_agent.reranking import DeterministicJudgeReranker, Reranker
 from feedback_intelligence_agent.retrieval import Retriever
@@ -174,14 +174,14 @@ class FeedbackInsightAgent:
                     prompt, question=effective_question, results=results
                 )
                 llm_span["response_chars"] = len(raw_response)
-            parsed = self._parse_response(raw_response)
+            parsed = parse_llm_output(raw_response)
             citations = build_citations(results)
             confidence = self._confidence(results, citations)
             run_span["citations"] = len(citations)
             run_span["confidence"] = confidence
             run_span["retrieved_chunks"] = len(results)
 
-        answer_text = parsed["answer"]
+        answer_text = parsed.payload.answer
         if tool_record is not None:
             if tool_record.status == "ok":
                 answer_text = (
@@ -197,6 +197,9 @@ class FeedbackInsightAgent:
             "guardrail_context_dropped": context_chunks_dropped,
             "metadata_filters": filters.model_dump(mode="json") if filters is not None else None,
             "reranker": type(self.reranker).__name__,
+            "output_format": parsed.output_format,
+            "output_repair_applied": parsed.repair_applied,
+            "output_validation_error": parsed.validation_error,
             "tool_used": (
                 tool_record.tool_name
                 if tool_record is not None and tool_record.status == "ok"
@@ -210,7 +213,7 @@ class FeedbackInsightAgent:
         answer = AgentAnswer(
             question=question,
             answer=answer_text,
-            recommended_actions=parsed["actions"],
+            recommended_actions=parsed.payload.recommended_actions,
             citations=citations,
             route=route,
             confidence=confidence,
@@ -494,37 +497,6 @@ class FeedbackInsightAgent:
         if value.tzinfo is None:
             return value
         return value.astimezone(timezone.utc).replace(tzinfo=None)
-
-    def _parse_response(self, raw_response: str) -> dict[str, list[str] | str]:
-        """Parse a sectioned LLM response into answer and action fields."""
-        answer = self._section(raw_response, "Answer", ["Recommended actions", "Citations"])
-        action_text = self._section(raw_response, "Recommended actions", ["Citations"])
-        actions = [
-            re.sub(r"^[-*]\s*", "", line).strip()
-            for line in action_text.splitlines()
-            if line.strip()
-        ]
-        return {
-            "answer": answer.strip() or raw_response.strip(),
-            "actions": actions[:5],
-        }
-
-    def _section(self, text: str, heading: str, next_headings: list[str]) -> str:
-        """Extract a simple markdown-like section from text."""
-        start_pattern = re.compile(rf"{re.escape(heading)}\s*:\s*", flags=re.IGNORECASE)
-        start_match = start_pattern.search(text)
-        if not start_match:
-            return ""
-        start = start_match.end()
-        end = len(text)
-        for next_heading in next_headings:
-            next_pattern = re.compile(
-                rf"\n\s*{re.escape(next_heading)}\s*:\s*", flags=re.IGNORECASE
-            )
-            next_match = next_pattern.search(text, pos=start)
-            if next_match:
-                end = min(end, next_match.start())
-        return text[start:end].strip()
 
     def _confidence(self, results: list[SearchResult], citations: list[Citation]) -> float:
         """Compute a simple confidence score from retrieval quality and citations."""

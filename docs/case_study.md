@@ -314,8 +314,8 @@ Tracked in [ROADMAP.md](../ROADMAP.md). High-value next steps:
 
 - **Retrieval:** optional external cross-encoder / LLM-judge rerankers and
   larger query suites for retrieval drift monitoring.
-- **Generation:** structured JSON output validation with automatic repair and
-  provider-specific structured output modes.
+- **Generation:** provider-specific structured output modes and richer repair
+  telemetry for malformed model responses.
 - **Evaluation & observability:** experiment tracking (MLflow / W&B),
   OpenTelemetry trace export, and dashboards for latency, retrieval-score
   distribution, and citation coverage.

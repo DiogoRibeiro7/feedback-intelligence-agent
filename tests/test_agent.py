@@ -2,11 +2,22 @@ from __future__ import annotations
 
 from feedback_intelligence_agent.agent import FeedbackInsightAgent
 from feedback_intelligence_agent.embeddings import HashingEmbeddingModel
-from feedback_intelligence_agent.llm import DeterministicLLM
+from feedback_intelligence_agent.llm import DeterministicLLM, LLMProvider
 from feedback_intelligence_agent.memory import ConversationTurn, InMemoryConversationStore
 from feedback_intelligence_agent.retrieval import QueryEngine
-from feedback_intelligence_agent.schemas import DocumentChunk
+from feedback_intelligence_agent.schemas import DocumentChunk, SearchResult
 from feedback_intelligence_agent.vector_store import InMemoryVectorStore
+
+
+class JsonAnswerLLM:
+    capabilities = DeterministicLLM.capabilities
+
+    def generate(self, prompt: str, *, question: str, results: list[SearchResult]) -> str:
+        del prompt, question, results
+        return (
+            '{"answer": "JSON answer grounded in evidence [1].", '
+            '"recommended_actions": ["Use structured parsing.", "Keep citations."]}'
+        )
 
 
 def build_test_agent() -> FeedbackInsightAgent:
@@ -31,6 +42,22 @@ def build_test_agent() -> FeedbackInsightAgent:
     return FeedbackInsightAgent(query_engine=query_engine, llm=DeterministicLLM())
 
 
+def build_test_agent_with_llm(llm: LLMProvider) -> FeedbackInsightAgent:
+    model = HashingEmbeddingModel(dim=128)
+    chunks = [
+        DocumentChunk(
+            chunk_id="1",
+            source_id="fb-1",
+            text="Onboarding checklist was unclear and setup took too long.",
+            metadata={"rating": 2},
+        )
+    ]
+    store = InMemoryVectorStore(dim=128)
+    store.add(chunks, model.embed([chunk.text for chunk in chunks]))
+    query_engine = QueryEngine(embedding_model=model, vector_store=store)
+    return FeedbackInsightAgent(query_engine=query_engine, llm=llm)
+
+
 def test_agent_routes_onboarding_question() -> None:
     agent = build_test_agent()
     assert agent.route("What is wrong with onboarding?") == "onboarding"
@@ -43,6 +70,20 @@ def test_agent_answer_contains_citations() -> None:
     assert answer.confidence > 0
     assert answer.recommended_actions
     assert answer.diagnostics["reranker"] == "DeterministicJudgeReranker"
+    assert answer.diagnostics["output_format"] == "sectioned"
+    assert answer.diagnostics["output_repair_applied"] is True
+
+
+def test_agent_accepts_structured_json_llm_output() -> None:
+    agent = build_test_agent_with_llm(JsonAnswerLLM())
+
+    answer = agent.answer("Why is onboarding slow?", top_k=1)
+
+    assert answer.answer == "JSON answer grounded in evidence [1]."
+    assert answer.recommended_actions == ["Use structured parsing.", "Keep citations."]
+    assert answer.diagnostics["output_format"] == "json"
+    assert answer.diagnostics["output_repair_applied"] is False
+    assert answer.diagnostics["output_validation_error"] is None
 
 
 def test_agent_single_turn_answer_has_no_memory_diagnostics() -> None:

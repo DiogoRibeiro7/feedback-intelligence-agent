@@ -25,7 +25,7 @@ This roadmap is designed to evolve the repository from a compact portfolio proje
 - [x] Add AWS Bedrock provider.
 - [x] Add retry, timeout, and circuit-breaker policies.
 - [x] Add prompt versioning with a validated registry, CLI inspection, and snapshot tests.
-- [ ] Add structured JSON output validation with automatic repair.
+- [x] Add structured JSON output validation with automatic repair.
 
 ## Phase 4 — Evaluation and observability
 
