@@ -1,0 +1,33 @@
+{
+  "title": "Feedback Intelligence Agent",
+  "upload_type": "software",
+  "description": "A production-style AI engineering repository that demonstrates how to build, evaluate, and serve an LLM-powered customer feedback intelligence system. The project implements an agentic RAG workflow with retrieval, evidence selection, cited responses, FastAPI serving, deterministic local fallback behavior, and offline evaluation.",
+  "creators": [
+    {
+      "name": "Ribeiro, Diogo",
+      "orcid": "0009-0001-2022-7072",
+      "email": "dfr@esmad.ipp.pt",
+      "affiliation": "ESMAD - School of Media Arts and Design, Polytechnic of Porto"
+    }
+  ],
+  "access_right": "open",
+  "license": "MIT",
+  "version": "0.1.0",
+  "keywords": [
+    "artificial intelligence",
+    "retrieval-augmented generation",
+    "large language models",
+    "customer feedback",
+    "FastAPI",
+    "evaluation",
+    "Python"
+  ],
+  "related_identifiers": [
+    {
+      "identifier": "https://github.com/DiogoRibeiro7/feedback-intelligence-agent",
+      "relation": "isSupplementTo",
+      "resource_type": "software",
+      "scheme": "url"
+    }
+  ]
+}
