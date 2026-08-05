@@ -79,6 +79,36 @@ def test_query_response_without_tool_keeps_plain_rag(client: TestClient) -> None
     assert result["citations"]
 
 
+def test_query_response_applies_metadata_filters(client: TestClient) -> None:
+    response = client.post(
+        "/query",
+        json={
+            "question": "Which feedback mentions support?",
+            "top_k": 4,
+            "channel": "support_ticket",
+            "max_rating": 2,
+            "created_after": "2026-02-01T00:00:00",
+        },
+    )
+    assert response.status_code == 200
+    citations = response.json()["result"]["citations"]
+    assert citations
+    assert {citation["document_id"] for citation in citations} == {"fb-005", "fb-009"}
+    assert {citation["source"] for citation in citations} == {"support_ticket"}
+
+
+def test_query_response_rejects_invalid_metadata_filter_ranges(client: TestClient) -> None:
+    response = client.post(
+        "/query",
+        json={
+            "question": "Which feedback mentions onboarding?",
+            "min_rating": 5,
+            "max_rating": 1,
+        },
+    )
+    assert response.status_code == 422
+
+
 def test_split_for_streaming_is_lossless() -> None:
     text = "First sentence here.\n\nSecond block with  double spaces and\ttabs across many words."
     chunks = _split_for_streaming(text, words_per_chunk=3)

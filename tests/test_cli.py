@@ -89,6 +89,31 @@ def test_ingest_job_command_failure_exits_nonzero_with_clean_error(tmp_path: Pat
     assert "Ingestion failed" in payload["error"]
 
 
+def test_query_command_applies_metadata_filters(tmp_path: Path) -> None:
+    index_path = tmp_path / "vector_store.json"
+    result = stdout_runner.invoke(
+        app,
+        [
+            "query",
+            "Which feedback mentions support?",
+            "--index-path",
+            str(index_path),
+            "--channel",
+            "support_ticket",
+            "--max-rating",
+            "2",
+            "--created-after",
+            "2026-02-01T00:00:00",
+        ],
+    )
+    assert result.exit_code == 0, result.output
+    payload = json.loads(result.stdout)
+    citations = payload["citations"]
+    assert citations
+    assert {citation["document_id"] for citation in citations} == {"fb-005", "fb-009"}
+    assert payload["diagnostics"]["metadata_filters"]["channel"] == "support_ticket"
+
+
 def test_chat_command_interactive_repl(tmp_path: Path) -> None:
     index_path = tmp_path / "vector_store.json"
     store_path = tmp_path / "conversations"

@@ -152,6 +152,25 @@ poetry run feedback-agent evaluate --queries examples/queries.jsonl --retriever 
 
 The API uses the retriever configured through the environment (`FEEDBACK_AGENT_RETRIEVER_TYPE`, `FEEDBACK_AGENT_DENSE_WEIGHT`, `FEEDBACK_AGENT_LEXICAL_WEIGHT`).
 
+## Metadata filters
+
+Queries can restrict retrieved feedback before the final ranking step. Filters
+work through the API and CLI:
+
+```bash
+poetry run feedback-agent query "Which support tickets mention onboarding?" \
+  --channel support_ticket \
+  --customer-segment enterprise \
+  --min-rating 1 \
+  --max-rating 2 \
+  --created-after 2026-02-01T00:00:00 \
+  --created-before 2026-04-01T00:00:00
+```
+
+The `/query`, `/query/stream`, and `/chat` endpoints accept the same fields:
+`customer_segment`, `channel`, `min_rating`, `max_rating`, `created_after`, and
+`created_before`.
+
 ## Data validation
 
 Ingested datasets are checked against a data contract (`data_contracts.py`) before indexing. The contract requires the columns `feedback_id`, `customer_segment`, `channel`, `rating`, `text`, and `created_at`, and accepts optional `sentiment` and `label` columns. Validation reports missing columns, empty text, duplicate IDs, and invalid timestamps.

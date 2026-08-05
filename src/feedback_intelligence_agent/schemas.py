@@ -6,7 +6,7 @@ from datetime import datetime
 from enum import Enum
 from typing import Any, Literal
 
-from pydantic import AliasChoices, BaseModel, ConfigDict, Field, field_validator
+from pydantic import AliasChoices, BaseModel, ConfigDict, Field, field_validator, model_validator
 
 from feedback_intelligence_agent.guardrails import GuardrailDecision
 
@@ -54,6 +54,48 @@ class SearchResult(BaseModel):
 
     chunk: DocumentChunk
     score: float
+
+
+class MetadataFilters(BaseModel):
+    """Optional filters applied to chunk metadata before final ranking."""
+
+    customer_segment: str | None = Field(default=None, min_length=1)
+    channel: FeedbackChannel | None = None
+    min_rating: int | None = Field(default=None, ge=1, le=5)
+    max_rating: int | None = Field(default=None, ge=1, le=5)
+    created_after: datetime | None = None
+    created_before: datetime | None = None
+
+    @model_validator(mode="after")
+    def validate_ranges(self) -> MetadataFilters:
+        """Reject impossible numeric and date ranges."""
+        if (
+            self.min_rating is not None
+            and self.max_rating is not None
+            and self.min_rating > self.max_rating
+        ):
+            raise ValueError("min_rating cannot be greater than max_rating")
+        if (
+            self.created_after is not None
+            and self.created_before is not None
+            and self.created_after > self.created_before
+        ):
+            raise ValueError("created_after cannot be later than created_before")
+        return self
+
+    @property
+    def is_empty(self) -> bool:
+        """Return True when no filter field was provided."""
+        return not any(
+            (
+                self.customer_segment,
+                self.channel,
+                self.min_rating is not None,
+                self.max_rating is not None,
+                self.created_after is not None,
+                self.created_before is not None,
+            )
+        )
 
 
 class Citation(BaseModel):
@@ -113,6 +155,30 @@ class QueryRequest(BaseModel):
 
     question: str = Field(min_length=3)
     top_k: int = Field(default=4, ge=1, le=12)
+    customer_segment: str | None = Field(default=None, min_length=1)
+    channel: FeedbackChannel | None = None
+    min_rating: int | None = Field(default=None, ge=1, le=5)
+    max_rating: int | None = Field(default=None, ge=1, le=5)
+    created_after: datetime | None = None
+    created_before: datetime | None = None
+
+    @model_validator(mode="after")
+    def validate_filter_ranges(self) -> QueryRequest:
+        """Validate metadata filters at request parsing time."""
+        self.metadata_filters()
+        return self
+
+    def metadata_filters(self) -> MetadataFilters | None:
+        """Return the request's metadata filters, or None when no filter is set."""
+        filters = MetadataFilters(
+            customer_segment=self.customer_segment,
+            channel=self.channel,
+            min_rating=self.min_rating,
+            max_rating=self.max_rating,
+            created_after=self.created_after,
+            created_before=self.created_before,
+        )
+        return None if filters.is_empty else filters
 
 
 class QueryResponse(BaseModel):
@@ -154,6 +220,30 @@ class ChatRequest(BaseModel):
     message: str = Field(min_length=1)
     conversation_id: str | None = None
     top_k: int = Field(default=4, ge=1, le=12)
+    customer_segment: str | None = Field(default=None, min_length=1)
+    channel: FeedbackChannel | None = None
+    min_rating: int | None = Field(default=None, ge=1, le=5)
+    max_rating: int | None = Field(default=None, ge=1, le=5)
+    created_after: datetime | None = None
+    created_before: datetime | None = None
+
+    @model_validator(mode="after")
+    def validate_filter_ranges(self) -> ChatRequest:
+        """Validate metadata filters at request parsing time."""
+        self.metadata_filters()
+        return self
+
+    def metadata_filters(self) -> MetadataFilters | None:
+        """Return the request's metadata filters, or None when no filter is set."""
+        filters = MetadataFilters(
+            customer_segment=self.customer_segment,
+            channel=self.channel,
+            min_rating=self.min_rating,
+            max_rating=self.max_rating,
+            created_after=self.created_after,
+            created_before=self.created_before,
+        )
+        return None if filters.is_empty else filters
 
 
 class ChatResponse(BaseModel):

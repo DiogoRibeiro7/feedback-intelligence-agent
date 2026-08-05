@@ -137,7 +137,11 @@ def create_app() -> FastAPI:
     def query(request: QueryRequest) -> QueryResponse:
         """Answer a question using the feedback insight agent."""
         try:
-            result = agent.answer(request.question, top_k=request.top_k)
+            result = agent.answer(
+                request.question,
+                top_k=request.top_k,
+                filters=request.metadata_filters(),
+            )
         except Exception as exc:  # noqa: BLE001 - convert to API-safe response.
             log_event("query_failed", {"error": str(exc)})
             raise HTTPException(status_code=400, detail=str(exc)) from exc
@@ -158,7 +162,11 @@ def create_app() -> FastAPI:
         """
         started = time.perf_counter()
         try:
-            result = agent.answer(request.question, top_k=request.top_k)
+            result = agent.answer(
+                request.question,
+                top_k=request.top_k,
+                filters=request.metadata_filters(),
+            )
         except Exception as exc:  # noqa: BLE001 - convert to API-safe response.
             log_event("query_stream_failed", {"error": str(exc)})
             raise HTTPException(status_code=400, detail=str(exc)) from exc
@@ -189,6 +197,7 @@ def create_app() -> FastAPI:
                 store=conversation_store,
                 conversation_id=request.conversation_id,
                 top_k=request.top_k,
+                filters=request.metadata_filters(),
             )
         except ValueError as exc:
             raise HTTPException(status_code=400, detail=str(exc)) from exc

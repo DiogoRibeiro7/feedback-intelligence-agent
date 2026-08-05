@@ -5,6 +5,7 @@ from __future__ import annotations
 import re
 from collections.abc import Sequence
 from dataclasses import dataclass
+from datetime import datetime, timezone
 
 from feedback_intelligence_agent.citations import build_citations
 from feedback_intelligence_agent.guardrails import (
@@ -26,7 +27,13 @@ from feedback_intelligence_agent.memory import (
 )
 from feedback_intelligence_agent.prompts import build_grounded_prompt
 from feedback_intelligence_agent.retrieval import Retriever
-from feedback_intelligence_agent.schemas import AgentAnswer, Citation, SearchResult, ToolRunRecord
+from feedback_intelligence_agent.schemas import (
+    AgentAnswer,
+    Citation,
+    MetadataFilters,
+    SearchResult,
+    ToolRunRecord,
+)
 from feedback_intelligence_agent.telemetry import Telemetry, log_event
 from feedback_intelligence_agent.tools import ToolError, ToolRegistry, ToolRouter
 
@@ -84,6 +91,7 @@ class FeedbackInsightAgent:
         *,
         top_k: int = 4,
         history: Sequence[ConversationTurn] | None = None,
+        filters: MetadataFilters | None = None,
     ) -> AgentAnswer:
         """Answer a user question using retrieved feedback as evidence.
 
@@ -125,7 +133,11 @@ class FeedbackInsightAgent:
             metadata=run_metadata,
         ) as run_span:
             results = self._retrieve(
-                effective_question, route=route, top_k=top_k, correlation_id=correlation_id
+                effective_question,
+                route=route,
+                top_k=top_k,
+                correlation_id=correlation_id,
+                filters=filters,
             )
             context_decision = check_context([result.chunk.text for result in results])
             context_chunks_dropped = 0
@@ -178,6 +190,7 @@ class FeedbackInsightAgent:
             "max_score": max((result.score for result in results), default=0.0),
             "min_score": min((result.score for result in results), default=0.0),
             "guardrail_context_dropped": context_chunks_dropped,
+            "metadata_filters": filters.model_dump(mode="json") if filters is not None else None,
             "tool_used": (
                 tool_record.tool_name
                 if tool_record is not None and tool_record.status == "ok"
@@ -218,6 +231,7 @@ class FeedbackInsightAgent:
         store: ConversationStore,
         conversation_id: str | None = None,
         top_k: int = 4,
+        filters: MetadataFilters | None = None,
     ) -> tuple[AgentAnswer, str]:
         """Answer a message inside a stored conversation and persist the turn.
 
@@ -232,7 +246,7 @@ class FeedbackInsightAgent:
         """
         resolved_id = conversation_id or new_conversation_id()
         memory = store.get(resolved_id) or ConversationMemory(conversation_id=resolved_id)
-        answer = self.answer(message, top_k=top_k, history=memory.turns)
+        answer = self.answer(message, top_k=top_k, history=memory.turns, filters=filters)
         document_ids: list[str] = []
         for citation in answer.citations:
             if citation.document_id not in document_ids:
@@ -366,7 +380,13 @@ class FeedbackInsightAgent:
         return "general_insight"
 
     def _retrieve(
-        self, question: str, *, route: str, top_k: int, correlation_id: str | None = None
+        self,
+        question: str,
+        *,
+        route: str,
+        top_k: int,
+        correlation_id: str | None = None,
+        filters: MetadataFilters | None = None,
     ) -> list[SearchResult]:
         """Retrieve and rerank candidates with lightweight domain-aware signals.
 
@@ -385,9 +405,20 @@ class FeedbackInsightAgent:
                 "route": route,
                 "top_k": top_k,
                 "candidate_k": candidate_k,
+                "metadata_filters": (
+                    filters.model_dump(mode="json") if filters is not None else None
+                ),
             },
         ) as span:
             candidates = self.query_engine.search(question, top_k=candidate_k)
+            unfiltered_count = len(candidates)
+            if filters is not None:
+                candidates = [
+                    result
+                    for result in candidates
+                    if self._matches_metadata_filters(result.chunk.metadata, filters)
+                ]
+            span["metadata_filtered_out"] = unfiltered_count - len(candidates)
             scored: list[SearchResult] = []
             for result in candidates:
                 adjusted_score = self._combined_score(question, route, result)
@@ -397,6 +428,63 @@ class FeedbackInsightAgent:
             span["max_score"] = max((result.score for result in ranked), default=0.0)
             span["min_score"] = min((result.score for result in ranked), default=0.0)
         return ranked
+
+    def _matches_metadata_filters(
+        self, metadata: dict[str, object], filters: MetadataFilters
+    ) -> bool:
+        """Return whether chunk metadata satisfies all requested filters."""
+        if filters.customer_segment is not None:
+            segment = str(metadata.get("customer_segment", "")).lower()
+            if segment != filters.customer_segment.lower():
+                return False
+        if filters.channel is not None and str(metadata.get("channel", "")) != filters.channel:
+            return False
+
+        rating = self._metadata_rating(metadata)
+        if filters.min_rating is not None and rating < filters.min_rating:
+            return False
+        if filters.max_rating is not None and rating > filters.max_rating:
+            return False
+
+        created_at = self._metadata_datetime(metadata.get("created_at"))
+        if filters.created_after is not None:
+            created_after = self._comparable_datetime(filters.created_after)
+            if created_at is None or created_at < created_after:
+                return False
+        if filters.created_before is not None:
+            created_before = self._comparable_datetime(filters.created_before)
+            if created_at is None or created_at > created_before:
+                return False
+        return True
+
+    def _metadata_rating(self, metadata: dict[str, object]) -> int:
+        """Read a metadata rating, defaulting to the neutral upper bound."""
+        value = metadata.get("rating", 5)
+        if isinstance(value, int):
+            return value
+        if not isinstance(value, str):
+            return 5
+        try:
+            return int(value)
+        except ValueError:
+            return 5
+
+    def _metadata_datetime(self, value: object) -> datetime | None:
+        """Parse an ISO datetime value from chunk metadata."""
+        if isinstance(value, datetime):
+            return value
+        if not isinstance(value, str) or not value:
+            return None
+        try:
+            return self._comparable_datetime(datetime.fromisoformat(value))
+        except ValueError:
+            return None
+
+    def _comparable_datetime(self, value: datetime) -> datetime:
+        """Normalize datetimes so metadata and API filters compare reliably."""
+        if value.tzinfo is None:
+            return value
+        return value.astimezone(timezone.utc).replace(tzinfo=None)
 
     def _combined_score(self, question: str, route: str, result: SearchResult) -> float:
         """Combine vector, lexical, route, and metadata features."""

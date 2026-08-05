@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from datetime import datetime
 from enum import Enum
 from pathlib import Path
 from typing import Annotated
@@ -35,7 +36,7 @@ from feedback_intelligence_agent.prompt_registry import (
     PromptVariableError,
 )
 from feedback_intelligence_agent.prompts import PROMPT_REGISTRY
-from feedback_intelligence_agent.schemas import ChatResponse
+from feedback_intelligence_agent.schemas import ChatResponse, FeedbackChannel, MetadataFilters
 from feedback_intelligence_agent.synthetic_data import SyntheticDataConfig, write_feedback_csv
 from feedback_intelligence_agent.telemetry import configure_logging
 
@@ -52,6 +53,27 @@ class RetrieverChoice(str, Enum):
     dense = "dense"
     lexical = "lexical"
     hybrid = "hybrid"
+
+
+def _metadata_filters(
+    *,
+    customer_segment: str | None,
+    channel: FeedbackChannel | None,
+    min_rating: int | None,
+    max_rating: int | None,
+    created_after: datetime | None,
+    created_before: datetime | None,
+) -> MetadataFilters | None:
+    """Build metadata filters from optional CLI parameters."""
+    filters = MetadataFilters(
+        customer_segment=customer_segment,
+        channel=channel,
+        min_rating=min_rating,
+        max_rating=max_rating,
+        created_after=created_after,
+        created_before=created_before,
+    )
+    return None if filters.is_empty else filters
 
 
 @app.command()
@@ -160,6 +182,24 @@ def query(
     lexical_weight: Annotated[
         float, typer.Option(help="Lexical score weight for hybrid retrieval.")
     ] = 0.4,
+    customer_segment: Annotated[
+        str | None, typer.Option(help="Filter retrieved feedback by customer segment.")
+    ] = None,
+    channel: Annotated[
+        FeedbackChannel | None, typer.Option(help="Filter retrieved feedback by channel.")
+    ] = None,
+    min_rating: Annotated[
+        int | None, typer.Option(help="Minimum feedback rating to retrieve.")
+    ] = None,
+    max_rating: Annotated[
+        int | None, typer.Option(help="Maximum feedback rating to retrieve.")
+    ] = None,
+    created_after: Annotated[
+        datetime | None, typer.Option(help="Only retrieve feedback created at or after this time.")
+    ] = None,
+    created_before: Annotated[
+        datetime | None, typer.Option(help="Only retrieve feedback created at or before this time.")
+    ] = None,
 ) -> None:
     """Ask a question against the indexed feedback."""
     configure_logging()
@@ -170,7 +210,15 @@ def query(
         lexical_weight=lexical_weight,
     )
     agent = build_agent(settings)
-    answer = agent.answer(question, top_k=top_k)
+    filters = _metadata_filters(
+        customer_segment=customer_segment,
+        channel=channel,
+        min_rating=min_rating,
+        max_rating=max_rating,
+        created_after=created_after,
+        created_before=created_before,
+    )
+    answer = agent.answer(question, top_k=top_k, filters=filters)
     typer.echo(answer.model_dump_json(indent=2))
     typer.echo(render_citations(answer.citations), err=True)
 
@@ -192,6 +240,24 @@ def chat(
         Path, typer.Option(help="Directory holding conversation JSON files.")
     ] = Path(".artifacts/conversations"),
     top_k: Annotated[int, typer.Option(help="Number of chunks to retrieve.")] = 4,
+    customer_segment: Annotated[
+        str | None, typer.Option(help="Filter retrieved feedback by customer segment.")
+    ] = None,
+    channel: Annotated[
+        FeedbackChannel | None, typer.Option(help="Filter retrieved feedback by channel.")
+    ] = None,
+    min_rating: Annotated[
+        int | None, typer.Option(help="Minimum feedback rating to retrieve.")
+    ] = None,
+    max_rating: Annotated[
+        int | None, typer.Option(help="Maximum feedback rating to retrieve.")
+    ] = None,
+    created_after: Annotated[
+        datetime | None, typer.Option(help="Only retrieve feedback created at or after this time.")
+    ] = None,
+    created_before: Annotated[
+        datetime | None, typer.Option(help="Only retrieve feedback created at or before this time.")
+    ] = None,
 ) -> None:
     """Chat with the agent using persistent conversation memory.
 
@@ -204,9 +270,21 @@ def chat(
     settings = Settings(index_path=index_path, conversation_store_path=store_path)
     agent = build_agent(settings)
     store = build_conversation_store(settings)
+    filters = _metadata_filters(
+        customer_segment=customer_segment,
+        channel=channel,
+        min_rating=min_rating,
+        max_rating=max_rating,
+        created_after=created_after,
+        created_before=created_before,
+    )
     if message is not None:
         answer, resolved_id = agent.chat(
-            message, store=store, conversation_id=conversation_id, top_k=top_k
+            message,
+            store=store,
+            conversation_id=conversation_id,
+            top_k=top_k,
+            filters=filters,
         )
         response = ChatResponse(conversation_id=resolved_id, result=answer)
         typer.echo(response.model_dump_json(indent=2))
@@ -223,7 +301,11 @@ def chat(
         if question.lower() in {"exit", "quit"}:
             break
         answer, conversation_id = agent.chat(
-            question, store=store, conversation_id=conversation_id, top_k=top_k
+            question,
+            store=store,
+            conversation_id=conversation_id,
+            top_k=top_k,
+            filters=filters,
         )
         typer.echo(f"[conversation {conversation_id}]", err=True)
         typer.echo(answer.answer)

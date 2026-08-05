@@ -13,8 +13,8 @@ This roadmap is designed to evolve the repository from a compact portfolio proje
 
 ## Phase 2 — Better retrieval
 
-- [ ] Add hybrid retrieval with lexical BM25 plus vector search.
-- [ ] Add metadata filters by segment, rating, channel, and date.
+- [x] Add hybrid retrieval with lexical BM25 plus vector search.
+- [x] Add metadata filters by segment, rating, channel, and date.
 - [ ] Add query expansion for product-specific terminology.
 - [ ] Add reranking with a cross-encoder or LLM judge.
 - [ ] Add retrieval regression tests for known questions.
@@ -40,13 +40,13 @@ This roadmap is designed to evolve the repository from a compact portfolio proje
 
 - [ ] Add streaming ingestion with Kafka or Kinesis.
 - [ ] Add incremental index updates.
-- [ ] Add data contracts for feedback producers.
+- [x] Add data contracts for feedback producers.
 - [ ] Add PII redaction before storage.
 - [ ] Add lakehouse export to Iceberg or Delta tables.
 
 ## Phase 6 — Product layer
 
-- [ ] Add a small UI for analysts and product managers.
+- [x] Add a small UI for analysts and product managers.
 - [ ] Add saved insight reports.
 - [ ] Add Slack or email summaries.
 - [ ] Add human feedback capture on generated answers.
