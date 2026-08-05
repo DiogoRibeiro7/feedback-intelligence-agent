@@ -246,16 +246,18 @@ tracking logs the same parameters, aggregate metrics, and JSON artifacts when
 ## Observability strategy
 
 Telemetry ([telemetry.py](../src/feedback_intelligence_agent/telemetry.py)) emits
-OpenTelemetry-style structured events around ingestion, retrieval, LLM calls,
-tool runs, agent runs, and evaluation. Each event carries a name, an ISO-8601
-UTC timestamp, a `correlation_id` shared across one logical operation, a
-`duration_ms` for finished spans, and a metadata dictionary (latency, retrieval
-counts and scores, provider, route, confidence, guardrail decisions).
+structured events around ingestion, embedding, retrieval, LLM calls, response
+parsing, tool runs, agent runs, and evaluation. Each event carries a name, an
+ISO-8601 UTC timestamp, a `correlation_id` shared across one logical operation,
+a `duration_ms` for finished spans, and a metadata dictionary (latency,
+retrieval counts and scores, provider, route, confidence, guardrail decisions).
 
 Telemetry is **disabled by default and side-effect-free**; sinks are injected
-explicitly. Enabling it appends one JSON object per event to a JSONL trace file.
-Blocked runs are recorded with `guardrail_allowed: false`, so refusals are
-observable, not silent. Separately, the
+explicitly. The default enabled backend appends one JSON object per event to a
+JSONL trace file for local inspection; the optional `otel` extra converts the
+same started/finished pairs into OpenTelemetry spans through the process-global
+tracer provider. Blocked runs are recorded with `guardrail_allowed: false`, so
+refusals are observable, not silent. Separately, the
 [benchmark harness](../src/feedback_intelligence_agent/benchmarking.py) measures
 per-phase latency (index build, query embedding, retrieval, full agent response)
 with robust statistics (mean, median, p95, min, max).
@@ -318,7 +320,7 @@ Tracked in [ROADMAP.md](../ROADMAP.md). High-value next steps:
   larger query suites for retrieval drift monitoring.
 - **Generation:** provider-specific structured output modes and richer repair
   telemetry for malformed model responses.
-- **Evaluation & observability:** OpenTelemetry trace export and dashboards for
+- **Evaluation & observability:** hallucination checks and dashboards for
   latency, retrieval-score distribution, and citation coverage.
 - **Data engineering:** streaming ingestion (Kafka/Kinesis), incremental index
   updates, and PII redaction before indexing.

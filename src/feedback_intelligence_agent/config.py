@@ -9,6 +9,7 @@ from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 RetrieverType = Literal["dense", "lexical", "hybrid"]
+TelemetryBackend = Literal["jsonl", "opentelemetry"]
 VectorStoreType = Literal["json", "qdrant"]
 
 
@@ -66,7 +67,9 @@ class Settings(BaseSettings):
     )
     ollama_model: str = Field(default="llama3.2", validation_alias="OLLAMA_MODEL")
     telemetry_enabled: bool = Field(default=False)
+    telemetry_backend: TelemetryBackend = "jsonl"
     telemetry_path: Path = Field(default=Path(".artifacts/telemetry.jsonl"))
+    telemetry_service_name: str = Field(default="feedback-intelligence-agent")
     conversation_store_path: Path = Field(default=Path(".artifacts/conversations"))
     job_store_path: Path = Field(default=Path(".artifacts/jobs"))
     cors_allow_origins: str = Field(

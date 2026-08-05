@@ -10,6 +10,8 @@ All notable changes to this project are documented here.
 - Retry, timeout, and circuit-breaker wrapper for remote LLM providers.
 - Structured LLM output validation with deterministic repair diagnostics.
 - Optional MLflow experiment tracking for experiment runs.
+- Optional OpenTelemetry span backend for ingestion, embedding, retrieval, generation,
+  and response parsing traces.
 
 ## 0.2.0 - 2026-08-05
 

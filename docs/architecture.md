@@ -109,7 +109,7 @@ Routing is keyword/intent based (`TOOL_ROUTES`) with no function-calling API, so
 - Replace the hashing embedding model with a neural embedding provider.
 - Replace the local vector store with a managed vector database.
 - Add a streaming ingestion layer using Kafka, Kinesis, or Pub/Sub.
-- Add tracing with OpenTelemetry.
+- Export telemetry spans through additional OpenTelemetry collectors or vendors.
 - Add human feedback capture for answer quality.
 - Add regression tests for prompts and retrieval behavior.
 - Replace the deterministic reranker with a cross-encoder or external LLM judge.

@@ -22,9 +22,11 @@ from contextlib import contextmanager
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Protocol
+from threading import Lock
+from typing import Any, Protocol, cast
 
 LOGGER_NAME = "feedback_intelligence_agent"
+TelemetryAttributeValue = str | bool | int | float
 
 
 def configure_logging(level: int = logging.INFO) -> None:
@@ -86,6 +88,35 @@ class TelemetrySink(Protocol):
         ...
 
 
+class OpenTelemetrySpan(Protocol):
+    """Minimal span behavior used by the OpenTelemetry sink."""
+
+    def set_attribute(self, key: str, value: TelemetryAttributeValue) -> None:
+        """Set one scalar span attribute."""
+        ...
+
+    def set_status(self, status: object) -> None:
+        """Set the span status."""
+        ...
+
+    def end(self) -> None:
+        """Finish the span."""
+        ...
+
+
+class OpenTelemetryTracer(Protocol):
+    """Minimal tracer behavior used by the OpenTelemetry sink."""
+
+    def start_span(
+        self,
+        name: str,
+        *,
+        attributes: Mapping[str, TelemetryAttributeValue],
+    ) -> OpenTelemetrySpan:
+        """Start a span with initial attributes."""
+        ...
+
+
 class InMemoryTelemetrySink:
     """Sink that keeps events in a list. Intended for tests and inspection."""
 
@@ -115,6 +146,57 @@ class JsonlTelemetrySink:
         line = json.dumps(event.to_dict(), sort_keys=True, default=str)
         with self.path.open("a", encoding="utf-8") as handle:
             handle.write(line + "\n")
+
+
+class TelemetryConfigurationError(RuntimeError):
+    """Raised when an optional telemetry backend cannot be configured."""
+
+
+class OpenTelemetryTraceSink:
+    """Sink that converts telemetry event pairs into OpenTelemetry spans.
+
+    The OpenTelemetry API is imported lazily so the default install remains
+    lightweight. The sink uses the process-global tracer provider, which lets
+    deployments configure exporters with standard OpenTelemetry environment
+    variables or instrumentation wrappers.
+    """
+
+    def __init__(
+        self,
+        service_name: str = LOGGER_NAME,
+        *,
+        tracer: OpenTelemetryTracer | None = None,
+    ) -> None:
+        """Create a span sink for the configured service/tracer name."""
+        self.tracer = tracer if tracer is not None else _build_opentelemetry_tracer(service_name)
+        self._active_spans: dict[tuple[str, str], OpenTelemetrySpan] = {}
+        self._lock = Lock()
+
+    def emit(self, event: TelemetryEvent) -> None:
+        """Start, finish, or emit an instantaneous OpenTelemetry span."""
+        span_name = _otel_span_name(event.name)
+        span_key = (event.correlation_id, span_name)
+        if event.name.endswith("_started"):
+            span = self.tracer.start_span(span_name, attributes=_otel_attributes(event))
+            with self._lock:
+                self._active_spans[span_key] = span
+            return
+        if event.name.endswith("_finished"):
+            with self._lock:
+                finished_span = (
+                    self._active_spans.pop(span_key) if span_key in self._active_spans else None
+                )
+            if finished_span is None:
+                finished_span = self.tracer.start_span(
+                    span_name, attributes=_otel_attributes(event)
+                )
+            _set_otel_attributes(finished_span, _otel_attributes(event))
+            _set_otel_status(finished_span, event)
+            finished_span.end()
+            return
+        span = self.tracer.start_span(span_name, attributes=_otel_attributes(event))
+        _set_otel_status(span, event)
+        span.end()
 
 
 class Telemetry:
@@ -201,3 +283,70 @@ class Telemetry:
 def _elapsed_ms(start: float) -> float:
     """Milliseconds elapsed since a ``time.perf_counter`` start value."""
     return round((time.perf_counter() - start) * 1000.0, 3)
+
+
+def _build_opentelemetry_tracer(service_name: str) -> OpenTelemetryTracer:
+    """Return the process-global OpenTelemetry tracer."""
+    try:
+        from opentelemetry import trace
+    except ImportError as exc:
+        raise TelemetryConfigurationError(
+            "OpenTelemetry tracing requires the optional 'otel' extra. "
+            "Install it with: poetry install --extras otel."
+        ) from exc
+    return cast(OpenTelemetryTracer, trace.get_tracer(service_name))
+
+
+def _otel_span_name(event_name: str) -> str:
+    """Convert event pair names into stable span names."""
+    for suffix in ("_started", "_finished"):
+        if event_name.endswith(suffix):
+            return event_name.removesuffix(suffix)
+    return event_name
+
+
+def _otel_attributes(event: TelemetryEvent) -> dict[str, TelemetryAttributeValue]:
+    """Convert event metadata into OpenTelemetry-safe scalar attributes."""
+    attributes: dict[str, TelemetryAttributeValue] = {
+        "fia.event_name": event.name,
+        "fia.correlation_id": event.correlation_id,
+    }
+    if event.duration_ms is not None:
+        attributes["fia.duration_ms"] = event.duration_ms
+    for key, value in event.metadata.items():
+        attributes[f"fia.{key}"] = _otel_attribute_value(value)
+    return attributes
+
+
+def _otel_attribute_value(value: object) -> TelemetryAttributeValue:
+    """Return a scalar attribute value accepted by OpenTelemetry exporters."""
+    if isinstance(value, str | bool | int | float):
+        return value
+    if value is None:
+        return "null"
+    return json.dumps(value, sort_keys=True, default=str)
+
+
+def _set_otel_attributes(
+    span: OpenTelemetrySpan, attributes: Mapping[str, TelemetryAttributeValue]
+) -> None:
+    """Apply attributes defensively to real or test OpenTelemetry spans."""
+    set_attribute = getattr(span, "set_attribute", None)
+    if not callable(set_attribute):
+        return
+    for key, value in attributes.items():
+        set_attribute(key, value)
+
+
+def _set_otel_status(span: OpenTelemetrySpan, event: TelemetryEvent) -> None:
+    """Mark failed spans with OpenTelemetry error status when available."""
+    if event.metadata.get("status") != "error":
+        return
+    set_status = getattr(span, "set_status", None)
+    if not callable(set_status):
+        return
+    try:
+        from opentelemetry.trace import Status, StatusCode
+    except ImportError:
+        return
+    set_status(Status(StatusCode.ERROR, str(event.metadata.get("error", ""))))

@@ -250,6 +250,8 @@ def test_benign_telemetry_event_sequence_is_unchanged() -> None:
         "retrieval_finished",
         "llm_call_started",
         "llm_call_finished",
+        "response_parsing_started",
+        "response_parsing_finished",
         "agent_run_finished",
     ]
 

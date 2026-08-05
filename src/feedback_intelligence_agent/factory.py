@@ -25,7 +25,11 @@ from feedback_intelligence_agent.query_expansion import ProductTerminologyExpand
 from feedback_intelligence_agent.resilience import ResiliencePolicy, ResilientLLMProvider
 from feedback_intelligence_agent.retrieval import HybridRetriever, QueryEngine, Retriever
 from feedback_intelligence_agent.schemas import DocumentChunk
-from feedback_intelligence_agent.telemetry import JsonlTelemetrySink, Telemetry
+from feedback_intelligence_agent.telemetry import (
+    JsonlTelemetrySink,
+    OpenTelemetryTraceSink,
+    Telemetry,
+)
 from feedback_intelligence_agent.tools import build_default_tools
 from feedback_intelligence_agent.vector_store import InMemoryVectorStore, VectorStore
 
@@ -37,11 +41,14 @@ def build_telemetry(settings: Settings) -> Telemetry:
     """Construct the telemetry emitter configured by the settings.
 
     Telemetry is disabled (a no-op emitter) unless ``FEEDBACK_AGENT_TELEMETRY_ENABLED``
-    is set; when enabled, events are appended to the JSONL file configured by
-    ``FEEDBACK_AGENT_TELEMETRY_PATH``.
+    is set. The default enabled backend appends events to the JSONL file configured
+    by ``FEEDBACK_AGENT_TELEMETRY_PATH``; ``opentelemetry`` emits spans through the
+    process-global OpenTelemetry tracer provider.
     """
     if not settings.telemetry_enabled:
         return Telemetry()
+    if settings.telemetry_backend == "opentelemetry":
+        return Telemetry(sink=OpenTelemetryTraceSink(settings.telemetry_service_name))
     return Telemetry(sink=JsonlTelemetrySink(settings.telemetry_path))
 
 
@@ -96,7 +103,20 @@ def build_index(
     records = load_feedback_csv(input_path, telemetry=telemetry)
     chunks = feedback_to_chunks(records)
     embedding_model = HashingEmbeddingModel(dim=embedding_dim)
-    vectors = embedding_model.embed([chunk_to_embedding_text(chunk) for chunk in chunks])
+    telemetry = telemetry or Telemetry()
+    correlation_id = telemetry.new_correlation_id()
+    with telemetry.span(
+        "embedding_started",
+        "embedding_finished",
+        correlation_id=correlation_id,
+        metadata={
+            "model": type(embedding_model).__name__,
+            "embedding_dim": embedding_dim,
+            "chunks": len(chunks),
+        },
+    ) as span:
+        vectors = embedding_model.embed([chunk_to_embedding_text(chunk) for chunk in chunks])
+        span["vectors"] = len(vectors)
     vector_store = InMemoryVectorStore(dim=embedding_dim)
     vector_store.add(chunks, vectors)
     vector_store.save(index_path)
@@ -120,7 +140,21 @@ def build_qdrant_index(settings: Settings, *, telemetry: Telemetry | None = None
         records = load_feedback_csv(settings.data_path, telemetry=telemetry)
         chunks = feedback_to_chunks(records)
         embedding_model = HashingEmbeddingModel(dim=settings.embedding_dim)
-        vectors = embedding_model.embed([chunk_to_embedding_text(chunk) for chunk in chunks])
+        telemetry = telemetry or Telemetry()
+        correlation_id = telemetry.new_correlation_id()
+        with telemetry.span(
+            "embedding_started",
+            "embedding_finished",
+            correlation_id=correlation_id,
+            metadata={
+                "model": type(embedding_model).__name__,
+                "embedding_dim": settings.embedding_dim,
+                "chunks": len(chunks),
+                "vector_store": "qdrant",
+            },
+        ) as span:
+            vectors = embedding_model.embed([chunk_to_embedding_text(chunk) for chunk in chunks])
+            span["vectors"] = len(vectors)
         store.add(chunks, vectors)
     return store
 

@@ -174,7 +174,16 @@ class FeedbackInsightAgent:
                     prompt, question=effective_question, results=results
                 )
                 llm_span["response_chars"] = len(raw_response)
-            parsed = parse_llm_output(raw_response)
+            with self.telemetry.span(
+                "response_parsing_started",
+                "response_parsing_finished",
+                correlation_id=correlation_id,
+                metadata={"response_chars": len(raw_response)},
+            ) as parsing_span:
+                parsed = parse_llm_output(raw_response)
+                parsing_span["output_format"] = parsed.output_format
+                parsing_span["repair_applied"] = parsed.repair_applied
+                parsing_span["validation_error"] = parsed.validation_error
             citations = build_citations(results)
             confidence = self._confidence(results, citations)
             run_span["citations"] = len(citations)

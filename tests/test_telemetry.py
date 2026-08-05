@@ -5,11 +5,12 @@ from pathlib import Path
 
 import pytest
 
+from feedback_intelligence_agent import telemetry as telemetry_module
 from feedback_intelligence_agent.agent import FeedbackInsightAgent
 from feedback_intelligence_agent.config import Settings
 from feedback_intelligence_agent.embeddings import HashingEmbeddingModel
 from feedback_intelligence_agent.evaluation import evaluate_system
-from feedback_intelligence_agent.factory import build_telemetry
+from feedback_intelligence_agent.factory import build_index, build_telemetry
 from feedback_intelligence_agent.ingestion import load_feedback_csv
 from feedback_intelligence_agent.llm import DeterministicLLM
 from feedback_intelligence_agent.retrieval import QueryEngine
@@ -17,6 +18,7 @@ from feedback_intelligence_agent.schemas import DocumentChunk, EvaluationCase
 from feedback_intelligence_agent.telemetry import (
     InMemoryTelemetrySink,
     JsonlTelemetrySink,
+    OpenTelemetryTraceSink,
     Telemetry,
     TelemetryEvent,
 )
@@ -169,6 +171,8 @@ def test_agent_run_emits_correlated_events_in_order() -> None:
         "retrieval_finished",
         "llm_call_started",
         "llm_call_finished",
+        "response_parsing_started",
+        "response_parsing_finished",
         "agent_run_finished",
     ]
     correlation_ids = {event.correlation_id for event in sink.events}
@@ -177,6 +181,7 @@ def test_agent_run_emits_correlated_events_in_order() -> None:
     assert finished["retrieval_finished"].metadata["results"] == 1
     assert finished["llm_call_finished"].metadata["provider"] == "DeterministicLLM"
     assert finished["llm_call_finished"].metadata["response_chars"] > 0
+    assert finished["response_parsing_finished"].metadata["output_format"] == "sectioned"
     assert finished["agent_run_finished"].metadata["route"] == "onboarding"
     assert finished["agent_run_finished"].metadata["citations"] >= 1
     for name in ("retrieval_finished", "llm_call_finished", "agent_run_finished"):
@@ -201,6 +206,27 @@ def test_ingestion_emits_started_and_finished_events() -> None:
     assert started.metadata["path"] == str(SAMPLE_CSV)
     assert started.metadata["strict"] is True
     assert finished.metadata["records"] == len(records)
+    assert finished.duration_ms is not None
+
+
+def test_index_build_emits_embedding_span(tmp_path: Path) -> None:
+    sink = InMemoryTelemetrySink()
+    build_index(
+        SAMPLE_CSV,
+        tmp_path / "index.json",
+        embedding_dim=128,
+        telemetry=Telemetry(sink=sink),
+    )
+    assert sink.event_names() == [
+        "ingestion_started",
+        "ingestion_finished",
+        "embedding_started",
+        "embedding_finished",
+    ]
+    finished = sink.events[-1]
+    assert finished.metadata["model"] == "HashingEmbeddingModel"
+    assert finished.metadata["embedding_dim"] == 128
+    assert finished.metadata["vectors"] > 0
     assert finished.duration_ms is not None
 
 
@@ -248,9 +274,98 @@ def test_build_telemetry_enabled_writes_jsonl(tmp_path: Path) -> None:
     assert record["name"] == "agent_run_started"
 
 
+def test_build_telemetry_enabled_uses_opentelemetry_backend(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    tracer = FakeOpenTelemetryTracer()
+
+    def build_tracer(service_name: str) -> FakeOpenTelemetryTracer:
+        tracer.service_name = service_name
+        return tracer
+
+    monkeypatch.setattr(telemetry_module, "_build_opentelemetry_tracer", build_tracer)
+    settings = Settings(
+        telemetry_enabled=True,
+        telemetry_backend="opentelemetry",
+        telemetry_service_name="feedback-agent-tests",
+    )
+
+    telemetry = build_telemetry(settings)
+    with telemetry.span("retrieval_started", "retrieval_finished", correlation_id="cid-1"):
+        pass
+
+    assert tracer.service_name == "feedback-agent-tests"
+    assert [span.name for span in tracer.spans] == ["retrieval"]
+    assert tracer.spans[0].ended is True
+
+
 def test_settings_read_telemetry_env_vars(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("FEEDBACK_AGENT_TELEMETRY_ENABLED", "true")
+    monkeypatch.setenv("FEEDBACK_AGENT_TELEMETRY_BACKEND", "opentelemetry")
     monkeypatch.setenv("FEEDBACK_AGENT_TELEMETRY_PATH", "traces/run.jsonl")
+    monkeypatch.setenv("FEEDBACK_AGENT_TELEMETRY_SERVICE_NAME", "feedback-agent-test")
     settings = Settings()
     assert settings.telemetry_enabled is True
+    assert settings.telemetry_backend == "opentelemetry"
     assert settings.telemetry_path == Path("traces/run.jsonl")
+    assert settings.telemetry_service_name == "feedback-agent-test"
+
+
+def test_opentelemetry_sink_records_finished_span_attributes() -> None:
+    tracer = FakeOpenTelemetryTracer()
+    sink = OpenTelemetryTraceSink(tracer=tracer)
+    telemetry = Telemetry(sink=sink)
+
+    with telemetry.span(
+        "llm_call_started",
+        "llm_call_finished",
+        correlation_id="cid-otel",
+        metadata={"provider": "DeterministicLLM", "metadata_filters": {"channel": "nps"}},
+    ) as span:
+        span["response_chars"] = 120
+
+    assert [span.name for span in tracer.spans] == ["llm_call"]
+    recorded = tracer.spans[0]
+    assert recorded.ended is True
+    assert recorded.attributes["fia.correlation_id"] == "cid-otel"
+    assert recorded.attributes["fia.provider"] == "DeterministicLLM"
+    assert recorded.attributes["fia.response_chars"] == 120
+    assert recorded.attributes["fia.metadata_filters"] == '{"channel": "nps"}'
+    assert recorded.attributes["fia.status"] == "ok"
+
+
+class FakeOpenTelemetryTracer:
+    """Minimal tracer used to exercise OpenTelemetry sink behavior."""
+
+    def __init__(self) -> None:
+        self.spans: list[FakeOpenTelemetrySpan] = []
+        self.service_name: str | None = None
+
+    def start_span(
+        self,
+        name: str,
+        *,
+        attributes: dict[str, str | bool | int | float],
+    ) -> FakeOpenTelemetrySpan:
+        span = FakeOpenTelemetrySpan(name=name, attributes=dict(attributes))
+        self.spans.append(span)
+        return span
+
+
+class FakeOpenTelemetrySpan:
+    """Minimal span used to verify attributes and end calls."""
+
+    def __init__(self, *, name: str, attributes: dict[str, str | bool | int | float]) -> None:
+        self.name = name
+        self.attributes = attributes
+        self.status: object | None = None
+        self.ended = False
+
+    def set_attribute(self, key: str, value: str | bool | int | float) -> None:
+        self.attributes[key] = value
+
+    def set_status(self, status: object) -> None:
+        self.status = status
+
+    def end(self) -> None:
+        self.ended = True

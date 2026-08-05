@@ -467,7 +467,9 @@ Environment variables:
 | `FEEDBACK_AGENT_LEXICAL_WEIGHT` | `0.4` | Lexical (BM25) score weight used by the hybrid retriever. |
 | `FEEDBACK_AGENT_LLM_PROVIDER` | `local` | `local`, `openai`, `openai_responses`, `anthropic`, `bedrock`, or `ollama`. |
 | `FEEDBACK_AGENT_TELEMETRY_ENABLED` | `false` | Enable structured telemetry events. |
+| `FEEDBACK_AGENT_TELEMETRY_BACKEND` | `jsonl` | Telemetry backend: `jsonl` or `opentelemetry`. |
 | `FEEDBACK_AGENT_TELEMETRY_PATH` | `.artifacts/telemetry.jsonl` | JSONL file that telemetry events are appended to. |
+| `FEEDBACK_AGENT_TELEMETRY_SERVICE_NAME` | `feedback-intelligence-agent` | Service/tracer name used by the OpenTelemetry backend. |
 | `FEEDBACK_AGENT_CONVERSATION_STORE_PATH` | `.artifacts/conversations` | Directory holding one JSON file per chat conversation. |
 | `FEEDBACK_AGENT_JOB_STORE_PATH` | `.artifacts/jobs` | Directory holding one JSON file per ingestion job. |
 | `OPENAI_API_KEY` | empty | Required only when using an OpenAI provider. |
@@ -621,12 +623,12 @@ poetry run feedback-agent ingest-job --input data/sample_feedback.csv \
 
 ## Telemetry
 
-The project emits OpenTelemetry-style structured events (`ingestion_started`/`_finished`,
-`retrieval_started`/`_finished`, `llm_call_started`/`_finished`, `agent_run_started`/`_finished`,
-`evaluation_finished`). Each event carries a name, an ISO-8601 UTC timestamp, a
-`correlation_id` shared by all events of one logical operation, a `duration_ms` for finished
-events, and a metadata dictionary (latency, retrieval counts and scores, provider name,
-route, confidence, evaluation aggregates).
+The project emits structured telemetry around ingestion, embedding, retrieval,
+LLM generation, response parsing, tool runs, agent runs, and evaluation. Each event
+carries a name, an ISO-8601 UTC timestamp, a `correlation_id` shared by all events
+of one logical operation, a `duration_ms` for finished events, and a metadata
+dictionary (latency, retrieval counts and scores, provider name, route, confidence,
+evaluation aggregates).
 
 Telemetry is disabled by default and adds no side effects. Enable it via environment
 variables and run any command; one JSON object per event is appended to the JSONL trace file:
@@ -646,9 +648,21 @@ Example trace line:
 ```
 
 In code, sinks are injected explicitly: `Telemetry(sink=JsonlTelemetrySink(path))` writes
-JSONL traces, `Telemetry(sink=InMemoryTelemetrySink())` captures events for tests, and a
-bare `Telemetry()` is a no-op. `factory.build_telemetry(settings)` builds the configured
-emitter from the environment.
+JSONL traces, `Telemetry(sink=InMemoryTelemetrySink())` captures events for tests,
+`Telemetry(sink=OpenTelemetryTraceSink())` converts started/finished event pairs
+into OpenTelemetry spans, and a bare `Telemetry()` is a no-op.
+`factory.build_telemetry(settings)` builds the configured emitter from the environment.
+
+Use the OpenTelemetry backend when a deployment already configures an SDK/exporter:
+
+```bash
+poetry install --extras otel
+export FEEDBACK_AGENT_TELEMETRY_ENABLED=true
+export FEEDBACK_AGENT_TELEMETRY_BACKEND=opentelemetry
+export FEEDBACK_AGENT_TELEMETRY_SERVICE_NAME=feedback-intelligence-agent
+
+poetry run feedback-agent query "Why are enterprise customers unhappy with onboarding?"
+```
 
 ## Why this project is useful in interviews
 
