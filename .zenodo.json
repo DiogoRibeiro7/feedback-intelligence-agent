@@ -1,7 +1,7 @@
 {
   "title": "Feedback Intelligence Agent",
   "upload_type": "software",
-  "description": "A production-style AI engineering repository that demonstrates how to build, evaluate, and serve an LLM-powered customer feedback intelligence system. The project implements an agentic RAG workflow with retrieval, evidence selection, cited responses, FastAPI serving, deterministic local fallback behavior, and offline evaluation.",
+  "description": "A production-style AI engineering repository that demonstrates how to build, evaluate, and serve an LLM-powered customer feedback intelligence system. The project implements an agentic RAG workflow with retrieval, evidence selection, cited responses, FastAPI serving, deterministic local fallback behavior, offline evaluation, data engineering pipelines, product workflows, and multi-tenant scoping.",
   "creators": [
     {
       "name": "Ribeiro, Diogo",
@@ -12,7 +12,7 @@
   ],
   "access_right": "open",
   "license": "MIT",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "keywords": [
     "artificial intelligence",
     "retrieval-augmented generation",

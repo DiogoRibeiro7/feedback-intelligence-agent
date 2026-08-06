@@ -1,7 +1,7 @@
 {
   "name": "feedback-intelligence-agent-frontend",
   "private": true,
-  "version": "0.2.0",
+  "version": "0.3.0",
   "type": "module",
   "description": "Minimal TypeScript + Vite demo UI for the Feedback Intelligence Agent API.",
   "scripts": {

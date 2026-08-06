@@ -12,8 +12,8 @@ doi: 10.5281/zenodo.21804219
 url: "https://github.com/DiogoRibeiro7/feedback-intelligence-agent"
 repository-code: "https://github.com/DiogoRibeiro7/feedback-intelligence-agent"
 license: MIT
-version: 0.2.0
-date-released: "2026-08-05"
+version: 0.3.0
+date-released: "2026-08-06"
 keywords:
   - artificial intelligence
   - retrieval-augmented generation

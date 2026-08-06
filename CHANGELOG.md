@@ -4,6 +4,10 @@ All notable changes to this project are documented here.
 
 ## Unreleased
 
+No unreleased changes yet.
+
+## 0.3.0 - 2026-08-06
+
 ### Added
 
 - AWS Bedrock Runtime Converse API provider via `FEEDBACK_AGENT_LLM_PROVIDER=bedrock`.
