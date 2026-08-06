@@ -25,6 +25,8 @@ All notable changes to this project are documented here.
   Delta-style or Iceberg-style metadata manifests.
 - Saved insight reports with JSON persistence, API endpoints, CLI commands, and
   frontend save/list controls.
+- Email digests for saved insight reports with render-only dry runs and optional
+  SMTP delivery.
 
 ## 0.2.0 - 2026-08-05
 

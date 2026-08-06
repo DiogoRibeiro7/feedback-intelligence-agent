@@ -74,6 +74,12 @@ class Settings(BaseSettings):
     conversation_store_path: Path = Field(default=Path(".artifacts/conversations"))
     job_store_path: Path = Field(default=Path(".artifacts/jobs"))
     report_store_path: Path = Field(default=Path(".artifacts/reports"))
+    email_smtp_host: str | None = Field(default=None)
+    email_smtp_port: int = Field(default=587, ge=1, le=65535)
+    email_from_address: str = Field(default="feedback-agent@example.local")
+    email_smtp_username: str | None = Field(default=None)
+    email_smtp_password: str | None = Field(default=None)
+    email_smtp_use_tls: bool = Field(default=True)
     cors_allow_origins: str = Field(
         default=(
             "http://localhost:5173,http://localhost:4173,"

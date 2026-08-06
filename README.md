@@ -63,6 +63,7 @@ feedback-intelligence-agent/
 │   ├── cli.py                # Typer CLI
 │   ├── config.py             # Runtime configuration
 │   ├── data_contracts.py     # Dataset validation and data contracts
+│   ├── email_summaries.py    # Saved report email digest rendering and SMTP send
 │   ├── embeddings.py         # Hashing embedding model
 │   ├── evaluation.py         # Retrieval and answer-quality metrics
 │   ├── experiments.py        # Repeatable experiment runner
@@ -495,6 +496,12 @@ Environment variables:
 | `FEEDBACK_AGENT_CONVERSATION_STORE_PATH` | `.artifacts/conversations` | Directory holding one JSON file per chat conversation. |
 | `FEEDBACK_AGENT_JOB_STORE_PATH` | `.artifacts/jobs` | Directory holding one JSON file per ingestion job. |
 | `FEEDBACK_AGENT_REPORT_STORE_PATH` | `.artifacts/reports` | Directory holding one JSON file per saved insight report. |
+| `FEEDBACK_AGENT_EMAIL_SMTP_HOST` | empty | SMTP host used only when sending email summaries. |
+| `FEEDBACK_AGENT_EMAIL_SMTP_PORT` | `587` | SMTP port used for email summaries. |
+| `FEEDBACK_AGENT_EMAIL_FROM_ADDRESS` | `feedback-agent@example.local` | Sender address for email summaries. |
+| `FEEDBACK_AGENT_EMAIL_SMTP_USERNAME` | empty | Optional SMTP username. |
+| `FEEDBACK_AGENT_EMAIL_SMTP_PASSWORD` | empty | Optional SMTP password. |
+| `FEEDBACK_AGENT_EMAIL_SMTP_USE_TLS` | `true` | Whether email-summary SMTP delivery starts TLS. |
 | `OPENAI_API_KEY` | empty | Required only when using an OpenAI provider. |
 | `OPENAI_MODEL` | `gpt-4o-mini` | Model name for the OpenAI provider. |
 | `OPENAI_BASE_URL` | `https://api.openai.com` | Base URL for OpenAI or OpenAI-compatible endpoints. |
@@ -872,6 +879,35 @@ poetry run feedback-agent reports get <report_id>
 
 The frontend adds a save action after each answer and shows saved report
 summaries from the same API store.
+
+## Email summaries
+
+Saved reports can be rendered into a concise plain-text email digest
+(`email_summaries.py`). Dry-run rendering is the default and needs no external
+service; SMTP delivery is opt-in through configuration.
+
+Render the latest saved reports without sending:
+
+```bash
+poetry run feedback-agent reports email-summary \
+  --recipient pm@example.com \
+  --max-reports 5
+```
+
+Render a specific report and send it through configured SMTP:
+
+```bash
+export FEEDBACK_AGENT_EMAIL_SMTP_HOST=smtp.example.com
+export FEEDBACK_AGENT_EMAIL_FROM_ADDRESS=feedback-agent@example.com
+
+poetry run feedback-agent reports email-summary \
+  --recipient pm@example.com \
+  --report-id <report_id> \
+  --send
+```
+
+The API exposes the same behavior through `POST /reports/email-summary` with
+`send: false` for render-only previews or `send: true` for SMTP delivery.
 
 ## Guardrails and safe refusals
 

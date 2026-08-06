@@ -288,6 +288,48 @@ def test_saved_reports_reject_invalid_ids(client: TestClient) -> None:
     assert response.status_code == 400
 
 
+def test_report_email_summary_renders_latest_report(client: TestClient) -> None:
+    query = client.post(
+        "/query",
+        json={"question": "Why are enterprise customers unhappy with onboarding?", "top_k": 3},
+    )
+    created = client.post(
+        "/reports",
+        json={"title": "Enterprise onboarding", "result": query.json()["result"]},
+    )
+    assert created.status_code == 201
+
+    summary = client.post(
+        "/reports/email-summary",
+        json={"recipients": ["pm@example.com"], "max_reports": 1},
+    )
+
+    assert summary.status_code == 200
+    payload = summary.json()
+    assert payload["sent"] is False
+    assert payload["summary"]["recipients"] == ["pm@example.com"]
+    assert payload["summary"]["report_ids"] == [created.json()["report_id"]]
+    assert "Enterprise onboarding" in payload["summary"]["body_text"]
+
+
+def test_report_email_summary_send_requires_smtp_host(client: TestClient) -> None:
+    query = client.post(
+        "/query",
+        json={"question": "Why are enterprise customers unhappy with onboarding?", "top_k": 3},
+    )
+    client.post(
+        "/reports", json={"title": "Enterprise onboarding", "result": query.json()["result"]}
+    )
+
+    response = client.post(
+        "/reports/email-summary",
+        json={"recipients": ["pm@example.com"], "send": True},
+    )
+
+    assert response.status_code == 400
+    assert "smtp_host is required" in response.json()["detail"]
+
+
 def test_submit_ingestion_job_runs_and_succeeds(client: TestClient, tmp_path: Path) -> None:
     index_path = tmp_path / "job_index.json"
     submit = client.post(

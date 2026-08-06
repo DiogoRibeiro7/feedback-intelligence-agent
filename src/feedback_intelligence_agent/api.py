@@ -14,6 +14,13 @@ from fastapi.responses import StreamingResponse
 
 from feedback_intelligence_agent import __version__
 from feedback_intelligence_agent.config import Settings
+from feedback_intelligence_agent.email_summaries import (
+    EmailSummaryDelivery,
+    EmailSummaryRequest,
+    deliver_email_summary,
+    render_email_summary,
+    select_reports_for_summary,
+)
 from feedback_intelligence_agent.factory import (
     build_agent,
     build_conversation_store,
@@ -234,6 +241,36 @@ def create_app() -> FastAPI:
     def list_reports() -> list[InsightReportSummary]:
         """Return saved insight report summaries."""
         return report_store.list()
+
+    @app.post("/reports/email-summary", response_model=EmailSummaryDelivery)
+    def email_report_summary(request: EmailSummaryRequest) -> EmailSummaryDelivery:
+        """Render or send an email digest for saved insight reports."""
+        try:
+            reports = select_reports_for_summary(
+                report_store,
+                report_ids=request.report_ids,
+                max_reports=request.max_reports,
+            )
+            summary = render_email_summary(
+                reports,
+                recipients=request.recipients,
+                subject=request.subject,
+            )
+            if not request.send:
+                return EmailSummaryDelivery(summary=summary, sent=False)
+            return deliver_email_summary(
+                summary,
+                smtp_host=settings.email_smtp_host,
+                smtp_port=settings.email_smtp_port,
+                from_address=settings.email_from_address,
+                username=settings.email_smtp_username,
+                password=settings.email_smtp_password,
+                use_tls=settings.email_smtp_use_tls,
+            )
+        except LookupError as exc:
+            raise HTTPException(status_code=404, detail=str(exc)) from exc
+        except ValueError as exc:
+            raise HTTPException(status_code=400, detail=str(exc)) from exc
 
     @app.get("/reports/{report_id}", response_model=SavedInsightReport)
     def get_report(report_id: str) -> SavedInsightReport:

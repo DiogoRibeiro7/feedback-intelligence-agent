@@ -98,6 +98,7 @@ flowchart TB
     CLI["Typer CLI<br/>(cli.py)"]
     FE["TypeScript + Vite UI<br/>(frontend/)"]
     REP["Saved insight reports<br/>(reports.py)"]
+    EMAIL["Email summaries<br/>(email_summaries.py)"]
   end
 
   subgraph Cross["Cross-cutting"]
@@ -111,6 +112,7 @@ flowchart TB
   FE --> API
   API --> REP
   CLI --> REP
+  REP --> EMAIL
   FAC -.builds.-> AG
   AG -.emits.-> TEL
   EVAL -.measures.-> AG
@@ -244,6 +246,10 @@ Notable elements:
   tags, notes, citations, diagnostics, and the full `AgentAnswer`. The API and
   CLI share the same JSON-backed store, and the frontend can save answers from
   the analyst workflow.
+- **Email summaries.** Saved reports can be rendered into a plain-text digest by
+  [email_summaries.py](../src/feedback_intelligence_agent/email_summaries.py).
+  Dry-run rendering is local and deterministic; SMTP delivery is optional and
+  configuration-driven.
 
 ## Evaluation strategy
 
@@ -294,9 +300,9 @@ with robust statistics (mean, median, p95, min, max).
 The API ([api.py](../src/feedback_intelligence_agent/api.py)) exposes `POST /query`,
 streaming `POST /query/stream` (SSE, no extra dependencies), `POST /chat` plus
 conversation retrieval, saved report endpoints (`POST /reports`, `GET /reports`,
-`GET /reports/{report_id}`), synchronous `POST /index`, asynchronous ingestion
-jobs (`POST /ingestion/jobs` + polling), and `GET /health` (liveness) and
-`GET /ready` (readiness) probes. Asynchronous ingestion uses FastAPI
+`GET /reports/{report_id}`, `POST /reports/email-summary`), synchronous
+`POST /index`, asynchronous ingestion jobs (`POST /ingestion/jobs` + polling),
+and `GET /health` (liveness) and `GET /ready` (readiness) probes. Asynchronous ingestion uses FastAPI
 `BackgroundTasks` ([jobs.py](../src/feedback_intelligence_agent/jobs.py)) — no
 Celery/Redis — and never leaks stack traces or paths to clients on failure.
 
@@ -357,5 +363,5 @@ Tracked in [ROADMAP.md](../ROADMAP.md). High-value next steps:
   distribution, citation coverage, and hallucination rate.
 - **Data engineering:** broader privacy policy coverage, durable stream
   checkpoints, and production Parquet/table-runtime exports.
-- **Product & platform:** human feedback capture on answers, report sharing,
+- **Product & platform:** human feedback capture on answers, Slack delivery,
   multi-tenant isolation, and auth/rate limiting on the API.

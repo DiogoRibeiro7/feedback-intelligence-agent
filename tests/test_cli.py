@@ -248,6 +248,57 @@ def test_reports_get_missing_exits_nonzero(tmp_path: Path) -> None:
     assert "Report not found" in result.stderr
 
 
+def test_reports_email_summary_command_renders_dry_run(tmp_path: Path) -> None:
+    store_path = tmp_path / "reports"
+    index_path = tmp_path / "vector_store.json"
+    saved = stdout_runner.invoke(
+        app,
+        [
+            "reports",
+            "save",
+            "Why are enterprise customers unhappy with onboarding?",
+            "--title",
+            "Enterprise onboarding",
+            "--store-path",
+            str(store_path),
+            "--index-path",
+            str(index_path),
+        ],
+    )
+    assert saved.exit_code == 0, saved.output
+    report_id = json.loads(saved.stdout)["report_id"]
+
+    result = stdout_runner.invoke(
+        app,
+        [
+            "reports",
+            "email-summary",
+            "--recipient",
+            "pm@example.com",
+            "--report-id",
+            report_id,
+            "--store-path",
+            str(store_path),
+        ],
+    )
+
+    assert result.exit_code == 0, result.output
+    payload = json.loads(result.stdout)
+    assert payload["sent"] is False
+    assert payload["summary"]["report_ids"] == [report_id]
+    assert "Enterprise onboarding" in payload["summary"]["body_text"]
+
+
+def test_reports_email_summary_requires_recipient(tmp_path: Path) -> None:
+    result = stdout_runner.invoke(
+        app,
+        ["reports", "email-summary", "--store-path", str(tmp_path / "reports")],
+    )
+
+    assert result.exit_code == 2
+    assert "At least one --recipient" in result.stderr
+
+
 def test_query_command_applies_metadata_filters(tmp_path: Path) -> None:
     index_path = tmp_path / "vector_store.json"
     result = stdout_runner.invoke(

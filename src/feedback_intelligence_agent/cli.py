@@ -14,6 +14,13 @@ from feedback_intelligence_agent.benchmarking import run_benchmark, write_benchm
 from feedback_intelligence_agent.citations import render_citations
 from feedback_intelligence_agent.config import Settings
 from feedback_intelligence_agent.data_contracts import DataContractError, validate_feedback_csv
+from feedback_intelligence_agent.email_summaries import (
+    EmailSummaryDelivery,
+    EmailSummaryRequest,
+    deliver_email_summary,
+    render_email_summary,
+    select_reports_for_summary,
+)
 from feedback_intelligence_agent.evaluation import evaluate_system, load_evaluation_cases
 from feedback_intelligence_agent.experiments import (
     ExperimentConfig,
@@ -503,6 +510,79 @@ def reports_get(
         typer.echo(f"Report not found: {report_id}", err=True)
         raise typer.Exit(code=1)
     typer.echo(report.model_dump_json(indent=2))
+
+
+@reports_app.command("email-summary")
+def reports_email_summary(
+    recipient: Annotated[
+        list[str] | None,
+        typer.Option("--recipient", help="Email recipient. Repeat for multiple recipients."),
+    ] = None,
+    report_id: Annotated[
+        list[str] | None,
+        typer.Option("--report-id", help="Report id to include. Repeat for multiple reports."),
+    ] = None,
+    subject: Annotated[str | None, typer.Option(help="Email subject override.")] = None,
+    max_reports: Annotated[
+        int, typer.Option(help="Maximum latest reports to include when --report-id is omitted.")
+    ] = 5,
+    send: Annotated[
+        bool, typer.Option(help="Send through configured SMTP instead of dry-run.")
+    ] = False,
+    store_path: Annotated[
+        Path, typer.Option(help="Directory holding saved report JSON files.")
+    ] = Path(".artifacts/reports"),
+) -> None:
+    """Render or send an email digest for saved insight reports."""
+    configure_logging()
+    recipients = recipient or []
+    if not recipients:
+        typer.echo("At least one --recipient is required.", err=True)
+        raise typer.Exit(code=2)
+    try:
+        request = EmailSummaryRequest(
+            recipients=recipients,
+            report_ids=report_id or [],
+            subject=subject,
+            max_reports=max_reports,
+            send=send,
+        )
+    except ValueError as exc:
+        typer.echo(f"Error: {exc}", err=True)
+        raise typer.Exit(code=2) from exc
+    settings = Settings(report_store_path=store_path)
+    store = JsonInsightReportStore(store_path)
+    try:
+        reports = select_reports_for_summary(
+            store,
+            report_ids=request.report_ids,
+            max_reports=request.max_reports,
+        )
+        summary = render_email_summary(
+            reports,
+            recipients=request.recipients,
+            subject=request.subject,
+        )
+        result = (
+            deliver_email_summary(
+                summary,
+                smtp_host=settings.email_smtp_host,
+                smtp_port=settings.email_smtp_port,
+                from_address=settings.email_from_address,
+                username=settings.email_smtp_username,
+                password=settings.email_smtp_password,
+                use_tls=settings.email_smtp_use_tls,
+            )
+            if request.send
+            else EmailSummaryDelivery(summary=summary, sent=False)
+        )
+    except LookupError as exc:
+        typer.echo(f"Error: {exc}", err=True)
+        raise typer.Exit(code=1) from exc
+    except ValueError as exc:
+        typer.echo(f"Error: {exc}", err=True)
+        raise typer.Exit(code=2) from exc
+    typer.echo(result.model_dump_json(indent=2))
 
 
 @app.command()

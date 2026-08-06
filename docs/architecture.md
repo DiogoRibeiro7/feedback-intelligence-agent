@@ -50,6 +50,9 @@ LLM provider
 Cited answer + tool metadata + recommended actions + diagnostics
    │
    ├───────────────► Saved insight reports
+   │                       │
+   │                       ▼
+   │                  Email summaries
 ```
 
 ## Components
@@ -123,6 +126,10 @@ Routing is keyword/intent based (`TOOL_ROUTES`) with no function-calling API, so
 ### Saved reports
 
 `reports.py` persists generated `AgentAnswer` payloads as saved insight reports with a title, tags, notes, citations, diagnostics, and creation time. The default `JsonInsightReportStore` writes one report file per ID under `.artifacts/reports`, and the API exposes create, list, and fetch endpoints for the frontend.
+
+### Email summaries
+
+`email_summaries.py` renders saved reports into concise plain-text email digests. The default path is render-only for local previews and CI; optional SMTP delivery is enabled by `FEEDBACK_AGENT_EMAIL_*` settings.
 
 ## Extension points
 
