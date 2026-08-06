@@ -10,7 +10,7 @@ from typing import Any
 
 from fastapi import BackgroundTasks, FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import StreamingResponse
+from fastapi.responses import Response, StreamingResponse
 
 from feedback_intelligence_agent import __version__
 from feedback_intelligence_agent.config import Settings
@@ -30,10 +30,12 @@ from feedback_intelligence_agent.factory import (
     build_report_store,
 )
 from feedback_intelligence_agent.human_feedback import (
+    ActiveLearningQueue,
     HumanFeedbackAnalytics,
     HumanFeedbackRecord,
     HumanFeedbackSummary,
     SubmitHumanFeedbackRequest,
+    build_active_learning_queue,
     summarise_human_feedback,
 )
 from feedback_intelligence_agent.jobs import JobRequest, JobResult, run_ingestion_job
@@ -42,6 +44,7 @@ from feedback_intelligence_agent.reports import (
     InsightReportSummary,
     SavedInsightReport,
     SaveInsightReportRequest,
+    render_report_markdown,
 )
 from feedback_intelligence_agent.schemas import (
     AgentAnswer,
@@ -282,6 +285,20 @@ def create_app() -> FastAPI:
         except ValueError as exc:
             raise HTTPException(status_code=400, detail=str(exc)) from exc
 
+    @app.get("/reports/{report_id}/markdown")
+    def export_report_markdown(report_id: str) -> Response:
+        """Return one saved insight report as Markdown."""
+        try:
+            report = report_store.get(report_id)
+        except ValueError as exc:
+            raise HTTPException(status_code=400, detail=str(exc)) from exc
+        if report is None:
+            raise HTTPException(status_code=404, detail="report not found")
+        return Response(
+            content=render_report_markdown(report),
+            media_type="text/markdown; charset=utf-8",
+        )
+
     @app.get("/reports/{report_id}", response_model=SavedInsightReport)
     def get_report(report_id: str) -> SavedInsightReport:
         """Return one saved insight report."""
@@ -309,6 +326,22 @@ def create_app() -> FastAPI:
     def answer_feedback_analytics(tenant_id: str | None = None) -> HumanFeedbackAnalytics:
         """Return aggregate human answer feedback metrics."""
         return summarise_human_feedback(human_feedback_store.list(tenant_id=tenant_id))
+
+    @app.get("/answer-feedback/active-learning", response_model=ActiveLearningQueue)
+    def answer_feedback_active_learning(
+        tenant_id: str | None = None,
+        max_items: int = 20,
+        low_confidence_threshold: float = 0.65,
+    ) -> ActiveLearningQueue:
+        """Return reviewed answers that should be queued for improvement work."""
+        try:
+            return build_active_learning_queue(
+                human_feedback_store.list(tenant_id=tenant_id),
+                max_items=max_items,
+                low_confidence_threshold=low_confidence_threshold,
+            )
+        except ValueError as exc:
+            raise HTTPException(status_code=400, detail=str(exc)) from exc
 
     @app.get("/answer-feedback/{feedback_id}", response_model=HumanFeedbackRecord)
     def get_answer_feedback(feedback_id: str) -> HumanFeedbackRecord:

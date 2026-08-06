@@ -6,6 +6,7 @@ import re
 import uuid
 from collections.abc import Iterable
 from datetime import datetime, timezone
+from json import dumps
 from pathlib import Path
 from typing import Protocol
 
@@ -172,6 +173,74 @@ class JsonInsightReportStore:
         return _sort_summaries(
             report.summary() for report in reports if _matches_tenant(report.tenant_id, tenant_id)
         )
+
+
+def render_report_markdown(report: SavedInsightReport) -> str:
+    """Render a saved insight report as stakeholder-friendly Markdown."""
+    lines = [
+        f"# {report.title}",
+        "",
+        f"- Report ID: `{report.report_id}`",
+        f"- Tenant: `{report.tenant_id}`",
+        f"- Created: {report.created_at.isoformat()}",
+        f"- Route: `{report.result.route}`",
+        f"- Confidence: {report.result.confidence:.3f}",
+        f"- Question: {report.question}",
+    ]
+    if report.tags:
+        lines.append(f"- Tags: {', '.join(f'`{tag}`' for tag in report.tags)}")
+    if report.notes:
+        lines.extend(["", "## Notes", "", report.notes])
+
+    lines.extend(["", "## Answer", "", report.result.answer])
+
+    if report.result.recommended_actions:
+        lines.extend(["", "## Recommended Actions", ""])
+        lines.extend(
+            f"{index}. {action}"
+            for index, action in enumerate(report.result.recommended_actions, 1)
+        )
+
+    if report.result.citations:
+        lines.extend(["", "## Citations", ""])
+        for citation in report.result.citations:
+            lines.extend(
+                [
+                    f"### [{citation.citation_id}] {citation.document_id}",
+                    "",
+                    f"- Source: `{citation.source}`",
+                    f"- Chunk: `{citation.chunk_id}`",
+                    f"- Score: {citation.score:.3f}",
+                    "",
+                    f"> {citation.quote}",
+                    "",
+                ]
+            )
+
+    if report.result.tool_run is not None:
+        lines.extend(
+            [
+                "## Tool Run",
+                "",
+                f"- Tool: `{report.result.tool_run.tool_name}`",
+                f"- Status: `{report.result.tool_run.status}`",
+                f"- Summary: {report.result.tool_run.summary}",
+            ]
+        )
+
+    if report.result.diagnostics:
+        lines.extend(
+            [
+                "",
+                "## Diagnostics",
+                "",
+                "```json",
+                dumps(report.result.diagnostics, indent=2, sort_keys=True, default=str),
+                "```",
+            ]
+        )
+
+    return "\n".join(lines).rstrip() + "\n"
 
 
 def _report_from_request(request: SaveInsightReportRequest) -> SavedInsightReport:

@@ -55,3 +55,5 @@ This roadmap is designed to evolve the repository from a compact portfolio proje
 ## Phase 7 — Feedback operations
 
 - [x] Add human feedback analytics by route and tenant.
+- [x] Add Markdown exports for saved insight reports.
+- [x] Add active-learning queues from captured reviewer judgements.

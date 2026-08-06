@@ -127,11 +127,11 @@ Routing is keyword/intent based (`TOOL_ROUTES`) with no function-calling API, so
 
 ### Saved reports
 
-`reports.py` persists generated `AgentAnswer` payloads as saved insight reports with a tenant ID, title, tags, notes, citations, diagnostics, and creation time. The default `JsonInsightReportStore` writes one report file per ID under `.artifacts/reports`, and the API exposes create, tenant-filtered list, and fetch endpoints for the frontend.
+`reports.py` persists generated `AgentAnswer` payloads as saved insight reports with a tenant ID, title, tags, notes, citations, diagnostics, and creation time. The default `JsonInsightReportStore` writes one report file per ID under `.artifacts/reports`, and the API exposes create, tenant-filtered list, fetch, and Markdown export endpoints for the frontend and stakeholder handoff.
 
 ### Human feedback
 
-`human_feedback.py` persists reviewer judgements on generated `AgentAnswer` payloads. Records capture the tenant ID, question, full answer package, useful/not useful rating, optional comment, linked report ID, tags, and creation time. The default `JsonHumanFeedbackStore` writes one record file per ID under `.artifacts/human_feedback`, and the API and CLI expose create, tenant-filtered list, analytics, and fetch workflows.
+`human_feedback.py` persists reviewer judgements on generated `AgentAnswer` payloads. Records capture the tenant ID, question, full answer package, useful/not useful rating, optional comment, linked report ID, tags, and creation time. The default `JsonHumanFeedbackStore` writes one record file per ID under `.artifacts/human_feedback`, and the API and CLI expose create, tenant-filtered list, analytics, active-learning queue, and fetch workflows.
 
 ### Email summaries
 
@@ -144,8 +144,8 @@ Routing is keyword/intent based (`TOOL_ROUTES`) with no function-calling API, so
 - Add durable stream checkpoints across process restarts.
 - Replace local JSONL lakehouse files with Parquet once a production table runtime is selected.
 - Export telemetry spans through additional OpenTelemetry collectors or vendors.
-- Add feedback analytics and active-learning queues from captured reviewer judgements.
-- Add report sharing and export formats for stakeholder handoff.
+- Add evaluator assignment and status transitions for active-learning queue items.
+- Add richer report sharing formats beyond Markdown stakeholder handoff.
 - Add regression tests for prompts and retrieval behavior.
 - Replace the deterministic reranker with a cross-encoder or external LLM judge.
 - Add role-based access control around the API.

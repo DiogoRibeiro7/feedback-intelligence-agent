@@ -42,6 +42,7 @@ from feedback_intelligence_agent.human_feedback import (
     HumanFeedbackRating,
     JsonHumanFeedbackStore,
     SubmitHumanFeedbackRequest,
+    build_active_learning_queue,
     summarise_human_feedback,
 )
 from feedback_intelligence_agent.index_updates import update_json_index
@@ -58,7 +59,11 @@ from feedback_intelligence_agent.prompt_registry import (
     PromptVariableError,
 )
 from feedback_intelligence_agent.prompts import PROMPT_REGISTRY
-from feedback_intelligence_agent.reports import JsonInsightReportStore, SaveInsightReportRequest
+from feedback_intelligence_agent.reports import (
+    JsonInsightReportStore,
+    SaveInsightReportRequest,
+    render_report_markdown,
+)
 from feedback_intelligence_agent.schemas import ChatResponse, FeedbackChannel, MetadataFilters
 from feedback_intelligence_agent.streaming_ingestion import (
     JsonlFeedbackStream,
@@ -85,6 +90,12 @@ class RetrieverChoice(str, Enum):
     dense = "dense"
     lexical = "lexical"
     hybrid = "hybrid"
+
+
+class ReportExportFormat(str, Enum):
+    """Saved report export formats selectable from the command line."""
+
+    markdown = "markdown"
 
 
 def _metadata_filters(
@@ -541,6 +552,42 @@ def reports_get(
     typer.echo(report.model_dump_json(indent=2))
 
 
+@reports_app.command("export")
+def reports_export(
+    report_id: Annotated[str, typer.Argument(help="Report identifier.")],
+    export_format: Annotated[
+        ReportExportFormat, typer.Option("--format", help="Export format.")
+    ] = ReportExportFormat.markdown,
+    output: Annotated[Path | None, typer.Option(help="Optional file path to write.")] = None,
+    store_path: Annotated[
+        Path, typer.Option(help="Directory holding saved report JSON files.")
+    ] = Path(".artifacts/reports"),
+) -> None:
+    """Export one saved insight report for stakeholder handoff."""
+    configure_logging()
+    try:
+        report = JsonInsightReportStore(store_path).get(report_id)
+    except ValueError as exc:
+        typer.echo(f"Error: {exc}", err=True)
+        raise typer.Exit(code=2) from exc
+    if report is None:
+        typer.echo(f"Report not found: {report_id}", err=True)
+        raise typer.Exit(code=1)
+
+    if export_format != ReportExportFormat.markdown:
+        typer.echo(f"Unsupported export format: {export_format.value}", err=True)
+        raise typer.Exit(code=2)
+    rendered = render_report_markdown(report)
+
+    if output is None:
+        typer.echo(rendered, nl=False)
+        return
+
+    output.parent.mkdir(parents=True, exist_ok=True)
+    output.write_text(rendered, encoding="utf-8")
+    typer.echo(f"Report exported to {output}", err=True)
+
+
 @reports_app.command("email-summary")
 def reports_email_summary(
     recipient: Annotated[
@@ -699,6 +746,34 @@ def answer_feedback_analytics(
     summaries = JsonHumanFeedbackStore(store_path).list(tenant_id=tenant_id)
     analytics = summarise_human_feedback(summaries)
     typer.echo(analytics.model_dump_json(indent=2))
+
+
+@answer_feedback_app.command("active-learning")
+def answer_feedback_active_learning(
+    tenant_id: Annotated[
+        str | None, typer.Option(help="Only queue feedback for this tenant id.")
+    ] = None,
+    max_items: Annotated[int, typer.Option(help="Maximum queue items to return.")] = 20,
+    low_confidence_threshold: Annotated[
+        float, typer.Option(help="Queue useful answers at or below this confidence.")
+    ] = 0.65,
+    store_path: Annotated[
+        Path, typer.Option(help="Directory holding answer feedback JSON files.")
+    ] = Path(".artifacts/human_feedback"),
+) -> None:
+    """Rank reviewed answers for active-learning follow-up."""
+    configure_logging()
+    summaries = JsonHumanFeedbackStore(store_path).list(tenant_id=tenant_id)
+    try:
+        queue = build_active_learning_queue(
+            summaries,
+            max_items=max_items,
+            low_confidence_threshold=low_confidence_threshold,
+        )
+    except ValueError as exc:
+        typer.echo(f"Error: {exc}", err=True)
+        raise typer.Exit(code=2) from exc
+    typer.echo(queue.model_dump_json(indent=2))
 
 
 @answer_feedback_app.command("get")

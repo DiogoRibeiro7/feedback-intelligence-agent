@@ -143,6 +143,30 @@ class HumanFeedbackAnalytics(BaseModel):
     by_tenant: list[HumanFeedbackGroupStats] = Field(default_factory=list)
 
 
+class ActiveLearningQueueItem(BaseModel):
+    """One reviewed answer that should be revisited in the improvement loop."""
+
+    feedback_id: str
+    question: str
+    tenant_id: str
+    route: str
+    rating: HumanFeedbackRating
+    confidence: float
+    created_at: datetime
+    report_id: str | None = None
+    has_comment: bool
+    tags: list[str] = Field(default_factory=list)
+    priority_score: float = Field(ge=0.0)
+    reasons: list[str] = Field(default_factory=list)
+
+
+class ActiveLearningQueue(BaseModel):
+    """Ranked queue of reviewed answers that need follow-up."""
+
+    total_candidates: int = Field(ge=0)
+    items: list[ActiveLearningQueueItem] = Field(default_factory=list)
+
+
 class HumanFeedbackStore(Protocol):
     """Protocol implemented by human feedback persistence backends."""
 
@@ -263,6 +287,69 @@ def summarise_human_feedback(
         with_comments=sum(1 for record in records if record.has_comment),
         by_route=_group_stats(records, key=lambda record: record.route),
         by_tenant=_group_stats(records, key=lambda record: record.tenant_id),
+    )
+
+
+def build_active_learning_queue(
+    summaries: Iterable[HumanFeedbackSummary],
+    *,
+    max_items: int = 20,
+    low_confidence_threshold: float = 0.65,
+) -> ActiveLearningQueue:
+    """Rank reviewed answers for prompt, retrieval, or data improvement work."""
+    if not 1 <= max_items <= 100:
+        raise ValueError("max_items must be between 1 and 100")
+    if not 0.0 <= low_confidence_threshold <= 1.0:
+        raise ValueError("low_confidence_threshold must be between 0 and 1")
+
+    candidates = [
+        item
+        for summary in summaries
+        if (item := _active_learning_item(summary, low_confidence_threshold)) is not None
+    ]
+    ranked = sorted(
+        candidates,
+        key=lambda item: (item.priority_score, item.created_at, item.feedback_id),
+        reverse=True,
+    )
+    return ActiveLearningQueue(
+        total_candidates=len(ranked),
+        items=ranked[:max_items],
+    )
+
+
+def _active_learning_item(
+    summary: HumanFeedbackSummary,
+    low_confidence_threshold: float,
+) -> ActiveLearningQueueItem | None:
+    reasons: list[str] = []
+    if summary.rating == HumanFeedbackRating.not_useful:
+        reasons.append("not_useful")
+    if summary.confidence <= low_confidence_threshold:
+        reasons.append("low_confidence")
+    if not reasons:
+        return None
+
+    priority_score = 0.0
+    if summary.rating == HumanFeedbackRating.not_useful:
+        priority_score += 1.0
+    priority_score += max(0.0, low_confidence_threshold - summary.confidence)
+    if summary.has_comment:
+        priority_score += 0.1
+
+    return ActiveLearningQueueItem(
+        feedback_id=summary.feedback_id,
+        question=summary.question,
+        tenant_id=summary.tenant_id,
+        route=summary.route,
+        rating=summary.rating,
+        confidence=summary.confidence,
+        created_at=summary.created_at,
+        report_id=summary.report_id,
+        has_comment=summary.has_comment,
+        tags=summary.tags,
+        priority_score=round(priority_score, 3),
+        reasons=reasons,
     )
 
 

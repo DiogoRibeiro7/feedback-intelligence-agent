@@ -8,6 +8,9 @@ All notable changes to this project are documented here.
 
 - Human answer feedback analytics with useful/not-useful rates, comment counts,
   and route/tenant breakdowns through the API and CLI.
+- Markdown exports for saved insight reports through the API and CLI.
+- Active-learning queue ranking for not-useful and low-confidence reviewed
+  answers through the API and CLI.
 
 ## 0.3.0 - 2026-08-06
 

@@ -9,19 +9,25 @@ from feedback_intelligence_agent.human_feedback import (
     InMemoryHumanFeedbackStore,
     JsonHumanFeedbackStore,
     SubmitHumanFeedbackRequest,
+    build_active_learning_queue,
     summarise_human_feedback,
 )
 from feedback_intelligence_agent.schemas import AgentAnswer
 
 
-def make_answer(question: str = "Why is onboarding slow?") -> AgentAnswer:
+def make_answer(
+    question: str = "Why is onboarding slow?",
+    *,
+    confidence: float = 0.72,
+    route: str = "onboarding",
+) -> AgentAnswer:
     return AgentAnswer(
         question=question,
         answer="Onboarding is slow because setup ownership is unclear [1].",
         recommended_actions=["Create a clearer onboarding checklist."],
         citations=[],
-        route="onboarding",
-        confidence=0.72,
+        route=route,
+        confidence=confidence,
         diagnostics={"retrieved_chunks": 1},
     )
 
@@ -121,6 +127,57 @@ def test_summarise_human_feedback_groups_by_route_and_tenant() -> None:
         ("acme", 2, 0.5),
         ("cobalt", 1, 1.0),
     ]
+
+
+def test_build_active_learning_queue_prioritises_not_useful_and_low_confidence() -> None:
+    store = InMemoryHumanFeedbackStore()
+    useful_high = store.save(
+        SubmitHumanFeedbackRequest(
+            result=make_answer("What worked?", confidence=0.91),
+            rating=HumanFeedbackRating.useful,
+            tenant_id="acme",
+        )
+    )
+    useful_low = store.save(
+        SubmitHumanFeedbackRequest(
+            result=make_answer("What was uncertain?", confidence=0.42),
+            rating=HumanFeedbackRating.useful,
+            tenant_id="acme",
+            report_id="report-1",
+        )
+    )
+    not_useful = store.save(
+        SubmitHumanFeedbackRequest(
+            result=make_answer("What was wrong?", confidence=0.81, route="pricing"),
+            rating=HumanFeedbackRating.not_useful,
+            tenant_id="acme",
+            comment="Missed the renewal issue.",
+            tags=["Pricing"],
+        )
+    )
+
+    queue = build_active_learning_queue(store.list(), low_confidence_threshold=0.65)
+
+    assert queue.total_candidates == 2
+    assert [item.feedback_id for item in queue.items] == [
+        not_useful.feedback_id,
+        useful_low.feedback_id,
+    ]
+    assert useful_high.feedback_id not in {item.feedback_id for item in queue.items}
+    assert queue.items[0].reasons == ["not_useful"]
+    assert queue.items[0].priority_score == 1.1
+    assert queue.items[0].route == "pricing"
+    assert queue.items[0].has_comment is True
+    assert queue.items[0].tags == ["pricing"]
+    assert queue.items[1].reasons == ["low_confidence"]
+    assert queue.items[1].report_id == "report-1"
+
+
+def test_build_active_learning_queue_validates_options() -> None:
+    with pytest.raises(ValueError, match="max_items"):
+        build_active_learning_queue([], max_items=0)
+    with pytest.raises(ValueError, match="low_confidence_threshold"):
+        build_active_learning_queue([], low_confidence_threshold=1.1)
 
 
 def test_human_feedback_request_rejects_unsafe_report_ids() -> None:

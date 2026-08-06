@@ -249,6 +249,32 @@ def test_reports_commands_save_list_and_get(tmp_path: Path) -> None:
     assert fetched.exit_code == 0, fetched.output
     assert json.loads(fetched.stdout)["report_id"] == report_id
 
+    exported = stdout_runner.invoke(
+        app,
+        ["reports", "export", report_id, "--store-path", str(store_path)],
+    )
+    assert exported.exit_code == 0, exported.output
+    assert exported.stdout.startswith("# Enterprise onboarding\n")
+    assert "- Tenant: `acme`" in exported.stdout
+
+    output = tmp_path / "exports" / "report.md"
+    written = stdout_runner.invoke(
+        app,
+        [
+            "reports",
+            "export",
+            report_id,
+            "--output",
+            str(output),
+            "--store-path",
+            str(store_path),
+        ],
+    )
+    assert written.exit_code == 0, written.output
+    assert written.stdout == ""
+    assert "Report exported to" in written.stderr
+    assert output.read_text(encoding="utf-8").startswith("# Enterprise onboarding\n")
+
 
 def test_reports_get_missing_exits_nonzero(tmp_path: Path) -> None:
     result = stdout_runner.invoke(
@@ -385,6 +411,46 @@ def test_answer_feedback_commands_submit_list_and_get(tmp_path: Path) -> None:
     )
     assert fetched.exit_code == 0, fetched.output
     assert json.loads(fetched.stdout)["feedback_id"] == feedback_id
+
+    needs_work = stdout_runner.invoke(
+        app,
+        [
+            "answer-feedback",
+            "submit",
+            "Which pricing issues were missed?",
+            "--rating",
+            "not_useful",
+            "--tenant-id",
+            "acme",
+            "--store-path",
+            str(store_path),
+            "--index-path",
+            str(index_path),
+        ],
+    )
+    assert needs_work.exit_code == 0, needs_work.output
+    needs_work_id = json.loads(needs_work.stdout)["feedback_id"]
+
+    queue = stdout_runner.invoke(
+        app,
+        [
+            "answer-feedback",
+            "active-learning",
+            "--tenant-id",
+            "acme",
+            "--low-confidence-threshold",
+            "0.1",
+            "--store-path",
+            str(store_path),
+        ],
+    )
+    assert queue.exit_code == 0, queue.output
+    queue_payload = json.loads(queue.stdout)
+    needs_work_items = [
+        item for item in queue_payload["items"] if item["feedback_id"] == needs_work_id
+    ]
+    assert needs_work_items
+    assert "not_useful" in needs_work_items[0]["reasons"]
 
 
 def test_answer_feedback_get_missing_exits_nonzero(tmp_path: Path) -> None:

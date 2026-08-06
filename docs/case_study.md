@@ -249,8 +249,8 @@ Notable elements:
 - **Saved insight reports.** Generated answers can be persisted through
   [reports.py](../src/feedback_intelligence_agent/reports.py) with a title,
   tags, notes, citations, diagnostics, and the full `AgentAnswer`. The API and
-  CLI share the same JSON-backed store, and the frontend can save answers from
-  the analyst workflow.
+  CLI share the same JSON-backed store, saved reports can be exported as
+  Markdown, and the frontend can save answers from the analyst workflow.
 - **Email summaries.** Saved reports can be rendered into a plain-text digest by
   [email_summaries.py](../src/feedback_intelligence_agent/email_summaries.py).
   Dry-run rendering is local and deterministic; SMTP delivery is optional and
@@ -259,7 +259,8 @@ Notable elements:
   not useful through [human_feedback.py](../src/feedback_intelligence_agent/human_feedback.py).
   The API, CLI, and frontend share the same JSON-backed store, preserving the
   full `AgentAnswer` alongside optional comments, tags, and linked report IDs.
-  The same records power useful-rate analytics by route and tenant.
+  The same records power useful-rate analytics by route and tenant plus an
+  active-learning queue for not-useful or low-confidence answers.
 
 ## Evaluation strategy
 
@@ -310,9 +311,11 @@ with robust statistics (mean, median, p95, min, max).
 The API ([api.py](../src/feedback_intelligence_agent/api.py)) exposes `POST /query`,
 streaming `POST /query/stream` (SSE, no extra dependencies), `POST /chat` plus
 conversation retrieval, saved report endpoints (`POST /reports`, `GET /reports`,
-`GET /reports/{report_id}`, `POST /reports/email-summary`), answer feedback
+`GET /reports/{report_id}`, `GET /reports/{report_id}/markdown`,
+`POST /reports/email-summary`), answer feedback
 endpoints (`POST /answer-feedback`, `GET /answer-feedback`,
-`GET /answer-feedback/analytics`, `GET /answer-feedback/{feedback_id}`),
+`GET /answer-feedback/analytics`, `GET /answer-feedback/active-learning`,
+`GET /answer-feedback/{feedback_id}`),
 synchronous `POST /index`,
 asynchronous ingestion jobs (`POST /ingestion/jobs` + polling),
 and `GET /health` (liveness) and `GET /ready` (readiness) probes. Asynchronous ingestion uses FastAPI

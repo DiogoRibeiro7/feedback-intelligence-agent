@@ -869,6 +869,7 @@ The API exposes:
 POST /reports
 GET /reports
 GET /reports/<report_id>
+GET /reports/<report_id>/markdown
 ```
 
 `GET /reports?tenant_id=<tenant>` scopes the list view to one tenant.
@@ -883,6 +884,7 @@ poetry run feedback-agent reports save "Why is onboarding slow?" \
 
 poetry run feedback-agent reports list --tenant-id acme
 poetry run feedback-agent reports get <report_id>
+poetry run feedback-agent reports export <report_id> --output report.md
 ```
 
 The frontend adds a save action after each answer and shows saved report
@@ -902,12 +904,15 @@ The API exposes:
 POST /answer-feedback
 GET /answer-feedback
 GET /answer-feedback/analytics
+GET /answer-feedback/active-learning
 GET /answer-feedback/<feedback_id>
 ```
 
 `GET /answer-feedback?tenant_id=<tenant>` scopes the list view to one tenant.
 `GET /answer-feedback/analytics?tenant_id=<tenant>` returns useful/not-useful
 counts, useful rate, comment coverage, and breakdowns by route and tenant.
+`GET /answer-feedback/active-learning?tenant_id=<tenant>` ranks not-useful and
+low-confidence reviewed answers for follow-up work.
 
 The CLI can answer a question and capture the reviewer judgement in one step:
 
@@ -920,6 +925,7 @@ poetry run feedback-agent answer-feedback submit "Why is onboarding slow?" \
 
 poetry run feedback-agent answer-feedback list --tenant-id acme
 poetry run feedback-agent answer-feedback analytics --tenant-id acme
+poetry run feedback-agent answer-feedback active-learning --tenant-id acme
 poetry run feedback-agent answer-feedback get <feedback_id>
 ```
 

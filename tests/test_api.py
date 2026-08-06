@@ -335,6 +335,32 @@ def test_saved_reports_can_be_created_listed_and_fetched(client: TestClient) -> 
     assert fetched.json() == report
 
 
+def test_saved_report_can_be_exported_as_markdown(client: TestClient) -> None:
+    query = client.post(
+        "/query",
+        json={"question": "Why are enterprise customers unhappy with onboarding?", "top_k": 3},
+    )
+    created = client.post(
+        "/reports",
+        json={
+            "title": "Enterprise onboarding",
+            "result": query.json()["result"],
+            "tenant_id": "acme",
+            "notes": "Share with leadership.",
+        },
+    )
+    assert created.status_code == 201
+
+    response = client.get(f"/reports/{created.json()['report_id']}/markdown")
+
+    assert response.status_code == 200
+    assert response.headers["content-type"].startswith("text/markdown")
+    assert response.text.startswith("# Enterprise onboarding\n")
+    assert "- Tenant: `acme`" in response.text
+    assert "## Answer" in response.text
+    assert "## Citations" in response.text
+
+
 def test_saved_reports_return_404_for_unknown_id(client: TestClient) -> None:
     response = client.get("/reports/does-not-exist")
     assert response.status_code == 404
@@ -522,6 +548,60 @@ def test_answer_feedback_analytics_summarises_by_tenant(client: TestClient) -> N
     assert acme.json()["total"] == 2
     assert acme.json()["useful_rate"] == 0.5
     assert acme.json()["with_comments"] == 1
+
+
+def test_answer_feedback_active_learning_returns_ranked_queue(client: TestClient) -> None:
+    query = client.post(
+        "/query",
+        json={"question": "Why are enterprise customers unhappy with onboarding?", "top_k": 3},
+    )
+    base_result = query.json()["result"]
+    low_confidence = {**base_result, "question": "What was uncertain?", "confidence": 0.41}
+    not_useful = {**base_result, "question": "What was wrong?", "confidence": 0.83}
+
+    client.post(
+        "/answer-feedback",
+        json={"result": low_confidence, "rating": "useful", "tenant_id": "acme"},
+    )
+    client.post(
+        "/answer-feedback",
+        json={
+            "result": not_useful,
+            "rating": "not_useful",
+            "tenant_id": "acme",
+            "comment": "Missed the main issue.",
+        },
+    )
+    client.post(
+        "/answer-feedback",
+        json={
+            "result": {**base_result, "confidence": 0.92},
+            "rating": "useful",
+            "tenant_id": "cobalt",
+        },
+    )
+
+    queue = client.get(
+        "/answer-feedback/active-learning",
+        params={"tenant_id": "acme", "low_confidence_threshold": 0.65},
+    )
+
+    assert queue.status_code == 200
+    payload = queue.json()
+    assert payload["total_candidates"] == 2
+    assert [item["reasons"] for item in payload["items"]] == [
+        ["not_useful"],
+        ["low_confidence"],
+    ]
+    assert payload["items"][0]["question"] == "What was wrong?"
+    assert payload["items"][0]["priority_score"] == 1.1
+
+
+def test_answer_feedback_active_learning_validates_options(client: TestClient) -> None:
+    response = client.get("/answer-feedback/active-learning", params={"max_items": 0})
+
+    assert response.status_code == 400
+    assert "max_items" in response.json()["detail"]
 
 
 def test_submit_ingestion_job_runs_and_succeeds(client: TestClient, tmp_path: Path) -> None:
