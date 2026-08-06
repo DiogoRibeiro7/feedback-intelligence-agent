@@ -13,6 +13,8 @@ All notable changes to this project are documented here.
   answers through the API and CLI.
 - Assignment and workflow-state transitions for active-learning queue items
   with a JSON-backed local state store.
+- Optional role-based API-key authorization for reader, writer, and admin routes.
+- Optional in-process fixed-window API rate limiting for deployed services.
 
 ## 0.3.0 - 2026-08-06
 

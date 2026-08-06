@@ -5,12 +5,12 @@ from __future__ import annotations
 import json
 import re
 import time
-from collections.abc import Iterator
-from typing import Any
+from collections.abc import Awaitable, Callable, Iterator
+from typing import Annotated, Any
 
-from fastapi import BackgroundTasks, FastAPI, HTTPException
+from fastapi import BackgroundTasks, Depends, FastAPI, Header, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import Response, StreamingResponse
+from fastapi.responses import JSONResponse, Response, StreamingResponse
 
 from feedback_intelligence_agent import __version__
 from feedback_intelligence_agent.active_learning import (
@@ -18,6 +18,14 @@ from feedback_intelligence_agent.active_learning import (
     ActiveLearningStatus,
     UpdateActiveLearningStateRequest,
     apply_active_learning_states,
+)
+from feedback_intelligence_agent.auth import (
+    ApiAuthConfigurationError,
+    ApiAuthenticationError,
+    ApiPermissionError,
+    ApiPrincipal,
+    ApiRole,
+    require_api_role,
 )
 from feedback_intelligence_agent.config import Settings
 from feedback_intelligence_agent.email_summaries import (
@@ -47,6 +55,7 @@ from feedback_intelligence_agent.human_feedback import (
 )
 from feedback_intelligence_agent.jobs import JobRequest, JobResult, run_ingestion_job
 from feedback_intelligence_agent.memory import ConversationMemory
+from feedback_intelligence_agent.rate_limit import InMemoryRateLimiter, RateLimitDecision
 from feedback_intelligence_agent.reports import (
     InsightReportSummary,
     SavedInsightReport,
@@ -118,6 +127,57 @@ def _build_stream_metadata(
     return metadata.model_dump(mode="json")
 
 
+def _auth_dependency(settings: Settings, role: ApiRole) -> Callable[..., ApiPrincipal]:
+    """Build a FastAPI dependency for the configured API role."""
+
+    def dependency(
+        x_feedback_agent_key: Annotated[
+            str | None,
+            Header(alias="X-Feedback-Agent-Key"),
+        ] = None,
+    ) -> ApiPrincipal:
+        try:
+            return require_api_role(
+                role,
+                x_feedback_agent_key,
+                auth_enabled=settings.api_auth_enabled,
+                reader_key=settings.api_reader_key,
+                writer_key=settings.api_writer_key,
+                admin_key=settings.api_admin_key,
+            )
+        except ApiAuthConfigurationError as exc:
+            raise HTTPException(status_code=500, detail=str(exc)) from exc
+        except ApiAuthenticationError as exc:
+            raise HTTPException(
+                status_code=401,
+                detail=str(exc),
+                headers={"WWW-Authenticate": "ApiKey"},
+            ) from exc
+        except ApiPermissionError as exc:
+            raise HTTPException(status_code=403, detail=str(exc)) from exc
+
+    return dependency
+
+
+def _rate_limit_key(
+    api_key: str | None,
+    client_host: str | None,
+) -> str:
+    """Return the caller identity used by the in-memory rate limiter."""
+    if api_key is not None and api_key.strip():
+        return f"api-key:{api_key.strip()}"
+    return f"ip:{client_host or 'unknown'}"
+
+
+def _rate_limit_headers(decision: RateLimitDecision) -> dict[str, str]:
+    """Return response headers describing the current rate-limit window."""
+    return {
+        "X-RateLimit-Limit": str(decision.limit),
+        "X-RateLimit-Remaining": str(decision.remaining),
+        "X-RateLimit-Reset": str(decision.reset_after_seconds),
+    }
+
+
 def create_app() -> FastAPI:
     """Create and configure the FastAPI application."""
     configure_logging()
@@ -128,6 +188,13 @@ def create_app() -> FastAPI:
     report_store = build_report_store(settings)
     human_feedback_store = build_human_feedback_store(settings)
     active_learning_state_store = build_active_learning_state_store(settings)
+    reader_access = Depends(_auth_dependency(settings, ApiRole.reader))
+    writer_access = Depends(_auth_dependency(settings, ApiRole.writer))
+    admin_access = Depends(_auth_dependency(settings, ApiRole.admin))
+    rate_limiter = InMemoryRateLimiter(
+        max_requests=settings.api_rate_limit_max_requests,
+        window_seconds=settings.api_rate_limit_window_seconds,
+    )
 
     app = FastAPI(
         title="Feedback Intelligence Agent API",
@@ -145,6 +212,33 @@ def create_app() -> FastAPI:
             allow_methods=["*"],
             allow_headers=["*"],
         )
+
+    @app.middleware("http")
+    async def rate_limit_middleware(
+        request: Request, call_next: Callable[[Request], Awaitable[Response]]
+    ) -> Response:
+        """Apply optional per-caller rate limiting to non-probe API routes."""
+        if not settings.api_rate_limit_enabled or request.url.path in {"/health", "/ready"}:
+            return await call_next(request)
+
+        decision = rate_limiter.check(
+            _rate_limit_key(
+                request.headers.get("X-Feedback-Agent-Key"),
+                request.client.host if request.client is not None else None,
+            )
+        )
+        headers = _rate_limit_headers(decision)
+        if not decision.allowed:
+            headers["Retry-After"] = str(decision.reset_after_seconds)
+            return JSONResponse(
+                status_code=429,
+                content={"detail": "rate limit exceeded"},
+                headers=headers,
+            )
+
+        response = await call_next(request)
+        response.headers.update(headers)
+        return response
 
     @app.get("/health")
     def health() -> dict[str, str]:
@@ -168,7 +262,7 @@ def create_app() -> FastAPI:
         """
         return {"status": "ready"}
 
-    @app.post("/query", response_model=QueryResponse)
+    @app.post("/query", response_model=QueryResponse, dependencies=[reader_access])
     def query(request: QueryRequest) -> QueryResponse:
         """Answer a question using the feedback insight agent."""
         try:
@@ -182,7 +276,7 @@ def create_app() -> FastAPI:
             raise HTTPException(status_code=400, detail=str(exc)) from exc
         return QueryResponse(result=result)
 
-    @app.post("/query/stream")
+    @app.post("/query/stream", dependencies=[reader_access])
     def query_stream(request: QueryRequest) -> StreamingResponse:
         """Answer a question as a Server-Sent Events stream.
 
@@ -219,7 +313,7 @@ def create_app() -> FastAPI:
 
         return StreamingResponse(event_stream(), media_type="text/event-stream")
 
-    @app.post("/chat", response_model=ChatResponse)
+    @app.post("/chat", response_model=ChatResponse, dependencies=[writer_access])
     def chat(request: ChatRequest) -> ChatResponse:
         """Answer a message within a stored conversation.
 
@@ -241,7 +335,11 @@ def create_app() -> FastAPI:
             raise HTTPException(status_code=400, detail=str(exc)) from exc
         return ChatResponse(conversation_id=conversation_id, result=result)
 
-    @app.get("/conversations/{conversation_id}", response_model=ConversationMemory)
+    @app.get(
+        "/conversations/{conversation_id}",
+        response_model=ConversationMemory,
+        dependencies=[reader_access],
+    )
     def get_conversation(conversation_id: str) -> ConversationMemory:
         """Return the stored turns of one conversation."""
         try:
@@ -252,17 +350,26 @@ def create_app() -> FastAPI:
             raise HTTPException(status_code=404, detail="conversation not found")
         return memory
 
-    @app.post("/reports", response_model=SavedInsightReport, status_code=201)
+    @app.post(
+        "/reports",
+        response_model=SavedInsightReport,
+        status_code=201,
+        dependencies=[writer_access],
+    )
     def save_report(request: SaveInsightReportRequest) -> SavedInsightReport:
         """Persist a generated insight answer as a saved report."""
         return report_store.save(request)
 
-    @app.get("/reports", response_model=list[InsightReportSummary])
+    @app.get("/reports", response_model=list[InsightReportSummary], dependencies=[reader_access])
     def list_reports(tenant_id: str | None = None) -> list[InsightReportSummary]:
         """Return saved insight report summaries."""
         return report_store.list(tenant_id=tenant_id)
 
-    @app.post("/reports/email-summary", response_model=EmailSummaryDelivery)
+    @app.post(
+        "/reports/email-summary",
+        response_model=EmailSummaryDelivery,
+        dependencies=[writer_access],
+    )
     def email_report_summary(request: EmailSummaryRequest) -> EmailSummaryDelivery:
         """Render or send an email digest for saved insight reports."""
         try:
@@ -293,7 +400,7 @@ def create_app() -> FastAPI:
         except ValueError as exc:
             raise HTTPException(status_code=400, detail=str(exc)) from exc
 
-    @app.get("/reports/{report_id}/markdown")
+    @app.get("/reports/{report_id}/markdown", dependencies=[reader_access])
     def export_report_markdown(report_id: str) -> Response:
         """Return one saved insight report as Markdown."""
         try:
@@ -307,7 +414,11 @@ def create_app() -> FastAPI:
             media_type="text/markdown; charset=utf-8",
         )
 
-    @app.get("/reports/{report_id}", response_model=SavedInsightReport)
+    @app.get(
+        "/reports/{report_id}",
+        response_model=SavedInsightReport,
+        dependencies=[reader_access],
+    )
     def get_report(report_id: str) -> SavedInsightReport:
         """Return one saved insight report."""
         try:
@@ -318,24 +429,41 @@ def create_app() -> FastAPI:
             raise HTTPException(status_code=404, detail="report not found")
         return report
 
-    @app.post("/answer-feedback", response_model=HumanFeedbackRecord, status_code=201)
+    @app.post(
+        "/answer-feedback",
+        response_model=HumanFeedbackRecord,
+        status_code=201,
+        dependencies=[writer_access],
+    )
     def submit_answer_feedback(
         request: SubmitHumanFeedbackRequest,
     ) -> HumanFeedbackRecord:
         """Persist a human judgement on a generated answer."""
         return human_feedback_store.save(request)
 
-    @app.get("/answer-feedback", response_model=list[HumanFeedbackSummary])
+    @app.get(
+        "/answer-feedback",
+        response_model=list[HumanFeedbackSummary],
+        dependencies=[reader_access],
+    )
     def list_answer_feedback(tenant_id: str | None = None) -> list[HumanFeedbackSummary]:
         """Return human feedback summaries."""
         return human_feedback_store.list(tenant_id=tenant_id)
 
-    @app.get("/answer-feedback/analytics", response_model=HumanFeedbackAnalytics)
+    @app.get(
+        "/answer-feedback/analytics",
+        response_model=HumanFeedbackAnalytics,
+        dependencies=[reader_access],
+    )
     def answer_feedback_analytics(tenant_id: str | None = None) -> HumanFeedbackAnalytics:
         """Return aggregate human answer feedback metrics."""
         return summarise_human_feedback(human_feedback_store.list(tenant_id=tenant_id))
 
-    @app.get("/answer-feedback/active-learning", response_model=ActiveLearningQueue)
+    @app.get(
+        "/answer-feedback/active-learning",
+        response_model=ActiveLearningQueue,
+        dependencies=[reader_access],
+    )
     def answer_feedback_active_learning(
         tenant_id: str | None = None,
         max_items: int = 20,
@@ -355,6 +483,7 @@ def create_app() -> FastAPI:
     @app.get(
         "/answer-feedback/active-learning/states",
         response_model=list[ActiveLearningState],
+        dependencies=[reader_access],
     )
     def list_active_learning_states(
         status: ActiveLearningStatus | None = None,
@@ -365,6 +494,7 @@ def create_app() -> FastAPI:
     @app.get(
         "/answer-feedback/active-learning/{feedback_id}",
         response_model=ActiveLearningState,
+        dependencies=[reader_access],
     )
     def get_active_learning_state(feedback_id: str) -> ActiveLearningState:
         """Return workflow state for one active-learning queue item."""
@@ -379,6 +509,7 @@ def create_app() -> FastAPI:
     @app.patch(
         "/answer-feedback/active-learning/{feedback_id}",
         response_model=ActiveLearningState,
+        dependencies=[writer_access],
     )
     def update_active_learning_state(
         feedback_id: str,
@@ -395,7 +526,11 @@ def create_app() -> FastAPI:
         except ValueError as exc:
             raise HTTPException(status_code=400, detail=str(exc)) from exc
 
-    @app.get("/answer-feedback/{feedback_id}", response_model=HumanFeedbackRecord)
+    @app.get(
+        "/answer-feedback/{feedback_id}",
+        response_model=HumanFeedbackRecord,
+        dependencies=[reader_access],
+    )
     def get_answer_feedback(feedback_id: str) -> HumanFeedbackRecord:
         """Return one human feedback record."""
         try:
@@ -406,7 +541,7 @@ def create_app() -> FastAPI:
             raise HTTPException(status_code=404, detail="answer feedback not found")
         return record
 
-    @app.post("/index")
+    @app.post("/index", dependencies=[admin_access])
     def index(request: IndexRequest) -> dict[str, str | int]:
         """Rebuild the local vector index from a CSV path."""
         index_path = request.index_path or str(settings.index_path)
@@ -425,6 +560,7 @@ def create_app() -> FastAPI:
         "/ingestion/jobs",
         response_model=JobSubmitResponse,
         status_code=202,
+        dependencies=[admin_access],
     )
     def submit_ingestion_job(
         request: JobRequest, background_tasks: BackgroundTasks
@@ -446,7 +582,11 @@ def create_app() -> FastAPI:
         )
         return JobSubmitResponse(job_id=job.job_id, status=job.status.value)
 
-    @app.get("/ingestion/jobs/{job_id}", response_model=JobResult)
+    @app.get(
+        "/ingestion/jobs/{job_id}",
+        response_model=JobResult,
+        dependencies=[reader_access],
+    )
     def get_ingestion_job(job_id: str) -> JobResult:
         """Return the status and result of an ingestion job; 404 if unknown."""
         job = job_store.get(job_id)

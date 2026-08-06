@@ -80,6 +80,88 @@ def tenant_client(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> TestClient
     return TestClient(create_app())
 
 
+@pytest.fixture()
+def auth_client(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> TestClient:
+    monkeypatch.setenv("FEEDBACK_AGENT_INDEX_PATH", str(tmp_path / "vector_store.json"))
+    monkeypatch.setenv("FEEDBACK_AGENT_CONVERSATION_STORE_PATH", str(tmp_path / "conversations"))
+    monkeypatch.setenv("FEEDBACK_AGENT_JOB_STORE_PATH", str(tmp_path / "jobs"))
+    monkeypatch.setenv("FEEDBACK_AGENT_REPORT_STORE_PATH", str(tmp_path / "reports"))
+    monkeypatch.setenv(
+        "FEEDBACK_AGENT_HUMAN_FEEDBACK_STORE_PATH",
+        str(tmp_path / "human_feedback"),
+    )
+    monkeypatch.setenv(
+        "FEEDBACK_AGENT_ACTIVE_LEARNING_STATE_STORE_PATH",
+        str(tmp_path / "active_learning"),
+    )
+    monkeypatch.setenv("FEEDBACK_AGENT_API_AUTH_ENABLED", "true")
+    monkeypatch.setenv("FEEDBACK_AGENT_API_READER_KEY", "read-key")
+    monkeypatch.setenv("FEEDBACK_AGENT_API_WRITER_KEY", "write-key")
+    monkeypatch.setenv("FEEDBACK_AGENT_API_ADMIN_KEY", "admin-key")
+    return TestClient(create_app())
+
+
+@pytest.fixture()
+def misconfigured_auth_client(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> TestClient:
+    monkeypatch.setenv("FEEDBACK_AGENT_INDEX_PATH", str(tmp_path / "vector_store.json"))
+    monkeypatch.setenv("FEEDBACK_AGENT_CONVERSATION_STORE_PATH", str(tmp_path / "conversations"))
+    monkeypatch.setenv("FEEDBACK_AGENT_JOB_STORE_PATH", str(tmp_path / "jobs"))
+    monkeypatch.setenv("FEEDBACK_AGENT_REPORT_STORE_PATH", str(tmp_path / "reports"))
+    monkeypatch.setenv(
+        "FEEDBACK_AGENT_HUMAN_FEEDBACK_STORE_PATH",
+        str(tmp_path / "human_feedback"),
+    )
+    monkeypatch.setenv(
+        "FEEDBACK_AGENT_ACTIVE_LEARNING_STATE_STORE_PATH",
+        str(tmp_path / "active_learning"),
+    )
+    monkeypatch.setenv("FEEDBACK_AGENT_API_AUTH_ENABLED", "true")
+    return TestClient(create_app())
+
+
+@pytest.fixture()
+def rate_limited_client(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> TestClient:
+    monkeypatch.setenv("FEEDBACK_AGENT_INDEX_PATH", str(tmp_path / "vector_store.json"))
+    monkeypatch.setenv("FEEDBACK_AGENT_CONVERSATION_STORE_PATH", str(tmp_path / "conversations"))
+    monkeypatch.setenv("FEEDBACK_AGENT_JOB_STORE_PATH", str(tmp_path / "jobs"))
+    monkeypatch.setenv("FEEDBACK_AGENT_REPORT_STORE_PATH", str(tmp_path / "reports"))
+    monkeypatch.setenv(
+        "FEEDBACK_AGENT_HUMAN_FEEDBACK_STORE_PATH",
+        str(tmp_path / "human_feedback"),
+    )
+    monkeypatch.setenv(
+        "FEEDBACK_AGENT_ACTIVE_LEARNING_STATE_STORE_PATH",
+        str(tmp_path / "active_learning"),
+    )
+    monkeypatch.setenv("FEEDBACK_AGENT_API_RATE_LIMIT_ENABLED", "true")
+    monkeypatch.setenv("FEEDBACK_AGENT_API_RATE_LIMIT_MAX_REQUESTS", "2")
+    monkeypatch.setenv("FEEDBACK_AGENT_API_RATE_LIMIT_WINDOW_SECONDS", "60")
+    return TestClient(create_app())
+
+
+@pytest.fixture()
+def auth_rate_limited_client(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> TestClient:
+    monkeypatch.setenv("FEEDBACK_AGENT_INDEX_PATH", str(tmp_path / "vector_store.json"))
+    monkeypatch.setenv("FEEDBACK_AGENT_CONVERSATION_STORE_PATH", str(tmp_path / "conversations"))
+    monkeypatch.setenv("FEEDBACK_AGENT_JOB_STORE_PATH", str(tmp_path / "jobs"))
+    monkeypatch.setenv("FEEDBACK_AGENT_REPORT_STORE_PATH", str(tmp_path / "reports"))
+    monkeypatch.setenv(
+        "FEEDBACK_AGENT_HUMAN_FEEDBACK_STORE_PATH",
+        str(tmp_path / "human_feedback"),
+    )
+    monkeypatch.setenv(
+        "FEEDBACK_AGENT_ACTIVE_LEARNING_STATE_STORE_PATH",
+        str(tmp_path / "active_learning"),
+    )
+    monkeypatch.setenv("FEEDBACK_AGENT_API_AUTH_ENABLED", "true")
+    monkeypatch.setenv("FEEDBACK_AGENT_API_READER_KEY", "read-key")
+    monkeypatch.setenv("FEEDBACK_AGENT_API_WRITER_KEY", "write-key")
+    monkeypatch.setenv("FEEDBACK_AGENT_API_RATE_LIMIT_ENABLED", "true")
+    monkeypatch.setenv("FEEDBACK_AGENT_API_RATE_LIMIT_MAX_REQUESTS", "1")
+    monkeypatch.setenv("FEEDBACK_AGENT_API_RATE_LIMIT_WINDOW_SECONDS", "60")
+    return TestClient(create_app())
+
+
 def test_health_endpoint_reports_ok(client: TestClient) -> None:
     response = client.get("/health")
     assert response.status_code == 200
@@ -90,6 +172,139 @@ def test_ready_endpoint_reports_ready(client: TestClient) -> None:
     response = client.get("/ready")
     assert response.status_code == 200
     assert response.json() == {"status": "ready"}
+
+
+def test_api_auth_leaves_health_and_ready_open(auth_client: TestClient) -> None:
+    assert auth_client.get("/health").status_code == 200
+    assert auth_client.get("/ready").status_code == 200
+
+
+def test_api_auth_requires_key_for_protected_routes(auth_client: TestClient) -> None:
+    response = auth_client.post(
+        "/query",
+        json={"question": "Why are enterprise customers unhappy with onboarding?"},
+    )
+
+    assert response.status_code == 401
+    assert response.headers["www-authenticate"] == "ApiKey"
+    assert "missing API key" in response.json()["detail"]
+
+
+def test_api_auth_allows_reader_access_to_read_routes(auth_client: TestClient) -> None:
+    response = auth_client.post(
+        "/query",
+        json={"question": "Why are enterprise customers unhappy with onboarding?", "top_k": 3},
+        headers={"X-Feedback-Agent-Key": "read-key"},
+    )
+
+    assert response.status_code == 200
+    assert response.json()["result"]["citations"]
+
+
+def test_api_auth_rejects_reader_access_to_write_routes(auth_client: TestClient) -> None:
+    query = auth_client.post(
+        "/query",
+        json={"question": "Why are enterprise customers unhappy with onboarding?", "top_k": 3},
+        headers={"X-Feedback-Agent-Key": "read-key"},
+    )
+
+    response = auth_client.post(
+        "/reports",
+        json={"title": "Enterprise onboarding", "result": query.json()["result"]},
+        headers={"X-Feedback-Agent-Key": "read-key"},
+    )
+
+    assert response.status_code == 403
+    assert "cannot access" in response.json()["detail"]
+
+
+def test_api_auth_allows_writer_access_to_write_routes(auth_client: TestClient) -> None:
+    query = auth_client.post(
+        "/query",
+        json={"question": "Why are enterprise customers unhappy with onboarding?", "top_k": 3},
+        headers={"X-Feedback-Agent-Key": "read-key"},
+    )
+
+    response = auth_client.post(
+        "/reports",
+        json={"title": "Enterprise onboarding", "result": query.json()["result"]},
+        headers={"X-Feedback-Agent-Key": "write-key"},
+    )
+
+    assert response.status_code == 201
+    assert response.json()["title"] == "Enterprise onboarding"
+
+
+def test_api_auth_restricts_admin_routes(auth_client: TestClient, tmp_path: Path) -> None:
+    writer = auth_client.post(
+        "/index",
+        json={
+            "input_path": "data/sample_feedback.csv",
+            "index_path": str(tmp_path / "writer.json"),
+        },
+        headers={"X-Feedback-Agent-Key": "write-key"},
+    )
+    admin = auth_client.post(
+        "/index",
+        json={"input_path": "data/sample_feedback.csv", "index_path": str(tmp_path / "admin.json")},
+        headers={"X-Feedback-Agent-Key": "admin-key"},
+    )
+
+    assert writer.status_code == 403
+    assert admin.status_code == 200
+    assert admin.json()["chunks"] > 0
+
+
+def test_api_auth_reports_missing_key_configuration(
+    misconfigured_auth_client: TestClient,
+) -> None:
+    response = misconfigured_auth_client.post(
+        "/query",
+        json={"question": "Why are enterprise customers unhappy with onboarding?"},
+    )
+
+    assert response.status_code == 500
+    assert "no API keys" in response.json()["detail"]
+
+
+def test_api_rate_limit_leaves_health_and_ready_open(
+    rate_limited_client: TestClient,
+) -> None:
+    for _ in range(4):
+        assert rate_limited_client.get("/health").status_code == 200
+        assert rate_limited_client.get("/ready").status_code == 200
+
+
+def test_api_rate_limit_rejects_requests_after_budget(
+    rate_limited_client: TestClient,
+) -> None:
+    first = rate_limited_client.get("/reports")
+    second = rate_limited_client.get("/reports")
+    third = rate_limited_client.get("/reports")
+
+    assert first.status_code == 200
+    assert first.headers["x-ratelimit-limit"] == "2"
+    assert first.headers["x-ratelimit-remaining"] == "1"
+    assert second.status_code == 200
+    assert second.headers["x-ratelimit-remaining"] == "0"
+    assert third.status_code == 429
+    assert third.json()["detail"] == "rate limit exceeded"
+    assert third.headers["retry-after"] == "60"
+
+
+def test_api_rate_limit_uses_api_key_identity_when_present(
+    auth_rate_limited_client: TestClient,
+) -> None:
+    read_headers = {"X-Feedback-Agent-Key": "read-key"}
+    write_headers = {"X-Feedback-Agent-Key": "write-key"}
+
+    first_reader = auth_rate_limited_client.get("/reports", headers=read_headers)
+    second_reader = auth_rate_limited_client.get("/reports", headers=read_headers)
+    writer = auth_rate_limited_client.get("/reports", headers=write_headers)
+
+    assert first_reader.status_code == 200
+    assert second_reader.status_code == 429
+    assert writer.status_code == 200
 
 
 def test_cors_headers_are_sent_for_allowed_origin(client: TestClient) -> None:

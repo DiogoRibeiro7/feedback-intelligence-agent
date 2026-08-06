@@ -58,3 +58,8 @@ This roadmap is designed to evolve the repository from a compact portfolio proje
 - [x] Add Markdown exports for saved insight reports.
 - [x] Add active-learning queues from captured reviewer judgements.
 - [x] Add evaluator assignment and status transitions for active-learning queue items.
+
+## Phase 8 — Production hardening
+
+- [x] Add optional role-based API-key access control.
+- [x] Add optional in-process API rate limiting.

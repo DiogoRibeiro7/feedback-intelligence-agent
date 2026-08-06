@@ -21,7 +21,7 @@ external dependency to poll in the default local mode, so it does not fake a
 database/LLM check. If you later add a hard dependency (a managed vector DB, a
 remote LLM), extend `/ready` to verify it.
 
-## Configuration and secrets
+## Configuration, secrets, and API access
 
 All runtime configuration comes from `FEEDBACK_AGENT_*` environment variables
 (see [`config.py`](../src/feedback_intelligence_agent/config.py) and the table in
@@ -35,6 +35,27 @@ from `local`. They are **never** stored in the repository:
 - Docker Compose prod-like: a local `deploy/.env.prod` file (gitignored).
 - ECS Fargate: AWS Secrets Manager, referenced by ARN via `secrets[].valueFrom`.
 - Fly.io: `fly secrets set ...`.
+
+API-key authorization is optional and disabled by default. For a deployed
+service, set `FEEDBACK_AGENT_API_AUTH_ENABLED=true` and provide one or more
+role keys:
+
+- `FEEDBACK_AGENT_API_READER_KEY`: read/query/list/fetch/export routes.
+- `FEEDBACK_AGENT_API_WRITER_KEY`: reader routes plus persisted product workflows.
+- `FEEDBACK_AGENT_API_ADMIN_KEY`: writer routes plus index rebuilds and ingestion jobs.
+
+Clients pass the key in `X-Feedback-Agent-Key`. `GET /health` and `GET /ready`
+remain unauthenticated so load balancers and orchestrators can probe the
+service.
+
+The app also ships optional in-process fixed-window rate limiting. Enable it
+with `FEEDBACK_AGENT_API_RATE_LIMIT_ENABLED=true` and tune
+`FEEDBACK_AGENT_API_RATE_LIMIT_MAX_REQUESTS` plus
+`FEEDBACK_AGENT_API_RATE_LIMIT_WINDOW_SECONDS`. The limiter keys by
+`X-Feedback-Agent-Key` when present, otherwise by client IP, and returns `429`
+with `Retry-After` after the caller exhausts the window. For multi-instance
+deployments, enforce shared limits at an API gateway, load balancer, or another
+centralized edge layer.
 
 ## Deployment paths
 
@@ -133,7 +154,8 @@ What they **do not** include:
   container filesystem / a volume. For multi-instance deployments, switch to
   the Qdrant backend (`FEEDBACK_AGENT_VECTOR_STORE=qdrant`) and point it at a
   shared instance.
-- No authentication or rate limiting on the API (see the production
+- Optional API-key authorization and in-process rate limiting are included, but
+  no distributed rate-limit backend is provided by the app (see the production
   considerations in [architecture.md](architecture.md)).
 
 The templates require you to fill in account, registry, region, and domain

@@ -123,7 +123,7 @@ Routing is keyword/intent based (`TOOL_ROUTES`) with no function-calling API, so
 
 ### API
 
-`api.py` exposes the system through FastAPI. The API validates input and returns typed responses.
+`api.py` exposes the system through FastAPI. The API validates input and returns typed responses. Optional API-key authorization in `auth.py` protects routes with `reader`, `writer`, and `admin` roles when `FEEDBACK_AGENT_API_AUTH_ENABLED=true`, while leaving health and readiness probes open. Optional fixed-window rate limiting in `rate_limit.py` protects non-probe routes per API key or client IP when `FEEDBACK_AGENT_API_RATE_LIMIT_ENABLED=true`.
 
 ### Saved reports
 
@@ -148,7 +148,7 @@ Routing is keyword/intent based (`TOOL_ROUTES`) with no function-calling API, so
 - Add richer report sharing formats beyond Markdown stakeholder handoff.
 - Add regression tests for prompts and retrieval behavior.
 - Replace the deterministic reranker with a cross-encoder or external LLM judge.
-- Add role-based access control around the API.
+- Add distributed API rate limiting for multi-instance deployments.
 
 ## Production considerations
 
@@ -156,7 +156,7 @@ A production version should include:
 
 - Tenant isolation.
 - Broader privacy policy coverage for names, addresses, and tenant-specific identifiers.
-- Rate limiting and authentication.
+- Distributed rate limiting and stronger identity integration beyond API keys.
 - Prompt injection checks (a deterministic baseline ships in `guardrails.py`).
 - Data lineage for every generated answer.
 - Human feedback loops with reviewer attribution and lifecycle states.

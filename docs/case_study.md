@@ -340,7 +340,8 @@ AWS Secrets Manager, or `fly secrets`. CI
 ([.github/workflows/ci.yml](../.github/workflows/ci.yml)) runs ruff lint, ruff
 format check, mypy strict, pytest with a coverage floor, and a package build
 across Python 3.10–3.12. Scope and honest limitations (no IaC, autoscaling, TLS,
-auth, or rate limiting) are documented in [deployment.md](deployment.md).
+distributed rate limiting, or full identity-provider integration) are documented
+in [deployment.md](deployment.md).
 
 ## Trade-offs
 
@@ -383,5 +384,5 @@ Tracked in [ROADMAP.md](../ROADMAP.md). High-value next steps:
   distribution, citation coverage, and hallucination rate.
 - **Data engineering:** broader privacy policy coverage, durable stream
   checkpoints, and production Parquet/table-runtime exports.
-- **Product & platform:** human feedback capture on answers, Slack delivery,
-  multi-tenant isolation, and auth/rate limiting on the API.
+- **Product & platform:** stronger tenant isolation, distributed rate limiting,
+  and identity-provider integration beyond API keys.

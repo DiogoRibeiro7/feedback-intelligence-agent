@@ -502,6 +502,13 @@ Environment variables:
 | `FEEDBACK_AGENT_REPORT_STORE_PATH` | `.artifacts/reports` | Directory holding one JSON file per saved insight report. |
 | `FEEDBACK_AGENT_HUMAN_FEEDBACK_STORE_PATH` | `.artifacts/human_feedback` | Directory holding one JSON file per human answer feedback record. |
 | `FEEDBACK_AGENT_ACTIVE_LEARNING_STATE_STORE_PATH` | `.artifacts/active_learning` | Directory holding assignment and workflow state for active-learning queue items. |
+| `FEEDBACK_AGENT_API_AUTH_ENABLED` | `false` | Require `X-Feedback-Agent-Key` on protected API routes. Health and readiness stay open. |
+| `FEEDBACK_AGENT_API_READER_KEY` | empty | API key allowed to query, stream, list, fetch, and export resources. |
+| `FEEDBACK_AGENT_API_WRITER_KEY` | empty | API key allowed to use reader routes plus persisted product workflows. |
+| `FEEDBACK_AGENT_API_ADMIN_KEY` | empty | API key allowed to use writer routes plus index and ingestion-job admin routes. |
+| `FEEDBACK_AGENT_API_RATE_LIMIT_ENABLED` | `false` | Enable in-process fixed-window API rate limiting for non-probe routes. |
+| `FEEDBACK_AGENT_API_RATE_LIMIT_MAX_REQUESTS` | `120` | Maximum requests per caller identity in each rate-limit window. |
+| `FEEDBACK_AGENT_API_RATE_LIMIT_WINDOW_SECONDS` | `60.0` | Rate-limit window length in seconds. |
 | `FEEDBACK_AGENT_EMAIL_SMTP_HOST` | empty | SMTP host used only when sending email summaries. |
 | `FEEDBACK_AGENT_EMAIL_SMTP_PORT` | `587` | SMTP port used for email summaries. |
 | `FEEDBACK_AGENT_EMAIL_FROM_ADDRESS` | `feedback-agent@example.local` | Sender address for email summaries. |
@@ -528,6 +535,39 @@ Environment variables:
 | `OLLAMA_MODEL` | `llama3.2` | Model name for the Ollama provider. |
 
 Create a local `.env` from `.env.example` if needed.
+
+### API access control
+
+API key authorization is disabled by default for local demos and CI. Enable it
+with `FEEDBACK_AGENT_API_AUTH_ENABLED=true` and provide at least one role key:
+
+```bash
+export FEEDBACK_AGENT_API_AUTH_ENABLED=true
+export FEEDBACK_AGENT_API_READER_KEY=read-local
+export FEEDBACK_AGENT_API_WRITER_KEY=write-local
+export FEEDBACK_AGENT_API_ADMIN_KEY=admin-local
+
+curl http://127.0.0.1:8000/reports \
+  -H "X-Feedback-Agent-Key: read-local"
+```
+
+`reader` keys can query, stream, list, fetch, and export resources. `writer`
+keys can also create reports, submit human feedback, send summaries, chat, and
+update active-learning workflow state. `admin` keys can also rebuild indexes
+and submit ingestion jobs. `GET /health` and `GET /ready` remain open for
+deployment probes.
+
+Optional rate limiting can be enabled independently:
+
+```bash
+export FEEDBACK_AGENT_API_RATE_LIMIT_ENABLED=true
+export FEEDBACK_AGENT_API_RATE_LIMIT_MAX_REQUESTS=120
+export FEEDBACK_AGENT_API_RATE_LIMIT_WINDOW_SECONDS=60
+```
+
+The limiter is in-process and fixed-window. It keys by `X-Feedback-Agent-Key`
+when present, otherwise by client IP, and returns `429` plus `Retry-After` when
+the caller exceeds the configured budget.
 
 ### LLM providers
 
