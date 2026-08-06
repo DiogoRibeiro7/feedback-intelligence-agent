@@ -30,9 +30,11 @@ from feedback_intelligence_agent.factory import (
     build_report_store,
 )
 from feedback_intelligence_agent.human_feedback import (
+    HumanFeedbackAnalytics,
     HumanFeedbackRecord,
     HumanFeedbackSummary,
     SubmitHumanFeedbackRequest,
+    summarise_human_feedback,
 )
 from feedback_intelligence_agent.jobs import JobRequest, JobResult, run_ingestion_job
 from feedback_intelligence_agent.memory import ConversationMemory
@@ -302,6 +304,11 @@ def create_app() -> FastAPI:
     def list_answer_feedback(tenant_id: str | None = None) -> list[HumanFeedbackSummary]:
         """Return human feedback summaries."""
         return human_feedback_store.list(tenant_id=tenant_id)
+
+    @app.get("/answer-feedback/analytics", response_model=HumanFeedbackAnalytics)
+    def answer_feedback_analytics(tenant_id: str | None = None) -> HumanFeedbackAnalytics:
+        """Return aggregate human answer feedback metrics."""
+        return summarise_human_feedback(human_feedback_store.list(tenant_id=tenant_id))
 
     @app.get("/answer-feedback/{feedback_id}", response_model=HumanFeedbackRecord)
     def get_answer_feedback(feedback_id: str) -> HumanFeedbackRecord:

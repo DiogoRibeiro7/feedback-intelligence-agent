@@ -259,6 +259,7 @@ Notable elements:
   not useful through [human_feedback.py](../src/feedback_intelligence_agent/human_feedback.py).
   The API, CLI, and frontend share the same JSON-backed store, preserving the
   full `AgentAnswer` alongside optional comments, tags, and linked report IDs.
+  The same records power useful-rate analytics by route and tenant.
 
 ## Evaluation strategy
 
@@ -311,7 +312,8 @@ streaming `POST /query/stream` (SSE, no extra dependencies), `POST /chat` plus
 conversation retrieval, saved report endpoints (`POST /reports`, `GET /reports`,
 `GET /reports/{report_id}`, `POST /reports/email-summary`), answer feedback
 endpoints (`POST /answer-feedback`, `GET /answer-feedback`,
-`GET /answer-feedback/{feedback_id}`), synchronous `POST /index`,
+`GET /answer-feedback/analytics`, `GET /answer-feedback/{feedback_id}`),
+synchronous `POST /index`,
 asynchronous ingestion jobs (`POST /ingestion/jobs` + polling),
 and `GET /health` (liveness) and `GET /ready` (readiness) probes. Asynchronous ingestion uses FastAPI
 `BackgroundTasks` ([jobs.py](../src/feedback_intelligence_agent/jobs.py)) — no

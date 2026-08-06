@@ -131,7 +131,7 @@ Routing is keyword/intent based (`TOOL_ROUTES`) with no function-calling API, so
 
 ### Human feedback
 
-`human_feedback.py` persists reviewer judgements on generated `AgentAnswer` payloads. Records capture the tenant ID, question, full answer package, useful/not useful rating, optional comment, linked report ID, tags, and creation time. The default `JsonHumanFeedbackStore` writes one record file per ID under `.artifacts/human_feedback`, and the API and CLI expose create, tenant-filtered list, and fetch workflows.
+`human_feedback.py` persists reviewer judgements on generated `AgentAnswer` payloads. Records capture the tenant ID, question, full answer package, useful/not useful rating, optional comment, linked report ID, tags, and creation time. The default `JsonHumanFeedbackStore` writes one record file per ID under `.artifacts/human_feedback`, and the API and CLI expose create, tenant-filtered list, analytics, and fetch workflows.
 
 ### Email summaries
 

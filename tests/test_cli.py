@@ -362,6 +362,23 @@ def test_answer_feedback_commands_submit_list_and_get(tmp_path: Path) -> None:
     assert other_tenant.exit_code == 0, other_tenant.output
     assert json.loads(other_tenant.stdout) == []
 
+    analytics = stdout_runner.invoke(
+        app,
+        [
+            "answer-feedback",
+            "analytics",
+            "--tenant-id",
+            "acme",
+            "--store-path",
+            str(store_path),
+        ],
+    )
+    assert analytics.exit_code == 0, analytics.output
+    payload = json.loads(analytics.stdout)
+    assert payload["total"] == 1
+    assert payload["useful_rate"] == 1.0
+    assert payload["by_tenant"][0]["key"] == "acme"
+
     fetched = stdout_runner.invoke(
         app,
         ["answer-feedback", "get", feedback_id, "--store-path", str(store_path)],

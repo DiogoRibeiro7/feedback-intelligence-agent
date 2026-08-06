@@ -901,10 +901,13 @@ The API exposes:
 ```text
 POST /answer-feedback
 GET /answer-feedback
+GET /answer-feedback/analytics
 GET /answer-feedback/<feedback_id>
 ```
 
 `GET /answer-feedback?tenant_id=<tenant>` scopes the list view to one tenant.
+`GET /answer-feedback/analytics?tenant_id=<tenant>` returns useful/not-useful
+counts, useful rate, comment coverage, and breakdowns by route and tenant.
 
 The CLI can answer a question and capture the reviewer judgement in one step:
 
@@ -916,6 +919,7 @@ poetry run feedback-agent answer-feedback submit "Why is onboarding slow?" \
   --tag onboarding
 
 poetry run feedback-agent answer-feedback list --tenant-id acme
+poetry run feedback-agent answer-feedback analytics --tenant-id acme
 poetry run feedback-agent answer-feedback get <feedback_id>
 ```
 

@@ -42,6 +42,7 @@ from feedback_intelligence_agent.human_feedback import (
     HumanFeedbackRating,
     JsonHumanFeedbackStore,
     SubmitHumanFeedbackRequest,
+    summarise_human_feedback,
 )
 from feedback_intelligence_agent.index_updates import update_json_index
 from feedback_intelligence_agent.ingestion import load_feedback_csv
@@ -682,6 +683,22 @@ def answer_feedback_list(
     configure_logging()
     summaries = JsonHumanFeedbackStore(store_path).list(tenant_id=tenant_id)
     typer.echo(json.dumps([summary.model_dump(mode="json") for summary in summaries], indent=2))
+
+
+@answer_feedback_app.command("analytics")
+def answer_feedback_analytics(
+    tenant_id: Annotated[
+        str | None, typer.Option(help="Only summarise feedback for this tenant id.")
+    ] = None,
+    store_path: Annotated[
+        Path, typer.Option(help="Directory holding answer feedback JSON files.")
+    ] = Path(".artifacts/human_feedback"),
+) -> None:
+    """Summarise useful/not-useful human feedback."""
+    configure_logging()
+    summaries = JsonHumanFeedbackStore(store_path).list(tenant_id=tenant_id)
+    analytics = summarise_human_feedback(summaries)
+    typer.echo(analytics.model_dump_json(indent=2))
 
 
 @answer_feedback_app.command("get")

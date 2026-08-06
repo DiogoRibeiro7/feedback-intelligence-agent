@@ -4,7 +4,10 @@ All notable changes to this project are documented here.
 
 ## Unreleased
 
-No unreleased changes yet.
+### Added
+
+- Human answer feedback analytics with useful/not-useful rates, comment counts,
+  and route/tenant breakdowns through the API and CLI.
 
 ## 0.3.0 - 2026-08-06
 

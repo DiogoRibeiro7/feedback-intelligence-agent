@@ -51,3 +51,7 @@ This roadmap is designed to evolve the repository from a compact portfolio proje
 - [x] Add Slack or email summaries.
 - [x] Add human feedback capture on generated answers.
 - [x] Add multi-tenant support.
+
+## Phase 7 — Feedback operations
+
+- [x] Add human feedback analytics by route and tenant.

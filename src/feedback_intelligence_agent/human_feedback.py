@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import re
 import uuid
-from collections.abc import Iterable
+from collections.abc import Callable, Iterable
 from datetime import datetime, timezone
 from enum import Enum
 from pathlib import Path
@@ -121,6 +121,28 @@ class HumanFeedbackSummary(BaseModel):
     tags: list[str] = Field(default_factory=list)
 
 
+class HumanFeedbackGroupStats(BaseModel):
+    """Aggregated feedback counts for a route or tenant."""
+
+    key: str
+    total: int = Field(ge=0)
+    useful: int = Field(ge=0)
+    not_useful: int = Field(ge=0)
+    useful_rate: float = Field(ge=0.0, le=1.0)
+
+
+class HumanFeedbackAnalytics(BaseModel):
+    """Aggregate useful/not-useful feedback metrics."""
+
+    total: int = Field(ge=0)
+    useful: int = Field(ge=0)
+    not_useful: int = Field(ge=0)
+    useful_rate: float = Field(ge=0.0, le=1.0)
+    with_comments: int = Field(ge=0)
+    by_route: list[HumanFeedbackGroupStats] = Field(default_factory=list)
+    by_tenant: list[HumanFeedbackGroupStats] = Field(default_factory=list)
+
+
 class HumanFeedbackStore(Protocol):
     """Protocol implemented by human feedback persistence backends."""
 
@@ -226,6 +248,24 @@ def _sort_summaries(
     )
 
 
+def summarise_human_feedback(
+    summaries: Iterable[HumanFeedbackSummary],
+) -> HumanFeedbackAnalytics:
+    """Aggregate answer feedback summaries for monitoring and review loops."""
+    records = list(summaries)
+    useful = sum(1 for record in records if record.rating == HumanFeedbackRating.useful)
+    not_useful = sum(1 for record in records if record.rating == HumanFeedbackRating.not_useful)
+    return HumanFeedbackAnalytics(
+        total=len(records),
+        useful=useful,
+        not_useful=not_useful,
+        useful_rate=_rate(useful, len(records)),
+        with_comments=sum(1 for record in records if record.has_comment),
+        by_route=_group_stats(records, key=lambda record: record.route),
+        by_tenant=_group_stats(records, key=lambda record: record.tenant_id),
+    )
+
+
 def _validate_human_feedback_id(feedback_id: str, *, field_name: str = "feedback_id") -> str:
     if not _FEEDBACK_ID_PATTERN.match(feedback_id):
         raise ValueError(
@@ -239,3 +279,38 @@ def _matches_tenant(value: str, tenant_id: str | None) -> bool:
     if tenant_id is None:
         return True
     return value.lower() == tenant_id.strip().lower()
+
+
+def _group_stats(
+    records: list[HumanFeedbackSummary],
+    *,
+    key: Callable[[HumanFeedbackSummary], str],
+) -> list[HumanFeedbackGroupStats]:
+    grouped: dict[str, list[HumanFeedbackSummary]] = {}
+    for record in records:
+        grouped.setdefault(key(record), []).append(record)
+    stats = [
+        _stats_for_group(group_key, group_records) for group_key, group_records in grouped.items()
+    ]
+    return sorted(stats, key=lambda item: (-item.total, item.key))
+
+
+def _stats_for_group(
+    key: str,
+    records: list[HumanFeedbackSummary],
+) -> HumanFeedbackGroupStats:
+    useful = sum(1 for record in records if record.rating == HumanFeedbackRating.useful)
+    not_useful = sum(1 for record in records if record.rating == HumanFeedbackRating.not_useful)
+    return HumanFeedbackGroupStats(
+        key=key,
+        total=len(records),
+        useful=useful,
+        not_useful=not_useful,
+        useful_rate=_rate(useful, len(records)),
+    )
+
+
+def _rate(numerator: int, denominator: int) -> float:
+    if denominator == 0:
+        return 0.0
+    return round(numerator / denominator, 3)

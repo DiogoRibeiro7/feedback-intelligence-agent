@@ -9,6 +9,7 @@ from feedback_intelligence_agent.human_feedback import (
     InMemoryHumanFeedbackStore,
     JsonHumanFeedbackStore,
     SubmitHumanFeedbackRequest,
+    summarise_human_feedback,
 )
 from feedback_intelligence_agent.schemas import AgentAnswer
 
@@ -76,6 +77,50 @@ def test_json_human_feedback_store_rejects_unsafe_ids(tmp_path: Path) -> None:
 
     with pytest.raises(ValueError, match="invalid feedback_id"):
         store.get("../bad")
+
+
+def test_summarise_human_feedback_groups_by_route_and_tenant() -> None:
+    store = InMemoryHumanFeedbackStore()
+    store.save(
+        SubmitHumanFeedbackRequest(
+            result=make_answer(),
+            rating=HumanFeedbackRating.useful,
+            tenant_id="acme",
+            comment="Useful.",
+        )
+    )
+    store.save(
+        SubmitHumanFeedbackRequest(
+            result=make_answer(),
+            rating=HumanFeedbackRating.not_useful,
+            tenant_id="acme",
+        )
+    )
+    store.save(
+        SubmitHumanFeedbackRequest(
+            result=make_answer("Which integrations failed?").model_copy(
+                update={"route": "integrations"}
+            ),
+            rating=HumanFeedbackRating.useful,
+            tenant_id="cobalt",
+        )
+    )
+
+    analytics = summarise_human_feedback(store.list())
+
+    assert analytics.total == 3
+    assert analytics.useful == 2
+    assert analytics.not_useful == 1
+    assert analytics.useful_rate == 0.667
+    assert analytics.with_comments == 1
+    assert [(item.key, item.total, item.useful_rate) for item in analytics.by_route] == [
+        ("onboarding", 2, 0.5),
+        ("integrations", 1, 1.0),
+    ]
+    assert [(item.key, item.total, item.useful_rate) for item in analytics.by_tenant] == [
+        ("acme", 2, 0.5),
+        ("cobalt", 1, 1.0),
+    ]
 
 
 def test_human_feedback_request_rejects_unsafe_report_ids() -> None:

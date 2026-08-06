@@ -488,6 +488,42 @@ def test_answer_feedback_can_be_listed_by_tenant(client: TestClient) -> None:
     assert [summary["feedback_id"] for summary in listed.json()] == [acme.json()["feedback_id"]]
 
 
+def test_answer_feedback_analytics_summarises_by_tenant(client: TestClient) -> None:
+    query = client.post(
+        "/query",
+        json={"question": "Why are enterprise customers unhappy with onboarding?", "top_k": 3},
+    )
+    client.post(
+        "/answer-feedback",
+        json={
+            "result": query.json()["result"],
+            "rating": "useful",
+            "tenant_id": "acme",
+            "comment": "Good.",
+        },
+    )
+    client.post(
+        "/answer-feedback",
+        json={"result": query.json()["result"], "rating": "not_useful", "tenant_id": "acme"},
+    )
+    client.post(
+        "/answer-feedback",
+        json={"result": query.json()["result"], "rating": "useful", "tenant_id": "cobalt"},
+    )
+
+    all_tenants = client.get("/answer-feedback/analytics")
+    acme = client.get("/answer-feedback/analytics", params={"tenant_id": "acme"})
+
+    assert all_tenants.status_code == 200
+    assert all_tenants.json()["total"] == 3
+    assert all_tenants.json()["useful_rate"] == 0.667
+    assert {item["key"] for item in all_tenants.json()["by_tenant"]} == {"acme", "cobalt"}
+    assert acme.status_code == 200
+    assert acme.json()["total"] == 2
+    assert acme.json()["useful_rate"] == 0.5
+    assert acme.json()["with_comments"] == 1
+
+
 def test_submit_ingestion_job_runs_and_succeeds(client: TestClient, tmp_path: Path) -> None:
     index_path = tmp_path / "job_index.json"
     submit = client.post(
