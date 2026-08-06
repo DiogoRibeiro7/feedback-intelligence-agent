@@ -68,6 +68,7 @@ feedback-intelligence-agent/
 │   ├── guardrails.py         # Deterministic safety guardrails
 │   ├── index_updates.py      # Incremental JSON vector index updates
 │   ├── ingestion.py          # CSV feedback loader
+│   ├── lakehouse.py          # Local Delta/Iceberg-style feedback export
 │   ├── lexical_search.py     # BM25 lexical retriever
 │   ├── llm.py                # LLM abstraction and local fallback
 │   ├── privacy.py            # PII and credential redaction helpers
@@ -705,6 +706,34 @@ poetry run feedback-agent stream-ingest \
   --input examples/stream_feedback.jsonl \
   --update-index \
   --index-path .artifacts/vector_store.json
+```
+
+## Lakehouse export
+
+`lakehouse.py` exports validated, redacted feedback records into a local
+lakehouse-style table. The default data files are partitioned JSONL, with a
+top-level manifest plus either Delta-style `_delta_log` metadata or
+Iceberg-style `metadata/v1.metadata.json` metadata. This keeps the default path
+dependency-light while preserving table schema, partitions, file counts, and
+record counts for downstream ingestion.
+
+Export the sample feedback with Delta-style metadata:
+
+```bash
+poetry run feedback-agent export-lakehouse \
+  --input data/sample_feedback.csv \
+  --output .artifacts/lakehouse/feedback \
+  --table-format delta
+```
+
+Use Iceberg-style metadata and a different partition layout:
+
+```bash
+poetry run feedback-agent export-lakehouse \
+  --input data/sample_feedback.csv \
+  --output .artifacts/lakehouse/feedback_iceberg \
+  --table-format iceberg \
+  --partition-column created_month
 ```
 
 ## Telemetry

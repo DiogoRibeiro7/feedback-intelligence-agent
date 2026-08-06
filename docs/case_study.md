@@ -68,6 +68,7 @@ flowchart TB
     STREAM["Kafka / Kinesis / JSONL events"] --> SI["Streaming ingestion<br/>(streaming_ingestion.py)"]
     SI --> DC
     DC --> ING["Ingestion<br/>(ingestion.py)"]
+    ING --> LH["Lakehouse export<br/>(lakehouse.py)"]
     ING --> UPD["Incremental updates<br/>(index_updates.py)"]
     UPD --> PRV["PII redaction<br/>(privacy.py)"]
     PRV --> CH["Chunking<br/>(chunking.py)"]
@@ -168,6 +169,9 @@ stream dead-letter payloads. Valid rows are chunked into overlapping word window
 ([chunking.py](../src/feedback_intelligence_agent/chunking.py)), embedded with
 deterministic feature hashing
 ([embeddings.py](../src/feedback_intelligence_agent/embeddings.py)), and persisted.
+For analytics handoff, [lakehouse.py](../src/feedback_intelligence_agent/lakehouse.py)
+exports the same validated, redacted records into partitioned JSONL files with
+Delta-style or Iceberg-style metadata.
 
 Retrieval is exposed behind a single `Retriever` protocol
 ([retrieval.py](../src/feedback_intelligence_agent/retrieval.py)) with three
@@ -327,6 +331,10 @@ readable; each names what was given up.
   JSON index updates exercise the same validation and merge behavior as
   Kafka/Kinesis adapters, but production deployments still need durable
   checkpoints and operational monitoring.
+- **Local lakehouse metadata, not a table runtime.** The exporter writes
+  deterministic partitioned files and Delta/Iceberg-style metadata without
+  Spark, PyArrow, or object storage. Production would usually swap the data
+  writer to Parquet through the chosen lakehouse runtime.
 
 ## Future work
 
@@ -339,6 +347,6 @@ Tracked in [ROADMAP.md](../ROADMAP.md). High-value next steps:
 - **Evaluation & observability:** alerting and SLOs for latency, retrieval-score
   distribution, citation coverage, and hallucination rate.
 - **Data engineering:** broader privacy policy coverage, durable stream
-  checkpoints, and lakehouse exports.
+  checkpoints, and production Parquet/table-runtime exports.
 - **Product & platform:** human feedback capture on answers, saved insight
   reports, multi-tenant isolation, and auth/rate limiting on the API.

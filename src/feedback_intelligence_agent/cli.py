@@ -33,6 +33,11 @@ from feedback_intelligence_agent.factory import (
 from feedback_intelligence_agent.index_updates import update_json_index
 from feedback_intelligence_agent.ingestion import load_feedback_csv
 from feedback_intelligence_agent.jobs import JobRequest, run_ingestion_job
+from feedback_intelligence_agent.lakehouse import (
+    DEFAULT_PARTITION_COLUMNS,
+    LakehouseTableFormat,
+    export_feedback_lakehouse,
+)
 from feedback_intelligence_agent.prompt_registry import (
     LATEST_VERSION,
     PromptNotFoundError,
@@ -207,6 +212,38 @@ def update_index(
         embedding_dim=embedding_dim,
         chunk_size=chunk_size,
         chunk_overlap=chunk_overlap,
+        telemetry=build_telemetry(settings),
+    )
+    typer.echo(result.model_dump_json(indent=2))
+
+
+@app.command("export-lakehouse")
+def export_lakehouse(
+    input: Annotated[Path, typer.Option(help="Feedback CSV to export.")],
+    output: Annotated[Path, typer.Option(help="Output table directory.")] = Path(
+        ".artifacts/lakehouse/feedback"
+    ),
+    table_format: Annotated[
+        LakehouseTableFormat,
+        typer.Option(help="Lakehouse metadata layout to write."),
+    ] = LakehouseTableFormat.delta,
+    partition_column: Annotated[
+        list[str] | None,
+        typer.Option(
+            "--partition-column",
+            help="Partition column. Repeat to override the default created_date/channel layout.",
+        ),
+    ] = None,
+) -> None:
+    """Export validated feedback to a local lakehouse-style table."""
+    configure_logging()
+    settings = Settings()
+    records = load_feedback_csv(input, telemetry=build_telemetry(settings))
+    result = export_feedback_lakehouse(
+        records,
+        output,
+        table_format=table_format,
+        partition_columns=partition_column or DEFAULT_PARTITION_COLUMNS,
         telemetry=build_telemetry(settings),
     )
     typer.echo(result.model_dump_json(indent=2))

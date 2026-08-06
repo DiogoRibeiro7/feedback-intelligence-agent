@@ -169,6 +169,33 @@ def test_stream_ingest_command_can_update_index(tmp_path: Path) -> None:
     assert InMemoryVectorStore.load(index_path).chunks[0].source_id == "stream-inc-1"
 
 
+def test_export_lakehouse_command_writes_table_metadata(tmp_path: Path) -> None:
+    output = tmp_path / "lakehouse" / "feedback"
+
+    result = stdout_runner.invoke(
+        app,
+        [
+            "export-lakehouse",
+            "--input",
+            "data/sample_feedback.csv",
+            "--output",
+            str(output),
+            "--table-format",
+            "iceberg",
+            "--partition-column",
+            "created_month",
+        ],
+    )
+
+    assert result.exit_code == 0, result.output
+    payload = json.loads(result.stdout)
+    assert payload["table_format"] == "iceberg"
+    assert payload["records"] == 12
+    assert payload["partition_columns"] == ["created_month"]
+    assert (output / "_lakehouse_manifest.json").exists()
+    assert (output / "metadata" / "v1.metadata.json").exists()
+
+
 def test_query_command_applies_metadata_filters(tmp_path: Path) -> None:
     index_path = tmp_path / "vector_store.json"
     result = stdout_runner.invoke(

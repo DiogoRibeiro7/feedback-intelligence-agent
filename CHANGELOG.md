@@ -21,6 +21,8 @@ All notable changes to this project are documented here.
 - Incremental JSON vector index updates for CSV batches and accepted stream events.
 - Deterministic PII and credential redaction before chunking, indexing, and
   stream artifact persistence.
+- Local lakehouse-style feedback export with partitioned JSONL data files plus
+  Delta-style or Iceberg-style metadata manifests.
 
 ## 0.2.0 - 2026-08-05
 

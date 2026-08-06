@@ -14,6 +14,8 @@ CSV feedback / feedback streams
    ▼
 Validation and ingestion
    │
+   ├───────────────► Lakehouse export
+   │
    ▼
 PII redaction
    │
@@ -52,7 +54,7 @@ Cited answer + tool metadata + recommended actions + diagnostics
 
 ### Ingestion
 
-`ingestion.py` loads CSV data and validates each row with Pydantic. `streaming_ingestion.py` validates bounded JSONL, Kafka, or Kinesis feedback batches against the same schema, checkpoints accepted offsets, and can write invalid messages to a dead-letter JSONL file. `index_updates.py` merges validated records into the persisted JSON vector index by replacing chunks for matching `feedback_id`s. Invalid rows or messages are reported with clear locations, which makes data quality issues easier to debug.
+`ingestion.py` loads CSV data and validates each row with Pydantic. `streaming_ingestion.py` validates bounded JSONL, Kafka, or Kinesis feedback batches against the same schema, checkpoints accepted offsets, and can write invalid messages to a dead-letter JSONL file. `index_updates.py` merges validated records into the persisted JSON vector index by replacing chunks for matching `feedback_id`s. `lakehouse.py` exports validated, redacted records into partitioned local data files with Delta-style or Iceberg-style metadata. Invalid rows or messages are reported with clear locations, which makes data quality issues easier to debug.
 
 ### Chunking
 
@@ -61,6 +63,10 @@ Cited answer + tool metadata + recommended actions + diagnostics
 ### Privacy
 
 `privacy.py` provides deterministic regex redaction for emails, phone numbers, and obvious access tokens. It is applied before chunking/indexing and when writing accepted stream CSVs or dead-letter payloads.
+
+### Lakehouse export
+
+`lakehouse.py` writes dependency-light local tables for downstream analytics. It stores partitioned JSONL data files plus a top-level manifest and either Delta-style `_delta_log` actions or Iceberg-style `metadata/v1.metadata.json` metadata. Records are redacted before export, and partition columns are validated against known derived fields such as `created_date`, `created_month`, `channel`, `customer_segment`, and `rating`.
 
 ### Embeddings
 
@@ -117,6 +123,7 @@ Routing is keyword/intent based (`TOOL_ROUTES`) with no function-calling API, so
 - Replace the hashing embedding model with a neural embedding provider.
 - Replace the local vector store with a managed vector database.
 - Add durable stream checkpoints across process restarts.
+- Replace local JSONL lakehouse files with Parquet once a production table runtime is selected.
 - Export telemetry spans through additional OpenTelemetry collectors or vendors.
 - Add human feedback capture for answer quality.
 - Add regression tests for prompts and retrieval behavior.
