@@ -260,7 +260,9 @@ Notable elements:
   The API, CLI, and frontend share the same JSON-backed store, preserving the
   full `AgentAnswer` alongside optional comments, tags, and linked report IDs.
   The same records power useful-rate analytics by route and tenant plus an
-  active-learning queue for not-useful or low-confidence answers.
+  active-learning queue for not-useful or low-confidence answers. Queue items
+  can be assigned and moved through workflow states in
+  [active_learning.py](../src/feedback_intelligence_agent/active_learning.py).
 
 ## Evaluation strategy
 
@@ -315,6 +317,8 @@ conversation retrieval, saved report endpoints (`POST /reports`, `GET /reports`,
 `POST /reports/email-summary`), answer feedback
 endpoints (`POST /answer-feedback`, `GET /answer-feedback`,
 `GET /answer-feedback/analytics`, `GET /answer-feedback/active-learning`,
+`GET /answer-feedback/active-learning/states`,
+`PATCH /answer-feedback/active-learning/{feedback_id}`,
 `GET /answer-feedback/{feedback_id}`),
 synchronous `POST /index`,
 asynchronous ingestion jobs (`POST /ingestion/jobs` + polling),

@@ -11,6 +11,8 @@ All notable changes to this project are documented here.
 - Markdown exports for saved insight reports through the API and CLI.
 - Active-learning queue ranking for not-useful and low-confidence reviewed
   answers through the API and CLI.
+- Assignment and workflow-state transitions for active-learning queue items
+  with a JSON-backed local state store.
 
 ## 0.3.0 - 2026-08-06
 

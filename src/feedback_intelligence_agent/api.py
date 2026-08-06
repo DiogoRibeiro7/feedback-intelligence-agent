@@ -13,6 +13,12 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import Response, StreamingResponse
 
 from feedback_intelligence_agent import __version__
+from feedback_intelligence_agent.active_learning import (
+    ActiveLearningState,
+    ActiveLearningStatus,
+    UpdateActiveLearningStateRequest,
+    apply_active_learning_states,
+)
 from feedback_intelligence_agent.config import Settings
 from feedback_intelligence_agent.email_summaries import (
     EmailSummaryDelivery,
@@ -22,6 +28,7 @@ from feedback_intelligence_agent.email_summaries import (
     select_reports_for_summary,
 )
 from feedback_intelligence_agent.factory import (
+    build_active_learning_state_store,
     build_agent,
     build_conversation_store,
     build_human_feedback_store,
@@ -120,6 +127,7 @@ def create_app() -> FastAPI:
     job_store = build_job_store(settings)
     report_store = build_report_store(settings)
     human_feedback_store = build_human_feedback_store(settings)
+    active_learning_state_store = build_active_learning_state_store(settings)
 
     app = FastAPI(
         title="Feedback Intelligence Agent API",
@@ -335,11 +343,55 @@ def create_app() -> FastAPI:
     ) -> ActiveLearningQueue:
         """Return reviewed answers that should be queued for improvement work."""
         try:
-            return build_active_learning_queue(
+            queue = build_active_learning_queue(
                 human_feedback_store.list(tenant_id=tenant_id),
                 max_items=max_items,
                 low_confidence_threshold=low_confidence_threshold,
             )
+            return apply_active_learning_states(queue, active_learning_state_store.list())
+        except ValueError as exc:
+            raise HTTPException(status_code=400, detail=str(exc)) from exc
+
+    @app.get(
+        "/answer-feedback/active-learning/states",
+        response_model=list[ActiveLearningState],
+    )
+    def list_active_learning_states(
+        status: ActiveLearningStatus | None = None,
+    ) -> list[ActiveLearningState]:
+        """Return persisted active-learning workflow states."""
+        return active_learning_state_store.list(status=status)
+
+    @app.get(
+        "/answer-feedback/active-learning/{feedback_id}",
+        response_model=ActiveLearningState,
+    )
+    def get_active_learning_state(feedback_id: str) -> ActiveLearningState:
+        """Return workflow state for one active-learning queue item."""
+        try:
+            state = active_learning_state_store.get(feedback_id)
+        except ValueError as exc:
+            raise HTTPException(status_code=400, detail=str(exc)) from exc
+        if state is None:
+            raise HTTPException(status_code=404, detail="active-learning state not found")
+        return state
+
+    @app.patch(
+        "/answer-feedback/active-learning/{feedback_id}",
+        response_model=ActiveLearningState,
+    )
+    def update_active_learning_state(
+        feedback_id: str,
+        request: UpdateActiveLearningStateRequest,
+    ) -> ActiveLearningState:
+        """Assign or transition one active-learning queue item."""
+        try:
+            feedback = human_feedback_store.get(feedback_id)
+            if feedback is None:
+                raise HTTPException(status_code=404, detail="answer feedback not found")
+            return active_learning_state_store.update(feedback_id, request)
+        except HTTPException:
+            raise
         except ValueError as exc:
             raise HTTPException(status_code=400, detail=str(exc)) from exc
 

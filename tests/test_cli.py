@@ -339,6 +339,7 @@ def test_reports_email_summary_requires_recipient(tmp_path: Path) -> None:
 
 def test_answer_feedback_commands_submit_list_and_get(tmp_path: Path) -> None:
     store_path = tmp_path / "human_feedback"
+    state_store_path = tmp_path / "active_learning"
     index_path = tmp_path / "vector_store.json"
 
     saved = stdout_runner.invoke(
@@ -442,6 +443,8 @@ def test_answer_feedback_commands_submit_list_and_get(tmp_path: Path) -> None:
             "0.1",
             "--store-path",
             str(store_path),
+            "--state-store-path",
+            str(state_store_path),
         ],
     )
     assert queue.exit_code == 0, queue.output
@@ -451,6 +454,62 @@ def test_answer_feedback_commands_submit_list_and_get(tmp_path: Path) -> None:
     ]
     assert needs_work_items
     assert "not_useful" in needs_work_items[0]["reasons"]
+
+    updated = stdout_runner.invoke(
+        app,
+        [
+            "answer-feedback",
+            "active-learning-update",
+            needs_work_id,
+            "--status",
+            "assigned",
+            "--assignee",
+            "Diogo Ribeiro",
+            "--notes",
+            "Add an evaluation case.",
+            "--state-store-path",
+            str(state_store_path),
+        ],
+    )
+    assert updated.exit_code == 0, updated.output
+    updated_payload = json.loads(updated.stdout)
+    assert updated_payload["status"] == "assigned"
+    assert updated_payload["assignee"] == "Diogo Ribeiro"
+
+    states = stdout_runner.invoke(
+        app,
+        [
+            "answer-feedback",
+            "active-learning-states",
+            "--status",
+            "assigned",
+            "--state-store-path",
+            str(state_store_path),
+        ],
+    )
+    assert states.exit_code == 0, states.output
+    assert json.loads(states.stdout)[0]["feedback_id"] == needs_work_id
+
+    enriched_queue = stdout_runner.invoke(
+        app,
+        [
+            "answer-feedback",
+            "active-learning",
+            "--tenant-id",
+            "acme",
+            "--store-path",
+            str(store_path),
+            "--state-store-path",
+            str(state_store_path),
+        ],
+    )
+    assert enriched_queue.exit_code == 0, enriched_queue.output
+    enriched_payload = json.loads(enriched_queue.stdout)
+    enriched_items = [
+        item for item in enriched_payload["items"] if item["feedback_id"] == needs_work_id
+    ]
+    assert enriched_items[0]["workflow_status"] == "assigned"
+    assert enriched_items[0]["assignee"] == "Diogo Ribeiro"
 
 
 def test_answer_feedback_get_missing_exits_nonzero(tmp_path: Path) -> None:

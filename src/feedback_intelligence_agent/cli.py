@@ -10,6 +10,12 @@ from typing import Annotated
 
 import typer
 
+from feedback_intelligence_agent.active_learning import (
+    ActiveLearningStatus,
+    JsonActiveLearningStateStore,
+    UpdateActiveLearningStateRequest,
+    apply_active_learning_states,
+)
 from feedback_intelligence_agent.benchmarking import run_benchmark, write_benchmark_outputs
 from feedback_intelligence_agent.citations import render_citations
 from feedback_intelligence_agent.config import Settings
@@ -760,6 +766,9 @@ def answer_feedback_active_learning(
     store_path: Annotated[
         Path, typer.Option(help="Directory holding answer feedback JSON files.")
     ] = Path(".artifacts/human_feedback"),
+    state_store_path: Annotated[
+        Path, typer.Option(help="Directory holding active-learning state JSON files.")
+    ] = Path(".artifacts/active_learning"),
 ) -> None:
     """Rank reviewed answers for active-learning follow-up."""
     configure_logging()
@@ -770,10 +779,62 @@ def answer_feedback_active_learning(
             max_items=max_items,
             low_confidence_threshold=low_confidence_threshold,
         )
+        queue = apply_active_learning_states(
+            queue,
+            JsonActiveLearningStateStore(state_store_path).list(),
+        )
     except ValueError as exc:
         typer.echo(f"Error: {exc}", err=True)
         raise typer.Exit(code=2) from exc
     typer.echo(queue.model_dump_json(indent=2))
+
+
+@answer_feedback_app.command("active-learning-states")
+def answer_feedback_active_learning_states(
+    status: Annotated[
+        ActiveLearningStatus | None, typer.Option(help="Only list this workflow status.")
+    ] = None,
+    state_store_path: Annotated[
+        Path, typer.Option(help="Directory holding active-learning state JSON files.")
+    ] = Path(".artifacts/active_learning"),
+) -> None:
+    """List active-learning assignment and workflow states."""
+    configure_logging()
+    states = JsonActiveLearningStateStore(state_store_path).list(status=status)
+    typer.echo(json.dumps([state.model_dump(mode="json") for state in states], indent=2))
+
+
+@answer_feedback_app.command("active-learning-update")
+def answer_feedback_active_learning_update(
+    feedback_id: Annotated[str, typer.Argument(help="Answer feedback identifier.")],
+    status: Annotated[
+        ActiveLearningStatus | None, typer.Option(help="Workflow status to set.")
+    ] = None,
+    assignee: Annotated[str | None, typer.Option(help="Reviewer or owner to assign.")] = None,
+    notes: Annotated[str | None, typer.Option(help="Optional workflow notes.")] = None,
+    state_store_path: Annotated[
+        Path, typer.Option(help="Directory holding active-learning state JSON files.")
+    ] = Path(".artifacts/active_learning"),
+) -> None:
+    """Assign or transition one active-learning queue item."""
+    configure_logging()
+    payload: dict[str, object] = {}
+    if status is not None:
+        payload["status"] = status
+    if assignee is not None:
+        payload["assignee"] = assignee
+    if notes is not None:
+        payload["notes"] = notes
+    if not payload:
+        typer.echo("At least one of --status, --assignee, or --notes is required.", err=True)
+        raise typer.Exit(code=2)
+    try:
+        request = UpdateActiveLearningStateRequest.model_validate(payload)
+        state = JsonActiveLearningStateStore(state_store_path).update(feedback_id, request)
+    except ValueError as exc:
+        typer.echo(f"Error: {exc}", err=True)
+        raise typer.Exit(code=2) from exc
+    typer.echo(state.model_dump_json(indent=2))
 
 
 @answer_feedback_app.command("get")

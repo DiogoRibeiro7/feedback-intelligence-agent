@@ -75,6 +75,7 @@ class Settings(BaseSettings):
     job_store_path: Path = Field(default=Path(".artifacts/jobs"))
     report_store_path: Path = Field(default=Path(".artifacts/reports"))
     human_feedback_store_path: Path = Field(default=Path(".artifacts/human_feedback"))
+    active_learning_state_store_path: Path = Field(default=Path(".artifacts/active_learning"))
     email_smtp_host: str | None = Field(default=None)
     email_smtp_port: int = Field(default=587, ge=1, le=65535)
     email_from_address: str = Field(default="feedback-agent@example.local")

@@ -35,6 +35,10 @@ def client(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> TestClient:
         "FEEDBACK_AGENT_HUMAN_FEEDBACK_STORE_PATH",
         str(tmp_path / "human_feedback"),
     )
+    monkeypatch.setenv(
+        "FEEDBACK_AGENT_ACTIVE_LEARNING_STATE_STORE_PATH",
+        str(tmp_path / "active_learning"),
+    )
     return TestClient(create_app())
 
 
@@ -68,6 +72,10 @@ def tenant_client(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> TestClient
     monkeypatch.setenv(
         "FEEDBACK_AGENT_HUMAN_FEEDBACK_STORE_PATH",
         str(tmp_path / "human_feedback"),
+    )
+    monkeypatch.setenv(
+        "FEEDBACK_AGENT_ACTIVE_LEARNING_STATE_STORE_PATH",
+        str(tmp_path / "active_learning"),
     )
     return TestClient(create_app())
 
@@ -595,6 +603,7 @@ def test_answer_feedback_active_learning_returns_ranked_queue(client: TestClient
     ]
     assert payload["items"][0]["question"] == "What was wrong?"
     assert payload["items"][0]["priority_score"] == 1.1
+    assert payload["items"][0]["workflow_status"] == "open"
 
 
 def test_answer_feedback_active_learning_validates_options(client: TestClient) -> None:
@@ -602,6 +611,60 @@ def test_answer_feedback_active_learning_validates_options(client: TestClient) -
 
     assert response.status_code == 400
     assert "max_items" in response.json()["detail"]
+
+
+def test_answer_feedback_active_learning_state_can_be_updated_and_listed(
+    client: TestClient,
+) -> None:
+    query = client.post(
+        "/query",
+        json={"question": "Why are enterprise customers unhappy with onboarding?", "top_k": 3},
+    )
+    created = client.post(
+        "/answer-feedback",
+        json={
+            "result": query.json()["result"],
+            "rating": "not_useful",
+            "tenant_id": "acme",
+            "comment": "Needs a better action plan.",
+        },
+    )
+    feedback_id = created.json()["feedback_id"]
+
+    updated = client.patch(
+        f"/answer-feedback/active-learning/{feedback_id}",
+        json={
+            "status": "assigned",
+            "assignee": " Diogo Ribeiro ",
+            "notes": " Add retrieval regression. ",
+        },
+    )
+    fetched = client.get(f"/answer-feedback/active-learning/{feedback_id}")
+    listed = client.get("/answer-feedback/active-learning/states", params={"status": "assigned"})
+    queue = client.get("/answer-feedback/active-learning")
+
+    assert updated.status_code == 200
+    assert updated.json()["status"] == "assigned"
+    assert updated.json()["assignee"] == "Diogo Ribeiro"
+    assert updated.json()["notes"] == "Add retrieval regression."
+    assert fetched.status_code == 200
+    assert fetched.json() == updated.json()
+    assert listed.status_code == 200
+    assert [state["feedback_id"] for state in listed.json()] == [feedback_id]
+    matching_items = [item for item in queue.json()["items"] if item["feedback_id"] == feedback_id]
+    assert matching_items[0]["workflow_status"] == "assigned"
+    assert matching_items[0]["assignee"] == "Diogo Ribeiro"
+
+
+def test_answer_feedback_active_learning_state_requires_existing_feedback(
+    client: TestClient,
+) -> None:
+    response = client.patch(
+        "/answer-feedback/active-learning/missing",
+        json={"status": "assigned"},
+    )
+
+    assert response.status_code == 404
 
 
 def test_submit_ingestion_job_runs_and_succeeds(client: TestClient, tmp_path: Path) -> None:

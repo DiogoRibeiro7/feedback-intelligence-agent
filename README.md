@@ -501,6 +501,7 @@ Environment variables:
 | `FEEDBACK_AGENT_JOB_STORE_PATH` | `.artifacts/jobs` | Directory holding one JSON file per ingestion job. |
 | `FEEDBACK_AGENT_REPORT_STORE_PATH` | `.artifacts/reports` | Directory holding one JSON file per saved insight report. |
 | `FEEDBACK_AGENT_HUMAN_FEEDBACK_STORE_PATH` | `.artifacts/human_feedback` | Directory holding one JSON file per human answer feedback record. |
+| `FEEDBACK_AGENT_ACTIVE_LEARNING_STATE_STORE_PATH` | `.artifacts/active_learning` | Directory holding assignment and workflow state for active-learning queue items. |
 | `FEEDBACK_AGENT_EMAIL_SMTP_HOST` | empty | SMTP host used only when sending email summaries. |
 | `FEEDBACK_AGENT_EMAIL_SMTP_PORT` | `587` | SMTP port used for email summaries. |
 | `FEEDBACK_AGENT_EMAIL_FROM_ADDRESS` | `feedback-agent@example.local` | Sender address for email summaries. |
@@ -905,6 +906,9 @@ POST /answer-feedback
 GET /answer-feedback
 GET /answer-feedback/analytics
 GET /answer-feedback/active-learning
+GET /answer-feedback/active-learning/states
+GET /answer-feedback/active-learning/<feedback_id>
+PATCH /answer-feedback/active-learning/<feedback_id>
 GET /answer-feedback/<feedback_id>
 ```
 
@@ -912,7 +916,9 @@ GET /answer-feedback/<feedback_id>
 `GET /answer-feedback/analytics?tenant_id=<tenant>` returns useful/not-useful
 counts, useful rate, comment coverage, and breakdowns by route and tenant.
 `GET /answer-feedback/active-learning?tenant_id=<tenant>` ranks not-useful and
-low-confidence reviewed answers for follow-up work.
+low-confidence reviewed answers for follow-up work. Queue items can be assigned
+and moved through `open`, `assigned`, `in_progress`, `resolved`, and `dismissed`
+workflow states.
 
 The CLI can answer a question and capture the reviewer judgement in one step:
 
@@ -926,6 +932,10 @@ poetry run feedback-agent answer-feedback submit "Why is onboarding slow?" \
 poetry run feedback-agent answer-feedback list --tenant-id acme
 poetry run feedback-agent answer-feedback analytics --tenant-id acme
 poetry run feedback-agent answer-feedback active-learning --tenant-id acme
+poetry run feedback-agent answer-feedback active-learning-update <feedback_id> \
+  --status assigned \
+  --assignee "Diogo Ribeiro"
+poetry run feedback-agent answer-feedback active-learning-states --status assigned
 poetry run feedback-agent answer-feedback get <feedback_id>
 ```
 

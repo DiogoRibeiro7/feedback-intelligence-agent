@@ -158,6 +158,10 @@ class ActiveLearningQueueItem(BaseModel):
     tags: list[str] = Field(default_factory=list)
     priority_score: float = Field(ge=0.0)
     reasons: list[str] = Field(default_factory=list)
+    workflow_status: str = "open"
+    assignee: str | None = None
+    state_notes: str | None = None
+    state_updated_at: datetime | None = None
 
 
 class ActiveLearningQueue(BaseModel):
