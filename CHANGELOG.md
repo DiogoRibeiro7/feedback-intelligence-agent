@@ -4,6 +4,8 @@ All notable changes to this project are documented here.
 
 ## Unreleased
 
+## 0.4.0 - 2026-08-06
+
 ### Added
 
 - Human answer feedback analytics with useful/not-useful rates, comment counts,
