@@ -151,6 +151,13 @@ body {
   margin-bottom: 0.75rem;
 }
 
+.panel__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.45rem;
+}
+
 .panel__action {
   min-height: 2rem;
   border: 1px solid var(--border);

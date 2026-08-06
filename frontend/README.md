@@ -6,6 +6,8 @@ see the grounded answer, the retrieved sources/citations, latency and provider
 metadata, and supports an optional **streaming** mode that renders tokens as
 they arrive over Server-Sent Events. Generated answers can also be saved as
 insight reports through the backend report store.
+It also captures answer-level human feedback with useful/not useful controls
+backed by the API's JSON store.
 
 ## What it shows
 
@@ -18,6 +20,8 @@ insight reports through the backend report store.
   marker coverage across the queries run in the current browser session.
 - **Saved reports**: a save action after each answer plus a report summary list
   backed by `POST /reports` and `GET /reports`.
+- **Human feedback**: useful/not useful answer actions backed by
+  `POST /answer-feedback`.
 - A **streaming toggle**: off calls `POST /query`; on calls `POST /query/stream`
   and appends `content` chunks live, then renders the final `metadata` event.
 

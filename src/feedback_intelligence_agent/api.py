@@ -24,9 +24,15 @@ from feedback_intelligence_agent.email_summaries import (
 from feedback_intelligence_agent.factory import (
     build_agent,
     build_conversation_store,
+    build_human_feedback_store,
     build_index,
     build_job_store,
     build_report_store,
+)
+from feedback_intelligence_agent.human_feedback import (
+    HumanFeedbackRecord,
+    HumanFeedbackSummary,
+    SubmitHumanFeedbackRequest,
 )
 from feedback_intelligence_agent.jobs import JobRequest, JobResult, run_ingestion_job
 from feedback_intelligence_agent.memory import ConversationMemory
@@ -108,6 +114,7 @@ def create_app() -> FastAPI:
     conversation_store = build_conversation_store(settings)
     job_store = build_job_store(settings)
     report_store = build_report_store(settings)
+    human_feedback_store = build_human_feedback_store(settings)
 
     app = FastAPI(
         title="Feedback Intelligence Agent API",
@@ -282,6 +289,29 @@ def create_app() -> FastAPI:
         if report is None:
             raise HTTPException(status_code=404, detail="report not found")
         return report
+
+    @app.post("/answer-feedback", response_model=HumanFeedbackRecord, status_code=201)
+    def submit_answer_feedback(
+        request: SubmitHumanFeedbackRequest,
+    ) -> HumanFeedbackRecord:
+        """Persist a human judgement on a generated answer."""
+        return human_feedback_store.save(request)
+
+    @app.get("/answer-feedback", response_model=list[HumanFeedbackSummary])
+    def list_answer_feedback() -> list[HumanFeedbackSummary]:
+        """Return human feedback summaries."""
+        return human_feedback_store.list()
+
+    @app.get("/answer-feedback/{feedback_id}", response_model=HumanFeedbackRecord)
+    def get_answer_feedback(feedback_id: str) -> HumanFeedbackRecord:
+        """Return one human feedback record."""
+        try:
+            record = human_feedback_store.get(feedback_id)
+        except ValueError as exc:
+            raise HTTPException(status_code=400, detail=str(exc)) from exc
+        if record is None:
+            raise HTTPException(status_code=404, detail="answer feedback not found")
+        return record
 
     @app.post("/index")
     def index(request: IndexRequest) -> dict[str, str | int]:

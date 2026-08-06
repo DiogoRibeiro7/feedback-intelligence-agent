@@ -38,6 +38,7 @@ from feedback_intelligence_agent.tools import build_default_tools
 from feedback_intelligence_agent.vector_store import InMemoryVectorStore, VectorStore
 
 if TYPE_CHECKING:
+    from feedback_intelligence_agent.human_feedback import JsonHumanFeedbackStore
     from feedback_intelligence_agent.jobs import JsonJobStore
     from feedback_intelligence_agent.reports import JsonInsightReportStore
 
@@ -84,6 +85,13 @@ def build_report_store(settings: Settings) -> JsonInsightReportStore:
     from feedback_intelligence_agent.reports import JsonInsightReportStore
 
     return JsonInsightReportStore(settings.report_store_path)
+
+
+def build_human_feedback_store(settings: Settings) -> JsonHumanFeedbackStore:
+    """Construct the JSON-backed human answer feedback store."""
+    from feedback_intelligence_agent.human_feedback import JsonHumanFeedbackStore
+
+    return JsonHumanFeedbackStore(settings.human_feedback_store_path)
 
 
 def chunk_to_embedding_text(chunk: DocumentChunk) -> str:

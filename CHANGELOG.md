@@ -27,6 +27,8 @@ All notable changes to this project are documented here.
   frontend save/list controls.
 - Email digests for saved insight reports with render-only dry runs and optional
   SMTP delivery.
+- Human answer feedback capture with JSON persistence, API endpoints, CLI
+  commands, and frontend useful/not useful controls.
 
 ## 0.2.0 - 2026-08-05
 

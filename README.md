@@ -28,7 +28,7 @@ changing the rest of the system.
 | Retrieval | Dense hashing embeddings, BM25 lexical search, configurable hybrid ranking |
 | Evaluation | Retrieval metrics, answer-quality metrics, repeatable experiments, benchmark reports |
 | Serving | Typer CLI, FastAPI API, SSE streaming endpoint, TypeScript/Vite frontend |
-| Product workflows | Saved insight reports persisted as local JSON artifacts |
+| Product workflows | Saved insight reports and human answer feedback persisted as local JSON artifacts |
 | Privacy | Deterministic PII and credential redaction before chunking and index storage |
 | Operations | Docker, deployment manifests, optional telemetry, async ingestion jobs |
 | Local default | No API key, no network dependency, deterministic outputs for tests and demos |
@@ -68,6 +68,7 @@ feedback-intelligence-agent/
 │   ├── evaluation.py         # Retrieval and answer-quality metrics
 │   ├── experiments.py        # Repeatable experiment runner
 │   ├── guardrails.py         # Deterministic safety guardrails
+│   ├── human_feedback.py     # Human answer feedback models and stores
 │   ├── index_updates.py      # Incremental JSON vector index updates
 │   ├── ingestion.py          # CSV feedback loader
 │   ├── lakehouse.py          # Local Delta/Iceberg-style feedback export
@@ -496,6 +497,7 @@ Environment variables:
 | `FEEDBACK_AGENT_CONVERSATION_STORE_PATH` | `.artifacts/conversations` | Directory holding one JSON file per chat conversation. |
 | `FEEDBACK_AGENT_JOB_STORE_PATH` | `.artifacts/jobs` | Directory holding one JSON file per ingestion job. |
 | `FEEDBACK_AGENT_REPORT_STORE_PATH` | `.artifacts/reports` | Directory holding one JSON file per saved insight report. |
+| `FEEDBACK_AGENT_HUMAN_FEEDBACK_STORE_PATH` | `.artifacts/human_feedback` | Directory holding one JSON file per human answer feedback record. |
 | `FEEDBACK_AGENT_EMAIL_SMTP_HOST` | empty | SMTP host used only when sending email summaries. |
 | `FEEDBACK_AGENT_EMAIL_SMTP_PORT` | `587` | SMTP port used for email summaries. |
 | `FEEDBACK_AGENT_EMAIL_FROM_ADDRESS` | `feedback-agent@example.local` | Sender address for email summaries. |
@@ -879,6 +881,36 @@ poetry run feedback-agent reports get <report_id>
 
 The frontend adds a save action after each answer and shows saved report
 summaries from the same API store.
+
+## Human feedback capture
+
+Analysts can mark generated answers as useful or not useful and persist the
+full answer payload for later review (`human_feedback.py`). Each record stores
+the original question, `AgentAnswer`, rating, optional comment, optional linked
+report ID, tags, and creation time under `.artifacts/human_feedback` by default.
+
+The API exposes:
+
+```text
+POST /answer-feedback
+GET /answer-feedback
+GET /answer-feedback/<feedback_id>
+```
+
+The CLI can answer a question and capture the reviewer judgement in one step:
+
+```bash
+poetry run feedback-agent answer-feedback submit "Why is onboarding slow?" \
+  --rating useful \
+  --comment "Grounded and actionable." \
+  --tag onboarding
+
+poetry run feedback-agent answer-feedback list
+poetry run feedback-agent answer-feedback get <feedback_id>
+```
+
+The frontend shows `Useful` and `Needs work` actions after each generated
+answer, backed by the same `POST /answer-feedback` endpoint.
 
 ## Email summaries
 

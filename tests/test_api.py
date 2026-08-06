@@ -31,6 +31,10 @@ def client(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> TestClient:
     monkeypatch.setenv("FEEDBACK_AGENT_CONVERSATION_STORE_PATH", str(tmp_path / "conversations"))
     monkeypatch.setenv("FEEDBACK_AGENT_JOB_STORE_PATH", str(tmp_path / "jobs"))
     monkeypatch.setenv("FEEDBACK_AGENT_REPORT_STORE_PATH", str(tmp_path / "reports"))
+    monkeypatch.setenv(
+        "FEEDBACK_AGENT_HUMAN_FEEDBACK_STORE_PATH",
+        str(tmp_path / "human_feedback"),
+    )
     return TestClient(create_app())
 
 
@@ -328,6 +332,55 @@ def test_report_email_summary_send_requires_smtp_host(client: TestClient) -> Non
 
     assert response.status_code == 400
     assert "smtp_host is required" in response.json()["detail"]
+
+
+def test_answer_feedback_can_be_created_listed_and_fetched(client: TestClient) -> None:
+    query = client.post(
+        "/query",
+        json={"question": "Why are enterprise customers unhappy with onboarding?", "top_k": 3},
+    )
+    assert query.status_code == 200
+
+    created = client.post(
+        "/answer-feedback",
+        json={
+            "result": query.json()["result"],
+            "rating": "useful",
+            "comment": "Grounded and actionable.",
+            "report_id": "report-1",
+            "tags": ["Enterprise", "enterprise", "Onboarding"],
+        },
+    )
+
+    assert created.status_code == 201
+    record = created.json()
+    assert record["feedback_id"]
+    assert record["question"] == query.json()["result"]["question"]
+    assert record["rating"] == "useful"
+    assert record["comment"] == "Grounded and actionable."
+    assert record["report_id"] == "report-1"
+    assert record["tags"] == ["enterprise", "onboarding"]
+
+    listed = client.get("/answer-feedback")
+    assert listed.status_code == 200
+    summaries = listed.json()
+    assert summaries[0]["feedback_id"] == record["feedback_id"]
+    assert summaries[0]["rating"] == "useful"
+    assert summaries[0]["has_comment"] is True
+
+    fetched = client.get(f"/answer-feedback/{record['feedback_id']}")
+    assert fetched.status_code == 200
+    assert fetched.json() == record
+
+
+def test_answer_feedback_returns_404_for_unknown_id(client: TestClient) -> None:
+    response = client.get("/answer-feedback/does-not-exist")
+    assert response.status_code == 404
+
+
+def test_answer_feedback_rejects_invalid_ids(client: TestClient) -> None:
+    response = client.get("/answer-feedback/bad id!")
+    assert response.status_code == 400
 
 
 def test_submit_ingestion_job_runs_and_succeeds(client: TestClient, tmp_path: Path) -> None:

@@ -77,6 +77,27 @@ export interface SaveInsightReportRequest {
   notes?: string | null;
 }
 
+export type HumanFeedbackRating = "useful" | "not_useful";
+
+export interface SubmitHumanFeedbackRequest {
+  result: AgentAnswer;
+  rating: HumanFeedbackRating;
+  comment?: string | null;
+  report_id?: string | null;
+  tags?: string[];
+}
+
+export interface HumanFeedbackRecord {
+  feedback_id: string;
+  question: string;
+  result: AgentAnswer;
+  rating: HumanFeedbackRating;
+  created_at: string;
+  comment?: string | null;
+  report_id?: string | null;
+  tags: string[];
+}
+
 // Payload of the final `metadata` SSE event from POST /query/stream.
 export interface StreamMetadata {
   provider: string;
@@ -137,6 +158,20 @@ export async function listInsightReports(): Promise<InsightReportSummary[]> {
     throw new ApiError(await readError(response));
   }
   return (await response.json()) as InsightReportSummary[];
+}
+
+export async function submitHumanFeedback(
+  request: SubmitHumanFeedbackRequest,
+): Promise<HumanFeedbackRecord> {
+  const response = await fetch(`${API_BASE_URL}/answer-feedback`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(request),
+  });
+  if (!response.ok) {
+    throw new ApiError(await readError(response));
+  }
+  return (await response.json()) as HumanFeedbackRecord;
 }
 
 export interface StreamHandlers {

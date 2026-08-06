@@ -53,6 +53,8 @@ Cited answer + tool metadata + recommended actions + diagnostics
    │                       │
    │                       ▼
    │                  Email summaries
+   │
+   └───────────────► Human answer feedback
 ```
 
 ## Components
@@ -127,6 +129,10 @@ Routing is keyword/intent based (`TOOL_ROUTES`) with no function-calling API, so
 
 `reports.py` persists generated `AgentAnswer` payloads as saved insight reports with a title, tags, notes, citations, diagnostics, and creation time. The default `JsonInsightReportStore` writes one report file per ID under `.artifacts/reports`, and the API exposes create, list, and fetch endpoints for the frontend.
 
+### Human feedback
+
+`human_feedback.py` persists reviewer judgements on generated `AgentAnswer` payloads. Records capture the question, full answer package, useful/not useful rating, optional comment, linked report ID, tags, and creation time. The default `JsonHumanFeedbackStore` writes one record file per ID under `.artifacts/human_feedback`, and the API and CLI expose create, list, and fetch workflows.
+
 ### Email summaries
 
 `email_summaries.py` renders saved reports into concise plain-text email digests. The default path is render-only for local previews and CI; optional SMTP delivery is enabled by `FEEDBACK_AGENT_EMAIL_*` settings.
@@ -138,7 +144,7 @@ Routing is keyword/intent based (`TOOL_ROUTES`) with no function-calling API, so
 - Add durable stream checkpoints across process restarts.
 - Replace local JSONL lakehouse files with Parquet once a production table runtime is selected.
 - Export telemetry spans through additional OpenTelemetry collectors or vendors.
-- Add human feedback capture for answer quality.
+- Add feedback analytics and active-learning queues from captured reviewer judgements.
 - Add report sharing and export formats for stakeholder handoff.
 - Add regression tests for prompts and retrieval behavior.
 - Replace the deterministic reranker with a cross-encoder or external LLM judge.
@@ -153,6 +159,6 @@ A production version should include:
 - Rate limiting and authentication.
 - Prompt injection checks (a deterministic baseline ships in `guardrails.py`).
 - Data lineage for every generated answer.
-- Human feedback loops.
+- Human feedback loops with reviewer attribution and lifecycle states.
 - Monitoring for retrieval drift and answer degradation.
 - Canary evaluation before prompt or model changes.

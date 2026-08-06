@@ -99,6 +99,7 @@ flowchart TB
     FE["TypeScript + Vite UI<br/>(frontend/)"]
     REP["Saved insight reports<br/>(reports.py)"]
     EMAIL["Email summaries<br/>(email_summaries.py)"]
+    HF["Human answer feedback<br/>(human_feedback.py)"]
   end
 
   subgraph Cross["Cross-cutting"]
@@ -112,6 +113,8 @@ flowchart TB
   FE --> API
   API --> REP
   CLI --> REP
+  API --> HF
+  CLI --> HF
   REP --> EMAIL
   FAC -.builds.-> AG
   AG -.emits.-> TEL
@@ -250,6 +253,10 @@ Notable elements:
   [email_summaries.py](../src/feedback_intelligence_agent/email_summaries.py).
   Dry-run rendering is local and deterministic; SMTP delivery is optional and
   configuration-driven.
+- **Human answer feedback.** Reviewers can mark generated answers as useful or
+  not useful through [human_feedback.py](../src/feedback_intelligence_agent/human_feedback.py).
+  The API, CLI, and frontend share the same JSON-backed store, preserving the
+  full `AgentAnswer` alongside optional comments, tags, and linked report IDs.
 
 ## Evaluation strategy
 
@@ -300,8 +307,10 @@ with robust statistics (mean, median, p95, min, max).
 The API ([api.py](../src/feedback_intelligence_agent/api.py)) exposes `POST /query`,
 streaming `POST /query/stream` (SSE, no extra dependencies), `POST /chat` plus
 conversation retrieval, saved report endpoints (`POST /reports`, `GET /reports`,
-`GET /reports/{report_id}`, `POST /reports/email-summary`), synchronous
-`POST /index`, asynchronous ingestion jobs (`POST /ingestion/jobs` + polling),
+`GET /reports/{report_id}`, `POST /reports/email-summary`), answer feedback
+endpoints (`POST /answer-feedback`, `GET /answer-feedback`,
+`GET /answer-feedback/{feedback_id}`), synchronous `POST /index`,
+asynchronous ingestion jobs (`POST /ingestion/jobs` + polling),
 and `GET /health` (liveness) and `GET /ready` (readiness) probes. Asynchronous ingestion uses FastAPI
 `BackgroundTasks` ([jobs.py](../src/feedback_intelligence_agent/jobs.py)) — no
 Celery/Redis — and never leaks stack traces or paths to clients on failure.

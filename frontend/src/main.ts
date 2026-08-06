@@ -4,9 +4,11 @@ import {
   listInsightReports,
   postQuery,
   saveInsightReport,
+  submitHumanFeedback,
   streamQuery,
   type AgentAnswer,
   type Citation,
+  type HumanFeedbackRating,
   type InsightReportSummary,
   type StreamMetadata,
 } from "./api";
@@ -30,6 +32,8 @@ const latencyChart = el<HTMLElement>("latency-chart");
 const scoreChart = el<HTMLElement>("score-chart");
 const coverageChart = el<HTMLElement>("coverage-chart");
 const answerPanel = el<HTMLElement>("answer-panel");
+const feedbackUsefulBtn = el<HTMLButtonElement>("feedback-useful-btn");
+const feedbackNotUsefulBtn = el<HTMLButtonElement>("feedback-not-useful-btn");
 const saveReportBtn = el<HTMLButtonElement>("save-report-btn");
 const answerBox = el<HTMLElement>("answer");
 const actionsBox = el<HTMLElement>("actions");
@@ -61,7 +65,13 @@ function clearResults(): void {
   metaList.textContent = "";
   sourcesList.textContent = "";
   saveReportBtn.hidden = true;
+  setFeedbackButtonsVisible(false);
   latestResult = null;
+}
+
+function setFeedbackButtonsVisible(visible: boolean): void {
+  feedbackUsefulBtn.hidden = !visible;
+  feedbackNotUsefulBtn.hidden = !visible;
 }
 
 function renderActions(actions: string[]): void {
@@ -316,6 +326,7 @@ function renderAnswer(result: AgentAnswer): void {
   answerBox.textContent = result.answer;
   answerPanel.hidden = false;
   saveReportBtn.hidden = false;
+  setFeedbackButtonsVisible(true);
   renderActions(result.recommended_actions);
   renderMeta({
     route: result.route,
@@ -382,6 +393,26 @@ async function saveCurrentReport(): Promise<void> {
   }
 }
 
+async function submitCurrentFeedback(rating: HumanFeedbackRating): Promise<void> {
+  if (latestResult === null) {
+    return;
+  }
+  feedbackUsefulBtn.disabled = true;
+  feedbackNotUsefulBtn.disabled = true;
+  try {
+    const saved = await submitHumanFeedback({
+      result: latestResult,
+      rating,
+      tags: [latestResult.route],
+    });
+    const label = rating === "useful" ? "useful" : "needs-work";
+    setStatus(`Captured ${label} feedback ${saved.feedback_id}`, "info");
+  } finally {
+    feedbackUsefulBtn.disabled = false;
+    feedbackNotUsefulBtn.disabled = false;
+  }
+}
+
 function setBusy(busy: boolean): void {
   submitBtn.disabled = busy;
   submitBtn.textContent = busy ? "Working…" : "Ask";
@@ -424,6 +455,7 @@ async function runStreaming(question: string): Promise<void> {
           diagnostics: {},
         };
         saveReportBtn.hidden = false;
+        setFeedbackButtonsVisible(true);
         renderActions(metadata.recommended_actions);
         renderMeta({
           provider: metadata.provider,
@@ -467,6 +499,20 @@ saveReportBtn.addEventListener("click", () => {
   saveCurrentReport().catch((error: unknown) => {
     const message = error instanceof ApiError ? error.message : String(error);
     setStatus(`Save failed: ${message}`, "error");
+  });
+});
+
+feedbackUsefulBtn.addEventListener("click", () => {
+  submitCurrentFeedback("useful").catch((error: unknown) => {
+    const message = error instanceof ApiError ? error.message : String(error);
+    setStatus(`Feedback failed: ${message}`, "error");
+  });
+});
+
+feedbackNotUsefulBtn.addEventListener("click", () => {
+  submitCurrentFeedback("not_useful").catch((error: unknown) => {
+    const message = error instanceof ApiError ? error.message : String(error);
+    setStatus(`Feedback failed: ${message}`, "error");
   });
 });
 

@@ -38,6 +38,11 @@ from feedback_intelligence_agent.factory import (
     build_telemetry,
     load_or_build_index,
 )
+from feedback_intelligence_agent.human_feedback import (
+    HumanFeedbackRating,
+    JsonHumanFeedbackStore,
+    SubmitHumanFeedbackRequest,
+)
 from feedback_intelligence_agent.index_updates import update_json_index
 from feedback_intelligence_agent.ingestion import load_feedback_csv
 from feedback_intelligence_agent.jobs import JobRequest, run_ingestion_job
@@ -69,6 +74,8 @@ prompts_app = typer.Typer(help="Inspect and render versioned prompt templates.")
 app.add_typer(prompts_app, name="prompts")
 reports_app = typer.Typer(help="Create and inspect saved insight reports.")
 app.add_typer(reports_app, name="reports")
+answer_feedback_app = typer.Typer(help="Capture human feedback on generated answers.")
+app.add_typer(answer_feedback_app, name="answer-feedback")
 
 
 class RetrieverChoice(str, Enum):
@@ -583,6 +590,81 @@ def reports_email_summary(
         typer.echo(f"Error: {exc}", err=True)
         raise typer.Exit(code=2) from exc
     typer.echo(result.model_dump_json(indent=2))
+
+
+@answer_feedback_app.command("submit")
+def answer_feedback_submit(
+    question: Annotated[str, typer.Argument(help="Question to answer and review.")],
+    rating: Annotated[
+        HumanFeedbackRating,
+        typer.Option(help="Human rating for the generated answer."),
+    ],
+    comment: Annotated[str | None, typer.Option(help="Optional human review comment.")] = None,
+    report_id: Annotated[
+        str | None, typer.Option(help="Optional saved report id linked to this feedback.")
+    ] = None,
+    tag: Annotated[
+        list[str] | None,
+        typer.Option("--tag", help="Feedback tag. Repeat for multiple tags."),
+    ] = None,
+    store_path: Annotated[
+        Path, typer.Option(help="Directory holding answer feedback JSON files.")
+    ] = Path(".artifacts/human_feedback"),
+    index_path: Annotated[Path, typer.Option(help="Path to vector index.")] = Path(
+        ".artifacts/vector_store.json"
+    ),
+    top_k: Annotated[int, typer.Option(help="Number of chunks to retrieve.")] = 4,
+) -> None:
+    """Answer a question and save the human judgement for that answer."""
+    configure_logging()
+    settings = Settings(index_path=index_path, human_feedback_store_path=store_path)
+    answer = build_agent(settings).answer(question, top_k=top_k)
+    try:
+        record = JsonHumanFeedbackStore(store_path).save(
+            SubmitHumanFeedbackRequest(
+                result=answer,
+                rating=rating,
+                comment=comment,
+                report_id=report_id,
+                tags=tag or [],
+            )
+        )
+    except ValueError as exc:
+        typer.echo(f"Error: {exc}", err=True)
+        raise typer.Exit(code=2) from exc
+    typer.echo(record.model_dump_json(indent=2))
+
+
+@answer_feedback_app.command("list")
+def answer_feedback_list(
+    store_path: Annotated[
+        Path, typer.Option(help="Directory holding answer feedback JSON files.")
+    ] = Path(".artifacts/human_feedback"),
+) -> None:
+    """List human feedback summaries."""
+    configure_logging()
+    summaries = JsonHumanFeedbackStore(store_path).list()
+    typer.echo(json.dumps([summary.model_dump(mode="json") for summary in summaries], indent=2))
+
+
+@answer_feedback_app.command("get")
+def answer_feedback_get(
+    feedback_id: Annotated[str, typer.Argument(help="Answer feedback identifier.")],
+    store_path: Annotated[
+        Path, typer.Option(help="Directory holding answer feedback JSON files.")
+    ] = Path(".artifacts/human_feedback"),
+) -> None:
+    """Print one human feedback record."""
+    configure_logging()
+    try:
+        record = JsonHumanFeedbackStore(store_path).get(feedback_id)
+    except ValueError as exc:
+        typer.echo(f"Error: {exc}", err=True)
+        raise typer.Exit(code=2) from exc
+    if record is None:
+        typer.echo(f"Answer feedback not found: {feedback_id}", err=True)
+        raise typer.Exit(code=1)
+    typer.echo(record.model_dump_json(indent=2))
 
 
 @app.command()

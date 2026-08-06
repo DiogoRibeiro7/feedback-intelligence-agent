@@ -299,6 +299,64 @@ def test_reports_email_summary_requires_recipient(tmp_path: Path) -> None:
     assert "At least one --recipient" in result.stderr
 
 
+def test_answer_feedback_commands_submit_list_and_get(tmp_path: Path) -> None:
+    store_path = tmp_path / "human_feedback"
+    index_path = tmp_path / "vector_store.json"
+
+    saved = stdout_runner.invoke(
+        app,
+        [
+            "answer-feedback",
+            "submit",
+            "Why are enterprise customers unhappy with onboarding?",
+            "--rating",
+            "useful",
+            "--comment",
+            "Grounded and actionable.",
+            "--tag",
+            "Enterprise",
+            "--tag",
+            "onboarding",
+            "--store-path",
+            str(store_path),
+            "--index-path",
+            str(index_path),
+        ],
+    )
+
+    assert saved.exit_code == 0, saved.output
+    record = json.loads(saved.stdout)
+    assert record["rating"] == "useful"
+    assert record["comment"] == "Grounded and actionable."
+    assert record["tags"] == ["enterprise", "onboarding"]
+    feedback_id = record["feedback_id"]
+
+    listed = stdout_runner.invoke(
+        app,
+        ["answer-feedback", "list", "--store-path", str(store_path)],
+    )
+    assert listed.exit_code == 0, listed.output
+    summaries = json.loads(listed.stdout)
+    assert summaries[0]["feedback_id"] == feedback_id
+
+    fetched = stdout_runner.invoke(
+        app,
+        ["answer-feedback", "get", feedback_id, "--store-path", str(store_path)],
+    )
+    assert fetched.exit_code == 0, fetched.output
+    assert json.loads(fetched.stdout)["feedback_id"] == feedback_id
+
+
+def test_answer_feedback_get_missing_exits_nonzero(tmp_path: Path) -> None:
+    result = stdout_runner.invoke(
+        app,
+        ["answer-feedback", "get", "missing", "--store-path", str(tmp_path / "feedback")],
+    )
+
+    assert result.exit_code == 1
+    assert "Answer feedback not found" in result.stderr
+
+
 def test_query_command_applies_metadata_filters(tmp_path: Path) -> None:
     index_path = tmp_path / "vector_store.json"
     result = stdout_runner.invoke(
