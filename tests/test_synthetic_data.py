@@ -112,6 +112,26 @@ def test_optional_sentiment_column_can_be_omitted(tmp_path: Path) -> None:
     assert report.is_valid
 
 
+def test_optional_tenant_column_can_be_emitted(tmp_path: Path) -> None:
+    out = tmp_path / "tenants.csv"
+    write_feedback_csv(
+        SyntheticDataConfig(
+            rows=20,
+            seed=4,
+            tenant_ids=("acme", "cobalt"),
+            include_tenant_column=True,
+        ),
+        out,
+    )
+
+    header = out.read_text(encoding="utf-8").splitlines()[0]
+    report, records = validate_feedback_csv(out, strict=True)
+
+    assert header.startswith("tenant_id,feedback_id")
+    assert report.is_valid
+    assert {record.tenant_id for record in records} <= {"acme", "cobalt"}
+
+
 def test_all_sentiments_appear_with_uniform_distribution() -> None:
     uniform = dict.fromkeys(SENTIMENTS, 1.0)
     rows = generate_feedback_rows(

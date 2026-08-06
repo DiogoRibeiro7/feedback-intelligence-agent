@@ -7,11 +7,14 @@ metadata, and supports an optional **streaming** mode that renders tokens as
 they arrive over Server-Sent Events. Generated answers can also be saved as
 insight reports through the backend report store.
 It also captures answer-level human feedback with useful/not useful controls
-backed by the API's JSON store.
+backed by the API's JSON store. The tenant input scopes queries, saved reports,
+and captured answer feedback to a tenant ID.
 
 ## What it shows
 
 - **Question input** and an **answer panel** rendering the agent's response.
+- **Tenant input** for `tenant_id` scoping; `default` preserves the local demo
+  behavior.
 - **Retrieved sources panel** listing each citation (`[n] document_id`, source
   channel, retrieval score, and the quoted evidence span).
 - **Metadata**: route, confidence, and — in streaming mode — provider and

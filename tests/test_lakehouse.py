@@ -17,10 +17,12 @@ from feedback_intelligence_agent.telemetry import InMemoryTelemetrySink, Telemet
 def make_record(
     feedback_id: str,
     *,
+    tenant_id: str = "default",
     text: str = "Onboarding update",
     channel: FeedbackChannel = FeedbackChannel.support_ticket,
 ) -> FeedbackRecord:
     return FeedbackRecord(
+        tenant_id=tenant_id,
         feedback_id=feedback_id,
         customer_segment="enterprise",
         channel=channel,
@@ -53,6 +55,8 @@ def test_export_feedback_lakehouse_writes_delta_style_table(tmp_path: Path) -> N
     assert "abc123def456ghi789" not in data_text
     assert "[REDACTED_EMAIL]" in data_text
     assert "[REDACTED_TOKEN]" in data_text
+    rows = [json.loads(line) for line in data_text.splitlines() if line.strip()]
+    assert {row["tenant_id"] for row in rows} == {"default"}
 
     manifest = json.loads(Path(result.manifest_path).read_text(encoding="utf-8"))
     assert manifest["table_format"] == "delta"
@@ -86,6 +90,23 @@ def test_export_feedback_lakehouse_rejects_unknown_partitions(tmp_path: Path) ->
             tmp_path / "feedback",
             partition_columns=("account_id",),
         )
+
+
+def test_export_feedback_lakehouse_can_partition_by_tenant(tmp_path: Path) -> None:
+    result = export_feedback_lakehouse(
+        [
+            make_record("shared", tenant_id="acme"),
+            make_record("shared", tenant_id="cobalt"),
+        ],
+        tmp_path / "feedback",
+        partition_columns=("tenant_id",),
+    )
+
+    assert result.partitions == 2
+    assert {data_file.partition_values["tenant_id"] for data_file in result.data_files} == {
+        "acme",
+        "cobalt",
+    }
 
 
 def test_export_feedback_lakehouse_emits_telemetry(tmp_path: Path) -> None:

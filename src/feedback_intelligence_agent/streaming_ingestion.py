@@ -321,7 +321,7 @@ def consume_feedback_stream(
                 continue
             if record is None:
                 continue
-            seen_ids.add(record.feedback_id)
+            seen_ids.add(f"{record.tenant_id}:{record.feedback_id}")
             records.append(record)
             stream.ack(envelope)
 
@@ -347,12 +347,13 @@ def write_stream_records_csv(records: list[FeedbackRecord], path: str | Path) ->
     """Write validated stream records to a CSV compatible with batch ingestion."""
     output = Path(path)
     output.parent.mkdir(parents=True, exist_ok=True)
+    fieldnames = ["tenant_id", *REQUIRED_COLUMNS]
     with output.open("w", newline="", encoding="utf-8") as handle:
-        writer = csv.DictWriter(handle, fieldnames=list(REQUIRED_COLUMNS))
+        writer = csv.DictWriter(handle, fieldnames=fieldnames)
         writer.writeheader()
         for record in records:
             row = redact_feedback_record(record).model_dump(mode="json")
-            writer.writerow({column: row[column] for column in REQUIRED_COLUMNS})
+            writer.writerow({column: row[column] for column in fieldnames})
     return output
 
 
@@ -371,16 +372,23 @@ def _validate_envelope(
             errors=_validation_issues(exc),
             payload=_clean_payload(envelope.payload),
         )
-    if record.feedback_id in seen_ids:
+    scoped_id = f"{record.tenant_id}:{record.feedback_id}"
+    if scoped_id in seen_ids:
         return None, StreamIngestionIssue(
             source=envelope.source,
             offset=envelope.offset,
-            message=f"duplicate feedback_id '{record.feedback_id}' in stream batch",
+            message=(
+                f"duplicate feedback_id '{record.feedback_id}' in tenant "
+                f"'{record.tenant_id}' in stream batch"
+            ),
             errors=[
                 ValidationIssue(
                     severity="error",
                     column="feedback_id",
-                    message=f"duplicate feedback_id '{record.feedback_id}'",
+                    message=(
+                        f"duplicate feedback_id '{record.feedback_id}' in tenant "
+                        f"'{record.tenant_id}'"
+                    ),
                 )
             ],
             payload=_clean_payload(envelope.payload),

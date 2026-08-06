@@ -16,6 +16,7 @@ class EmailSummaryRequest(BaseModel):
     """Request to render or send a saved-report email summary."""
 
     recipients: list[str] = Field(min_length=1)
+    tenant_id: str | None = Field(default=None, min_length=1)
     report_ids: list[str] = Field(default_factory=list)
     subject: str | None = Field(default=None, max_length=160)
     max_reports: int = Field(default=5, ge=1, le=20)
@@ -33,6 +34,14 @@ class EmailSummaryRequest(BaseModel):
             if email not in recipients:
                 recipients.append(email)
         return recipients
+
+    @field_validator("tenant_id")
+    @classmethod
+    def normalise_tenant_id(cls, value: str | None) -> str | None:
+        """Normalize tenant identifiers when digest selection is scoped."""
+        if value is None:
+            return None
+        return value.strip().lower()
 
 
 class EmailSummary(BaseModel):
@@ -89,14 +98,21 @@ def select_reports_for_summary(
     *,
     report_ids: list[str],
     max_reports: int,
+    tenant_id: str | None = None,
 ) -> list[SavedInsightReport]:
     """Resolve explicit report IDs or the latest saved reports for a summary."""
-    selected_ids = report_ids or [summary.report_id for summary in store.list()[:max_reports]]
+    tenant_filter = tenant_id.strip().lower() if tenant_id is not None else None
+    selected_ids = report_ids or [
+        summary.report_id for summary in store.list(tenant_id=tenant_filter)[:max_reports]
+    ]
     reports: list[SavedInsightReport] = []
     missing: list[str] = []
     for report_id in selected_ids[:max_reports]:
         report = store.get(report_id)
         if report is None:
+            missing.append(report_id)
+            continue
+        if tenant_filter is not None and report.tenant_id.lower() != tenant_filter:
             missing.append(report_id)
             continue
         reports.append(report)
@@ -148,6 +164,7 @@ def _report_lines(index: int, report: SavedInsightReport) -> list[str]:
     lines = [
         f"{index}. {report.title}",
         f"Question: {report.question}",
+        f"Tenant: {report.tenant_id}",
         f"Route: {report.result.route}",
         f"Confidence: {report.result.confidence:.3f}",
         f"Citations: {len(report.result.citations)}",

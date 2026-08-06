@@ -24,6 +24,7 @@ from feedback_intelligence_agent.telemetry import Telemetry
 
 DEFAULT_PARTITION_COLUMNS: tuple[str, ...] = ("created_date", "channel")
 ALLOWED_PARTITION_COLUMNS: tuple[str, ...] = (
+    "tenant_id",
     "created_date",
     "created_month",
     "channel",
@@ -157,7 +158,7 @@ def _group_records(
     partition_columns: tuple[str, ...],
 ) -> dict[tuple[str, ...], list[FeedbackRecord]]:
     grouped: dict[tuple[str, ...], list[FeedbackRecord]] = {}
-    for record in sorted(records, key=lambda item: item.feedback_id):
+    for record in sorted(records, key=lambda item: (item.tenant_id, item.feedback_id)):
         key = tuple(_partition_value(record, column) for column in partition_columns)
         grouped.setdefault(key, []).append(record)
     return dict(sorted(grouped.items(), key=lambda item: item[0]))
@@ -340,6 +341,7 @@ def _write_iceberg_metadata(
 def _record_json_line(record: FeedbackRecord) -> str:
     row = record.model_dump(mode="json")
     payload = {column: row[column] for column in REQUIRED_COLUMNS}
+    payload["tenant_id"] = row["tenant_id"]
     payload["created_date"] = _partition_value(record, "created_date")
     payload["created_month"] = _partition_value(record, "created_month")
     return _json(payload) + "\n"
@@ -347,6 +349,7 @@ def _record_json_line(record: FeedbackRecord) -> str:
 
 def _schema() -> list[dict[str, str]]:
     return [
+        {"name": "tenant_id", "type": "string"},
         {"name": "feedback_id", "type": "string"},
         {"name": "customer_segment", "type": "string"},
         {"name": "channel", "type": "string"},
@@ -359,6 +362,8 @@ def _schema() -> list[dict[str, str]]:
 
 
 def _partition_value(record: FeedbackRecord, column: str) -> str:
+    if column == "tenant_id":
+        return record.tenant_id
     if column == "created_date":
         return record.created_at.date().isoformat()
     if column == "created_month":

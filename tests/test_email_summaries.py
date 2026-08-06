@@ -48,6 +48,7 @@ def test_render_email_summary_includes_report_details() -> None:
     assert summary.recipients == ["pm@example.com"]
     assert summary.report_ids == [report.report_id]
     assert "Question: Why is onboarding slow?" in summary.body_text
+    assert "Tenant: default" in summary.body_text
     assert "Recommended actions:" in summary.body_text
     assert "Tags: onboarding" in summary.body_text
 
@@ -68,6 +69,25 @@ def test_select_reports_for_summary_reports_missing_ids() -> None:
 
     with pytest.raises(LookupError, match="report not found"):
         select_reports_for_summary(store, report_ids=["missing"], max_reports=5)
+
+
+def test_select_reports_for_summary_filters_by_tenant() -> None:
+    store = InMemoryInsightReportStore()
+    acme = store.save(
+        SaveInsightReportRequest(title="Acme", result=make_answer("Acme?"), tenant_id="acme")
+    )
+    store.save(
+        SaveInsightReportRequest(title="Cobalt", result=make_answer("Cobalt?"), tenant_id="cobalt")
+    )
+
+    selected = select_reports_for_summary(
+        store,
+        report_ids=[],
+        max_reports=5,
+        tenant_id="acme",
+    )
+
+    assert [report.report_id for report in selected] == [acme.report_id]
 
 
 def test_email_summary_request_validates_recipients() -> None:

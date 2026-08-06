@@ -103,6 +103,7 @@ def chunk_to_embedding_text(chunk: DocumentChunk) -> str:
     metadata = chunk.metadata
     metadata_text = " ".join(
         [
+            f"tenant {metadata.get('tenant_id', 'default')}",
             f"segment {metadata.get('customer_segment', '')}",
             f"channel {metadata.get('channel', '')}",
             f"rating {metadata.get('rating', '')}",

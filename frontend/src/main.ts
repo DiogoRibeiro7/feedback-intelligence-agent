@@ -23,6 +23,7 @@ function el<T extends HTMLElement>(id: string): T {
 
 const form = el<HTMLFormElement>("query-form");
 const questionInput = el<HTMLTextAreaElement>("question");
+const tenantInput = el<HTMLInputElement>("tenant-id");
 const streamToggle = el<HTMLInputElement>("stream-toggle");
 const submitBtn = el<HTMLButtonElement>("submit-btn");
 const statusBox = el<HTMLElement>("status");
@@ -118,6 +119,10 @@ interface DashboardSample {
 
 const dashboardSamples: DashboardSample[] = [];
 let latestResult: AgentAnswer | null = null;
+
+function currentTenantId(): string {
+  return tenantInput.value.trim().toLowerCase() || "default";
+}
 
 function mean(values: number[]): number {
   if (values.length === 0) {
@@ -384,6 +389,7 @@ async function saveCurrentReport(): Promise<void> {
     const saved = await saveInsightReport({
       title: defaultReportTitle(latestResult),
       result: latestResult,
+      tenant_id: currentTenantId(),
       tags: [latestResult.route],
     });
     setStatus(`Saved report ${saved.report_id}`, "info");
@@ -403,6 +409,7 @@ async function submitCurrentFeedback(rating: HumanFeedbackRating): Promise<void>
     const saved = await submitHumanFeedback({
       result: latestResult,
       rating,
+      tenant_id: currentTenantId(),
       tags: [latestResult.route],
     });
     const label = rating === "useful" ? "useful" : "needs-work";
@@ -421,7 +428,7 @@ function setBusy(busy: boolean): void {
 async function runNonStreaming(question: string): Promise<void> {
   setStatus("Querying…", "info");
   const started = performance.now();
-  const response = await postQuery({ question });
+  const response = await postQuery({ question, tenant_id: currentTenantId() });
   const latencyMs = performance.now() - started;
   renderAnswer(response.result);
   pushDashboardSample(question, response.result.answer, response.result.citations, latencyMs);
@@ -436,7 +443,7 @@ async function runStreaming(question: string): Promise<void> {
   const started = performance.now();
   let metadataReceived = false;
   await streamQuery(
-    { question },
+    { question, tenant_id: currentTenantId() },
     {
       onContent: (text: string) => {
         streamed += text;

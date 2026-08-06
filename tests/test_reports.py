@@ -31,6 +31,7 @@ def test_in_memory_report_store_saves_and_lists_summaries() -> None:
         SaveInsightReportRequest(
             title="Onboarding report",
             result=make_answer(),
+            tenant_id="Acme",
             tags=[" Enterprise ", "enterprise", "Onboarding"],
             notes="Review next planning cycle.",
         )
@@ -40,7 +41,10 @@ def test_in_memory_report_store_saves_and_lists_summaries() -> None:
     summaries = store.list()
     assert len(summaries) == 1
     assert summaries[0].report_id == report.report_id
+    assert summaries[0].tenant_id == "acme"
     assert summaries[0].tags == ["enterprise", "onboarding"]
+    assert store.list(tenant_id="acme")[0].report_id == report.report_id
+    assert store.list(tenant_id="cobalt") == []
 
 
 def test_json_report_store_persists_report_files(tmp_path: Path) -> None:
@@ -50,6 +54,8 @@ def test_json_report_store_persists_report_files(tmp_path: Path) -> None:
     reloaded = JsonInsightReportStore(tmp_path).get(report.report_id)
 
     assert reloaded == report
+    assert reloaded is not None
+    assert reloaded.tenant_id == "default"
     assert (tmp_path / f"{report.report_id}.json").exists()
     assert JsonInsightReportStore(tmp_path).list()[0].title == "Saved answer"
 

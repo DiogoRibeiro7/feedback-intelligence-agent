@@ -26,6 +26,7 @@ class FeedbackRecord(BaseModel):
 
     model_config = ConfigDict(str_strip_whitespace=True)
 
+    tenant_id: str = Field(default="default", min_length=1)
     feedback_id: str = Field(min_length=1)
     customer_segment: str = Field(min_length=1)
     channel: FeedbackChannel
@@ -38,6 +39,12 @@ class FeedbackRecord(BaseModel):
     def normalise_text(cls, value: str) -> str:
         """Collapse repeated whitespace in feedback text."""
         return " ".join(value.split())
+
+    @field_validator("tenant_id")
+    @classmethod
+    def normalise_tenant_id(cls, value: str) -> str:
+        """Normalize tenant identifiers for deterministic filtering."""
+        return value.strip().lower()
 
 
 class DocumentChunk(BaseModel):
@@ -59,12 +66,21 @@ class SearchResult(BaseModel):
 class MetadataFilters(BaseModel):
     """Optional filters applied to chunk metadata before final ranking."""
 
+    tenant_id: str | None = Field(default=None, min_length=1)
     customer_segment: str | None = Field(default=None, min_length=1)
     channel: FeedbackChannel | None = None
     min_rating: int | None = Field(default=None, ge=1, le=5)
     max_rating: int | None = Field(default=None, ge=1, le=5)
     created_after: datetime | None = None
     created_before: datetime | None = None
+
+    @field_validator("tenant_id")
+    @classmethod
+    def normalise_tenant_id(cls, value: str | None) -> str | None:
+        """Normalize tenant identifiers for deterministic filtering."""
+        if value is None:
+            return None
+        return value.strip().lower()
 
     @model_validator(mode="after")
     def validate_ranges(self) -> MetadataFilters:
@@ -89,6 +105,7 @@ class MetadataFilters(BaseModel):
         return not any(
             (
                 self.customer_segment,
+                self.tenant_id,
                 self.channel,
                 self.min_rating is not None,
                 self.max_rating is not None,
@@ -155,6 +172,7 @@ class QueryRequest(BaseModel):
 
     question: str = Field(min_length=3)
     top_k: int = Field(default=4, ge=1, le=12)
+    tenant_id: str | None = Field(default=None, min_length=1)
     customer_segment: str | None = Field(default=None, min_length=1)
     channel: FeedbackChannel | None = None
     min_rating: int | None = Field(default=None, ge=1, le=5)
@@ -171,6 +189,7 @@ class QueryRequest(BaseModel):
     def metadata_filters(self) -> MetadataFilters | None:
         """Return the request's metadata filters, or None when no filter is set."""
         filters = MetadataFilters(
+            tenant_id=self.tenant_id,
             customer_segment=self.customer_segment,
             channel=self.channel,
             min_rating=self.min_rating,
@@ -220,6 +239,7 @@ class ChatRequest(BaseModel):
     message: str = Field(min_length=1)
     conversation_id: str | None = None
     top_k: int = Field(default=4, ge=1, le=12)
+    tenant_id: str | None = Field(default=None, min_length=1)
     customer_segment: str | None = Field(default=None, min_length=1)
     channel: FeedbackChannel | None = None
     min_rating: int | None = Field(default=None, ge=1, le=5)
@@ -236,6 +256,7 @@ class ChatRequest(BaseModel):
     def metadata_filters(self) -> MetadataFilters | None:
         """Return the request's metadata filters, or None when no filter is set."""
         filters = MetadataFilters(
+            tenant_id=self.tenant_id,
             customer_segment=self.customer_segment,
             channel=self.channel,
             min_rating=self.min_rating,

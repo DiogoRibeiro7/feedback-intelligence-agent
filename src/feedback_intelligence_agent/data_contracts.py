@@ -25,12 +25,13 @@ REQUIRED_COLUMNS: tuple[str, ...] = (
     "created_at",
 )
 
-OPTIONAL_COLUMNS: tuple[str, ...] = ("sentiment", "label")
+OPTIONAL_COLUMNS: tuple[str, ...] = ("tenant_id", "sentiment", "label")
 
 KNOWN_SENTIMENTS: frozenset[str] = frozenset({"positive", "negative", "neutral", "mixed"})
 
 _FIELD_ERROR_MESSAGES: dict[str, str] = {
     "feedback_id": "feedback_id must be a non-empty string",
+    "tenant_id": "tenant_id must be a non-empty string",
     "customer_segment": "customer_segment must be a non-empty string",
     "channel": "channel must be one of: "
     + ", ".join(sorted(channel.value for channel in FeedbackChannel)),
@@ -178,7 +179,7 @@ def validate_feedback_csv(
             raise DataContractError(report)
         return report, []
 
-    seen_ids: set[str] = set()
+    seen_ids: set[tuple[str, str]] = set()
     invalid_rows = 0
     raw_rows: list[dict[str, Any]] = [
         {str(key): value for key, value in row.items()} for row in frame.to_dict(orient="records")
@@ -187,20 +188,24 @@ def validate_feedback_csv(
     for position, raw_row in enumerate(raw_rows):
         line_number = position + 2  # 1-based, accounting for the header line.
         payload = {column: raw_row.get(column) for column in REQUIRED_COLUMNS}
+        if "tenant_id" in raw_row:
+            payload["tenant_id"] = raw_row.get("tenant_id")
         row_issues = _row_issues(payload, line_number)
 
         feedback_id = str(raw_row.get("feedback_id", "")).strip()
-        if feedback_id and feedback_id in seen_ids:
+        tenant_id = str(raw_row.get("tenant_id", "default")).strip().lower() or "default"
+        scoped_id = (tenant_id, feedback_id)
+        if feedback_id and scoped_id in seen_ids:
             row_issues.append(
                 ValidationIssue(
                     severity="error",
                     row=line_number,
                     column="feedback_id",
-                    message=f"duplicate feedback_id '{feedback_id}'",
+                    message=(f"duplicate feedback_id '{feedback_id}' in tenant '{tenant_id}'"),
                 )
             )
         if feedback_id:
-            seen_ids.add(feedback_id)
+            seen_ids.add(scoped_id)
 
         sentiment = str(raw_row.get("sentiment", "")).strip().lower()
         if sentiment and sentiment not in KNOWN_SENTIMENTS:

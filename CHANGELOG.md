@@ -29,6 +29,8 @@ All notable changes to this project are documented here.
   SMTP delivery.
 - Human answer feedback capture with JSON persistence, API endpoints, CLI
   commands, and frontend useful/not useful controls.
+- Multi-tenant feedback scoping through optional `tenant_id` ingestion fields,
+  retrieval filters, tenant-aware reports, answer feedback, and lakehouse exports.
 
 ## 0.2.0 - 2026-08-05
 

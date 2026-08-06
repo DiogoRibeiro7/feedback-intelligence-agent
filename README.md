@@ -184,6 +184,7 @@ work through the API and CLI:
 
 ```bash
 poetry run feedback-agent query "Which support tickets mention onboarding?" \
+  --tenant-id acme \
   --channel support_ticket \
   --customer-segment enterprise \
   --min-rating 1 \
@@ -193,12 +194,14 @@ poetry run feedback-agent query "Which support tickets mention onboarding?" \
 ```
 
 The `/query`, `/query/stream`, and `/chat` endpoints accept the same fields:
-`customer_segment`, `channel`, `min_rating`, `max_rating`, `created_after`, and
-`created_before`.
+`tenant_id`, `customer_segment`, `channel`, `min_rating`, `max_rating`,
+`created_after`, and `created_before`. Omitting `tenant_id` preserves the
+single-tenant local default; non-default tenants are isolated by chunk metadata
+before final ranking.
 
 ## Data validation
 
-Ingested datasets are checked against a data contract (`data_contracts.py`) before indexing. The contract requires the columns `feedback_id`, `customer_segment`, `channel`, `rating`, `text`, and `created_at`, and accepts optional `sentiment` and `label` columns. Validation reports missing columns, empty text, duplicate IDs, and invalid timestamps.
+Ingested datasets are checked against a data contract (`data_contracts.py`) before indexing. The contract requires the columns `feedback_id`, `customer_segment`, `channel`, `rating`, `text`, and `created_at`, and accepts optional `tenant_id`, `sentiment`, and `label` columns. Validation reports missing columns, empty text, duplicate IDs scoped by tenant, and invalid timestamps.
 
 Validate a CSV from the CLI:
 
@@ -234,8 +237,8 @@ poetry run feedback-agent generate-data --rows 1000 --output data/synthetic_feed
 
 The generated CSV uses the same columns the data contract requires
 (`feedback_id`, `customer_segment`, `channel`, `rating`, `text`, `created_at`)
-plus an optional `sentiment` column, with ratings aligned to sentiment. It passes
-validation and feeds straight into indexing:
+plus optional `tenant_id` and `sentiment` columns, with ratings aligned to
+sentiment. It passes validation and feeds straight into indexing:
 
 ```bash
 poetry run feedback-agent validate-data data/synthetic_feedback.csv --strict
@@ -857,7 +860,7 @@ curl http://127.0.0.1:8000/conversations/<conversation_id>   # stored turns
 
 Generated answers can be saved as reusable insight reports (`reports.py`). A
 report stores the title, original question, full `AgentAnswer`, tags, notes,
-citations, diagnostics, and creation time as a JSON file under
+tenant ID, citations, diagnostics, and creation time as a JSON file under
 `.artifacts/reports` by default.
 
 The API exposes:
@@ -868,14 +871,17 @@ GET /reports
 GET /reports/<report_id>
 ```
 
+`GET /reports?tenant_id=<tenant>` scopes the list view to one tenant.
+
 The CLI can answer and save a report in one step, then list or fetch it later:
 
 ```bash
 poetry run feedback-agent reports save "Why is onboarding slow?" \
   --title "Onboarding insight" \
+  --tenant-id acme \
   --tag onboarding
 
-poetry run feedback-agent reports list
+poetry run feedback-agent reports list --tenant-id acme
 poetry run feedback-agent reports get <report_id>
 ```
 
@@ -887,7 +893,8 @@ summaries from the same API store.
 Analysts can mark generated answers as useful or not useful and persist the
 full answer payload for later review (`human_feedback.py`). Each record stores
 the original question, `AgentAnswer`, rating, optional comment, optional linked
-report ID, tags, and creation time under `.artifacts/human_feedback` by default.
+report ID, tenant ID, tags, and creation time under `.artifacts/human_feedback`
+by default.
 
 The API exposes:
 
@@ -897,15 +904,18 @@ GET /answer-feedback
 GET /answer-feedback/<feedback_id>
 ```
 
+`GET /answer-feedback?tenant_id=<tenant>` scopes the list view to one tenant.
+
 The CLI can answer a question and capture the reviewer judgement in one step:
 
 ```bash
 poetry run feedback-agent answer-feedback submit "Why is onboarding slow?" \
   --rating useful \
+  --tenant-id acme \
   --comment "Grounded and actionable." \
   --tag onboarding
 
-poetry run feedback-agent answer-feedback list
+poetry run feedback-agent answer-feedback list --tenant-id acme
 poetry run feedback-agent answer-feedback get <feedback_id>
 ```
 

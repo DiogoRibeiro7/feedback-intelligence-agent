@@ -26,8 +26,15 @@ class SaveInsightReportRequest(BaseModel):
 
     title: str = Field(min_length=1, max_length=120)
     result: AgentAnswer
+    tenant_id: str = Field(default="default", min_length=1)
     tags: list[str] = Field(default_factory=list)
     notes: str | None = Field(default=None, max_length=2000)
+
+    @field_validator("tenant_id")
+    @classmethod
+    def normalise_tenant_id(cls, value: str) -> str:
+        """Normalize tenant identifiers for deterministic filtering."""
+        return value.strip().lower()
 
     @field_validator("tags")
     @classmethod
@@ -51,6 +58,7 @@ class SavedInsightReport(BaseModel):
     title: str
     question: str
     result: AgentAnswer
+    tenant_id: str = "default"
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     tags: list[str] = Field(default_factory=list)
     notes: str | None = None
@@ -62,6 +70,7 @@ class SavedInsightReport(BaseModel):
             title=self.title,
             question=self.question,
             created_at=self.created_at,
+            tenant_id=self.tenant_id,
             route=self.result.route,
             confidence=self.result.confidence,
             citations=len(self.result.citations),
@@ -76,6 +85,7 @@ class InsightReportSummary(BaseModel):
     title: str
     question: str
     created_at: datetime
+    tenant_id: str = "default"
     route: str
     confidence: float
     citations: int = Field(ge=0)
@@ -93,7 +103,7 @@ class InsightReportStore(Protocol):
         """Return a saved report, or None when unknown."""
         ...
 
-    def list(self) -> list[InsightReportSummary]:
+    def list(self, *, tenant_id: str | None = None) -> list[InsightReportSummary]:
         """Return saved report summaries sorted newest first."""
         ...
 
@@ -117,9 +127,13 @@ class InMemoryInsightReportStore:
         report = self._reports.get(report_id)
         return report.model_copy(deep=True) if report is not None else None
 
-    def list(self) -> list[InsightReportSummary]:
+    def list(self, *, tenant_id: str | None = None) -> list[InsightReportSummary]:
         """Return report summaries sorted newest first."""
-        return _sort_summaries(report.summary() for report in self._reports.values())
+        return _sort_summaries(
+            report.summary()
+            for report in self._reports.values()
+            if _matches_tenant(report.tenant_id, tenant_id)
+        )
 
 
 class JsonInsightReportStore:
@@ -149,13 +163,15 @@ class JsonInsightReportStore:
             return None
         return SavedInsightReport.model_validate_json(path.read_text(encoding="utf-8"))
 
-    def list(self) -> list[InsightReportSummary]:
+    def list(self, *, tenant_id: str | None = None) -> list[InsightReportSummary]:
         """Return saved report summaries sorted newest first."""
         reports = [
             SavedInsightReport.model_validate_json(path.read_text(encoding="utf-8"))
             for path in self.root.glob("*.json")
         ]
-        return _sort_summaries(report.summary() for report in reports)
+        return _sort_summaries(
+            report.summary() for report in reports if _matches_tenant(report.tenant_id, tenant_id)
+        )
 
 
 def _report_from_request(request: SaveInsightReportRequest) -> SavedInsightReport:
@@ -164,6 +180,7 @@ def _report_from_request(request: SaveInsightReportRequest) -> SavedInsightRepor
         title=request.title,
         question=request.result.question,
         result=request.result,
+        tenant_id=request.tenant_id,
         tags=request.tags,
         notes=request.notes,
     )
@@ -184,3 +201,9 @@ def _validate_report_id(report_id: str) -> str:
             "from [A-Za-z0-9._-] starting with a letter or digit"
         )
     return report_id
+
+
+def _matches_tenant(value: str, tenant_id: str | None) -> bool:
+    if tenant_id is None:
+        return True
+    return value.lower() == tenant_id.strip().lower()

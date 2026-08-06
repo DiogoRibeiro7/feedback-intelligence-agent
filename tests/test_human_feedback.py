@@ -32,6 +32,7 @@ def test_in_memory_human_feedback_store_saves_and_lists_summaries() -> None:
         SubmitHumanFeedbackRequest(
             result=make_answer(),
             rating=HumanFeedbackRating.useful,
+            tenant_id="Acme",
             comment=" Grounded and actionable. ",
             report_id="report-1",
             tags=[" Enterprise ", "enterprise", "Onboarding"],
@@ -40,13 +41,17 @@ def test_in_memory_human_feedback_store_saves_and_lists_summaries() -> None:
 
     assert store.get(record.feedback_id) == record
     assert record.comment == "Grounded and actionable."
+    assert record.tenant_id == "acme"
     assert record.tags == ["enterprise", "onboarding"]
     summaries = store.list()
     assert len(summaries) == 1
     assert summaries[0].feedback_id == record.feedback_id
     assert summaries[0].rating == HumanFeedbackRating.useful
+    assert summaries[0].tenant_id == "acme"
     assert summaries[0].has_comment is True
     assert summaries[0].report_id == "report-1"
+    assert store.list(tenant_id="acme")[0].feedback_id == record.feedback_id
+    assert store.list(tenant_id="cobalt") == []
 
 
 def test_json_human_feedback_store_persists_record_files(tmp_path: Path) -> None:

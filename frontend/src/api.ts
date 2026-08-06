@@ -47,6 +47,7 @@ export interface QueryResponse {
 export interface QueryRequest {
   question: string;
   top_k?: number;
+  tenant_id?: string | null;
 }
 
 export interface SavedInsightReport {
@@ -54,6 +55,7 @@ export interface SavedInsightReport {
   title: string;
   question: string;
   result: AgentAnswer;
+  tenant_id: string;
   created_at: string;
   tags: string[];
   notes?: string | null;
@@ -64,6 +66,7 @@ export interface InsightReportSummary {
   title: string;
   question: string;
   created_at: string;
+  tenant_id: string;
   route: string;
   confidence: number;
   citations: number;
@@ -73,6 +76,7 @@ export interface InsightReportSummary {
 export interface SaveInsightReportRequest {
   title: string;
   result: AgentAnswer;
+  tenant_id?: string;
   tags?: string[];
   notes?: string | null;
 }
@@ -82,6 +86,7 @@ export type HumanFeedbackRating = "useful" | "not_useful";
 export interface SubmitHumanFeedbackRequest {
   result: AgentAnswer;
   rating: HumanFeedbackRating;
+  tenant_id?: string;
   comment?: string | null;
   report_id?: string | null;
   tags?: string[];
@@ -92,6 +97,7 @@ export interface HumanFeedbackRecord {
   question: string;
   result: AgentAnswer;
   rating: HumanFeedbackRating;
+  tenant_id: string;
   created_at: string;
   comment?: string | null;
   report_id?: string | null;
@@ -130,7 +136,11 @@ export async function postQuery(request: QueryRequest): Promise<QueryResponse> {
   const response = await fetch(`${API_BASE_URL}/query`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ question: request.question, top_k: request.top_k ?? 4 }),
+    body: JSON.stringify({
+      question: request.question,
+      top_k: request.top_k ?? 4,
+      tenant_id: request.tenant_id ?? undefined,
+    }),
   });
   if (!response.ok) {
     throw new ApiError(await readError(response));
@@ -188,7 +198,11 @@ export async function streamQuery(
   const response = await fetch(`${API_BASE_URL}/query/stream`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ question: request.question, top_k: request.top_k ?? 4 }),
+    body: JSON.stringify({
+      question: request.question,
+      top_k: request.top_k ?? 4,
+      tenant_id: request.tenant_id ?? undefined,
+    }),
   });
   if (!response.ok || !response.body) {
     throw new ApiError(await readError(response));

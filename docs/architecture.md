@@ -61,11 +61,11 @@ Cited answer + tool metadata + recommended actions + diagnostics
 
 ### Ingestion
 
-`ingestion.py` loads CSV data and validates each row with Pydantic. `streaming_ingestion.py` validates bounded JSONL, Kafka, or Kinesis feedback batches against the same schema, checkpoints accepted offsets, and can write invalid messages to a dead-letter JSONL file. `index_updates.py` merges validated records into the persisted JSON vector index by replacing chunks for matching `feedback_id`s. `lakehouse.py` exports validated, redacted records into partitioned local data files with Delta-style or Iceberg-style metadata. Invalid rows or messages are reported with clear locations, which makes data quality issues easier to debug.
+`ingestion.py` loads CSV data and validates each row with Pydantic. `tenant_id` is optional and defaults to `default`; duplicate `feedback_id`s are checked within each tenant. `streaming_ingestion.py` validates bounded JSONL, Kafka, or Kinesis feedback batches against the same schema, checkpoints accepted offsets, and can write invalid messages to a dead-letter JSONL file. `index_updates.py` merges validated records into the persisted JSON vector index by replacing chunks for matching tenant-scoped source IDs. `lakehouse.py` exports validated, redacted records into partitioned local data files with Delta-style or Iceberg-style metadata. Invalid rows or messages are reported with clear locations, which makes data quality issues easier to debug.
 
 ### Chunking
 
-`chunking.py` splits feedback into overlapping word chunks. Before chunking, `privacy.py` redacts emails, phone numbers, and obvious access tokens so persisted chunks do not carry raw PII or pasted credentials. The current dataset has short feedback, but the logic also works for longer support tickets or interview transcripts.
+`chunking.py` splits feedback into overlapping word chunks and carries tenant metadata into every chunk. Default-tenant source IDs preserve the original `feedback_id`; non-default tenants use tenant-qualified source IDs to avoid collisions. Before chunking, `privacy.py` redacts emails, phone numbers, and obvious access tokens so persisted chunks do not carry raw PII or pasted credentials. The current dataset has short feedback, but the logic also works for longer support tickets or interview transcripts.
 
 ### Privacy
 
@@ -73,7 +73,7 @@ Cited answer + tool metadata + recommended actions + diagnostics
 
 ### Lakehouse export
 
-`lakehouse.py` writes dependency-light local tables for downstream analytics. It stores partitioned JSONL data files plus a top-level manifest and either Delta-style `_delta_log` actions or Iceberg-style `metadata/v1.metadata.json` metadata. Records are redacted before export, and partition columns are validated against known derived fields such as `created_date`, `created_month`, `channel`, `customer_segment`, and `rating`.
+`lakehouse.py` writes dependency-light local tables for downstream analytics. It stores partitioned JSONL data files plus a top-level manifest and either Delta-style `_delta_log` actions or Iceberg-style `metadata/v1.metadata.json` metadata. Records are redacted before export, and partition columns are validated against known fields such as `tenant_id`, `created_date`, `created_month`, `channel`, `customer_segment`, and `rating`.
 
 ### Embeddings
 
@@ -127,11 +127,11 @@ Routing is keyword/intent based (`TOOL_ROUTES`) with no function-calling API, so
 
 ### Saved reports
 
-`reports.py` persists generated `AgentAnswer` payloads as saved insight reports with a title, tags, notes, citations, diagnostics, and creation time. The default `JsonInsightReportStore` writes one report file per ID under `.artifacts/reports`, and the API exposes create, list, and fetch endpoints for the frontend.
+`reports.py` persists generated `AgentAnswer` payloads as saved insight reports with a tenant ID, title, tags, notes, citations, diagnostics, and creation time. The default `JsonInsightReportStore` writes one report file per ID under `.artifacts/reports`, and the API exposes create, tenant-filtered list, and fetch endpoints for the frontend.
 
 ### Human feedback
 
-`human_feedback.py` persists reviewer judgements on generated `AgentAnswer` payloads. Records capture the question, full answer package, useful/not useful rating, optional comment, linked report ID, tags, and creation time. The default `JsonHumanFeedbackStore` writes one record file per ID under `.artifacts/human_feedback`, and the API and CLI expose create, list, and fetch workflows.
+`human_feedback.py` persists reviewer judgements on generated `AgentAnswer` payloads. Records capture the tenant ID, question, full answer package, useful/not useful rating, optional comment, linked report ID, tags, and creation time. The default `JsonHumanFeedbackStore` writes one record file per ID under `.artifacts/human_feedback`, and the API and CLI expose create, tenant-filtered list, and fetch workflows.
 
 ### Email summaries
 

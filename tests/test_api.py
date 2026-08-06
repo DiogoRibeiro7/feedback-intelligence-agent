@@ -38,6 +38,40 @@ def client(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> TestClient:
     return TestClient(create_app())
 
 
+@pytest.fixture()
+def tenant_client(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> TestClient:
+    data_path = tmp_path / "tenant_feedback.csv"
+    data_path.write_text(
+        "\n".join(
+            [
+                "tenant_id,feedback_id,customer_segment,channel,rating,text,created_at",
+                (
+                    "acme,shared,enterprise,support_ticket,1,"
+                    '"Acme onboarding checklist is missing owners.",'
+                    "2026-05-01T09:00:00"
+                ),
+                (
+                    "cobalt,shared,enterprise,support_ticket,1,"
+                    '"Cobalt pricing renewal workflow is confusing.",'
+                    "2026-05-02T09:00:00"
+                ),
+            ]
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    monkeypatch.setenv("FEEDBACK_AGENT_DATA_PATH", str(data_path))
+    monkeypatch.setenv("FEEDBACK_AGENT_INDEX_PATH", str(tmp_path / "tenant_vector_store.json"))
+    monkeypatch.setenv("FEEDBACK_AGENT_CONVERSATION_STORE_PATH", str(tmp_path / "conversations"))
+    monkeypatch.setenv("FEEDBACK_AGENT_JOB_STORE_PATH", str(tmp_path / "jobs"))
+    monkeypatch.setenv("FEEDBACK_AGENT_REPORT_STORE_PATH", str(tmp_path / "reports"))
+    monkeypatch.setenv(
+        "FEEDBACK_AGENT_HUMAN_FEEDBACK_STORE_PATH",
+        str(tmp_path / "human_feedback"),
+    )
+    return TestClient(create_app())
+
+
 def test_health_endpoint_reports_ok(client: TestClient) -> None:
     response = client.get("/health")
     assert response.status_code == 200
@@ -100,6 +134,23 @@ def test_query_response_applies_metadata_filters(client: TestClient) -> None:
     assert citations
     assert {citation["document_id"] for citation in citations} == {"fb-005", "fb-009"}
     assert {citation["source"] for citation in citations} == {"support_ticket"}
+
+
+def test_query_response_applies_tenant_filter(tenant_client: TestClient) -> None:
+    response = tenant_client.post(
+        "/query",
+        json={
+            "question": "Which onboarding issues were reported?",
+            "tenant_id": "Acme",
+            "top_k": 4,
+        },
+    )
+
+    assert response.status_code == 200
+    result = response.json()["result"]
+    assert result["citations"]
+    assert {citation["document_id"] for citation in result["citations"]} == {"acme:shared"}
+    assert result["diagnostics"]["metadata_filters"]["tenant_id"] == "acme"
 
 
 def test_query_response_rejects_invalid_metadata_filter_ranges(client: TestClient) -> None:
@@ -269,12 +320,14 @@ def test_saved_reports_can_be_created_listed_and_fetched(client: TestClient) -> 
     report = created.json()
     assert report["report_id"]
     assert report["question"] == query.json()["result"]["question"]
+    assert report["tenant_id"] == "default"
     assert report["tags"] == ["enterprise", "onboarding"]
 
     listed = client.get("/reports")
     assert listed.status_code == 200
     summaries = listed.json()
     assert summaries[0]["report_id"] == report["report_id"]
+    assert summaries[0]["tenant_id"] == "default"
     assert summaries[0]["citations"] == len(query.json()["result"]["citations"])
 
     fetched = client.get(f"/reports/{report['report_id']}")
@@ -314,6 +367,35 @@ def test_report_email_summary_renders_latest_report(client: TestClient) -> None:
     assert payload["summary"]["recipients"] == ["pm@example.com"]
     assert payload["summary"]["report_ids"] == [created.json()["report_id"]]
     assert "Enterprise onboarding" in payload["summary"]["body_text"]
+
+
+def test_saved_reports_can_be_listed_by_tenant(client: TestClient) -> None:
+    query = client.post(
+        "/query",
+        json={"question": "Why are enterprise customers unhappy with onboarding?", "top_k": 3},
+    )
+    acme = client.post(
+        "/reports",
+        json={
+            "title": "Acme onboarding",
+            "result": query.json()["result"],
+            "tenant_id": "acme",
+        },
+    )
+    client.post(
+        "/reports",
+        json={
+            "title": "Cobalt onboarding",
+            "result": query.json()["result"],
+            "tenant_id": "cobalt",
+        },
+    )
+
+    listed = client.get("/reports", params={"tenant_id": "acme"})
+
+    assert acme.status_code == 201
+    assert listed.status_code == 200
+    assert [summary["report_id"] for summary in listed.json()] == [acme.json()["report_id"]]
 
 
 def test_report_email_summary_send_requires_smtp_host(client: TestClient) -> None:
@@ -357,6 +439,7 @@ def test_answer_feedback_can_be_created_listed_and_fetched(client: TestClient) -
     assert record["feedback_id"]
     assert record["question"] == query.json()["result"]["question"]
     assert record["rating"] == "useful"
+    assert record["tenant_id"] == "default"
     assert record["comment"] == "Grounded and actionable."
     assert record["report_id"] == "report-1"
     assert record["tags"] == ["enterprise", "onboarding"]
@@ -366,6 +449,7 @@ def test_answer_feedback_can_be_created_listed_and_fetched(client: TestClient) -
     summaries = listed.json()
     assert summaries[0]["feedback_id"] == record["feedback_id"]
     assert summaries[0]["rating"] == "useful"
+    assert summaries[0]["tenant_id"] == "default"
     assert summaries[0]["has_comment"] is True
 
     fetched = client.get(f"/answer-feedback/{record['feedback_id']}")
@@ -381,6 +465,27 @@ def test_answer_feedback_returns_404_for_unknown_id(client: TestClient) -> None:
 def test_answer_feedback_rejects_invalid_ids(client: TestClient) -> None:
     response = client.get("/answer-feedback/bad id!")
     assert response.status_code == 400
+
+
+def test_answer_feedback_can_be_listed_by_tenant(client: TestClient) -> None:
+    query = client.post(
+        "/query",
+        json={"question": "Why are enterprise customers unhappy with onboarding?", "top_k": 3},
+    )
+    acme = client.post(
+        "/answer-feedback",
+        json={"result": query.json()["result"], "rating": "useful", "tenant_id": "acme"},
+    )
+    client.post(
+        "/answer-feedback",
+        json={"result": query.json()["result"], "rating": "not_useful", "tenant_id": "cobalt"},
+    )
+
+    listed = client.get("/answer-feedback", params={"tenant_id": "acme"})
+
+    assert acme.status_code == 201
+    assert listed.status_code == 200
+    assert [summary["feedback_id"] for summary in listed.json()] == [acme.json()["feedback_id"]]
 
 
 def test_submit_ingestion_job_runs_and_succeeds(client: TestClient, tmp_path: Path) -> None:

@@ -36,6 +36,8 @@ def test_feedback_to_chunks_preserves_metadata() -> None:
     assert len(chunks) == 1
     assert chunks[0].source_id == "fb-test"
     assert chunks[0].metadata["customer_segment"] == "enterprise"
+    assert chunks[0].metadata["tenant_id"] == "default"
+    assert chunks[0].metadata["feedback_id"] == "fb-test"
 
 
 def test_feedback_to_chunks_redacts_pii_before_storage() -> None:
@@ -56,3 +58,23 @@ def test_feedback_to_chunks_redacts_pii_before_storage() -> None:
     assert "555-123-4567" not in chunks[0].text
     assert "[REDACTED_EMAIL]" in chunks[0].text
     assert "[REDACTED_PHONE]" in chunks[0].text
+
+
+def test_feedback_to_chunks_qualifies_source_ids_for_non_default_tenants() -> None:
+    record = FeedbackRecord.model_validate(
+        {
+            "tenant_id": "Acme",
+            "feedback_id": "fb-test",
+            "customer_segment": "enterprise",
+            "channel": "support_ticket",
+            "rating": 2,
+            "text": "Tenant scoped onboarding feedback.",
+            "created_at": "2026-01-01T00:00:00",
+        }
+    )
+
+    [chunk] = feedback_to_chunks([record])
+
+    assert chunk.source_id == "acme:fb-test"
+    assert chunk.chunk_id == "acme:fb-test::chunk-0"
+    assert chunk.metadata["tenant_id"] == "acme"

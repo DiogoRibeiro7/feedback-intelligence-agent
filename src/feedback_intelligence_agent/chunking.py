@@ -8,6 +8,13 @@ from feedback_intelligence_agent.privacy import redact_pii
 from feedback_intelligence_agent.schemas import DocumentChunk, FeedbackRecord
 
 
+def scoped_source_id(record: FeedbackRecord) -> str:
+    """Return a tenant-safe source ID while preserving legacy default IDs."""
+    if record.tenant_id == "default":
+        return record.feedback_id
+    return f"{record.tenant_id}:{record.feedback_id}"
+
+
 def chunk_text(text: str, *, max_words: int = 80, overlap_words: int = 16) -> list[str]:
     """Split text into overlapping word chunks.
 
@@ -60,6 +67,7 @@ def feedback_to_chunks(
     """
     chunks: list[DocumentChunk] = []
     for record in records:
+        source_id = scoped_source_id(record)
         text_for_storage = redact_pii(record.text)
         chunk_texts = chunk_text(
             text_for_storage,
@@ -69,10 +77,12 @@ def feedback_to_chunks(
         for index, text in enumerate(chunk_texts):
             chunks.append(
                 DocumentChunk(
-                    chunk_id=f"{record.feedback_id}::chunk-{index}",
-                    source_id=record.feedback_id,
+                    chunk_id=f"{source_id}::chunk-{index}",
+                    source_id=source_id,
                     text=text,
                     metadata={
+                        "tenant_id": record.tenant_id,
+                        "feedback_id": record.feedback_id,
                         "customer_segment": record.customer_segment,
                         "channel": record.channel.value,
                         "rating": record.rating,

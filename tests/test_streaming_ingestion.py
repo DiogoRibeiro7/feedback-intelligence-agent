@@ -103,8 +103,26 @@ def test_write_stream_records_csv_round_trip(tmp_path: Path) -> None:
     output = write_stream_records_csv(result.records, tmp_path / "accepted.csv")
 
     text = output.read_text(encoding="utf-8")
-    assert "feedback_id,customer_segment,channel,rating,text,created_at" in text
+    assert "tenant_id,feedback_id,customer_segment,channel,rating,text,created_at" in text
     assert "csv-1" in text
+
+
+def test_stream_duplicate_detection_is_scoped_by_tenant() -> None:
+    stream = InMemoryFeedbackStream(
+        [
+            {**valid_payload("shared"), "tenant_id": "acme"},
+            {**valid_payload("shared"), "tenant_id": "cobalt"},
+        ]
+    )
+
+    result = consume_feedback_stream(stream, max_messages=10)
+
+    assert result.accepted_records == 2
+    assert result.rejected_messages == 0
+    assert [(record.tenant_id, record.feedback_id) for record in result.records] == [
+        ("acme", "shared"),
+        ("cobalt", "shared"),
+    ]
 
 
 def test_write_stream_records_csv_redacts_pii(tmp_path: Path) -> None:

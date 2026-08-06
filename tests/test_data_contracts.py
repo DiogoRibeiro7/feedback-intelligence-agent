@@ -74,7 +74,24 @@ def test_duplicate_ids_reported(tmp_path: Path) -> None:
     [issue] = report.errors
     assert issue.column == "feedback_id"
     assert issue.row == 4
-    assert "duplicate feedback_id 'fb-001'" in issue.message
+    assert "duplicate feedback_id 'fb-001' in tenant 'default'" in issue.message
+
+
+def test_duplicate_feedback_ids_are_scoped_by_tenant(tmp_path: Path) -> None:
+    header = "tenant_id," + HEADER
+    rows = [
+        'acme,fb-001,enterprise,support_ticket,2,"Acme onboarding issue.",2026-01-08T09:20:00',
+        'cobalt,fb-001,startup,nps_survey,5,"Cobalt setup was fast.",2026-01-20T11:00:00',
+    ]
+    csv_path = write_csv(tmp_path, [header, *rows])
+
+    report, records = validate_feedback_csv(csv_path, strict=True)
+
+    assert report.is_valid
+    assert [(record.tenant_id, record.feedback_id) for record in records] == [
+        ("acme", "fb-001"),
+        ("cobalt", "fb-001"),
+    ]
 
 
 def test_invalid_timestamp_reported(tmp_path: Path) -> None:

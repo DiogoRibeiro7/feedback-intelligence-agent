@@ -497,6 +497,10 @@ class FeedbackInsightAgent:
         self, metadata: dict[str, object], filters: MetadataFilters
     ) -> bool:
         """Return whether chunk metadata satisfies all requested filters."""
+        if filters.tenant_id is not None:
+            tenant_id = str(metadata.get("tenant_id", "default")).lower()
+            if tenant_id != filters.tenant_id.lower():
+                return False
         if filters.customer_segment is not None:
             segment = str(metadata.get("customer_segment", "")).lower()
             if segment != filters.customer_segment.lower():

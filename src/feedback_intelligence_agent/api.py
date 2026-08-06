@@ -245,9 +245,9 @@ def create_app() -> FastAPI:
         return report_store.save(request)
 
     @app.get("/reports", response_model=list[InsightReportSummary])
-    def list_reports() -> list[InsightReportSummary]:
+    def list_reports(tenant_id: str | None = None) -> list[InsightReportSummary]:
         """Return saved insight report summaries."""
-        return report_store.list()
+        return report_store.list(tenant_id=tenant_id)
 
     @app.post("/reports/email-summary", response_model=EmailSummaryDelivery)
     def email_report_summary(request: EmailSummaryRequest) -> EmailSummaryDelivery:
@@ -257,6 +257,7 @@ def create_app() -> FastAPI:
                 report_store,
                 report_ids=request.report_ids,
                 max_reports=request.max_reports,
+                tenant_id=request.tenant_id,
             )
             summary = render_email_summary(
                 reports,
@@ -298,9 +299,9 @@ def create_app() -> FastAPI:
         return human_feedback_store.save(request)
 
     @app.get("/answer-feedback", response_model=list[HumanFeedbackSummary])
-    def list_answer_feedback() -> list[HumanFeedbackSummary]:
+    def list_answer_feedback(tenant_id: str | None = None) -> list[HumanFeedbackSummary]:
         """Return human feedback summaries."""
-        return human_feedback_store.list()
+        return human_feedback_store.list(tenant_id=tenant_id)
 
     @app.get("/answer-feedback/{feedback_id}", response_model=HumanFeedbackRecord)
     def get_answer_feedback(feedback_id: str) -> HumanFeedbackRecord:

@@ -212,6 +212,8 @@ def test_reports_commands_save_list_and_get(tmp_path: Path) -> None:
             "Enterprise",
             "--tag",
             "onboarding",
+            "--tenant-id",
+            "acme",
             "--store-path",
             str(store_path),
             "--index-path",
@@ -222,13 +224,23 @@ def test_reports_commands_save_list_and_get(tmp_path: Path) -> None:
     assert saved.exit_code == 0, saved.output
     report = json.loads(saved.stdout)
     assert report["title"] == "Enterprise onboarding"
+    assert report["tenant_id"] == "acme"
     assert report["tags"] == ["enterprise", "onboarding"]
     report_id = report["report_id"]
 
-    listed = stdout_runner.invoke(app, ["reports", "list", "--store-path", str(store_path)])
+    listed = stdout_runner.invoke(
+        app, ["reports", "list", "--tenant-id", "acme", "--store-path", str(store_path)]
+    )
     assert listed.exit_code == 0, listed.output
     summaries = json.loads(listed.stdout)
     assert summaries[0]["report_id"] == report_id
+    assert summaries[0]["tenant_id"] == "acme"
+
+    other_tenant = stdout_runner.invoke(
+        app, ["reports", "list", "--tenant-id", "cobalt", "--store-path", str(store_path)]
+    )
+    assert other_tenant.exit_code == 0, other_tenant.output
+    assert json.loads(other_tenant.stdout) == []
 
     fetched = stdout_runner.invoke(
         app,
@@ -313,6 +325,8 @@ def test_answer_feedback_commands_submit_list_and_get(tmp_path: Path) -> None:
             "useful",
             "--comment",
             "Grounded and actionable.",
+            "--tenant-id",
+            "acme",
             "--tag",
             "Enterprise",
             "--tag",
@@ -327,17 +341,26 @@ def test_answer_feedback_commands_submit_list_and_get(tmp_path: Path) -> None:
     assert saved.exit_code == 0, saved.output
     record = json.loads(saved.stdout)
     assert record["rating"] == "useful"
+    assert record["tenant_id"] == "acme"
     assert record["comment"] == "Grounded and actionable."
     assert record["tags"] == ["enterprise", "onboarding"]
     feedback_id = record["feedback_id"]
 
     listed = stdout_runner.invoke(
         app,
-        ["answer-feedback", "list", "--store-path", str(store_path)],
+        ["answer-feedback", "list", "--tenant-id", "acme", "--store-path", str(store_path)],
     )
     assert listed.exit_code == 0, listed.output
     summaries = json.loads(listed.stdout)
     assert summaries[0]["feedback_id"] == feedback_id
+    assert summaries[0]["tenant_id"] == "acme"
+
+    other_tenant = stdout_runner.invoke(
+        app,
+        ["answer-feedback", "list", "--tenant-id", "cobalt", "--store-path", str(store_path)],
+    )
+    assert other_tenant.exit_code == 0, other_tenant.output
+    assert json.loads(other_tenant.stdout) == []
 
     fetched = stdout_runner.invoke(
         app,
@@ -366,6 +389,8 @@ def test_query_command_applies_metadata_filters(tmp_path: Path) -> None:
             "Which feedback mentions support?",
             "--index-path",
             str(index_path),
+            "--tenant-id",
+            "default",
             "--channel",
             "support_ticket",
             "--max-rating",
@@ -379,6 +404,7 @@ def test_query_command_applies_metadata_filters(tmp_path: Path) -> None:
     citations = payload["citations"]
     assert citations
     assert {citation["document_id"] for citation in citations} == {"fb-005", "fb-009"}
+    assert payload["diagnostics"]["metadata_filters"]["tenant_id"] == "default"
     assert payload["diagnostics"]["metadata_filters"]["channel"] == "support_ticket"
 
 

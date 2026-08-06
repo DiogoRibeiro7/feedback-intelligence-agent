@@ -50,4 +50,4 @@ This roadmap is designed to evolve the repository from a compact portfolio proje
 - [x] Add saved insight reports.
 - [x] Add Slack or email summaries.
 - [x] Add human feedback capture on generated answers.
-- [ ] Add multi-tenant support.
+- [x] Add multi-tenant support.

@@ -9,8 +9,8 @@ the same seed and parameters always yield a byte-identical CSV.
 Generated rows use the exact columns required by the feedback data contract
 (:mod:`feedback_intelligence_agent.data_contracts`): ``feedback_id``,
 ``customer_segment``, ``channel``, ``rating``, ``text``, and ``created_at``, plus
-an optional ``sentiment`` column. Ratings are derived from the chosen sentiment
-so the dataset is internally consistent.
+optional ``tenant_id`` and ``sentiment`` columns. Ratings are derived from the
+chosen sentiment so the dataset is internally consistent.
 """
 
 from __future__ import annotations
@@ -28,6 +28,7 @@ __all__ = [
     "DEFAULT_CUSTOMER_SEGMENTS",
     "DEFAULT_ISSUE_CATEGORIES",
     "DEFAULT_PRODUCT_AREAS",
+    "DEFAULT_TENANT_IDS",
     "DEFAULT_SENTIMENT_DISTRIBUTION",
     "SyntheticDataConfig",
     "generate_feedback_rows",
@@ -37,6 +38,7 @@ __all__ = [
 #: Column order written to the generated CSV (matches the data contract plus
 #: the optional ``sentiment`` column).
 CSV_COLUMNS: tuple[str, ...] = (
+    "tenant_id",
     "feedback_id",
     "customer_segment",
     "channel",
@@ -58,6 +60,8 @@ DEFAULT_PRODUCT_AREAS: tuple[str, ...] = (
 )
 
 DEFAULT_CUSTOMER_SEGMENTS: tuple[str, ...] = ("enterprise", "mid_market", "startup")
+
+DEFAULT_TENANT_IDS: tuple[str, ...] = ("default",)
 
 DEFAULT_ISSUE_CATEGORIES: tuple[str, ...] = (
     "setup_friction",
@@ -144,6 +148,7 @@ class SyntheticDataConfig:
         seed: Seed for the local random generator; the same seed and parameters
             always produce a byte-identical CSV.
         product_areas: Product areas referenced by generated feedback text.
+        tenant_ids: Tenant IDs assigned to records.
         customer_segments: Customer segments assigned to records.
         issue_categories: Issue categories woven into the feedback text.
         sentiment_distribution: Target proportion of each sentiment; values are
@@ -151,11 +156,13 @@ class SyntheticDataConfig:
         start_date: Earliest possible ``created_at`` timestamp.
         max_day_span: Records are spread across this many days after ``start_date``.
         include_sentiment_column: Whether to emit the optional ``sentiment`` column.
+        include_tenant_column: Whether to emit the optional ``tenant_id`` column.
     """
 
     rows: int = 1000
     seed: int = 42
     product_areas: tuple[str, ...] = DEFAULT_PRODUCT_AREAS
+    tenant_ids: tuple[str, ...] = DEFAULT_TENANT_IDS
     customer_segments: tuple[str, ...] = DEFAULT_CUSTOMER_SEGMENTS
     issue_categories: tuple[str, ...] = DEFAULT_ISSUE_CATEGORIES
     sentiment_distribution: dict[str, float] = field(
@@ -164,6 +171,7 @@ class SyntheticDataConfig:
     start_date: datetime = field(default_factory=lambda: datetime(2026, 1, 1, 8, 0, 0))
     max_day_span: int = 180
     include_sentiment_column: bool = True
+    include_tenant_column: bool = False
 
     def __post_init__(self) -> None:
         """Validate configuration and normalise the sentiment distribution."""
@@ -171,6 +179,8 @@ class SyntheticDataConfig:
             raise ValueError("rows must be a positive integer")
         if not self.product_areas:
             raise ValueError("product_areas must not be empty")
+        if not self.tenant_ids:
+            raise ValueError("tenant_ids must not be empty")
         if not self.customer_segments:
             raise ValueError("customer_segments must not be empty")
         if not self.issue_categories:
@@ -239,6 +249,7 @@ def generate_feedback_rows(config: SyntheticDataConfig) -> list[dict[str, str]]:
         sentiment = rng.choices(sentiments, weights=weights, k=1)[0]
         rating = rng.choice(_SENTIMENT_RATINGS[sentiment])
         segment = rng.choice(list(config.customer_segments))
+        tenant_id = rng.choice(list(config.tenant_ids)).strip().lower() or "default"
         channel = rng.choice(channels)
         product_area = rng.choice(list(config.product_areas))
         issue_category = rng.choice(list(config.issue_categories))
@@ -253,6 +264,7 @@ def generate_feedback_rows(config: SyntheticDataConfig) -> list[dict[str, str]]:
         minute_offset = rng.randint(0, 24 * 60 - 1)
         created_at = config.start_date + timedelta(days=day_offset, minutes=minute_offset)
         row = {
+            "tenant_id": tenant_id,
             "feedback_id": f"syn-{index + 1:06d}",
             "customer_segment": segment,
             "channel": channel,
@@ -263,6 +275,8 @@ def generate_feedback_rows(config: SyntheticDataConfig) -> list[dict[str, str]]:
         }
         if not config.include_sentiment_column:
             row.pop("sentiment")
+        if not config.include_tenant_column:
+            row.pop("tenant_id")
         rows.append(row)
     return rows
 
@@ -272,9 +286,9 @@ def _rows_to_csv(rows: list[dict[str, str]], *, include_sentiment: bool) -> str:
 
     Uses ``\\n`` line terminators so output is byte-identical across platforms.
     """
-    columns = (
-        list(CSV_COLUMNS) if include_sentiment else [c for c in CSV_COLUMNS if c != "sentiment"]
-    )
+    columns = [column for column in CSV_COLUMNS if column in rows[0]] if rows else []
+    if not include_sentiment:
+        columns = [column for column in columns if column != "sentiment"]
     buffer = io.StringIO()
     writer = csv.DictWriter(buffer, fieldnames=columns, lineterminator="\n")
     writer.writeheader()

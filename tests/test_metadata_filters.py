@@ -93,6 +93,50 @@ def test_filter_by_customer_segment() -> None:
     }
 
 
+def test_filter_by_tenant_id() -> None:
+    model = HashingEmbeddingModel(dim=128)
+    chunks = [
+        DocumentChunk(
+            chunk_id="acme-onboarding",
+            source_id="fb-shared",
+            text="Feedback issue about onboarding checklist for Acme tenant.",
+            metadata={
+                "tenant_id": "acme",
+                "customer_segment": "enterprise",
+                "channel": "support_ticket",
+                "rating": 1,
+                "created_at": "2026-05-01T09:00:00",
+            },
+        ),
+        DocumentChunk(
+            chunk_id="cobalt-onboarding",
+            source_id="fb-shared",
+            text="Feedback issue about onboarding checklist for Cobalt tenant.",
+            metadata={
+                "tenant_id": "cobalt",
+                "customer_segment": "enterprise",
+                "channel": "support_ticket",
+                "rating": 1,
+                "created_at": "2026-05-02T09:00:00",
+            },
+        ),
+    ]
+    store = InMemoryVectorStore(dim=128)
+    store.add(chunks, model.embed([chunk.text for chunk in chunks]))
+    agent = FeedbackInsightAgent(
+        query_engine=QueryEngine(embedding_model=model, vector_store=store),
+        llm=DeterministicLLM(),
+    )
+    answer = agent.answer(
+        "Which feedback issue mentions onboarding?",
+        top_k=5,
+        filters=MetadataFilters(tenant_id="Acme"),
+    )
+    assert answer.citations
+    assert {citation.chunk_id for citation in answer.citations} == {"acme-onboarding"}
+    assert answer.diagnostics["metadata_filters"]["tenant_id"] == "acme"
+
+
 def test_filter_by_channel() -> None:
     agent = build_filter_agent()
     answer = agent.answer(

@@ -88,6 +88,7 @@ class RetrieverChoice(str, Enum):
 
 def _metadata_filters(
     *,
+    tenant_id: str | None,
     customer_segment: str | None,
     channel: FeedbackChannel | None,
     min_rating: int | None,
@@ -97,6 +98,7 @@ def _metadata_filters(
 ) -> MetadataFilters | None:
     """Build metadata filters from optional CLI parameters."""
     filters = MetadataFilters(
+        tenant_id=tenant_id,
         customer_segment=customer_segment,
         channel=channel,
         min_rating=min_rating,
@@ -328,6 +330,9 @@ def query(
     customer_segment: Annotated[
         str | None, typer.Option(help="Filter retrieved feedback by customer segment.")
     ] = None,
+    tenant_id: Annotated[
+        str | None, typer.Option(help="Filter retrieved feedback by tenant id.")
+    ] = None,
     channel: Annotated[
         FeedbackChannel | None, typer.Option(help="Filter retrieved feedback by channel.")
     ] = None,
@@ -354,6 +359,7 @@ def query(
     )
     agent = build_agent(settings)
     filters = _metadata_filters(
+        tenant_id=tenant_id,
         customer_segment=customer_segment,
         channel=channel,
         min_rating=min_rating,
@@ -386,6 +392,9 @@ def chat(
     customer_segment: Annotated[
         str | None, typer.Option(help="Filter retrieved feedback by customer segment.")
     ] = None,
+    tenant_id: Annotated[
+        str | None, typer.Option(help="Filter retrieved feedback by tenant id.")
+    ] = None,
     channel: Annotated[
         FeedbackChannel | None, typer.Option(help="Filter retrieved feedback by channel.")
     ] = None,
@@ -414,6 +423,7 @@ def chat(
     agent = build_agent(settings)
     store = build_conversation_store(settings)
     filters = _metadata_filters(
+        tenant_id=tenant_id,
         customer_segment=customer_segment,
         channel=channel,
         min_rating=min_rating,
@@ -464,6 +474,9 @@ def reports_save(
         typer.Option("--tag", help="Report tag. Repeat for multiple tags."),
     ] = None,
     notes: Annotated[str | None, typer.Option(help="Optional report notes.")] = None,
+    tenant_id: Annotated[
+        str, typer.Option(help="Tenant id for retrieval and saved report scoping.")
+    ] = "default",
     store_path: Annotated[
         Path, typer.Option(help="Directory holding saved report JSON files.")
     ] = Path(".artifacts/reports"),
@@ -475,11 +488,16 @@ def reports_save(
     """Answer a question and save the resulting insight report."""
     configure_logging()
     settings = Settings(index_path=index_path, report_store_path=store_path)
-    answer = build_agent(settings).answer(question, top_k=top_k)
+    answer = build_agent(settings).answer(
+        question,
+        top_k=top_k,
+        filters=MetadataFilters(tenant_id=tenant_id),
+    )
     report = JsonInsightReportStore(store_path).save(
         SaveInsightReportRequest(
             title=title or _default_report_title(question),
             result=answer,
+            tenant_id=tenant_id,
             tags=tag or [],
             notes=notes,
         )
@@ -489,13 +507,16 @@ def reports_save(
 
 @reports_app.command("list")
 def reports_list(
+    tenant_id: Annotated[
+        str | None, typer.Option(help="Only list reports for this tenant id.")
+    ] = None,
     store_path: Annotated[
         Path, typer.Option(help="Directory holding saved report JSON files.")
     ] = Path(".artifacts/reports"),
 ) -> None:
     """List saved insight report summaries."""
     configure_logging()
-    summaries = JsonInsightReportStore(store_path).list()
+    summaries = JsonInsightReportStore(store_path).list(tenant_id=tenant_id)
     typer.echo(json.dumps([summary.model_dump(mode="json") for summary in summaries], indent=2))
 
 
@@ -530,6 +551,9 @@ def reports_email_summary(
         typer.Option("--report-id", help="Report id to include. Repeat for multiple reports."),
     ] = None,
     subject: Annotated[str | None, typer.Option(help="Email subject override.")] = None,
+    tenant_id: Annotated[
+        str | None, typer.Option(help="Only include reports for this tenant id.")
+    ] = None,
     max_reports: Annotated[
         int, typer.Option(help="Maximum latest reports to include when --report-id is omitted.")
     ] = 5,
@@ -549,6 +573,7 @@ def reports_email_summary(
     try:
         request = EmailSummaryRequest(
             recipients=recipients,
+            tenant_id=tenant_id,
             report_ids=report_id or [],
             subject=subject,
             max_reports=max_reports,
@@ -564,6 +589,7 @@ def reports_email_summary(
             store,
             report_ids=request.report_ids,
             max_reports=request.max_reports,
+            tenant_id=request.tenant_id,
         )
         summary = render_email_summary(
             reports,
@@ -603,6 +629,9 @@ def answer_feedback_submit(
     report_id: Annotated[
         str | None, typer.Option(help="Optional saved report id linked to this feedback.")
     ] = None,
+    tenant_id: Annotated[
+        str, typer.Option(help="Tenant id for retrieval and feedback scoping.")
+    ] = "default",
     tag: Annotated[
         list[str] | None,
         typer.Option("--tag", help="Feedback tag. Repeat for multiple tags."),
@@ -618,12 +647,17 @@ def answer_feedback_submit(
     """Answer a question and save the human judgement for that answer."""
     configure_logging()
     settings = Settings(index_path=index_path, human_feedback_store_path=store_path)
-    answer = build_agent(settings).answer(question, top_k=top_k)
+    answer = build_agent(settings).answer(
+        question,
+        top_k=top_k,
+        filters=MetadataFilters(tenant_id=tenant_id),
+    )
     try:
         record = JsonHumanFeedbackStore(store_path).save(
             SubmitHumanFeedbackRequest(
                 result=answer,
                 rating=rating,
+                tenant_id=tenant_id,
                 comment=comment,
                 report_id=report_id,
                 tags=tag or [],
@@ -637,13 +671,16 @@ def answer_feedback_submit(
 
 @answer_feedback_app.command("list")
 def answer_feedback_list(
+    tenant_id: Annotated[
+        str | None, typer.Option(help="Only list feedback for this tenant id.")
+    ] = None,
     store_path: Annotated[
         Path, typer.Option(help="Directory holding answer feedback JSON files.")
     ] = Path(".artifacts/human_feedback"),
 ) -> None:
     """List human feedback summaries."""
     configure_logging()
-    summaries = JsonHumanFeedbackStore(store_path).list()
+    summaries = JsonHumanFeedbackStore(store_path).list(tenant_id=tenant_id)
     typer.echo(json.dumps([summary.model_dump(mode="json") for summary in summaries], indent=2))
 
 

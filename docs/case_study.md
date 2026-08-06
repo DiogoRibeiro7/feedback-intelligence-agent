@@ -162,15 +162,16 @@ fails fast with actionable errors on misconfiguration.
 Ingestion validates each row against a data contract
 ([data_contracts.py](../src/feedback_intelligence_agent/data_contracts.py)) — the
 contract requires `feedback_id`, `customer_segment`, `channel`, `rating`,
-`text`, and `created_at` and reports missing columns, empty text, duplicate IDs,
-and invalid timestamps. Streaming ingestion
+`text`, and `created_at`, accepts optional `tenant_id`, and reports missing
+columns, empty text, duplicate IDs scoped by tenant, and invalid timestamps.
+Streaming ingestion
 ([streaming_ingestion.py](../src/feedback_intelligence_agent/streaming_ingestion.py))
 validates bounded JSONL, Kafka, or Kinesis event batches through the same
 `FeedbackRecord` schema, checkpoints accepted offsets, and can write rejected
 messages to a dead-letter JSONL file. Incremental updates
 ([index_updates.py](../src/feedback_intelligence_agent/index_updates.py)) merge
 validated records into the persisted JSON index by replacing existing chunks for
-matching `feedback_id`s before appending fresh chunks. Before storage, the
+matching tenant-scoped source IDs before appending fresh chunks. Before storage, the
 privacy layer ([privacy.py](../src/feedback_intelligence_agent/privacy.py))
 redacts emails, phone numbers, and obvious access tokens from feedback text and
 stream dead-letter payloads. Valid rows are chunked into overlapping word windows
@@ -179,7 +180,8 @@ deterministic feature hashing
 ([embeddings.py](../src/feedback_intelligence_agent/embeddings.py)), and persisted.
 For analytics handoff, [lakehouse.py](../src/feedback_intelligence_agent/lakehouse.py)
 exports the same validated, redacted records into partitioned JSONL files with
-Delta-style or Iceberg-style metadata.
+Delta-style or Iceberg-style metadata, including optional `tenant_id`
+partitioning.
 
 Retrieval is exposed behind a single `Retriever` protocol
 ([retrieval.py](../src/feedback_intelligence_agent/retrieval.py)) with three
