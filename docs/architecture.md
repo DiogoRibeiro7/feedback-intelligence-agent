@@ -48,6 +48,8 @@ LLM provider
    │
    ▼
 Cited answer + tool metadata + recommended actions + diagnostics
+   │
+   ├───────────────► Saved insight reports
 ```
 
 ## Components
@@ -118,6 +120,10 @@ Routing is keyword/intent based (`TOOL_ROUTES`) with no function-calling API, so
 
 `api.py` exposes the system through FastAPI. The API validates input and returns typed responses.
 
+### Saved reports
+
+`reports.py` persists generated `AgentAnswer` payloads as saved insight reports with a title, tags, notes, citations, diagnostics, and creation time. The default `JsonInsightReportStore` writes one report file per ID under `.artifacts/reports`, and the API exposes create, list, and fetch endpoints for the frontend.
+
 ## Extension points
 
 - Replace the hashing embedding model with a neural embedding provider.
@@ -126,6 +132,7 @@ Routing is keyword/intent based (`TOOL_ROUTES`) with no function-calling API, so
 - Replace local JSONL lakehouse files with Parquet once a production table runtime is selected.
 - Export telemetry spans through additional OpenTelemetry collectors or vendors.
 - Add human feedback capture for answer quality.
+- Add report sharing and export formats for stakeholder handoff.
 - Add regression tests for prompts and retrieval behavior.
 - Replace the deterministic reranker with a cross-encoder or external LLM judge.
 - Add role-based access control around the API.

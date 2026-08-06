@@ -97,6 +97,7 @@ flowchart TB
     API["FastAPI service<br/>(api.py)"]
     CLI["Typer CLI<br/>(cli.py)"]
     FE["TypeScript + Vite UI<br/>(frontend/)"]
+    REP["Saved insight reports<br/>(reports.py)"]
   end
 
   subgraph Cross["Cross-cutting"]
@@ -108,6 +109,8 @@ flowchart TB
   API --> AG
   CLI --> AG
   FE --> API
+  API --> REP
+  CLI --> REP
   FAC -.builds.-> AG
   AG -.emits.-> TEL
   EVAL -.measures.-> AG
@@ -236,6 +239,11 @@ Notable elements:
   optional `LLMQueryRewriter` can delegate to a provider); only the rewritten
   question reaches retrieval, and the rewrite is reported transparently in
   diagnostics.
+- **Saved insight reports.** Generated answers can be persisted through
+  [reports.py](../src/feedback_intelligence_agent/reports.py) with a title,
+  tags, notes, citations, diagnostics, and the full `AgentAnswer`. The API and
+  CLI share the same JSON-backed store, and the frontend can save answers from
+  the analyst workflow.
 
 ## Evaluation strategy
 
@@ -285,8 +293,9 @@ with robust statistics (mean, median, p95, min, max).
 
 The API ([api.py](../src/feedback_intelligence_agent/api.py)) exposes `POST /query`,
 streaming `POST /query/stream` (SSE, no extra dependencies), `POST /chat` plus
-conversation retrieval, synchronous `POST /index`, asynchronous ingestion jobs
-(`POST /ingestion/jobs` + polling), and `GET /health` (liveness) and
+conversation retrieval, saved report endpoints (`POST /reports`, `GET /reports`,
+`GET /reports/{report_id}`), synchronous `POST /index`, asynchronous ingestion
+jobs (`POST /ingestion/jobs` + polling), and `GET /health` (liveness) and
 `GET /ready` (readiness) probes. Asynchronous ingestion uses FastAPI
 `BackgroundTasks` ([jobs.py](../src/feedback_intelligence_agent/jobs.py)) — no
 Celery/Redis — and never leaks stack traces or paths to clients on failure.
@@ -348,5 +357,5 @@ Tracked in [ROADMAP.md](../ROADMAP.md). High-value next steps:
   distribution, citation coverage, and hallucination rate.
 - **Data engineering:** broader privacy policy coverage, durable stream
   checkpoints, and production Parquet/table-runtime exports.
-- **Product & platform:** human feedback capture on answers, saved insight
-  reports, multi-tenant isolation, and auth/rate limiting on the API.
+- **Product & platform:** human feedback capture on answers, report sharing,
+  multi-tenant isolation, and auth/rate limiting on the API.

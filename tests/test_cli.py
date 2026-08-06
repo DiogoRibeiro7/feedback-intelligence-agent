@@ -196,6 +196,58 @@ def test_export_lakehouse_command_writes_table_metadata(tmp_path: Path) -> None:
     assert (output / "metadata" / "v1.metadata.json").exists()
 
 
+def test_reports_commands_save_list_and_get(tmp_path: Path) -> None:
+    store_path = tmp_path / "reports"
+    index_path = tmp_path / "vector_store.json"
+
+    saved = stdout_runner.invoke(
+        app,
+        [
+            "reports",
+            "save",
+            "Why are enterprise customers unhappy with onboarding?",
+            "--title",
+            "Enterprise onboarding",
+            "--tag",
+            "Enterprise",
+            "--tag",
+            "onboarding",
+            "--store-path",
+            str(store_path),
+            "--index-path",
+            str(index_path),
+        ],
+    )
+
+    assert saved.exit_code == 0, saved.output
+    report = json.loads(saved.stdout)
+    assert report["title"] == "Enterprise onboarding"
+    assert report["tags"] == ["enterprise", "onboarding"]
+    report_id = report["report_id"]
+
+    listed = stdout_runner.invoke(app, ["reports", "list", "--store-path", str(store_path)])
+    assert listed.exit_code == 0, listed.output
+    summaries = json.loads(listed.stdout)
+    assert summaries[0]["report_id"] == report_id
+
+    fetched = stdout_runner.invoke(
+        app,
+        ["reports", "get", report_id, "--store-path", str(store_path)],
+    )
+    assert fetched.exit_code == 0, fetched.output
+    assert json.loads(fetched.stdout)["report_id"] == report_id
+
+
+def test_reports_get_missing_exits_nonzero(tmp_path: Path) -> None:
+    result = stdout_runner.invoke(
+        app,
+        ["reports", "get", "missing", "--store-path", str(tmp_path / "reports")],
+    )
+
+    assert result.exit_code == 1
+    assert "Report not found" in result.stderr
+
+
 def test_query_command_applies_metadata_filters(tmp_path: Path) -> None:
     index_path = tmp_path / "vector_store.json"
     result = stdout_runner.invoke(

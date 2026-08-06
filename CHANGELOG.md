@@ -23,6 +23,8 @@ All notable changes to this project are documented here.
   stream artifact persistence.
 - Local lakehouse-style feedback export with partitioned JSONL data files plus
   Delta-style or Iceberg-style metadata manifests.
+- Saved insight reports with JSON persistence, API endpoints, CLI commands, and
+  frontend save/list controls.
 
 ## 0.2.0 - 2026-08-05
 

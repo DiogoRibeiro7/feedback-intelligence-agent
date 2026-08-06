@@ -1,10 +1,13 @@
 import "./styles.css";
 import {
   ApiError,
+  listInsightReports,
   postQuery,
+  saveInsightReport,
   streamQuery,
   type AgentAnswer,
   type Citation,
+  type InsightReportSummary,
   type StreamMetadata,
 } from "./api";
 
@@ -27,8 +30,12 @@ const latencyChart = el<HTMLElement>("latency-chart");
 const scoreChart = el<HTMLElement>("score-chart");
 const coverageChart = el<HTMLElement>("coverage-chart");
 const answerPanel = el<HTMLElement>("answer-panel");
+const saveReportBtn = el<HTMLButtonElement>("save-report-btn");
 const answerBox = el<HTMLElement>("answer");
 const actionsBox = el<HTMLElement>("actions");
+const reportsPanel = el<HTMLElement>("reports-panel");
+const refreshReportsBtn = el<HTMLButtonElement>("refresh-reports-btn");
+const reportsList = el<HTMLOListElement>("reports");
 const metaPanel = el<HTMLElement>("meta-panel");
 const metaList = el<HTMLDListElement>("meta");
 const sourcesPanel = el<HTMLElement>("sources-panel");
@@ -53,6 +60,8 @@ function clearResults(): void {
   actionsBox.textContent = "";
   metaList.textContent = "";
   sourcesList.textContent = "";
+  saveReportBtn.hidden = true;
+  latestResult = null;
 }
 
 function renderActions(actions: string[]): void {
@@ -98,6 +107,7 @@ interface DashboardSample {
 }
 
 const dashboardSamples: DashboardSample[] = [];
+let latestResult: AgentAnswer | null = null;
 
 function mean(values: number[]): number {
   if (values.length === 0) {
@@ -302,14 +312,74 @@ function renderSources(citations: Citation[]): void {
 }
 
 function renderAnswer(result: AgentAnswer): void {
+  latestResult = result;
   answerBox.textContent = result.answer;
   answerPanel.hidden = false;
+  saveReportBtn.hidden = false;
   renderActions(result.recommended_actions);
   renderMeta({
     route: result.route,
     confidence: result.confidence,
   });
   renderSources(result.citations);
+}
+
+function defaultReportTitle(result: AgentAnswer): string {
+  const title = result.question.trim().replace(/[?!.]+$/, "");
+  return title.slice(0, 120) || "Saved insight report";
+}
+
+function renderReports(reports: InsightReportSummary[]): void {
+  reportsList.textContent = "";
+  if (reports.length === 0) {
+    reportsPanel.hidden = true;
+    return;
+  }
+  for (const report of reports) {
+    const item = document.createElement("li");
+    item.className = "report";
+
+    const title = document.createElement("strong");
+    title.className = "report__title";
+    title.textContent = report.title;
+
+    const meta = document.createElement("span");
+    meta.className = "report__meta";
+    const created = new Date(report.created_at).toLocaleString();
+    meta.textContent = `${report.route} · ${report.confidence.toFixed(3)} · ${report.citations} citations · ${created}`;
+
+    const question = document.createElement("span");
+    question.className = "report__question";
+    question.textContent = report.question;
+
+    item.appendChild(title);
+    item.appendChild(meta);
+    item.appendChild(question);
+    reportsList.appendChild(item);
+  }
+  reportsPanel.hidden = false;
+}
+
+async function refreshReports(): Promise<void> {
+  renderReports(await listInsightReports());
+}
+
+async function saveCurrentReport(): Promise<void> {
+  if (latestResult === null) {
+    return;
+  }
+  saveReportBtn.disabled = true;
+  try {
+    const saved = await saveInsightReport({
+      title: defaultReportTitle(latestResult),
+      result: latestResult,
+      tags: [latestResult.route],
+    });
+    setStatus(`Saved report ${saved.report_id}`, "info");
+    await refreshReports();
+  } finally {
+    saveReportBtn.disabled = false;
+  }
 }
 
 function setBusy(busy: boolean): void {
@@ -342,6 +412,18 @@ async function runStreaming(question: string): Promise<void> {
         answerBox.textContent = streamed;
       },
       onMetadata: (metadata: StreamMetadata) => {
+        latestResult = {
+          question,
+          answer: streamed,
+          recommended_actions: metadata.recommended_actions,
+          citations: metadata.citations,
+          route: metadata.route,
+          confidence: metadata.confidence,
+          guardrail: metadata.guardrail,
+          tool_run: null,
+          diagnostics: {},
+        };
+        saveReportBtn.hidden = false;
         renderActions(metadata.recommended_actions);
         renderMeta({
           provider: metadata.provider,
@@ -379,4 +461,22 @@ form.addEventListener("submit", (event: SubmitEvent) => {
     .finally(() => {
       setBusy(false);
     });
+});
+
+saveReportBtn.addEventListener("click", () => {
+  saveCurrentReport().catch((error: unknown) => {
+    const message = error instanceof ApiError ? error.message : String(error);
+    setStatus(`Save failed: ${message}`, "error");
+  });
+});
+
+refreshReportsBtn.addEventListener("click", () => {
+  refreshReports().catch((error: unknown) => {
+    const message = error instanceof ApiError ? error.message : String(error);
+    setStatus(`Report refresh failed: ${message}`, "error");
+  });
+});
+
+refreshReports().catch(() => {
+  reportsPanel.hidden = true;
 });

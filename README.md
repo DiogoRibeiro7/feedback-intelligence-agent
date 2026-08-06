@@ -28,6 +28,7 @@ changing the rest of the system.
 | Retrieval | Dense hashing embeddings, BM25 lexical search, configurable hybrid ranking |
 | Evaluation | Retrieval metrics, answer-quality metrics, repeatable experiments, benchmark reports |
 | Serving | Typer CLI, FastAPI API, SSE streaming endpoint, TypeScript/Vite frontend |
+| Product workflows | Saved insight reports persisted as local JSON artifacts |
 | Privacy | Deterministic PII and credential redaction before chunking and index storage |
 | Operations | Docker, deployment manifests, optional telemetry, async ingestion jobs |
 | Local default | No API key, no network dependency, deterministic outputs for tests and demos |
@@ -76,6 +77,7 @@ feedback-intelligence-agent/
 │   ├── prompts.py            # Prompt definitions and construction
 │   ├── query_expansion.py    # Deterministic product terminology expansion
 │   ├── reranking.py          # Deterministic local judge reranker
+│   ├── reports.py            # Saved insight report models and stores
 │   ├── retrieval.py          # Query engine and hybrid retriever
 │   ├── schemas.py            # Domain schemas
 │   ├── streaming_ingestion.py # JSONL/Kafka/Kinesis feedback stream validation
@@ -428,7 +430,8 @@ A minimal, professional **TypeScript + Vite** demo UI lives in
 grounded answer, the retrieved sources/citations, latency and provider
 metadata, and supports an optional streaming mode (`POST /query/stream`). It
 also keeps a browser-session dashboard for latency trend, retrieval-score
-distribution, and citation marker coverage while an analyst explores queries.
+distribution, citation marker coverage, and saved report summaries while an
+analyst explores queries.
 
 Run it locally against a running backend:
 
@@ -491,6 +494,7 @@ Environment variables:
 | `FEEDBACK_AGENT_TELEMETRY_SERVICE_NAME` | `feedback-intelligence-agent` | Service/tracer name used by the OpenTelemetry backend. |
 | `FEEDBACK_AGENT_CONVERSATION_STORE_PATH` | `.artifacts/conversations` | Directory holding one JSON file per chat conversation. |
 | `FEEDBACK_AGENT_JOB_STORE_PATH` | `.artifacts/jobs` | Directory holding one JSON file per ingestion job. |
+| `FEEDBACK_AGENT_REPORT_STORE_PATH` | `.artifacts/reports` | Directory holding one JSON file per saved insight report. |
 | `OPENAI_API_KEY` | empty | Required only when using an OpenAI provider. |
 | `OPENAI_MODEL` | `gpt-4o-mini` | Model name for the OpenAI provider. |
 | `OPENAI_BASE_URL` | `https://api.openai.com` | Base URL for OpenAI or OpenAI-compatible endpoints. |
@@ -839,6 +843,35 @@ curl -X POST http://127.0.0.1:8000/chat \
 
 curl http://127.0.0.1:8000/conversations/<conversation_id>   # stored turns
 ```
+
+## Saved insight reports
+
+Generated answers can be saved as reusable insight reports (`reports.py`). A
+report stores the title, original question, full `AgentAnswer`, tags, notes,
+citations, diagnostics, and creation time as a JSON file under
+`.artifacts/reports` by default.
+
+The API exposes:
+
+```text
+POST /reports
+GET /reports
+GET /reports/<report_id>
+```
+
+The CLI can answer and save a report in one step, then list or fetch it later:
+
+```bash
+poetry run feedback-agent reports save "Why is onboarding slow?" \
+  --title "Onboarding insight" \
+  --tag onboarding
+
+poetry run feedback-agent reports list
+poetry run feedback-agent reports get <report_id>
+```
+
+The frontend adds a save action after each answer and shows saved report
+summaries from the same API store.
 
 ## Guardrails and safe refusals
 

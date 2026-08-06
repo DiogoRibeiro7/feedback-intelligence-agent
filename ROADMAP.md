@@ -47,7 +47,7 @@ This roadmap is designed to evolve the repository from a compact portfolio proje
 ## Phase 6 — Product layer
 
 - [x] Add a small UI for analysts and product managers.
-- [ ] Add saved insight reports.
+- [x] Add saved insight reports.
 - [ ] Add Slack or email summaries.
 - [ ] Add human feedback capture on generated answers.
 - [ ] Add multi-tenant support.

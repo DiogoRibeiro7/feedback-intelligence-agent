@@ -49,6 +49,34 @@ export interface QueryRequest {
   top_k?: number;
 }
 
+export interface SavedInsightReport {
+  report_id: string;
+  title: string;
+  question: string;
+  result: AgentAnswer;
+  created_at: string;
+  tags: string[];
+  notes?: string | null;
+}
+
+export interface InsightReportSummary {
+  report_id: string;
+  title: string;
+  question: string;
+  created_at: string;
+  route: string;
+  confidence: number;
+  citations: number;
+  tags: string[];
+}
+
+export interface SaveInsightReportRequest {
+  title: string;
+  result: AgentAnswer;
+  tags?: string[];
+  notes?: string | null;
+}
+
 // Payload of the final `metadata` SSE event from POST /query/stream.
 export interface StreamMetadata {
   provider: string;
@@ -87,6 +115,28 @@ export async function postQuery(request: QueryRequest): Promise<QueryResponse> {
     throw new ApiError(await readError(response));
   }
   return (await response.json()) as QueryResponse;
+}
+
+export async function saveInsightReport(
+  request: SaveInsightReportRequest,
+): Promise<SavedInsightReport> {
+  const response = await fetch(`${API_BASE_URL}/reports`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(request),
+  });
+  if (!response.ok) {
+    throw new ApiError(await readError(response));
+  }
+  return (await response.json()) as SavedInsightReport;
+}
+
+export async function listInsightReports(): Promise<InsightReportSummary[]> {
+  const response = await fetch(`${API_BASE_URL}/reports`);
+  if (!response.ok) {
+    throw new ApiError(await readError(response));
+  }
+  return (await response.json()) as InsightReportSummary[];
 }
 
 export interface StreamHandlers {

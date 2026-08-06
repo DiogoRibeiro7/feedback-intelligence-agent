@@ -56,9 +56,24 @@
       </section>
 
       <section id="answer-panel" class="panel" hidden>
-        <h2 class="panel__title">Answer</h2>
+        <div class="panel__header">
+          <h2 class="panel__title">Answer</h2>
+          <button type="button" id="save-report-btn" class="panel__action" hidden>
+            Save report
+          </button>
+        </div>
         <div id="answer" class="panel__body answer"></div>
         <div id="actions" class="actions"></div>
+      </section>
+
+      <section id="reports-panel" class="panel" hidden>
+        <div class="panel__header">
+          <h2 class="panel__title">Saved reports</h2>
+          <button type="button" id="refresh-reports-btn" class="panel__action">
+            Refresh
+          </button>
+        </div>
+        <ol id="reports" class="reports"></ol>
       </section>
 
       <section id="meta-panel" class="panel" hidden>

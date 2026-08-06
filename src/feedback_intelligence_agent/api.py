@@ -19,9 +19,15 @@ from feedback_intelligence_agent.factory import (
     build_conversation_store,
     build_index,
     build_job_store,
+    build_report_store,
 )
 from feedback_intelligence_agent.jobs import JobRequest, JobResult, run_ingestion_job
 from feedback_intelligence_agent.memory import ConversationMemory
+from feedback_intelligence_agent.reports import (
+    InsightReportSummary,
+    SavedInsightReport,
+    SaveInsightReportRequest,
+)
 from feedback_intelligence_agent.schemas import (
     AgentAnswer,
     ChatRequest,
@@ -94,6 +100,7 @@ def create_app() -> FastAPI:
     agent = build_agent(settings)
     conversation_store = build_conversation_store(settings)
     job_store = build_job_store(settings)
+    report_store = build_report_store(settings)
 
     app = FastAPI(
         title="Feedback Intelligence Agent API",
@@ -217,6 +224,27 @@ def create_app() -> FastAPI:
         if memory is None:
             raise HTTPException(status_code=404, detail="conversation not found")
         return memory
+
+    @app.post("/reports", response_model=SavedInsightReport, status_code=201)
+    def save_report(request: SaveInsightReportRequest) -> SavedInsightReport:
+        """Persist a generated insight answer as a saved report."""
+        return report_store.save(request)
+
+    @app.get("/reports", response_model=list[InsightReportSummary])
+    def list_reports() -> list[InsightReportSummary]:
+        """Return saved insight report summaries."""
+        return report_store.list()
+
+    @app.get("/reports/{report_id}", response_model=SavedInsightReport)
+    def get_report(report_id: str) -> SavedInsightReport:
+        """Return one saved insight report."""
+        try:
+            report = report_store.get(report_id)
+        except ValueError as exc:
+            raise HTTPException(status_code=400, detail=str(exc)) from exc
+        if report is None:
+            raise HTTPException(status_code=404, detail="report not found")
+        return report
 
     @app.post("/index")
     def index(request: IndexRequest) -> dict[str, str | int]:

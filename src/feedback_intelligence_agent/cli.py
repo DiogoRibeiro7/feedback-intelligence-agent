@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 from datetime import datetime
 from enum import Enum
 from pathlib import Path
@@ -44,6 +45,7 @@ from feedback_intelligence_agent.prompt_registry import (
     PromptVariableError,
 )
 from feedback_intelligence_agent.prompts import PROMPT_REGISTRY
+from feedback_intelligence_agent.reports import JsonInsightReportStore, SaveInsightReportRequest
 from feedback_intelligence_agent.schemas import ChatResponse, FeedbackChannel, MetadataFilters
 from feedback_intelligence_agent.streaming_ingestion import (
     JsonlFeedbackStream,
@@ -58,6 +60,8 @@ experiment_app = typer.Typer(help="Run repeatable experiments over RAG configura
 app.add_typer(experiment_app, name="experiment")
 prompts_app = typer.Typer(help="Inspect and render versioned prompt templates.")
 app.add_typer(prompts_app, name="prompts")
+reports_app = typer.Typer(help="Create and inspect saved insight reports.")
+app.add_typer(reports_app, name="reports")
 
 
 class RetrieverChoice(str, Enum):
@@ -87,6 +91,12 @@ def _metadata_filters(
         created_before=created_before,
     )
     return None if filters.is_empty else filters
+
+
+def _default_report_title(question: str) -> str:
+    """Create a compact report title from a question."""
+    title = " ".join(question.strip().rstrip("?!.").split())
+    return title[:120] or "Saved insight report"
 
 
 @app.command()
@@ -429,6 +439,70 @@ def chat(
         typer.echo(f"[conversation {conversation_id}]", err=True)
         typer.echo(answer.answer)
         typer.echo(render_citations(answer.citations), err=True)
+
+
+@reports_app.command("save")
+def reports_save(
+    question: Annotated[str, typer.Argument(help="Question to answer and save.")],
+    title: Annotated[str | None, typer.Option(help="Report title.")] = None,
+    tag: Annotated[
+        list[str] | None,
+        typer.Option("--tag", help="Report tag. Repeat for multiple tags."),
+    ] = None,
+    notes: Annotated[str | None, typer.Option(help="Optional report notes.")] = None,
+    store_path: Annotated[
+        Path, typer.Option(help="Directory holding saved report JSON files.")
+    ] = Path(".artifacts/reports"),
+    index_path: Annotated[Path, typer.Option(help="Path to vector index.")] = Path(
+        ".artifacts/vector_store.json"
+    ),
+    top_k: Annotated[int, typer.Option(help="Number of chunks to retrieve.")] = 4,
+) -> None:
+    """Answer a question and save the resulting insight report."""
+    configure_logging()
+    settings = Settings(index_path=index_path, report_store_path=store_path)
+    answer = build_agent(settings).answer(question, top_k=top_k)
+    report = JsonInsightReportStore(store_path).save(
+        SaveInsightReportRequest(
+            title=title or _default_report_title(question),
+            result=answer,
+            tags=tag or [],
+            notes=notes,
+        )
+    )
+    typer.echo(report.model_dump_json(indent=2))
+
+
+@reports_app.command("list")
+def reports_list(
+    store_path: Annotated[
+        Path, typer.Option(help="Directory holding saved report JSON files.")
+    ] = Path(".artifacts/reports"),
+) -> None:
+    """List saved insight report summaries."""
+    configure_logging()
+    summaries = JsonInsightReportStore(store_path).list()
+    typer.echo(json.dumps([summary.model_dump(mode="json") for summary in summaries], indent=2))
+
+
+@reports_app.command("get")
+def reports_get(
+    report_id: Annotated[str, typer.Argument(help="Report identifier.")],
+    store_path: Annotated[
+        Path, typer.Option(help="Directory holding saved report JSON files.")
+    ] = Path(".artifacts/reports"),
+) -> None:
+    """Print one saved insight report."""
+    configure_logging()
+    try:
+        report = JsonInsightReportStore(store_path).get(report_id)
+    except ValueError as exc:
+        typer.echo(f"Error: {exc}", err=True)
+        raise typer.Exit(code=2) from exc
+    if report is None:
+        typer.echo(f"Report not found: {report_id}", err=True)
+        raise typer.Exit(code=1)
+    typer.echo(report.model_dump_json(indent=2))
 
 
 @app.command()

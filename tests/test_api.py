@@ -30,6 +30,7 @@ def client(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> TestClient:
     monkeypatch.setenv("FEEDBACK_AGENT_INDEX_PATH", str(tmp_path / "vector_store.json"))
     monkeypatch.setenv("FEEDBACK_AGENT_CONVERSATION_STORE_PATH", str(tmp_path / "conversations"))
     monkeypatch.setenv("FEEDBACK_AGENT_JOB_STORE_PATH", str(tmp_path / "jobs"))
+    monkeypatch.setenv("FEEDBACK_AGENT_REPORT_STORE_PATH", str(tmp_path / "reports"))
     return TestClient(create_app())
 
 
@@ -241,6 +242,50 @@ def test_chat_with_invalid_conversation_id_returns_400(client: TestClient) -> No
     )
     assert response.status_code == 400
     assert "invalid conversation_id" in response.json()["detail"]
+
+
+def test_saved_reports_can_be_created_listed_and_fetched(client: TestClient) -> None:
+    query = client.post(
+        "/query",
+        json={"question": "Why are enterprise customers unhappy with onboarding?", "top_k": 3},
+    )
+    assert query.status_code == 200
+
+    created = client.post(
+        "/reports",
+        json={
+            "title": "Enterprise onboarding",
+            "result": query.json()["result"],
+            "tags": ["Enterprise", "onboarding", "enterprise"],
+            "notes": "Discuss in product review.",
+        },
+    )
+
+    assert created.status_code == 201
+    report = created.json()
+    assert report["report_id"]
+    assert report["question"] == query.json()["result"]["question"]
+    assert report["tags"] == ["enterprise", "onboarding"]
+
+    listed = client.get("/reports")
+    assert listed.status_code == 200
+    summaries = listed.json()
+    assert summaries[0]["report_id"] == report["report_id"]
+    assert summaries[0]["citations"] == len(query.json()["result"]["citations"])
+
+    fetched = client.get(f"/reports/{report['report_id']}")
+    assert fetched.status_code == 200
+    assert fetched.json() == report
+
+
+def test_saved_reports_return_404_for_unknown_id(client: TestClient) -> None:
+    response = client.get("/reports/does-not-exist")
+    assert response.status_code == 404
+
+
+def test_saved_reports_reject_invalid_ids(client: TestClient) -> None:
+    response = client.get("/reports/bad id!")
+    assert response.status_code == 400
 
 
 def test_submit_ingestion_job_runs_and_succeeds(client: TestClient, tmp_path: Path) -> None:

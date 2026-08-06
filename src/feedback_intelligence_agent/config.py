@@ -73,6 +73,7 @@ class Settings(BaseSettings):
     telemetry_service_name: str = Field(default="feedback-intelligence-agent")
     conversation_store_path: Path = Field(default=Path(".artifacts/conversations"))
     job_store_path: Path = Field(default=Path(".artifacts/jobs"))
+    report_store_path: Path = Field(default=Path(".artifacts/reports"))
     cors_allow_origins: str = Field(
         default=(
             "http://localhost:5173,http://localhost:4173,"

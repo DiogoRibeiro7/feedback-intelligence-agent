@@ -39,6 +39,7 @@ from feedback_intelligence_agent.vector_store import InMemoryVectorStore, Vector
 
 if TYPE_CHECKING:
     from feedback_intelligence_agent.jobs import JsonJobStore
+    from feedback_intelligence_agent.reports import JsonInsightReportStore
 
 
 def build_telemetry(settings: Settings) -> Telemetry:
@@ -76,6 +77,13 @@ def build_job_store(settings: Settings) -> JsonJobStore:
     from feedback_intelligence_agent.jobs import JsonJobStore
 
     return JsonJobStore(settings.job_store_path)
+
+
+def build_report_store(settings: Settings) -> JsonInsightReportStore:
+    """Construct the JSON-backed saved insight report store."""
+    from feedback_intelligence_agent.reports import JsonInsightReportStore
+
+    return JsonInsightReportStore(settings.report_store_path)
 
 
 def chunk_to_embedding_text(chunk: DocumentChunk) -> str:
