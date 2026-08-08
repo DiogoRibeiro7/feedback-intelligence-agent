@@ -27,7 +27,7 @@ jobs:
         run: pipx install poetry==2.2.1
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v7
         with:
           python-version: ${{ matrix.python-version }}
           cache: poetry
@@ -70,7 +70,7 @@ jobs:
       # The documentation toolchain reads pyproject.toml with tomllib, which
       # needs Python 3.11+; the package itself still supports 3.10.
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v7
         with:
           python-version: "3.12"
           cache: poetry
