@@ -1,0 +1,103 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_engineering.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\section{Test suite at a glance}
+
+The suite contains 39 test modules and 486 test functions, all executed by a single pytest invocation.
+
+\begin{longtable}{>{\raggedright\arraybackslash\small}p{0.45\textwidth} >{\small}r >{\small}r}
+\caption{Test modules and functions by category.}\label{tab:test-categories}\\
+\toprule
+Category & Modules & Test functions \\
+\midrule
+\endfirsthead
+\toprule
+Category & Modules & Test functions \\
+\midrule
+\endhead
+\midrule
+\multicolumn{3}{r}{\footnotesize continued on next page}\\
+\endfoot
+\bottomrule
+\endlastfoot
+behavioural regression & 1 & 8 \\
+data validation & 1 & 18 \\
+integration (CLI) & 1 & 23 \\
+integration (HTTP) & 1 & 47 \\
+numerical / metric & 1 & 26 \\
+numerical / retrieval & 2 & 16 \\
+performance measurement & 1 & 16 \\
+retrieval regression & 1 & 5 \\
+snapshot regression & 1 & 3 \\
+unit & 29 & 324 \\
+\end{longtable}
+
+\section{Execution}
+
+Every category runs from the same command; the suite is not split by marker or path in either the Makefile or CI:
+
+\texttt{poetry run pytest -\allowbreak{}-\allowbreak{}cov=feedback\_\allowbreak{}intelligence\_\allowbreak{}agent -\allowbreak{}-\allowbreak{}cov-\allowbreak{}report=term-\allowbreak{}missing -\allowbreak{}-\allowbreak{}cov-\allowbreak{}fail-\allowbreak{}under=\$(COVERAGE\_\allowbreak{}THRESHOLD)\allowbreak{}}.
+
+The suite requires no network access, no database, and no API key: the deterministic local LLM provider and the JSON vector store are the defaults, and optional integrations are exercised through injected fakes.
+
+\section{Test module inventory}
+
+\begin{longtable}{>{\raggedright\arraybackslash\small}p{0.28\textwidth} >{\raggedright\arraybackslash\small}p{0.24\textwidth} >{\raggedright\arraybackslash\small}p{0.18\textwidth} >{\raggedright\arraybackslash\small}p{0.10\textwidth} >{\raggedright\arraybackslash\small}p{0.12\textwidth}}
+\caption{Every test module, its subject, and its size.}\label{tab:test-inventory}\\
+\toprule
+Test module & Primary subject & Category & Tests & Parametrised \\
+\midrule
+\endfirsthead
+\toprule
+Test module & Primary subject & Category & Tests & Parametrised \\
+\midrule
+\endhead
+\midrule
+\multicolumn{5}{r}{\footnotesize continued on next page}\\
+\endfoot
+\bottomrule
+\endlastfoot
+\texttt{tests/\allowbreak{}test\_\allowbreak{}active\_\allowbreak{}learning.\allowbreak{}py} & \texttt{active\_\allowbreak{}learning} & unit & 4 & 0 \\
+\texttt{tests/\allowbreak{}test\_\allowbreak{}agent.\allowbreak{}py} & \texttt{agent} & unit & 9 & 0 \\
+\texttt{tests/\allowbreak{}test\_\allowbreak{}api.\allowbreak{}py} & \texttt{api} & integration (HTTP) & 47 & 0 \\
+\texttt{tests/\allowbreak{}test\_\allowbreak{}auth.\allowbreak{}py} & \texttt{auth} & unit & 6 & 0 \\
+\texttt{tests/\allowbreak{}test\_\allowbreak{}benchmarking.\allowbreak{}py} & \texttt{benchmarking} & performance measurement & 16 & 0 \\
+\texttt{tests/\allowbreak{}test\_\allowbreak{}chunking.\allowbreak{}py} & \texttt{chunking} & unit & 6 & 0 \\
+\texttt{tests/\allowbreak{}test\_\allowbreak{}citations.\allowbreak{}py} & \texttt{citations} & unit & 13 & 0 \\
+\texttt{tests/\allowbreak{}test\_\allowbreak{}cli.\allowbreak{}py} & \texttt{cli} & integration (CLI) & 23 & 0 \\
+\texttt{tests/\allowbreak{}test\_\allowbreak{}data\_\allowbreak{}contracts.\allowbreak{}py} & \texttt{data\_\allowbreak{}contracts} & data validation & 18 & 0 \\
+\texttt{tests/\allowbreak{}test\_\allowbreak{}docs\_\allowbreak{}tools.\allowbreak{}py} & \texttt{docs\_\allowbreak{}tools} & unit & 50 & 2 \\
+\texttt{tests/\allowbreak{}test\_\allowbreak{}email\_\allowbreak{}summaries.\allowbreak{}py} & \texttt{email\_\allowbreak{}summaries} & unit & 6 & 0 \\
+\texttt{tests/\allowbreak{}test\_\allowbreak{}embeddings\_\allowbreak{}and\_\allowbreak{}store.\allowbreak{}py} & \texttt{embeddings,\allowbreak{} vector\_\allowbreak{}store} & numerical / retrieval & 3 & 0 \\
+\texttt{tests/\allowbreak{}test\_\allowbreak{}evaluation.\allowbreak{}py} & \texttt{evaluation} & numerical / metric & 26 & 0 \\
+\texttt{tests/\allowbreak{}test\_\allowbreak{}experiments.\allowbreak{}py} & \texttt{experiments} & unit & 14 & 0 \\
+\texttt{tests/\allowbreak{}test\_\allowbreak{}guardrails.\allowbreak{}py} & \texttt{guardrails} & unit & 16 & 5 \\
+\texttt{tests/\allowbreak{}test\_\allowbreak{}hallucination.\allowbreak{}py} & \texttt{hallucination} & unit & 4 & 0 \\
+\texttt{tests/\allowbreak{}test\_\allowbreak{}human\_\allowbreak{}feedback.\allowbreak{}py} & \texttt{human\_\allowbreak{}feedback} & unit & 7 & 0 \\
+\texttt{tests/\allowbreak{}test\_\allowbreak{}index\_\allowbreak{}updates.\allowbreak{}py} & \texttt{index\_\allowbreak{}updates} & unit & 6 & 0 \\
+\texttt{tests/\allowbreak{}test\_\allowbreak{}jobs.\allowbreak{}py} & \texttt{jobs} & unit & 9 & 0 \\
+\texttt{tests/\allowbreak{}test\_\allowbreak{}lakehouse.\allowbreak{}py} & \texttt{lakehouse} & unit & 5 & 0 \\
+\texttt{tests/\allowbreak{}test\_\allowbreak{}lexical\_\allowbreak{}and\_\allowbreak{}hybrid.\allowbreak{}py} & \texttt{lexical\_\allowbreak{}search,\allowbreak{} retrieval} & numerical / retrieval & 13 & 0 \\
+\texttt{tests/\allowbreak{}test\_\allowbreak{}llm\_\allowbreak{}providers.\allowbreak{}py} & \texttt{llm} & unit & 40 & 0 \\
+\texttt{tests/\allowbreak{}test\_\allowbreak{}memory.\allowbreak{}py} & \texttt{memory} & unit & 14 & 0 \\
+\texttt{tests/\allowbreak{}test\_\allowbreak{}metadata\_\allowbreak{}filters.\allowbreak{}py} & \texttt{agent,\allowbreak{} schemas} & behavioural regression & 8 & 0 \\
+\texttt{tests/\allowbreak{}test\_\allowbreak{}output\_\allowbreak{}parser.\allowbreak{}py} & \texttt{output\_\allowbreak{}parser} & unit & 4 & 0 \\
+\texttt{tests/\allowbreak{}test\_\allowbreak{}privacy.\allowbreak{}py} & \texttt{privacy} & unit & 4 & 0 \\
+\texttt{tests/\allowbreak{}test\_\allowbreak{}prompt\_\allowbreak{}registry.\allowbreak{}py} & \texttt{prompt\_\allowbreak{}registry} & unit & 14 & 0 \\
+\texttt{tests/\allowbreak{}test\_\allowbreak{}prompt\_\allowbreak{}snapshot.\allowbreak{}py} & \texttt{prompts,\allowbreak{} prompt\_\allowbreak{}registry} & snapshot regression & 3 & 0 \\
+\texttt{tests/\allowbreak{}test\_\allowbreak{}qdrant\_\allowbreak{}store.\allowbreak{}py} & \texttt{qdrant\_\allowbreak{}store} & unit & 9 & 0 \\
+\texttt{tests/\allowbreak{}test\_\allowbreak{}query\_\allowbreak{}expansion.\allowbreak{}py} & \texttt{query\_\allowbreak{}expansion} & unit & 4 & 0 \\
+\texttt{tests/\allowbreak{}test\_\allowbreak{}rate\_\allowbreak{}limit.\allowbreak{}py} & \texttt{rate\_\allowbreak{}limit} & unit & 4 & 0 \\
+\texttt{tests/\allowbreak{}test\_\allowbreak{}reports.\allowbreak{}py} & \texttt{reports} & unit & 4 & 0 \\
+\texttt{tests/\allowbreak{}test\_\allowbreak{}reranking.\allowbreak{}py} & \texttt{reranking} & unit & 3 & 0 \\
+\texttt{tests/\allowbreak{}test\_\allowbreak{}resilience.\allowbreak{}py} & \texttt{resilience} & unit & 5 & 0 \\
+\texttt{tests/\allowbreak{}test\_\allowbreak{}retrieval\_\allowbreak{}regressions.\allowbreak{}py} & \texttt{retrieval,\allowbreak{} reranking} & retrieval regression & 5 & 2 \\
+\texttt{tests/\allowbreak{}test\_\allowbreak{}streaming\_\allowbreak{}ingestion.\allowbreak{}py} & \texttt{streaming\_\allowbreak{}ingestion} & unit & 11 & 0 \\
+\texttt{tests/\allowbreak{}test\_\allowbreak{}synthetic\_\allowbreak{}data.\allowbreak{}py} & \texttt{synthetic\_\allowbreak{}data} & unit & 13 & 0 \\
+\texttt{tests/\allowbreak{}test\_\allowbreak{}telemetry.\allowbreak{}py} & \texttt{telemetry} & unit & 17 & 0 \\
+\texttt{tests/\allowbreak{}test\_\allowbreak{}tools.\allowbreak{}py} & \texttt{tools} & unit & 23 & 1 \\
+\end{longtable}

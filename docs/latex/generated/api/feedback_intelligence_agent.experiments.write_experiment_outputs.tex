@@ -1,0 +1,24 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{write\_experiment\_outputs}}
+\label{func:feedback_intelligence_agent.experiments.write_experiment_outputs}\index{Functions!write\_experiment\_outputs}
+
+Write results, metrics, and run metadata JSON files.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+write_experiment_outputs(result: ExperimentResult, metadata: RunMetadata, *, output_dir: Path | None = None) -> dict[str, Path]
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{result}] \texttt{ExperimentResult}, required. Deterministic experiment result.
+  \item[\texttt{metadata}] \texttt{RunMetadata}, required. Environment metadata for this run.
+  \item[\texttt{output\_\allowbreak{}dir}] \texttt{Path \textbar{} None}, default \texttt{None}, keyword-only. Destination directory; defaults to the configured one.
+\end{arglist}
+\apifield{Value}\texttt{dict[str,\allowbreak{} Path]\allowbreak{}}. Mapping of artifact name to the path written.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}experiments.\allowbreak{}py:183}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/experiments.py#L183}{online}), module \cref{module:feedback_intelligence_agent.experiments}

@@ -1,0 +1,55 @@
+% Authored TikZ: data lineage from repository artifact to published outputs.
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[
+  art/.style={rectangle, draw=black, align=center, font=\scriptsize,
+    text width=34mm, minimum height=7mm, inner sep=3pt},
+  proc/.style={rectangle, draw=black, rounded corners=2pt, align=center,
+    font=\scriptsize, text width=34mm, minimum height=7mm, inner sep=3pt,
+    fill=shadegrey},
+  gate/.style={rectangle, draw=black, very thick, align=center,
+    font=\scriptsize, text width=30mm, minimum height=6mm, inner sep=3pt},
+  flow/.style={-{Latex[length=1.8mm]}, thick},
+  alt/.style={-{Latex[length=1.8mm]}, rulegrey, dashed},
+  node distance=3.4mm
+]
+  \node[art] (raw) {\texttt{data/sample\_feedback.csv}\\ authored, version controlled};
+  \node[proc, below=of raw] (load) {\texttt{load\_feedback\_csv}};
+  \node[gate, right=8mm of load] (contract) {Data contract\\ \texttt{validate\_feedback\_csv}};
+  \node[art, below=of load] (records) {\texttt{FeedbackRecord} list};
+  \node[proc, below=of records] (chunk) {\texttt{feedback\_to\_chunks}};
+  \node[gate, right=8mm of chunk] (redact) {PII redaction\\ \texttt{redact\_pii}};
+  \node[art, below=of chunk] (chunks) {\texttt{DocumentChunk} list\\ + retrieval metadata};
+  \node[proc, below=of chunks] (embed) {\texttt{chunk\_to\_embedding\_text}\\ + \texttt{HashingEmbeddingModel}};
+  \node[art, below=of embed] (index) {Vector index\\ JSON file or Qdrant};
+  \node[proc, below=of index] (retrieve) {Retrieval + reranking};
+  \node[art, below=of retrieve] (results) {\texttt{SearchResult} list};
+  \node[proc, below=of results] (answer) {Agent generation\\ + citation building};
+  \node[art, below=of answer] (agentanswer) {\texttt{AgentAnswer}\\ answer + citations};
+  \node[proc, below=of agentanswer] (eval) {\texttt{evaluate\_system}};
+  \node[art, below=of eval] (report) {\texttt{EvaluationReport}\\ + saved insight reports};
+
+  \foreach \a/\b in {raw/load, load/records, records/chunk, chunk/chunks,
+                     chunks/embed, embed/index, index/retrieve,
+                     retrieve/results, results/answer, answer/agentanswer,
+                     agentanswer/eval, eval/report}
+    \draw[flow] (\a) -- (\b);
+  \draw[flow] (load) -- (contract);
+  \draw[flow] (chunk) -- (redact);
+
+  % Alternative inputs and outputs.
+  \node[art, left=10mm of load] (stream) {JSONL / Kafka / Kinesis\\ stream events};
+  \node[art, above=of stream] (synth) {Synthetic dataset\\ seeded generator};
+  \node[art, left=10mm of chunk] (lake) {Lakehouse export\\ partitioned JSONL\\ + table metadata};
+
+  \draw[alt] (stream.east) -- (load.west);
+  \draw[alt] (synth.south) -- (stream.north);
+  \draw[alt] (records.west) to[out=180, in=0] (lake.east);
+\end{tikzpicture}
+\caption{Data lineage. Shaded boxes are transformations, plain boxes are
+artifacts, heavy boxes are validation gates. Dashed edges are alternative
+inputs and outputs that reuse the same contract and redaction steps. Every
+path from an input to a stored artifact passes through both gates.}
+\label{fig:data-lineage}
+\end{figure}

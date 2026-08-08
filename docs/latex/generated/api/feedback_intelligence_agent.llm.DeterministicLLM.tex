@@ -1,0 +1,35 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{DeterministicLLM}}
+\label{class:feedback_intelligence_agent.llm.DeterministicLLM}\index{Classes!DeterministicLLM}
+
+Local deterministic fallback used for tests and demos.
+\apifield{Attributes}
+\begin{arglist}
+  \item[\texttt{capabilities}] default \texttt{ProviderCapabilities(supports\_\allowbreak{}streaming=True,\allowbreak{} supports\_\allowbreak{}tool\_\allowbreak{}calling=False,\allowbreak{} supports\_\allowbreak{}json\_\allowbreak{}mode=False,\allowbreak{} max\_\allowbreak{}context\_\allowbreak{}tokens=None)\allowbreak{}}
+  \item[\texttt{ACTION\_\allowbreak{}LIBRARY}] default \texttt{\{'onboarding': 'Create a clearer onboarding checklist with owners,\allowbreak{} milestones,\allowbreak{} and escalation rules.\allowbreak{}',\allowbreak{} 'setup': 'Add proactive support when implementation or setup exceeds the expected timeline.\allowbreak{}',\allowbreak{} 'dashboard': 'Expose a dashboard that shows progress,\allowbreak{} blockers,\allowbreak{} and next best actions.\allowbreak{}',\allowbreak{} 'pricing': 'Review pricing communication and explain value by segment before renewal conversations.\allowbreak{}',\allowbreak{} 'integration': 'Prioritise the most requested integrations and publish expected delivery timelines.\allowbreak{}',\allowbreak{} 'latency': 'Add performance monitoring and investigate slow paths affecting high-\allowbreak{}value workflows.\allowbreak{}',\allowbreak{} 'support': 'Improve support triage with severity labels and clearer response-\allowbreak{}time expectations.\allowbreak{}',\allowbreak{} 'export': 'Improve export reliability and add clearer error messages for failed exports.\allowbreak{}'\}}
+\end{arglist}
+\apifield{Details}This class does not pretend to be a general LLM. It produces a structured, evidence-driven answer from retrieved chunks. That makes the repository fully runnable without network access or paid inference APIs.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}llm.\allowbreak{}py:67}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/llm.py#L67}{online}), class, module \cref{module:feedback_intelligence_agent.llm}
+
+\subsection{\texttt{generate}}
+\label{method:feedback_intelligence_agent.llm.DeterministicLLM.generate}\index{Methods!generate}
+Generate a deterministic answer based on retrieved evidence.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+generate(self, prompt: str, *, question: str, results: list[SearchResult]) -> str
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{prompt}] \texttt{str}, required.
+  \item[\texttt{question}] \texttt{str}, required, keyword-only.
+  \item[\texttt{results}] \texttt{list[SearchResult]\allowbreak{}}, required, keyword-only.
+\end{arglist}
+\apifield{Value}\texttt{str}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}llm.\allowbreak{}py:106}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/llm.py#L106}{online})

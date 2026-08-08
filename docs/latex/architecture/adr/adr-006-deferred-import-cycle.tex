@@ -1,0 +1,59 @@
+\section{ADR-006: Break the factory/jobs cycle with a deferred import}
+\label{adr:006}
+
+\subsection*{Status}
+
+Accepted; in force at revision \texttt{\projectrevisionshort}.
+
+\subsection*{Context}
+
+\pkg{jobs} needs \texttt{chunk\_to\_embedding\_text} from \pkg{factory} so that
+an ingestion job produces vectors identical to a full rebuild. \pkg{factory}
+needs \texttt{JsonJobStore} from \pkg{jobs} so that \texttt{build\_job\_store}
+can return one. At module level this is a runtime import cycle.
+
+\subsection*{Decision}
+
+\texttt{factory.build\_job\_store} imports \texttt{jobs} inside the function
+body, and the annotation-only reference is satisfied by a
+\texttt{TYPE\_CHECKING} import at module level. The same pattern is applied to
+\texttt{build\_report\_store}, \texttt{build\_human\_feedback\_store}, and
+\texttt{build\_active\_learning\_state\_store}.
+
+The reason is stated in the source: \texttt{build\_job\_store} carries the
+docstring line ``Imported lazily to avoid a circular import, since
+\texttt{feedback\_intelligence\_agent.jobs} reuses
+\texttt{chunk\_to\_embedding\_text}.'' This is the only decision in this
+chapter for which the repository states its own rationale in prose.
+
+\subsection*{Consequences}
+
+\begin{itemize}
+  \item The eager import graph is acyclic, which the generated cycle analysis
+    confirms: zero strongly connected components among module-level imports.
+  \item Counting deferred edges, exactly one component becomes cyclic:
+    \texttt{\{factory, jobs\}}. \cref{ch:dependencies} reports it rather than
+    hiding it, because the acyclicity is a property of import placement rather
+    than of the design.
+  \item The annotation remains type-checked despite the runtime import being
+    absent.
+  \item The cycle persists as a latent constraint: moving that import to module
+    level at any future point reintroduces it.
+\end{itemize}
+
+\subsection*{Alternatives}
+
+Extracting \texttt{chunk\_to\_embedding\_text} into a shared module that both
+import, which would eliminate the cycle rather than defer it. The repository
+records no consideration of this.
+
+\noevidence
+
+\subsection*{Evidence}
+
+\srcfile{src/feedback\_intelligence\_agent/factory.py}
+(\texttt{if TYPE\_CHECKING} block and the four function-local imports;
+docstring of \texttt{build\_job\_store});
+\srcfile{docs/metadata/module-dependencies.json}
+(\texttt{cycles.runtime} is empty; \texttt{cycles.including\_deferred}
+contains \texttt{["factory", "jobs"]}).

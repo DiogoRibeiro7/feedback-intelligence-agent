@@ -1,0 +1,52 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{EmailSummaryRequest}}
+\label{class:feedback_intelligence_agent.email_summaries.EmailSummaryRequest}\label{schema:EmailSummaryRequest}\index{Classes!EmailSummaryRequest}
+
+Request to render or send a saved-report email summary.
+\apifield{Inherits}\texttt{BaseModel}
+\apifield{Fields}
+\begin{arglist}
+  \item[\texttt{recipients}] \texttt{list[str]\allowbreak{}}, required, \texttt{min\_\allowbreak{}length=1}
+  \item[\texttt{tenant\_\allowbreak{}id}] \texttt{str \textbar{} None}, default \texttt{None}, \texttt{min\_\allowbreak{}length=1}
+  \item[\texttt{report\_\allowbreak{}ids}] \texttt{list[str]\allowbreak{}}, default \texttt{list()\allowbreak{}}
+  \item[\texttt{subject}] \texttt{str \textbar{} None}, default \texttt{None}, \texttt{max\_\allowbreak{}length=160}
+  \item[\texttt{max\_\allowbreak{}reports}] \texttt{int}, default \texttt{5}, \texttt{ge=1,\allowbreak{} le=20}
+  \item[\texttt{send}] \texttt{bool}, default \texttt{False}
+\end{arglist}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}email\_\allowbreak{}summaries.\allowbreak{}py:15}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/email_summaries.py#L15}{online}), pydantic model, module \cref{module:feedback_intelligence_agent.email_summaries}
+
+\subsection{\texttt{validate\_recipients}}
+\label{method:feedback_intelligence_agent.email_summaries.EmailSummaryRequest.validate_recipients}\index{Methods!validate\_recipients}
+Trim and lightly validate email recipients without extra dependencies.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+validate_recipients(cls, value: list[str]) -> list[str]
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{value}] \texttt{list[str]\allowbreak{}}, required.
+\end{arglist}
+\apifield{Value}\texttt{list[str]\allowbreak{}}
+\apifield{Raises}\texttt{ValueError}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}email\_\allowbreak{}summaries.\allowbreak{}py:27}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/email_summaries.py#L27}{online})
+
+\subsection{\texttt{normalise\_tenant\_id}}
+\label{method:feedback_intelligence_agent.email_summaries.EmailSummaryRequest.normalise_tenant_id}\index{Methods!normalise\_tenant\_id}
+Normalize tenant identifiers when digest selection is scoped.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+normalise_tenant_id(cls, value: str | None) -> str | None
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{value}] \texttt{str \textbar{} None}, required.
+\end{arglist}
+\apifield{Value}\texttt{str \textbar{} None}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}email\_\allowbreak{}summaries.\allowbreak{}py:40}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/email_summaries.py#L40}{online})

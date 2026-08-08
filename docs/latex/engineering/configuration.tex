@@ -1,0 +1,64 @@
+% Authored: configuration management and secret handling.
+
+\chapter{Configuration Management}
+\label{ch:configuration-management}
+
+\section{Model}
+
+There is exactly one configuration object,
+\cref{class:feedback_intelligence_agent.config.Settings}, and exactly one
+source of truth for what it contains: its field declarations. The complete
+variable reference, with types, defaults, constraints, and sensitivity, is
+generated in \cref{ch:configuration}; precedence rules are documented there
+too. This chapter covers the engineering side: how configuration is shipped,
+kept in sync, and kept free of secrets.
+
+\section{The template and its coverage}
+
+\srcfile{.env.example} is the version-controlled template. It carries inline
+comments explaining which provider each block belongs to and what turns it on.
+The configuration chapter includes a generated coverage check comparing the
+template against the fields the application actually reads, in both directions,
+so drift between them is reported rather than assumed absent.
+
+\input{generated/engineering/environment}
+
+\section{Secret handling}
+
+Four properties hold at this revision, and each is checkable:
+
+\begin{enumerate}
+  \item \textbf{No secret is committed.} Every credential slot in
+    \srcfile{.env.example} is empty, and the declared default of every
+    credential field in \srcfile{config.py} is \texttt{None}. The real
+    \srcfile{.env} is git-ignored. \srcfile{CONTRIBUTING.md} and
+    \srcfile{SECURITY.md} both state the prohibition explicitly.
+  \item \textbf{Credentials use conventional names.} Provider keys declare a
+    \texttt{validation\_alias} so they read \envvar{OPENAI\_API\_KEY},
+    \envvar{ANTHROPIC\_API\_KEY}, \envvar{AWS\_REGION}, and
+    \envvar{OLLAMA\_BASE\_URL} rather than prefixed variants. AWS credentials
+    are never read by the package at all --- the Bedrock adapter defers to the
+    AWS SDK credential chain (environment, profile, SSO, or instance role).
+  \item \textbf{Credentials do not reach the domain layer.} They are read into
+    \texttt{Settings} and consumed only by the infrastructure adapters that
+    need them.
+  \item \textbf{Nothing echoes a secret.} No log event, telemetry attribute,
+    answer diagnostic, or error message includes a credential value.
+    Authorization failures report a role or a configuration problem, never the
+    key that was presented.
+\end{enumerate}
+
+\section{Deployment configuration}
+
+\srcfile{deploy/} carries three descriptors --- a production Compose file, an
+ECS Fargate task definition, and a Fly.io configuration --- listed in
+\cref{ch:build}. The Compose file expects a \srcfile{deploy/.env.prod} file
+that is not in the repository, which is the intended mechanism: production
+values are supplied at deployment time, never committed.
+
+\section{Documentation of configuration}
+
+Because the reference is generated from the field declarations, adding a
+setting to \texttt{Settings} adds it to this manual on the next
+\texttt{make docs}, and forgetting to add it to \srcfile{.env.example} is
+reported by the coverage check rather than going unnoticed.

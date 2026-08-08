@@ -1,0 +1,64 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{JsonActiveLearningStateStore}}
+\label{class:feedback_intelligence_agent.active_learning.JsonActiveLearningStateStore}\index{Classes!JsonActiveLearningStateStore}
+
+JSON-backed active-learning state store.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+JsonActiveLearningStateStore(self, root: str | Path) -> None
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{root}] \texttt{str \textbar{} Path}, required.
+\end{arglist}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}active\_\allowbreak{}learning.\allowbreak{}py:109}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/active_learning.py#L109}{online}), class, module \cref{module:feedback_intelligence_agent.active_learning}
+
+\subsection{\texttt{get}}
+\label{method:feedback_intelligence_agent.active_learning.JsonActiveLearningStateStore.get}\index{Methods!get}
+Load one state record from disk, or None when missing.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+get(self, feedback_id: str) -> ActiveLearningState | None
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{feedback\_\allowbreak{}id}] \texttt{str}, required.
+\end{arglist}
+\apifield{Value}\texttt{ActiveLearningState \textbar{} None}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}active\_\allowbreak{}learning.\allowbreak{}py:120}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/active_learning.py#L120}{online})
+
+\subsection{\texttt{update}}
+\label{method:feedback_intelligence_agent.active_learning.JsonActiveLearningStateStore.update}\index{Methods!update}
+Create or update one JSON state record.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+update(self, feedback_id: str, request: UpdateActiveLearningStateRequest) -> ActiveLearningState
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{feedback\_\allowbreak{}id}] \texttt{str}, required.
+  \item[\texttt{request}] \texttt{UpdateActiveLearningStateRequest}, required.
+\end{arglist}
+\apifield{Value}\texttt{ActiveLearningState}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}active\_\allowbreak{}learning.\allowbreak{}py:127}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/active_learning.py#L127}{online})
+
+\subsection{\texttt{list}}
+\label{method:feedback_intelligence_agent.active_learning.JsonActiveLearningStateStore.list}\index{Methods!list}
+Return state records sorted by most recently updated first.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+list(self, *, status: ActiveLearningStatus | None = None) -> list[ActiveLearningState]
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{status}] \texttt{ActiveLearningStatus \textbar{} None}, default \texttt{None}, keyword-only.
+\end{arglist}
+\apifield{Value}\texttt{list[ActiveLearningState]\allowbreak{}}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}active\_\allowbreak{}learning.\allowbreak{}py:138}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/active_learning.py#L138}{online})

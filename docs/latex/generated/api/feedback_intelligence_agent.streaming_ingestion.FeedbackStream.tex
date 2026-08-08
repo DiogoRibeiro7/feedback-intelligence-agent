@@ -1,0 +1,45 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{FeedbackStream}}
+\label{class:feedback_intelligence_agent.streaming_ingestion.FeedbackStream}\index{Classes!FeedbackStream}
+
+Protocol implemented by bounded feedback stream consumers.
+\apifield{Inherits}\texttt{Protocol}
+\apifield{Attributes}
+\begin{arglist}
+  \item[\texttt{source}] \texttt{str}, required
+\end{arglist}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}streaming\_\allowbreak{}ingestion.\allowbreak{}py:82}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/streaming_ingestion.py#L82}{online}), protocol, module \cref{module:feedback_intelligence_agent.streaming_ingestion}
+
+\subsection{\texttt{poll}}
+\label{method:feedback_intelligence_agent.streaming_ingestion.FeedbackStream.poll}\index{Methods!poll}
+Return up to \texttt{max\_\allowbreak{}messages} envelopes.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+poll(self, max_messages: int) -> list[StreamEnvelope]
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{max\_\allowbreak{}messages}] \texttt{int}, required.
+\end{arglist}
+\apifield{Value}\texttt{list[StreamEnvelope]\allowbreak{}}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}streaming\_\allowbreak{}ingestion.\allowbreak{}py:87}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/streaming_ingestion.py#L87}{online})
+
+\subsection{\texttt{ack}}
+\label{method:feedback_intelligence_agent.streaming_ingestion.FeedbackStream.ack}\index{Methods!ack}
+Commit or acknowledge one successfully processed envelope.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+ack(self, envelope: StreamEnvelope) -> None
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{envelope}] \texttt{StreamEnvelope}, required.
+\end{arglist}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}streaming\_\allowbreak{}ingestion.\allowbreak{}py:91}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/streaming_ingestion.py#L91}{online})

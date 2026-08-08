@@ -1,0 +1,22 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{HumanFeedbackGroupStats}}
+\label{class:feedback_intelligence_agent.human_feedback.HumanFeedbackGroupStats}\label{schema:HumanFeedbackGroupStats}\index{Classes!HumanFeedbackGroupStats}
+
+Aggregated feedback counts for a route or tenant.
+\apifield{Inherits}\texttt{BaseModel}
+\apifield{Fields}
+\begin{arglist}
+  \item[\texttt{key}] \texttt{str}, required
+  \item[\texttt{total}] \texttt{int}, required, \texttt{ge=0}
+  \item[\texttt{useful}] \texttt{int}, required, \texttt{ge=0}
+  \item[\texttt{not\_\allowbreak{}useful}] \texttt{int}, required, \texttt{ge=0}
+  \item[\texttt{useful\_\allowbreak{}rate}] \texttt{float}, required, \texttt{ge=0.\allowbreak{}0,\allowbreak{} le=1.\allowbreak{}0}
+\end{arglist}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}human\_\allowbreak{}feedback.\allowbreak{}py:124}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/human_feedback.py#L124}{online}), pydantic model, module \cref{module:feedback_intelligence_agent.human_feedback}

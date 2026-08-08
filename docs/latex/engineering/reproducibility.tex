@@ -1,0 +1,105 @@
+% Authored: reproducibility and data provenance.
+
+\chapter{Reproducibility}
+\label{ch:reproducibility}
+
+\section{The reproducibility equation}
+
+A result produced by this repository is determined by six inputs:
+
+\begin{equation}
+\underbrace{\text{Environment}}_{\text{Python + poetry.lock}}
+\;+\;
+\underbrace{\text{Revision}}_{\text{git SHA}}
+\;+\;
+\underbrace{\text{Configuration}}_{\text{Settings / .env}}
+\;+\;
+\underbrace{\text{Data}}_{\text{versioned CSV}}
+\;+\;
+\underbrace{\text{Seeds}}_{\text{local Random}}
+\;+\;
+\underbrace{\text{Pipeline}}_{\text{CLI or make target}}
+\;=\;
+\text{Artifact}
+\label{eq:reproducibility}
+\end{equation}
+
+Each term corresponds to something concrete in the repository:
+
+\begin{description}
+  \item[Environment] The supported interpreter range is declared in
+    \srcfile{pyproject.toml} and exercised across 3.10, 3.11, and 3.12 in CI.
+    Exact package versions are pinned in \srcfile{poetry.lock}, which is
+    version controlled. The container image pins Poetry itself.
+  \item[Revision] Every artifact is attributable to a git SHA. This manual
+    records the SHA it describes on its title page and in the documentation
+    manifest.
+  \item[Configuration] A single settings object with declared defaults, so the
+    effective configuration of a run is the defaults plus the environment
+    variables listed in \cref{ch:configuration}.
+  \item[Data] The sample dataset and every fixture are authored files under
+    version control, so ``the data'' is fully identified by the revision.
+  \item[Seeds] Synthetic generation uses a locally seeded
+    \texttt{random.Random}; nothing in the package touches the global
+    \texttt{random} state or a NumPy generator. Nothing else in the default
+    path is stochastic at all.
+  \item[Pipeline] Executed through a documented CLI command or Make target.
+\end{description}
+
+\section{What is deterministic}
+
+With the default configuration the entire pipeline is deterministic:
+
+\begin{itemize}[nosep]
+  \item embedding (hash-derived, no learned parameters);
+  \item retrieval and ranking (fixed scoring, ties broken by corpus position);
+  \item reranking (fixed linear combination of transparent signals);
+  \item generation (the deterministic local provider);
+  \item output parsing and repair;
+  \item citation construction;
+  \item evidence-overlap checking;
+  \item evaluation metrics and their aggregation;
+  \item synthetic dataset generation for a fixed seed and parameters;
+  \item lakehouse export, which the module describes as writing deterministic
+    partitioned files;
+  \item documentation generation, which is byte-identical for a given revision.
+\end{itemize}
+
+\section{What is not, and why}
+
+Stating the boundary precisely matters more than claiming reproducibility:
+
+\begin{description}
+  \item[Remote LLM providers] A remote model is not reproducible across time.
+    The provider may be updated, and the repository sets no seed for remote
+    calls (the Bedrock adapter sets a temperature, which reduces but does not
+    remove variability). Any evaluation or experiment run against a remote
+    provider is a point-in-time measurement.
+  \item[Wall-clock timing] Benchmark latencies depend on the machine. The
+    harness reports sample counts and five statistics rather than a single
+    number, but the values are not comparable across hosts.
+  \item[Timestamps in artifacts] Saved reports, jobs, conversations, and
+    telemetry events record creation times, so those files differ between runs
+    by construction.
+  \item[Dependency resolution outside the lock] Installing without
+    \srcfile{poetry.lock} --- or installing extras, which the lock also covers
+    but CI never installs --- can resolve differently.
+  \item[Retrieval over a changing corpus] Incremental index updates change the
+    corpus, and BM25 scores depend on corpus statistics
+    ($N$, $n(t)$, $\overline{|d|}$). Adding documents therefore changes lexical
+    scores for existing documents. This is a property of BM25, not a defect,
+    but it means a retrieval result is reproducible only against a fixed index.
+\end{description}
+
+\section{Checksums and manifests}
+
+The repository records no checksum manifest for its datasets or artifacts. The
+only digest mechanism present is the one introduced by the documentation
+system: \srcfile{docs/metadata/documentation-manifest.json} stores a SHA-256
+for every generated documentation file together with the revision it was
+generated from, so documentation drift is detectable. Extending the same idea to
+data artifacts is listed in \cref{ch:improvements}.
+
+\section{Data provenance}
+
+\input{generated/engineering/data-provenance}

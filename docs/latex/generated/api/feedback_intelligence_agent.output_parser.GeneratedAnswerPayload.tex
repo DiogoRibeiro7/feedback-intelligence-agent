@@ -1,0 +1,63 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{GeneratedAnswerPayload}}
+\label{class:feedback_intelligence_agent.output_parser.GeneratedAnswerPayload}\label{schema:GeneratedAnswerPayload}\index{Classes!GeneratedAnswerPayload}
+
+Validated answer payload expected from an LLM provider.
+\apifield{Inherits}\texttt{BaseModel}
+\apifield{Fields}
+\begin{arglist}
+  \item[\texttt{model\_\allowbreak{}config}] default \texttt{ConfigDict(extra='ignore',\allowbreak{} populate\_\allowbreak{}by\_\allowbreak{}name=True,\allowbreak{} str\_\allowbreak{}strip\_\allowbreak{}whitespace=True)\allowbreak{}}
+  \item[\texttt{answer}] \texttt{str}, required, \texttt{min\_\allowbreak{}length=1}
+  \item[\texttt{recommended\_\allowbreak{}actions}] \texttt{list[str]\allowbreak{}}, default \texttt{list()\allowbreak{}}, \texttt{validation\_\allowbreak{}alias=AliasChoices('recommended\_\allowbreak{}actions',\allowbreak{} 'recommendedActions',\allowbreak{} 'actions')\allowbreak{}}
+\end{arglist}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}output\_\allowbreak{}parser.\allowbreak{}py:14}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/output_parser.py#L14}{online}), pydantic model, module \cref{module:feedback_intelligence_agent.output_parser}
+
+\subsection{\texttt{strip\_answer}}
+\label{method:feedback_intelligence_agent.output_parser.GeneratedAnswerPayload.strip_answer}\index{Methods!strip\_answer}
+Reject answers that collapse to empty text.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+strip_answer(cls, value: str) -> str
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{value}] \texttt{str}, required.
+\end{arglist}
+\apifield{Value}\texttt{str}
+\apifield{Raises}\texttt{ValueError}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}output\_\allowbreak{}parser.\allowbreak{}py:27}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/output_parser.py#L27}{online})
+
+\subsection{\texttt{coerce\_actions}}
+\label{method:feedback_intelligence_agent.output_parser.GeneratedAnswerPayload.coerce_actions}\index{Methods!coerce\_actions}
+Accept strings or string lists for recommended actions.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+coerce_actions(cls, value: object) -> object
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{value}] \texttt{object}, required.
+\end{arglist}
+\apifield{Value}\texttt{object}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}output\_\allowbreak{}parser.\allowbreak{}py:36}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/output_parser.py#L36}{online})
+
+\subsection{\texttt{strip\_actions}}
+\label{method:feedback_intelligence_agent.output_parser.GeneratedAnswerPayload.strip_actions}\index{Methods!strip\_actions}
+Normalize action bullets and limit the public action list.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+strip_actions(cls, value: list[str]) -> list[str]
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{value}] \texttt{list[str]\allowbreak{}}, required.
+\end{arglist}
+\apifield{Value}\texttt{list[str]\allowbreak{}}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}output\_\allowbreak{}parser.\allowbreak{}py:46}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/output_parser.py#L46}{online})

@@ -1,0 +1,54 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{InMemoryConversationStore}}
+\label{class:feedback_intelligence_agent.memory.InMemoryConversationStore}\index{Classes!InMemoryConversationStore}
+
+Dict-backed conversation store intended for tests and ephemeral use.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+InMemoryConversationStore(self) -> None
+\end{lstlisting}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}memory.\allowbreak{}py:162}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/memory.py#L162}{online}), class, module \cref{module:feedback_intelligence_agent.memory}
+
+\subsection{\texttt{get}}
+\label{method:feedback_intelligence_agent.memory.InMemoryConversationStore.get}\index{Methods!get}
+Return a deep copy of the stored conversation, or \texttt{None}.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+get(self, conversation_id: str) -> ConversationMemory | None
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{conversation\_\allowbreak{}id}] \texttt{str}, required.
+\end{arglist}
+\apifield{Value}\texttt{ConversationMemory \textbar{} None}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}memory.\allowbreak{}py:169}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/memory.py#L169}{online})
+
+\subsection{\texttt{save}}
+\label{method:feedback_intelligence_agent.memory.InMemoryConversationStore.save}\index{Methods!save}
+Store a deep copy of the conversation keyed by its ID.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+save(self, memory: ConversationMemory) -> None
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{memory}] \texttt{ConversationMemory}, required.
+\end{arglist}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}memory.\allowbreak{}py:175}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/memory.py#L175}{online})
+
+\subsection{\texttt{conversation\_ids}}
+\label{method:feedback_intelligence_agent.memory.InMemoryConversationStore.conversation_ids}\index{Methods!conversation\_ids}
+Return the identifiers of all stored conversations, sorted.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+conversation_ids(self) -> list[str]
+\end{lstlisting}
+\apifield{Value}\texttt{list[str]\allowbreak{}}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}memory.\allowbreak{}py:180}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/memory.py#L180}{online})

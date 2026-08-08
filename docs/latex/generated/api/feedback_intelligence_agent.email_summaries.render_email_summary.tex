@@ -1,0 +1,24 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{render\_email\_summary}}
+\label{func:feedback_intelligence_agent.email_summaries.render_email_summary}\index{Functions!render\_email\_summary}
+
+Render saved reports into a concise plain-text email digest.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+render_email_summary(reports: Sequence[SavedInsightReport], *, recipients: list[str], subject: str | None = None) -> EmailSummary
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{reports}] \texttt{Sequence[SavedInsightReport]\allowbreak{}}, required.
+  \item[\texttt{recipients}] \texttt{list[str]\allowbreak{}}, required, keyword-only.
+  \item[\texttt{subject}] \texttt{str \textbar{} None}, default \texttt{None}, keyword-only.
+\end{arglist}
+\apifield{Value}\texttt{EmailSummary}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}email\_\allowbreak{}summaries.\allowbreak{}py:69}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/email_summaries.py#L69}{online}), module \cref{module:feedback_intelligence_agent.email_summaries}

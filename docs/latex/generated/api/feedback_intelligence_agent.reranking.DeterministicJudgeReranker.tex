@@ -1,0 +1,48 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{DeterministicJudgeReranker}}
+\label{class:feedback_intelligence_agent.reranking.DeterministicJudgeReranker}\index{Classes!DeterministicJudgeReranker}
+
+Deterministic local relevance judge for reranking retrieval candidates.
+\apifield{Details}This is a lightweight stand-in for a cross-encoder or LLM judge: it scores each candidate using the original retrieval score plus transparent lexical, route, segment, and low-rating relevance signals. It keeps CI and demos fully local while making the reranking step explicit and replaceable.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}reranking.\allowbreak{}py:26}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/reranking.py#L26}{online}), class, module \cref{module:feedback_intelligence_agent.reranking}
+
+\subsection{\texttt{rerank}}
+\label{method:feedback_intelligence_agent.reranking.DeterministicJudgeReranker.rerank}\index{Methods!rerank}
+Score and rank candidate chunks with deterministic relevance signals.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+rerank(self, question: str, results: list[SearchResult], *, top_k: int, route_keywords: tuple[str, ...] = ()) -> list[SearchResult]
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{question}] \texttt{str}, required.
+  \item[\texttt{results}] \texttt{list[SearchResult]\allowbreak{}}, required.
+  \item[\texttt{top\_\allowbreak{}k}] \texttt{int}, required, keyword-only.
+  \item[\texttt{route\_\allowbreak{}keywords}] \texttt{tuple[str,\allowbreak{} .\allowbreak{}.\allowbreak{}.\allowbreak{}]\allowbreak{}}, default \texttt{()\allowbreak{}}, keyword-only.
+\end{arglist}
+\apifield{Value}\texttt{list[SearchResult]\allowbreak{}}
+\apifield{Raises}\texttt{ValueError}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}reranking.\allowbreak{}py:35}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/reranking.py#L35}{online})
+
+\subsection{\texttt{score}}
+\label{method:feedback_intelligence_agent.reranking.DeterministicJudgeReranker.score}\index{Methods!score}
+Return a deterministic relevance score for one retrieved chunk.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+score(self, question: str, result: SearchResult, *, route_keywords: tuple[str, ...] = ()) -> float
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{question}] \texttt{str}, required.
+  \item[\texttt{result}] \texttt{SearchResult}, required.
+  \item[\texttt{route\_\allowbreak{}keywords}] \texttt{tuple[str,\allowbreak{} .\allowbreak{}.\allowbreak{}.\allowbreak{}]\allowbreak{}}, default \texttt{()\allowbreak{}}, keyword-only.
+\end{arglist}
+\apifield{Value}\texttt{float}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}reranking.\allowbreak{}py:55}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/reranking.py#L55}{online})

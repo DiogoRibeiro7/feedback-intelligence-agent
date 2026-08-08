@@ -1,0 +1,22 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{StreamIngestionIssue}}
+\label{class:feedback_intelligence_agent.streaming_ingestion.StreamIngestionIssue}\label{schema:StreamIngestionIssue}\index{Classes!StreamIngestionIssue}
+
+Validation failure for one stream message.
+\apifield{Inherits}\texttt{BaseModel}
+\apifield{Fields}
+\begin{arglist}
+  \item[\texttt{source}] \texttt{str}, required
+  \item[\texttt{offset}] \texttt{StreamOffset}, required
+  \item[\texttt{message}] \texttt{str}, required
+  \item[\texttt{errors}] \texttt{list[ValidationIssue]\allowbreak{}}, default \texttt{list()\allowbreak{}}
+  \item[\texttt{payload}] \texttt{dict[str,\allowbreak{} Any]\allowbreak{}}, default \texttt{dict()\allowbreak{}}
+\end{arglist}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}streaming\_\allowbreak{}ingestion.\allowbreak{}py:60}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/streaming_ingestion.py#L60}{online}), pydantic model, module \cref{module:feedback_intelligence_agent.streaming_ingestion}

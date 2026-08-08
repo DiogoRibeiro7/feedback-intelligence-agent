@@ -1,0 +1,549 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\begin{longtable}{>{\raggedright\arraybackslash\small}p{0.24\textwidth} >{\small}r >{\small}r >{\raggedright\arraybackslash\small}p{0.52\textwidth}}
+\caption{Modules of the feedback\_intelligence\_agent package.}\label{tab:modules}\\
+\toprule
+Module & Lines & Objects & Summary \\
+\midrule
+\endfirsthead
+\toprule
+Module & Lines & Objects & Summary \\
+\midrule
+\endhead
+\midrule
+\multicolumn{4}{r}{\footnotesize continued on next page}\\
+\endfoot
+\bottomrule
+\endlastfoot
+\texttt{feedback\_\allowbreak{}intelligence\_\allowbreak{}agent} & 7 & 0 & Feedback Intelligence Agent package. \\
+\texttt{active\_\allowbreak{}learning} & 214 & 8 & Workflow state for active-learning follow-up items. \\
+\texttt{agent} & 564 & 3 & Agent orchestration for the feedback intelligence agent. \\
+\texttt{api} & 597 & 1 & FastAPI application. \\
+\texttt{auth} & 122 & 8 & Optional API-key authorization for the FastAPI service. \\
+\texttt{benchmarking} & 286 & 13 & Latency and throughput benchmarks for the RAG pipeline. \\
+\texttt{chunking} & 93 & 3 & Text chunking utilities. \\
+\texttt{citations} & 65 & 4 & Citation construction shared by the agent and the deterministic LLM provider. \\
+\texttt{cli} & 1007 & 29 & Command-line interface for the feedback intelligence agent. \\
+\texttt{config} & 113 & 4 & Application configuration. \\
+\texttt{data\_\allowbreak{}contracts} & 237 & 7 & Data contracts and dataset validation for customer feedback CSV files. \\
+\texttt{email\_\allowbreak{}summaries} & 178 & 6 & Email summaries for saved insight reports. \\
+\texttt{embeddings} & 78 & 3 & Embedding models. \\
+\texttt{evaluation} & 416 & 18 & Offline evaluation for retrieval quality and answer quality. \\
+\texttt{experiments} & 346 & 14 & Repeatable experiment runner for comparing RAG configurations. \\
+\texttt{factory} & 349 & 13 & Factories for constructing the application components. \\
+\texttt{guardrails} & 220 & 8 & Deterministic safety guardrails for the feedback intelligence agent. \\
+\texttt{hallucination} & 285 & 9 & Hallucination checks for evidence-grounded answers. \\
+\texttt{human\_\allowbreak{}feedback} & 407 & 14 & Human review feedback on generated agent answers. \\
+\texttt{index\_\allowbreak{}updates} & 115 & 2 & Incremental index update helpers. \\
+\texttt{ingestion} & 58 & 2 & Feedback ingestion utilities. \\
+\texttt{jobs} & 281 & 9 & Asynchronous ingestion jobs with status tracking. \\
+\texttt{lakehouse} & 398 & 7 & Local lakehouse-style feedback exports. \\
+\texttt{lexical\_\allowbreak{}search} & 113 & 3 & Lexical BM25 search implemented from scratch. \\
+\texttt{llm} & 658 & 11 & LLM provider abstraction. \\
+\texttt{memory} & 344 & 11 & Conversation memory and follow-up query rewriting. \\
+\texttt{output\_\allowbreak{}parser} & 181 & 4 & Structured LLM output parsing and deterministic repair. \\
+\texttt{privacy} & 59 & 6 & Deterministic PII redaction helpers. \\
+\texttt{prompt\_\allowbreak{}registry} & 159 & 6 & Versioned prompt registry. \\
+\texttt{prompts} & 91 & 5 & Prompt construction utilities and the default prompt registry. \\
+\texttt{qdrant\_\allowbreak{}store} & 196 & 2 & Optional Qdrant-backed vector store. \\
+\texttt{query\_\allowbreak{}expansion} & 93 & 5 & Deterministic query expansion for product-specific terminology. \\
+\texttt{rate\_\allowbreak{}limit} & 76 & 2 & Small in-memory fixed-window rate limiter for API deployments. \\
+\texttt{reports} & 278 & 8 & Saved insight reports for product and analyst workflows. \\
+\texttt{reranking} & 137 & 2 & Local candidate reranking for retrieved feedback chunks. \\
+\texttt{resilience} & 149 & 4 & Retry, timeout, and circuit-breaker wrappers for LLM providers. \\
+\texttt{retrieval} & 113 & 4 & Retrieval helpers. \\
+\texttt{schemas} & 311 & 16 & Typed domain schemas used across the project. \\
+\texttt{streaming\_\allowbreak{}ingestion} & 515 & 12 & Streaming ingestion primitives for feedback events. \\
+\texttt{synthetic\_\allowbreak{}data} & 318 & 8 & Synthetic customer feedback dataset generation. \\
+\texttt{telemetry} & 352 & 13 & Structured logging and OpenTelemetry-style telemetry. \\
+\texttt{tools} & 565 & 21 & Deterministic tool-use framework for the feedback intelligence agent. \\
+\texttt{vector\_\allowbreak{}store} & 182 & 3 & A small vector store with JSON persistence. \\
+\end{longtable}
+
+\apibreak
+\section{\texttt{feedback\_intelligence\_agent}}
+\label{module:feedback_intelligence_agent}\index{Modules!feedback\_intelligence\_agent}
+
+Feedback Intelligence Agent package.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}\_\allowbreak{}\_\allowbreak{}init\_\allowbreak{}\_\allowbreak{}.\allowbreak{}py}, 7 lines
+\apifield{Exports}\texttt{FeedbackInsightAgent}, \texttt{Settings}
+\apifield{Imports}\texttt{agent}, \texttt{config}
+
+\apibreak
+\section{\texttt{active\_learning}}
+\label{module:feedback_intelligence_agent.active_learning}\index{Modules!active\_learning}
+
+Workflow state for active-learning follow-up items.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}active\_\allowbreak{}learning.\allowbreak{}py}, 214 lines
+\apifield{Imports}\texttt{human\_\allowbreak{}feedback}
+\apifield{Classes}\cref{class:feedback_intelligence_agent.active_learning.ActiveLearningStatus}, \cref{class:feedback_intelligence_agent.active_learning.UpdateActiveLearningStateRequest}, \cref{class:feedback_intelligence_agent.active_learning.ActiveLearningState}, \cref{class:feedback_intelligence_agent.active_learning.ActiveLearningStateStore}, \cref{class:feedback_intelligence_agent.active_learning.InMemoryActiveLearningStateStore}, \cref{class:feedback_intelligence_agent.active_learning.JsonActiveLearningStateStore}
+\apifield{Functions}\cref{func:feedback_intelligence_agent.active_learning.apply_active_learning_states}, \cref{func:feedback_intelligence_agent.active_learning.validate_feedback_id}
+
+\apibreak
+\section{\texttt{agent}}
+\label{module:feedback_intelligence_agent.agent}\index{Modules!agent}
+
+Agent orchestration for the feedback intelligence agent.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}agent.\allowbreak{}py}, 564 lines
+\apifield{Imports}\texttt{citations}, \texttt{guardrails}, \texttt{hallucination}, \texttt{llm}, \texttt{memory}, \texttt{output\_\allowbreak{}parser}, \texttt{prompts}, \texttt{reranking}, \texttt{retrieval}, \texttt{schemas}, \texttt{telemetry}, \texttt{tools}
+\apifield{Classes}\cref{class:feedback_intelligence_agent.agent.RouteRule}, \cref{class:feedback_intelligence_agent.agent.FeedbackInsightAgent}
+\apifield{Constants}\texttt{ROUTE\_\allowbreak{}RULES}
+
+\apibreak
+\section{\texttt{api}}
+\label{module:feedback_intelligence_agent.api}\index{Modules!api}
+
+FastAPI application.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}api.\allowbreak{}py}, 597 lines
+\apifield{Imports}\texttt{active\_\allowbreak{}learning}, \texttt{auth}, \texttt{config}, \texttt{email\_\allowbreak{}summaries}, \texttt{factory}, \texttt{human\_\allowbreak{}feedback}, \texttt{jobs}, \texttt{memory}, \texttt{rate\_\allowbreak{}limit}, \texttt{reports}, \texttt{schemas}, \texttt{telemetry}
+\apifield{Functions}\cref{func:feedback_intelligence_agent.api.create_app}
+
+\apibreak
+\section{\texttt{auth}}
+\label{module:feedback_intelligence_agent.auth}\index{Modules!auth}
+
+Optional API-key authorization for the FastAPI service.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}auth.\allowbreak{}py}, 122 lines
+\apifield{Classes}\cref{class:feedback_intelligence_agent.auth.ApiRole}, \cref{class:feedback_intelligence_agent.auth.ApiPrincipal}, \cref{class:feedback_intelligence_agent.auth.ApiAuthError}, \cref{class:feedback_intelligence_agent.auth.ApiAuthConfigurationError}, \cref{class:feedback_intelligence_agent.auth.ApiAuthenticationError}, \cref{class:feedback_intelligence_agent.auth.ApiPermissionError}
+\apifield{Functions}\cref{func:feedback_intelligence_agent.auth.resolve_api_principal}, \cref{func:feedback_intelligence_agent.auth.require_api_role}
+
+\apibreak
+\section{\texttt{benchmarking}}
+\label{module:feedback_intelligence_agent.benchmarking}\index{Modules!benchmarking}
+
+Latency and throughput benchmarks for the RAG pipeline.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}benchmarking.\allowbreak{}py}, 286 lines
+\apifield{Imports}\texttt{agent}, \texttt{chunking}, \texttt{config}, \texttt{embeddings}, \texttt{evaluation}, \texttt{factory}, \texttt{ingestion}, \texttt{vector\_\allowbreak{}store}
+\apifield{Classes}\cref{class:feedback_intelligence_agent.benchmarking.PhaseStats}, \cref{class:feedback_intelligence_agent.benchmarking.BenchmarkReport}
+\apifield{Functions}\cref{func:feedback_intelligence_agent.benchmarking.percentile}, \cref{func:feedback_intelligence_agent.benchmarking.summarize}, \cref{func:feedback_intelligence_agent.benchmarking.run_benchmark}, \cref{func:feedback_intelligence_agent.benchmarking.report_to_markdown}, \cref{func:feedback_intelligence_agent.benchmarking.write_benchmark_outputs}
+\apifield{Constants}\texttt{RESULTS\_\allowbreak{}JSON\_\allowbreak{}FILENAME}, \texttt{RESULTS\_\allowbreak{}MARKDOWN\_\allowbreak{}FILENAME}, \texttt{PHASE\_\allowbreak{}INDEXING}, \texttt{PHASE\_\allowbreak{}EMBEDDING}, \texttt{PHASE\_\allowbreak{}RETRIEVAL}, \texttt{PHASE\_\allowbreak{}AGENT\_\allowbreak{}RESPONSE}
+\apifield{Details}This module times the four phases that dominate end-to-end cost in a retrieval system and reports robust summary statistics per phase:
+
+- \texttt{indexing}: load the CSV, chunk it, embed every chunk, and build the in-memory vector store (one timed unit per repetition). - \texttt{embedding}: embed the benchmark queries with the hashing embedding model. - \texttt{retrieval}: run every query through the retriever and collect the top-k chunks. - \texttt{agent\_\allowbreak{}response}: run every query through the full agent (retrieval plus answer generation with the deterministic local provider).
+
+Each phase is run \texttt{warmup} times to prime caches and then \texttt{repetitions} times for measurement. Durations come from \texttt{time.\allowbreak{}perf\_\allowbreak{}counter}, so they are wall-clock times and inherently non-deterministic. Only the *structure* of the report is deterministic; never snapshot the timing values.
+
+The summary statistics (mean, median, p95, min, max) are exposed as pure functions so they can be unit-tested without timing anything. Results serialise to both JSON and a small Markdown table via \texttt{write\_\allowbreak{}benchmark\_\allowbreak{}outputs}.
+
+\apibreak
+\section{\texttt{chunking}}
+\label{module:feedback_intelligence_agent.chunking}\index{Modules!chunking}
+
+Text chunking utilities.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}chunking.\allowbreak{}py}, 93 lines
+\apifield{Imports}\texttt{privacy}, \texttt{schemas}
+\apifield{Functions}\cref{func:feedback_intelligence_agent.chunking.scoped_source_id}, \cref{func:feedback_intelligence_agent.chunking.chunk_text}, \cref{func:feedback_intelligence_agent.chunking.feedback_to_chunks}
+
+\apibreak
+\section{\texttt{citations}}
+\label{module:feedback_intelligence_agent.citations}\index{Modules!citations}
+
+Citation construction shared by the agent and the deterministic LLM provider.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}citations.\allowbreak{}py}, 65 lines
+\apifield{Imports}\texttt{schemas}
+\apifield{Functions}\cref{func:feedback_intelligence_agent.citations.build_citations}, \cref{func:feedback_intelligence_agent.citations.citation_marker}, \cref{func:feedback_intelligence_agent.citations.summarize_evidence}, \cref{func:feedback_intelligence_agent.citations.render_citations}
+\apifield{Details}Keeping the logic in one place guarantees that the bracketed markers emitted in answer text (\texttt{[1]\allowbreak{}}, \texttt{[2]\allowbreak{}}) always line up with the structured citation list built from the actually retrieved chunks.
+
+\apibreak
+\section{\texttt{cli}}
+\label{module:feedback_intelligence_agent.cli}\index{Modules!cli}
+
+Command-line interface for the feedback intelligence agent.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}cli.\allowbreak{}py}, 1007 lines
+\apifield{Imports}\texttt{active\_\allowbreak{}learning}, \texttt{benchmarking}, \texttt{citations}, \texttt{config}, \texttt{data\_\allowbreak{}contracts}, \texttt{email\_\allowbreak{}summaries}, \texttt{evaluation}, \texttt{experiments}, \texttt{factory}, \texttt{human\_\allowbreak{}feedback}, \texttt{index\_\allowbreak{}updates}, \texttt{ingestion}, \texttt{jobs}, \texttt{lakehouse}, \texttt{prompt\_\allowbreak{}registry}, \texttt{prompts}, \texttt{reports}, \texttt{schemas}, \texttt{streaming\_\allowbreak{}ingestion}, \texttt{synthetic\_\allowbreak{}data}, \texttt{telemetry}
+\apifield{Classes}\cref{class:feedback_intelligence_agent.cli.RetrieverChoice}, \cref{class:feedback_intelligence_agent.cli.ReportExportFormat}
+\apifield{Functions}\cref{func:feedback_intelligence_agent.cli.index}, \cref{func:feedback_intelligence_agent.cli.ingest_job}, \cref{func:feedback_intelligence_agent.cli.stream_ingest}, \cref{func:feedback_intelligence_agent.cli.update_index}, \cref{func:feedback_intelligence_agent.cli.export_lakehouse}, \cref{func:feedback_intelligence_agent.cli.validate_data}, \cref{func:feedback_intelligence_agent.cli.generate_data}, \cref{func:feedback_intelligence_agent.cli.query}, \cref{func:feedback_intelligence_agent.cli.chat}, \cref{func:feedback_intelligence_agent.cli.reports_save}, \cref{func:feedback_intelligence_agent.cli.reports_list}, \cref{func:feedback_intelligence_agent.cli.reports_get}, \cref{func:feedback_intelligence_agent.cli.reports_export}, \cref{func:feedback_intelligence_agent.cli.reports_email_summary}, \cref{func:feedback_intelligence_agent.cli.answer_feedback_submit}, \cref{func:feedback_intelligence_agent.cli.answer_feedback_list}, \cref{func:feedback_intelligence_agent.cli.answer_feedback_analytics}, \cref{func:feedback_intelligence_agent.cli.answer_feedback_active_learning}, \cref{func:feedback_intelligence_agent.cli.answer_feedback_active_learning_states}, \cref{func:feedback_intelligence_agent.cli.answer_feedback_active_learning_update}, \cref{func:feedback_intelligence_agent.cli.answer_feedback_get}, \cref{func:feedback_intelligence_agent.cli.evaluate}, \cref{func:feedback_intelligence_agent.cli.benchmark}, \cref{func:feedback_intelligence_agent.cli.experiment_run}, \cref{func:feedback_intelligence_agent.cli.prompts_list}, \cref{func:feedback_intelligence_agent.cli.prompts_render}, \cref{func:feedback_intelligence_agent.cli.serve}
+
+\apibreak
+\section{\texttt{config}}
+\label{module:feedback_intelligence_agent.config}\index{Modules!config}
+
+Application configuration.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}config.\allowbreak{}py}, 113 lines
+\apifield{Classes}\cref{class:feedback_intelligence_agent.config.Settings}
+\apifield{Constants}\texttt{RetrieverType}, \texttt{TelemetryBackend}, \texttt{VectorStoreType}
+
+\apibreak
+\section{\texttt{data\_contracts}}
+\label{module:feedback_intelligence_agent.data_contracts}\index{Modules!data\_contracts}
+
+Data contracts and dataset validation for customer feedback CSV files.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}data\_\allowbreak{}contracts.\allowbreak{}py}, 237 lines
+\apifield{Imports}\texttt{schemas}
+\apifield{Classes}\cref{class:feedback_intelligence_agent.data_contracts.ValidationIssue}, \cref{class:feedback_intelligence_agent.data_contracts.ValidationReport}, \cref{class:feedback_intelligence_agent.data_contracts.DataContractError}
+\apifield{Functions}\cref{func:feedback_intelligence_agent.data_contracts.validate_feedback_csv}
+\apifield{Constants}\texttt{REQUIRED\_\allowbreak{}COLUMNS}, \texttt{OPTIONAL\_\allowbreak{}COLUMNS}, \texttt{KNOWN\_\allowbreak{}SENTIMENTS}
+\apifield{Details}This module defines the expected schema for ingested feedback datasets and validates CSV input before it reaches chunking and indexing. Validation produces a structured report with clear, row-level errors for missing columns, empty text, duplicate identifiers, and invalid timestamps.
+
+\apibreak
+\section{\texttt{email\_summaries}}
+\label{module:feedback_intelligence_agent.email_summaries}\index{Modules!email\_summaries}
+
+Email summaries for saved insight reports.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}email\_\allowbreak{}summaries.\allowbreak{}py}, 178 lines
+\apifield{Imports}\texttt{reports}
+\apifield{Classes}\cref{class:feedback_intelligence_agent.email_summaries.EmailSummaryRequest}, \cref{class:feedback_intelligence_agent.email_summaries.EmailSummary}, \cref{class:feedback_intelligence_agent.email_summaries.EmailSummaryDelivery}
+\apifield{Functions}\cref{func:feedback_intelligence_agent.email_summaries.render_email_summary}, \cref{func:feedback_intelligence_agent.email_summaries.select_reports_for_summary}, \cref{func:feedback_intelligence_agent.email_summaries.deliver_email_summary}
+
+\apibreak
+\section{\texttt{embeddings}}
+\label{module:feedback_intelligence_agent.embeddings}\index{Modules!embeddings}
+
+Embedding models.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}embeddings.\allowbreak{}py}, 78 lines
+\apifield{Classes}\cref{class:feedback_intelligence_agent.embeddings.EmbeddingModel}, \cref{class:feedback_intelligence_agent.embeddings.HashingEmbeddingModel}
+\apifield{Constants}\texttt{TOKEN\_\allowbreak{}PATTERN}
+\apifield{Details}This repository intentionally includes a deterministic hashing embedding model. It keeps the demo runnable without external infrastructure while still exposing the same interface that a production embedding provider would use.
+
+\apibreak
+\section{\texttt{evaluation}}
+\label{module:feedback_intelligence_agent.evaluation}\index{Modules!evaluation}
+
+Offline evaluation for retrieval quality and answer quality.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}evaluation.\allowbreak{}py}, 416 lines
+\apifield{Imports}\texttt{agent}, \texttt{hallucination}, \texttt{retrieval}, \texttt{schemas}, \texttt{telemetry}
+\apifield{Classes}\cref{class:feedback_intelligence_agent.evaluation.RetrievalMetrics}, \cref{class:feedback_intelligence_agent.evaluation.AnswerMetrics}, \cref{class:feedback_intelligence_agent.evaluation.CaseResult}, \cref{class:feedback_intelligence_agent.evaluation.EvaluationReport}
+\apifield{Functions}\cref{func:feedback_intelligence_agent.evaluation.precision_at_k}, \cref{func:feedback_intelligence_agent.evaluation.recall_at_k}, \cref{func:feedback_intelligence_agent.evaluation.reciprocal_rank}, \cref{func:feedback_intelligence_agent.evaluation.context_hit}, \cref{func:feedback_intelligence_agent.evaluation.keyword_coverage}, \cref{func:feedback_intelligence_agent.evaluation.groundedness_score}, \cref{func:feedback_intelligence_agent.evaluation.is_refusal}, \cref{func:feedback_intelligence_agent.evaluation.refusal_correct}, \cref{func:feedback_intelligence_agent.evaluation.load_evaluation_cases}, \cref{func:feedback_intelligence_agent.evaluation.evaluate_case_detailed}, \cref{func:feedback_intelligence_agent.evaluation.evaluate_case}, \cref{func:feedback_intelligence_agent.evaluation.evaluate_system}, \cref{func:feedback_intelligence_agent.evaluation.aggregate_report}
+\apifield{Constants}\texttt{REFUSAL\_\allowbreak{}MARKERS}
+\apifield{Details}The module exposes small, pure metric functions (precision@k, recall@k, reciprocal rank, keyword coverage, groundedness, refusal correctness) plus an orchestration layer that runs every evaluation case through the retriever and the agent and aggregates results into a typed \texttt{EvaluationReport}.
+
+All metrics are deterministic when used with the local LLM provider, which makes the report suitable for CI regression gates.
+
+\apibreak
+\section{\texttt{experiments}}
+\label{module:feedback_intelligence_agent.experiments}\index{Modules!experiments}
+
+Repeatable experiment runner for comparing RAG configurations.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}experiments.\allowbreak{}py}, 346 lines
+\apifield{Imports}\texttt{agent}, \texttt{chunking}, \texttt{config}, \texttt{embeddings}, \texttt{evaluation}, \texttt{factory}, \texttt{ingestion}, \texttt{vector\_\allowbreak{}store}
+\apifield{Classes}\cref{class:feedback_intelligence_agent.experiments.ExperimentConfig}, \cref{class:feedback_intelligence_agent.experiments.QueryResult}, \cref{class:feedback_intelligence_agent.experiments.AggregateMetrics}, \cref{class:feedback_intelligence_agent.experiments.ExperimentResult}, \cref{class:feedback_intelligence_agent.experiments.RunMetadata}, \cref{class:feedback_intelligence_agent.experiments.ExperimentTrackingError}
+\apifield{Functions}\cref{func:feedback_intelligence_agent.experiments.run_experiment}, \cref{func:feedback_intelligence_agent.experiments.collect_run_metadata}, \cref{func:feedback_intelligence_agent.experiments.write_experiment_outputs}, \cref{func:feedback_intelligence_agent.experiments.track_experiment_run}
+\apifield{Constants}\texttt{RESULTS\_\allowbreak{}FILENAME}, \texttt{METRICS\_\allowbreak{}FILENAME}, \texttt{METADATA\_\allowbreak{}FILENAME}, \texttt{TrackingProvider}
+\apifield{Details}An experiment is described by a YAML file (parsed into a typed \texttt{ExperimentConfig}), executed fully locally against a feedback CSV and a JSONL query set, and persisted as three JSON artifacts:
+
+- \texttt{results.\allowbreak{}json}: configuration plus per-query answers and metrics. - \texttt{metrics.\allowbreak{}json}: aggregate retrieval and answer-quality metrics. - \texttt{run\_\allowbreak{}metadata.\allowbreak{}json}: timestamp, git commit, Python and package versions.
+
+With the deterministic local LLM provider, \texttt{results.\allowbreak{}json} and \texttt{metrics.\allowbreak{}json} are bit-for-bit reproducible; everything environment-specific lives in \texttt{run\_\allowbreak{}metadata.\allowbreak{}json}. This makes experiment outputs directly comparable across configurations and usable as CI regression baselines.
+
+\apibreak
+\section{\texttt{factory}}
+\label{module:feedback_intelligence_agent.factory}\index{Modules!factory}
+
+Factories for constructing the application components.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}factory.\allowbreak{}py}, 349 lines
+\apifield{Imports}\texttt{active\_\allowbreak{}learning}, \texttt{agent}, \texttt{chunking}, \texttt{config}, \texttt{embeddings}, \texttt{hallucination}, \texttt{human\_\allowbreak{}feedback}, \texttt{ingestion}, \texttt{jobs}, \texttt{lexical\_\allowbreak{}search}, \texttt{llm}, \texttt{memory}, \texttt{qdrant\_\allowbreak{}store}, \texttt{query\_\allowbreak{}expansion}, \texttt{reports}, \texttt{resilience}, \texttt{retrieval}, \texttt{schemas}, \texttt{telemetry}, \texttt{tools}, \texttt{vector\_\allowbreak{}store}
+\apifield{Functions}\cref{func:feedback_intelligence_agent.factory.build_telemetry}, \cref{func:feedback_intelligence_agent.factory.build_conversation_store}, \cref{func:feedback_intelligence_agent.factory.build_job_store}, \cref{func:feedback_intelligence_agent.factory.build_report_store}, \cref{func:feedback_intelligence_agent.factory.build_human_feedback_store}, \cref{func:feedback_intelligence_agent.factory.build_active_learning_state_store}, \cref{func:feedback_intelligence_agent.factory.chunk_to_embedding_text}, \cref{func:feedback_intelligence_agent.factory.build_index}, \cref{func:feedback_intelligence_agent.factory.build_qdrant_index}, \cref{func:feedback_intelligence_agent.factory.load_or_build_index}, \cref{func:feedback_intelligence_agent.factory.build_retriever}, \cref{func:feedback_intelligence_agent.factory.build_llm}, \cref{func:feedback_intelligence_agent.factory.build_agent}
+
+\apibreak
+\section{\texttt{guardrails}}
+\label{module:feedback_intelligence_agent.guardrails}\index{Modules!guardrails}
+
+Deterministic safety guardrails for the feedback intelligence agent.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}guardrails.\allowbreak{}py}, 220 lines
+\apifield{Classes}\cref{class:feedback_intelligence_agent.guardrails.GuardrailDecision}, \cref{class:feedback_intelligence_agent.guardrails.GuardrailRule}
+\apifield{Functions}\cref{func:feedback_intelligence_agent.guardrails.check_input}, \cref{func:feedback_intelligence_agent.guardrails.is_suspicious_context}, \cref{func:feedback_intelligence_agent.guardrails.check_context}
+\apifield{Constants}\texttt{Severity}, \texttt{SAFE\_\allowbreak{}REFUSAL}, \texttt{INPUT\_\allowbreak{}RULES}
+\apifield{Details}The module implements two transparent, regex/keyword-based gates:
+
+1. \texttt{check\_\allowbreak{}input} runs **before retrieval** and blocks empty queries, prompt-injection attempts, requests for hidden system instructions, requests to ignore the retrieved context, and unsupported data access requests (other customers' PII, raw database access). 2. \texttt{check\_\allowbreak{}context} runs **before answer generation** and flags retrieved chunks that contain instruction-override content (indirect prompt injection planted in feedback text).
+
+Every rule is a documented regular expression, so decisions are fully deterministic, reproducible in CI, and easy to audit. No model call is involved in any guardrail decision.
+
+\apibreak
+\section{\texttt{hallucination}}
+\label{module:feedback_intelligence_agent.hallucination}\index{Modules!hallucination}
+
+Hallucination checks for evidence-grounded answers.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}hallucination.\allowbreak{}py}, 285 lines
+\apifield{Imports}\texttt{llm}, \texttt{schemas}
+\apifield{Classes}\cref{class:feedback_intelligence_agent.hallucination.EvidenceOverlap}, \cref{class:feedback_intelligence_agent.hallucination.JudgeVerdict}, \cref{class:feedback_intelligence_agent.hallucination.HallucinationCheck}, \cref{class:feedback_intelligence_agent.hallucination.HallucinationJudge}, \cref{class:feedback_intelligence_agent.hallucination.EvidenceOverlapHallucinationChecker}, \cref{class:feedback_intelligence_agent.hallucination.LLMHallucinationJudge}
+\apifield{Functions}\cref{func:feedback_intelligence_agent.hallucination.evidence_overlap_score}
+\apifield{Constants}\texttt{HallucinationRisk}, \texttt{JudgeLabel}
+\apifield{Details}The default check is deterministic and local: answer sentences must have enough content-token overlap with retrieved evidence. An optional LLM-as-judge wrapper can be injected for deployments that want semantic review on top of the lexical gate without changing the agent orchestration.
+
+\apibreak
+\section{\texttt{human\_feedback}}
+\label{module:feedback_intelligence_agent.human_feedback}\index{Modules!human\_feedback}
+
+Human review feedback on generated agent answers.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}human\_\allowbreak{}feedback.\allowbreak{}py}, 407 lines
+\apifield{Imports}\texttt{schemas}
+\apifield{Classes}\cref{class:feedback_intelligence_agent.human_feedback.HumanFeedbackRating}, \cref{class:feedback_intelligence_agent.human_feedback.SubmitHumanFeedbackRequest}, \cref{class:feedback_intelligence_agent.human_feedback.HumanFeedbackRecord}, \cref{class:feedback_intelligence_agent.human_feedback.HumanFeedbackSummary}, \cref{class:feedback_intelligence_agent.human_feedback.HumanFeedbackGroupStats}, \cref{class:feedback_intelligence_agent.human_feedback.HumanFeedbackAnalytics}, \cref{class:feedback_intelligence_agent.human_feedback.ActiveLearningQueueItem}, \cref{class:feedback_intelligence_agent.human_feedback.ActiveLearningQueue}, \cref{class:feedback_intelligence_agent.human_feedback.HumanFeedbackStore}, \cref{class:feedback_intelligence_agent.human_feedback.InMemoryHumanFeedbackStore}, \cref{class:feedback_intelligence_agent.human_feedback.JsonHumanFeedbackStore}
+\apifield{Functions}\cref{func:feedback_intelligence_agent.human_feedback.new_human_feedback_id}, \cref{func:feedback_intelligence_agent.human_feedback.summarise_human_feedback}, \cref{func:feedback_intelligence_agent.human_feedback.build_active_learning_queue}
+
+\apibreak
+\section{\texttt{index\_updates}}
+\label{module:feedback_intelligence_agent.index_updates}\index{Modules!index\_updates}
+
+Incremental index update helpers.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}index\_\allowbreak{}updates.\allowbreak{}py}, 115 lines
+\apifield{Imports}\texttt{chunking}, \texttt{embeddings}, \texttt{factory}, \texttt{schemas}, \texttt{telemetry}, \texttt{vector\_\allowbreak{}store}
+\apifield{Classes}\cref{class:feedback_intelligence_agent.index_updates.IncrementalIndexResult}
+\apifield{Functions}\cref{func:feedback_intelligence_agent.index_updates.update_json_index}
+\apifield{Details}The default JSON index can be updated without rebuilding from the full dataset: validated feedback records are chunked, embedded, and merged into the persisted vector store by \texttt{feedback\_\allowbreak{}id}. Existing chunks for the same source document are replaced before new chunks are appended.
+
+\apibreak
+\section{\texttt{ingestion}}
+\label{module:feedback_intelligence_agent.ingestion}\index{Modules!ingestion}
+
+Feedback ingestion utilities.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}ingestion.\allowbreak{}py}, 58 lines
+\apifield{Exports}\texttt{REQUIRED\_\allowbreak{}COLUMNS}, \texttt{FeedbackIngestionError}, \texttt{load\_\allowbreak{}feedback\_\allowbreak{}csv}
+\apifield{Imports}\texttt{data\_\allowbreak{}contracts}, \texttt{schemas}, \texttt{telemetry}
+\apifield{Classes}\cref{class:feedback_intelligence_agent.ingestion.FeedbackIngestionError}
+\apifield{Functions}\cref{func:feedback_intelligence_agent.ingestion.load_feedback_csv}
+
+\apibreak
+\section{\texttt{jobs}}
+\label{module:feedback_intelligence_agent.jobs}\index{Modules!jobs}
+
+Asynchronous ingestion jobs with status tracking.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}jobs.\allowbreak{}py}, 281 lines
+\apifield{Exports}\texttt{InMemoryJobStore}, \texttt{JobNotFoundError}, \texttt{JobRequest}, \texttt{JobResult}, \texttt{JobStatus}, \texttt{JobStore}, \texttt{JsonJobStore}, \texttt{new\_\allowbreak{}job\_\allowbreak{}id}, \texttt{run\_\allowbreak{}ingestion\_\allowbreak{}job}
+\apifield{Imports}\texttt{chunking}, \texttt{data\_\allowbreak{}contracts}, \texttt{embeddings}, \texttt{factory}, \texttt{ingestion}, \texttt{telemetry}, \texttt{vector\_\allowbreak{}store}
+\apifield{Classes}\cref{class:feedback_intelligence_agent.jobs.JobStatus}, \cref{class:feedback_intelligence_agent.jobs.JobRequest}, \cref{class:feedback_intelligence_agent.jobs.JobResult}, \cref{class:feedback_intelligence_agent.jobs.JobStore}, \cref{class:feedback_intelligence_agent.jobs.JobNotFoundError}, \cref{class:feedback_intelligence_agent.jobs.InMemoryJobStore}, \cref{class:feedback_intelligence_agent.jobs.JsonJobStore}
+\apifield{Functions}\cref{func:feedback_intelligence_agent.jobs.new_job_id}, \cref{func:feedback_intelligence_agent.jobs.run_ingestion_job}
+\apifield{Details}This module decouples ingestion from the request/response cycle. A client submits an ingestion request, receives a job identifier immediately, and polls for the terminal status (\texttt{succeeded} / \texttt{failed}) without blocking on the embedding and indexing work.
+
+The pieces are:
+
+1. Typed job models (\texttt{JobStatus}, \texttt{JobRequest}, \texttt{JobResult}). 2. A \texttt{JobStore} protocol with two backends: an in-memory store guarded by a lock (suitable for FastAPI \texttt{BackgroundTasks}) and a JSON-backed store that persists one file per job. 3. A single \texttt{run\_\allowbreak{}ingestion\_\allowbreak{}job} pipeline that loads + validates a CSV, chunks it, builds embeddings, persists the vector store, and records success or a clean failure message. The full exception detail is logged server-side but never surfaced to the client, so secrets, stack traces, and filesystem internals do not leak.
+
+The pipeline is a plain function so it is directly unit-testable and is also the exact callable scheduled by the API's \texttt{BackgroundTasks}.
+
+\apibreak
+\section{\texttt{lakehouse}}
+\label{module:feedback_intelligence_agent.lakehouse}\index{Modules!lakehouse}
+
+Local lakehouse-style feedback exports.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}lakehouse.\allowbreak{}py}, 398 lines
+\apifield{Imports}\texttt{data\_\allowbreak{}contracts}, \texttt{privacy}, \texttt{schemas}, \texttt{telemetry}
+\apifield{Classes}\cref{class:feedback_intelligence_agent.lakehouse.LakehouseTableFormat}, \cref{class:feedback_intelligence_agent.lakehouse.LakehouseDataFormat}, \cref{class:feedback_intelligence_agent.lakehouse.LakehouseDataFile}, \cref{class:feedback_intelligence_agent.lakehouse.LakehouseExportResult}
+\apifield{Functions}\cref{func:feedback_intelligence_agent.lakehouse.export_feedback_lakehouse}
+\apifield{Constants}\texttt{DEFAULT\_\allowbreak{}PARTITION\_\allowbreak{}COLUMNS}, \texttt{ALLOWED\_\allowbreak{}PARTITION\_\allowbreak{}COLUMNS}
+\apifield{Details}The exporter intentionally avoids heavyweight table runtimes in the default install. It writes deterministic partitioned JSONL data files plus Delta-style or Iceberg-style metadata so local demos and CI can exercise the data-product contract without requiring Spark, delta-rs, PyArrow, or an object store.
+
+\apibreak
+\section{\texttt{lexical\_search}}
+\label{module:feedback_intelligence_agent.lexical_search}\index{Modules!lexical\_search}
+
+Lexical BM25 search implemented from scratch.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}lexical\_\allowbreak{}search.\allowbreak{}py}, 113 lines
+\apifield{Imports}\texttt{query\_\allowbreak{}expansion}, \texttt{schemas}
+\apifield{Classes}\cref{class:feedback_intelligence_agent.lexical_search.BM25Retriever}
+\apifield{Functions}\cref{func:feedback_intelligence_agent.lexical_search.tokenize}
+\apifield{Constants}\texttt{TOKEN\_\allowbreak{}PATTERN}
+\apifield{Details}The retriever complements dense hashing-embedding search: BM25 rewards exact term matches (product names, error codes, integration names) that vector similarity can dilute, while staying fully local and dependency-free.
+
+\apibreak
+\section{\texttt{llm}}
+\label{module:feedback_intelligence_agent.llm}\index{Modules!llm}
+
+LLM provider abstraction.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}llm.\allowbreak{}py}, 658 lines
+\apifield{Imports}\texttt{citations}, \texttt{schemas}
+\apifield{Classes}\cref{class:feedback_intelligence_agent.llm.LLMProviderError}, \cref{class:feedback_intelligence_agent.llm.ProviderCapabilities}, \cref{class:feedback_intelligence_agent.llm.LLMProvider}, \cref{class:feedback_intelligence_agent.llm.BedrockRuntimeClient}, \cref{class:feedback_intelligence_agent.llm.BedrockExceptionTypes}, \cref{class:feedback_intelligence_agent.llm.DeterministicLLM}, \cref{class:feedback_intelligence_agent.llm.OpenAIChatLLM}, \cref{class:feedback_intelligence_agent.llm.OpenAIResponsesLLM}, \cref{class:feedback_intelligence_agent.llm.AnthropicLLM}, \cref{class:feedback_intelligence_agent.llm.BedrockConverseLLM}, \cref{class:feedback_intelligence_agent.llm.OllamaLLM}
+\apifield{Details}The deterministic local provider is the default and keeps the project fully runnable without API keys. Optional remote providers (OpenAI-compatible, Anthropic, AWS Bedrock, Ollama) plug into the same \texttt{LLMProvider} protocol and are selected through configuration (see \texttt{factory.\allowbreak{}build\_\allowbreak{}llm}).
+
+\apibreak
+\section{\texttt{memory}}
+\label{module:feedback_intelligence_agent.memory}\index{Modules!memory}
+
+Conversation memory and follow-up query rewriting.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}memory.\allowbreak{}py}, 344 lines
+\apifield{Imports}\texttt{llm}
+\apifield{Classes}\cref{class:feedback_intelligence_agent.memory.ConversationTurn}, \cref{class:feedback_intelligence_agent.memory.ConversationMemory}, \cref{class:feedback_intelligence_agent.memory.ConversationStore}, \cref{class:feedback_intelligence_agent.memory.InMemoryConversationStore}, \cref{class:feedback_intelligence_agent.memory.JsonConversationStore}, \cref{class:feedback_intelligence_agent.memory.QueryRewrite}, \cref{class:feedback_intelligence_agent.memory.QueryRewriter}, \cref{class:feedback_intelligence_agent.memory.DeterministicQueryRewriter}, \cref{class:feedback_intelligence_agent.memory.LLMQueryRewriter}
+\apifield{Functions}\cref{func:feedback_intelligence_agent.memory.new_conversation_id}, \cref{func:feedback_intelligence_agent.memory.extract_entities}
+\apifield{Details}The module provides three building blocks:
+
+1. Typed conversation state (\texttt{ConversationTurn}, \texttt{ConversationMemory}) that records what the user asked, what the agent answered, and which documents grounded the answer. 2. Pluggable persistence (\texttt{InMemoryConversationStore} for tests and \texttt{JsonConversationStore} for local JSON files under \texttt{.\allowbreak{}artifacts/\allowbreak{}}). 3. Deterministic follow-up query rewriting (\texttt{DeterministicQueryRewriter}) that converts elliptical follow-ups ("What about pricing?") and pronoun references ("Why do they complain about it?") into standalone questions using only entities from the previous turn. Only the rewritten standalone question reaches retrieval, so the index is never queried with the full conversation history. An optional \texttt{LLMQueryRewriter} can delegate rewriting to an LLM provider, but the deterministic local rewriter is the default and requires no external APIs.
+
+\apibreak
+\section{\texttt{output\_parser}}
+\label{module:feedback_intelligence_agent.output_parser}\index{Modules!output\_parser}
+
+Structured LLM output parsing and deterministic repair.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}output\_\allowbreak{}parser.\allowbreak{}py}, 181 lines
+\apifield{Classes}\cref{class:feedback_intelligence_agent.output_parser.GeneratedAnswerPayload}, \cref{class:feedback_intelligence_agent.output_parser.ParsedLLMOutput}
+\apifield{Functions}\cref{func:feedback_intelligence_agent.output_parser.parse_llm_output}
+\apifield{Constants}\texttt{OutputFormat}
+
+\apibreak
+\section{\texttt{privacy}}
+\label{module:feedback_intelligence_agent.privacy}\index{Modules!privacy}
+
+Deterministic PII redaction helpers.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}privacy.\allowbreak{}py}, 59 lines
+\apifield{Exports}\texttt{EMAIL\_\allowbreak{}PLACEHOLDER}, \texttt{PHONE\_\allowbreak{}PLACEHOLDER}, \texttt{TOKEN\_\allowbreak{}PLACEHOLDER}, \texttt{redact\_\allowbreak{}feedback\_\allowbreak{}record}, \texttt{redact\_\allowbreak{}feedback\_\allowbreak{}records}, \texttt{redact\_\allowbreak{}pii}
+\apifield{Imports}\texttt{schemas}
+\apifield{Functions}\cref{func:feedback_intelligence_agent.privacy.redact_pii}, \cref{func:feedback_intelligence_agent.privacy.redact_feedback_record}, \cref{func:feedback_intelligence_agent.privacy.redact_feedback_records}
+\apifield{Constants}\texttt{EMAIL\_\allowbreak{}PLACEHOLDER}, \texttt{PHONE\_\allowbreak{}PLACEHOLDER}, \texttt{TOKEN\_\allowbreak{}PLACEHOLDER}
+
+\apibreak
+\section{\texttt{prompt\_registry}}
+\label{module:feedback_intelligence_agent.prompt_registry}\index{Modules!prompt\_registry}
+
+Versioned prompt registry.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}prompt\_\allowbreak{}registry.\allowbreak{}py}, 159 lines
+\apifield{Classes}\cref{class:feedback_intelligence_agent.prompt_registry.PromptNotFoundError}, \cref{class:feedback_intelligence_agent.prompt_registry.PromptVariableError}, \cref{class:feedback_intelligence_agent.prompt_registry.PromptTemplate}, \cref{class:feedback_intelligence_agent.prompt_registry.PromptRegistry}
+\apifield{Functions}\cref{func:feedback_intelligence_agent.prompt_registry.template_placeholders}
+\apifield{Constants}\texttt{LATEST\_\allowbreak{}VERSION}
+\apifield{Details}Prompts are production assets: they are named, versioned, validated against their declared variables, and covered by snapshot tests. This module provides the generic registry machinery; the actual prompt definitions live in \texttt{feedback\_\allowbreak{}intelligence\_\allowbreak{}agent.\allowbreak{}prompts}.
+
+\apibreak
+\section{\texttt{prompts}}
+\label{module:feedback_intelligence_agent.prompts}\index{Modules!prompts}
+
+Prompt construction utilities and the default prompt registry.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}prompts.\allowbreak{}py}, 91 lines
+\apifield{Imports}\texttt{citations}, \texttt{prompt\_\allowbreak{}registry}, \texttt{schemas}
+\apifield{Functions}\cref{func:feedback_intelligence_agent.prompts.build_grounded_prompt}
+\apifield{Constants}\texttt{SYSTEM\_\allowbreak{}PROMPT}, \texttt{PROMPT\_\allowbreak{}REGISTRY}, \texttt{RAG\_\allowbreak{}SYSTEM\_\allowbreak{}V1}, \texttt{RAG\_\allowbreak{}ANSWER\_\allowbreak{}V1}
+\apifield{Details}All production prompts are registered in \texttt{PROMPT\_\allowbreak{}REGISTRY} with a name, version, declared variables, and a changelog note. The agent always renders through the registry, so prompt changes are explicit, versioned, and covered by snapshot tests (see \texttt{tests/\allowbreak{}test\_\allowbreak{}prompt\_\allowbreak{}snapshot.\allowbreak{}py} and \texttt{docs/\allowbreak{}prompts.\allowbreak{}md}).
+
+\apibreak
+\section{\texttt{qdrant\_store}}
+\label{module:feedback_intelligence_agent.qdrant_store}\index{Modules!qdrant\_store}
+
+Optional Qdrant-backed vector store.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}qdrant\_\allowbreak{}store.\allowbreak{}py}, 196 lines
+\apifield{Imports}\texttt{schemas}
+\apifield{Classes}\cref{class:feedback_intelligence_agent.qdrant_store.QdrantStoreError}, \cref{class:feedback_intelligence_agent.qdrant_store.QdrantVectorStore}
+\apifield{Details}The store mirrors the semantics of the default \texttt{InMemoryVectorStore} but persists vectors in a running Qdrant instance instead of a local JSON file. It satisfies the same \texttt{VectorStore} protocol, so the retrieval layer treats both stores identically.
+
+\texttt{qdrant-\allowbreak{}client} is an *optional* dependency (poetry extra \texttt{qdrant}) and is imported lazily, with an actionable error if it is not installed. This keeps the default install lean and the deterministic local path free of any external service.
+
+\apibreak
+\section{\texttt{query\_expansion}}
+\label{module:feedback_intelligence_agent.query_expansion}\index{Modules!query\_expansion}
+
+Deterministic query expansion for product-specific terminology.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}query\_\allowbreak{}expansion.\allowbreak{}py}, 93 lines
+\apifield{Classes}\cref{class:feedback_intelligence_agent.query_expansion.QueryExpansion}, \cref{class:feedback_intelligence_agent.query_expansion.QueryExpander}, \cref{class:feedback_intelligence_agent.query_expansion.ProductTerminologyExpander}
+\apifield{Constants}\texttt{TOKEN\_\allowbreak{}PATTERN}, \texttt{PRODUCT\_\allowbreak{}TERMINOLOGY}
+
+\apibreak
+\section{\texttt{rate\_limit}}
+\label{module:feedback_intelligence_agent.rate_limit}\index{Modules!rate\_limit}
+
+Small in-memory fixed-window rate limiter for API deployments.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}rate\_\allowbreak{}limit.\allowbreak{}py}, 76 lines
+\apifield{Classes}\cref{class:feedback_intelligence_agent.rate_limit.RateLimitDecision}, \cref{class:feedback_intelligence_agent.rate_limit.InMemoryRateLimiter}
+
+\apibreak
+\section{\texttt{reports}}
+\label{module:feedback_intelligence_agent.reports}\index{Modules!reports}
+
+Saved insight reports for product and analyst workflows.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}reports.\allowbreak{}py}, 278 lines
+\apifield{Imports}\texttt{schemas}
+\apifield{Classes}\cref{class:feedback_intelligence_agent.reports.SaveInsightReportRequest}, \cref{class:feedback_intelligence_agent.reports.SavedInsightReport}, \cref{class:feedback_intelligence_agent.reports.InsightReportSummary}, \cref{class:feedback_intelligence_agent.reports.InsightReportStore}, \cref{class:feedback_intelligence_agent.reports.InMemoryInsightReportStore}, \cref{class:feedback_intelligence_agent.reports.JsonInsightReportStore}
+\apifield{Functions}\cref{func:feedback_intelligence_agent.reports.new_report_id}, \cref{func:feedback_intelligence_agent.reports.render_report_markdown}
+
+\apibreak
+\section{\texttt{reranking}}
+\label{module:feedback_intelligence_agent.reranking}\index{Modules!reranking}
+
+Local candidate reranking for retrieved feedback chunks.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}reranking.\allowbreak{}py}, 137 lines
+\apifield{Imports}\texttt{schemas}
+\apifield{Classes}\cref{class:feedback_intelligence_agent.reranking.Reranker}, \cref{class:feedback_intelligence_agent.reranking.DeterministicJudgeReranker}
+
+\apibreak
+\section{\texttt{resilience}}
+\label{module:feedback_intelligence_agent.resilience}\index{Modules!resilience}
+
+Retry, timeout, and circuit-breaker wrappers for LLM providers.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}resilience.\allowbreak{}py}, 149 lines
+\apifield{Imports}\texttt{llm}, \texttt{schemas}
+\apifield{Classes}\cref{class:feedback_intelligence_agent.resilience.ResiliencePolicy}, \cref{class:feedback_intelligence_agent.resilience.CircuitBreaker}, \cref{class:feedback_intelligence_agent.resilience.ResilientLLMProvider}
+\apifield{Constants}\texttt{CircuitState}
+
+\apibreak
+\section{\texttt{retrieval}}
+\label{module:feedback_intelligence_agent.retrieval}\index{Modules!retrieval}
+
+Retrieval helpers.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}retrieval.\allowbreak{}py}, 113 lines
+\apifield{Imports}\texttt{embeddings}, \texttt{query\_\allowbreak{}expansion}, \texttt{schemas}, \texttt{vector\_\allowbreak{}store}
+\apifield{Classes}\cref{class:feedback_intelligence_agent.retrieval.Retriever}, \cref{class:feedback_intelligence_agent.retrieval.QueryEngine}, \cref{class:feedback_intelligence_agent.retrieval.HybridRetriever}
+\apifield{Functions}\cref{func:feedback_intelligence_agent.retrieval.min_max_normalize}
+
+\apibreak
+\section{\texttt{schemas}}
+\label{module:feedback_intelligence_agent.schemas}\index{Modules!schemas}
+
+Typed domain schemas used across the project.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}schemas.\allowbreak{}py}, 311 lines
+\apifield{Imports}\texttt{guardrails}
+\apifield{Classes}\cref{class:feedback_intelligence_agent.schemas.FeedbackChannel}, \cref{class:feedback_intelligence_agent.schemas.FeedbackRecord}, \cref{class:feedback_intelligence_agent.schemas.DocumentChunk}, \cref{class:feedback_intelligence_agent.schemas.SearchResult}, \cref{class:feedback_intelligence_agent.schemas.MetadataFilters}, \cref{class:feedback_intelligence_agent.schemas.Citation}, \cref{class:feedback_intelligence_agent.schemas.ToolRunRecord}, \cref{class:feedback_intelligence_agent.schemas.AgentAnswer}, \cref{class:feedback_intelligence_agent.schemas.QueryRequest}, \cref{class:feedback_intelligence_agent.schemas.QueryResponse}, \cref{class:feedback_intelligence_agent.schemas.StreamMetadata}, \cref{class:feedback_intelligence_agent.schemas.ChatRequest}, \cref{class:feedback_intelligence_agent.schemas.ChatResponse}, \cref{class:feedback_intelligence_agent.schemas.IndexRequest}, \cref{class:feedback_intelligence_agent.schemas.JobSubmitResponse}, \cref{class:feedback_intelligence_agent.schemas.EvaluationCase}
+
+\apibreak
+\section{\texttt{streaming\_ingestion}}
+\label{module:feedback_intelligence_agent.streaming_ingestion}\index{Modules!streaming\_ingestion}
+
+Streaming ingestion primitives for feedback events.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}streaming\_\allowbreak{}ingestion.\allowbreak{}py}, 515 lines
+\apifield{Exports}\texttt{FeedbackStream}, \texttt{InMemoryFeedbackStream}, \texttt{JsonlFeedbackStream}, \texttt{KafkaFeedbackStream}, \texttt{KinesisFeedbackStream}, \texttt{StreamEnvelope}, \texttt{StreamIngestionError}, \texttt{StreamIngestionIssue}, \texttt{StreamIngestionResult}, \texttt{StreamOffset}, \texttt{consume\_\allowbreak{}feedback\_\allowbreak{}stream}, \texttt{write\_\allowbreak{}stream\_\allowbreak{}records\_\allowbreak{}csv}
+\apifield{Imports}\texttt{data\_\allowbreak{}contracts}, \texttt{privacy}, \texttt{schemas}, \texttt{telemetry}
+\apifield{Classes}\cref{class:feedback_intelligence_agent.streaming_ingestion.StreamIngestionError}, \cref{class:feedback_intelligence_agent.streaming_ingestion.StreamOffset}, \cref{class:feedback_intelligence_agent.streaming_ingestion.StreamEnvelope}, \cref{class:feedback_intelligence_agent.streaming_ingestion.StreamIngestionIssue}, \cref{class:feedback_intelligence_agent.streaming_ingestion.StreamIngestionResult}, \cref{class:feedback_intelligence_agent.streaming_ingestion.FeedbackStream}, \cref{class:feedback_intelligence_agent.streaming_ingestion.InMemoryFeedbackStream}, \cref{class:feedback_intelligence_agent.streaming_ingestion.JsonlFeedbackStream}, \cref{class:feedback_intelligence_agent.streaming_ingestion.KafkaFeedbackStream}, \cref{class:feedback_intelligence_agent.streaming_ingestion.KinesisFeedbackStream}
+\apifield{Functions}\cref{func:feedback_intelligence_agent.streaming_ingestion.consume_feedback_stream}, \cref{func:feedback_intelligence_agent.streaming_ingestion.write_stream_records_csv}
+\apifield{Details}The local path is deterministic and dependency-free: JSONL or in-memory events are validated into \texttt{FeedbackRecord} objects. Kafka and Kinesis adapters are thin optional wrappers around provider SDKs and are imported lazily, so the default install stays lightweight.
+
+\apibreak
+\section{\texttt{synthetic\_data}}
+\label{module:feedback_intelligence_agent.synthetic_data}\index{Modules!synthetic\_data}
+
+Synthetic customer feedback dataset generation.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}synthetic\_\allowbreak{}data.\allowbreak{}py}, 318 lines
+\apifield{Exports}\texttt{DEFAULT\_\allowbreak{}CUSTOMER\_\allowbreak{}SEGMENTS}, \texttt{DEFAULT\_\allowbreak{}ISSUE\_\allowbreak{}CATEGORIES}, \texttt{DEFAULT\_\allowbreak{}PRODUCT\_\allowbreak{}AREAS}, \texttt{DEFAULT\_\allowbreak{}TENANT\_\allowbreak{}IDS}, \texttt{DEFAULT\_\allowbreak{}SENTIMENT\_\allowbreak{}DISTRIBUTION}, \texttt{SyntheticDataConfig}, \texttt{generate\_\allowbreak{}feedback\_\allowbreak{}rows}, \texttt{write\_\allowbreak{}feedback\_\allowbreak{}csv}
+\apifield{Imports}\texttt{schemas}
+\apifield{Classes}\cref{class:feedback_intelligence_agent.synthetic_data.SyntheticDataConfig}
+\apifield{Functions}\cref{func:feedback_intelligence_agent.synthetic_data.generate_feedback_rows}, \cref{func:feedback_intelligence_agent.synthetic_data.write_feedback_csv}
+\apifield{Constants}\texttt{DEFAULT\_\allowbreak{}PRODUCT\_\allowbreak{}AREAS}, \texttt{DEFAULT\_\allowbreak{}CUSTOMER\_\allowbreak{}SEGMENTS}, \texttt{DEFAULT\_\allowbreak{}TENANT\_\allowbreak{}IDS}, \texttt{DEFAULT\_\allowbreak{}ISSUE\_\allowbreak{}CATEGORIES}, \texttt{DEFAULT\_\allowbreak{}SENTIMENT\_\allowbreak{}DISTRIBUTION}
+\apifield{Details}This module produces realistic, schema-compatible customer feedback records so the repository is self-contained and can build larger demo datasets without any external data or paid API. Generation uses a local, deterministically seeded \texttt{random.\allowbreak{}Random} instance (never the global \texttt{random} or NumPy state), so the same seed and parameters always yield a byte-identical CSV.
+
+Generated rows use the exact columns required by the feedback data contract (\texttt{feedback\_\allowbreak{}intelligence\_\allowbreak{}agent.\allowbreak{}data\_\allowbreak{}contracts}): \texttt{feedback\_\allowbreak{}id}, \texttt{customer\_\allowbreak{}segment}, \texttt{channel}, \texttt{rating}, \texttt{text}, and \texttt{created\_\allowbreak{}at}, plus optional \texttt{tenant\_\allowbreak{}id} and \texttt{sentiment} columns. Ratings are derived from the chosen sentiment so the dataset is internally consistent.
+
+\apibreak
+\section{\texttt{telemetry}}
+\label{module:feedback_intelligence_agent.telemetry}\index{Modules!telemetry}
+
+Structured logging and OpenTelemetry-style telemetry.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}telemetry.\allowbreak{}py}, 352 lines
+\apifield{Classes}\cref{class:feedback_intelligence_agent.telemetry.TelemetryEvent}, \cref{class:feedback_intelligence_agent.telemetry.TelemetrySink}, \cref{class:feedback_intelligence_agent.telemetry.OpenTelemetrySpan}, \cref{class:feedback_intelligence_agent.telemetry.OpenTelemetryTracer}, \cref{class:feedback_intelligence_agent.telemetry.InMemoryTelemetrySink}, \cref{class:feedback_intelligence_agent.telemetry.JsonlTelemetrySink}, \cref{class:feedback_intelligence_agent.telemetry.TelemetryConfigurationError}, \cref{class:feedback_intelligence_agent.telemetry.OpenTelemetryTraceSink}, \cref{class:feedback_intelligence_agent.telemetry.Telemetry}
+\apifield{Functions}\cref{func:feedback_intelligence_agent.telemetry.configure_logging}, \cref{func:feedback_intelligence_agent.telemetry.get_logger}, \cref{func:feedback_intelligence_agent.telemetry.log_event}
+\apifield{Constants}\texttt{LOGGER\_\allowbreak{}NAME}
+\apifield{Details}The module provides two layers:
+
+1. Lightweight JSON logging helpers (\texttt{configure\_\allowbreak{}logging}, \texttt{log\_\allowbreak{}event}) that keep runtime logs consistent and easy to redirect to systems such as CloudWatch, Datadog, or OpenTelemetry collectors. 2. A structured telemetry pipeline (\texttt{Telemetry} plus pluggable sinks) that records spans and events with timestamps, durations, and correlation IDs. Telemetry is a no-op unless a sink is attached, so the default code path stays free of side effects.
+
+\apibreak
+\section{\texttt{tools}}
+\label{module:feedback_intelligence_agent.tools}\index{Modules!tools}
+
+Deterministic tool-use framework for the feedback intelligence agent.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}tools.\allowbreak{}py}, 565 lines
+\apifield{Imports}\texttt{citations}, \texttt{schemas}
+\apifield{Classes}\cref{class:feedback_intelligence_agent.tools.ToolError}, \cref{class:feedback_intelligence_agent.tools.ToolOutput}, \cref{class:feedback_intelligence_agent.tools.Tool}, \cref{class:feedback_intelligence_agent.tools.SentimentSummaryInput}, \cref{class:feedback_intelligence_agent.tools.SentimentSummaryOutput}, \cref{class:feedback_intelligence_agent.tools.SentimentSummaryTool}, \cref{class:feedback_intelligence_agent.tools.IssueClusterInput}, \cref{class:feedback_intelligence_agent.tools.IssueCluster}, \cref{class:feedback_intelligence_agent.tools.IssueClusterOutput}, \cref{class:feedback_intelligence_agent.tools.IssueClusterTool}, \cref{class:feedback_intelligence_agent.tools.TicketEvidence}, \cref{class:feedback_intelligence_agent.tools.TicketDraftInput}, \cref{class:feedback_intelligence_agent.tools.TicketDraftOutput}, \cref{class:feedback_intelligence_agent.tools.TicketDraftTool}, \cref{class:feedback_intelligence_agent.tools.ToolRegistry}, \cref{class:feedback_intelligence_agent.tools.ToolSelection}, \cref{class:feedback_intelligence_agent.tools.ToolRoute}, \cref{class:feedback_intelligence_agent.tools.ToolRouter}
+\apifield{Functions}\cref{func:feedback_intelligence_agent.tools.build_default_tools}
+\apifield{Constants}\texttt{ISSUE\_\allowbreak{}TERM\_\allowbreak{}GROUPS}, \texttt{TOOL\_\allowbreak{}ROUTES}
+\apifield{Details}The module provides:
+
+1. A typed tool interface (\texttt{Tool}) where every tool declares a name, a description, a Pydantic input schema, and a Pydantic output schema. 2. Three local tools that run fully offline: \texttt{SentimentSummaryTool}, \texttt{IssueClusterTool}, and \texttt{TicketDraftTool}. 3. A registry (\texttt{ToolRegistry}) and a deterministic keyword router (\texttt{ToolRouter}) that selects at most one tool per query.
+
+No function-calling API is involved: routing and execution are keyword and rule based, so tool behaviour is reproducible in tests and CI. Unknown or unavailable tool requests are surfaced as a graceful refusal instead of an error, and the agent falls back to the plain RAG answer.
+
+\apibreak
+\section{\texttt{vector\_store}}
+\label{module:feedback_intelligence_agent.vector_store}\index{Modules!vector\_store}
+
+A small vector store with JSON persistence.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}vector\_\allowbreak{}store.\allowbreak{}py}, 182 lines
+\apifield{Imports}\texttt{schemas}
+\apifield{Classes}\cref{class:feedback_intelligence_agent.vector_store.VectorStore}, \cref{class:feedback_intelligence_agent.vector_store.PersistedVectorStore}, \cref{class:feedback_intelligence_agent.vector_store.InMemoryVectorStore}

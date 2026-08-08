@@ -1,0 +1,40 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{EvidenceOverlapHallucinationChecker}}
+\label{class:feedback_intelligence_agent.hallucination.EvidenceOverlapHallucinationChecker}\index{Classes!EvidenceOverlapHallucinationChecker}
+
+Combine deterministic evidence overlap with an optional semantic judge.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+EvidenceOverlapHallucinationChecker(self, *, sentence_threshold: float = 0.5, pass_threshold: float = 0.75, judge: HallucinationJudge | None = None) -> None
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{sentence\_\allowbreak{}threshold}] \texttt{float}, default \texttt{0.\allowbreak{}5}, keyword-only.
+  \item[\texttt{pass\_\allowbreak{}threshold}] \texttt{float}, default \texttt{0.\allowbreak{}75}, keyword-only.
+  \item[\texttt{judge}] \texttt{HallucinationJudge \textbar{} None}, default \texttt{None}, keyword-only.
+\end{arglist}
+\apifield{Raises}\texttt{ValueError}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}hallucination.\allowbreak{}py:100}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/hallucination.py#L100}{online}), class, module \cref{module:feedback_intelligence_agent.hallucination}
+
+\subsection{\texttt{check}}
+\label{method:feedback_intelligence_agent.hallucination.EvidenceOverlapHallucinationChecker.check}\index{Methods!check}
+Run overlap and optional judge checks for an answer.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+check(self, answer: str, *, question: str, results: list[SearchResult]) -> HallucinationCheck
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{answer}] \texttt{str}, required.
+  \item[\texttt{question}] \texttt{str}, required, keyword-only.
+  \item[\texttt{results}] \texttt{list[SearchResult]\allowbreak{}}, required, keyword-only.
+\end{arglist}
+\apifield{Value}\texttt{HallucinationCheck}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}hallucination.\allowbreak{}py:119}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/hallucination.py#L119}{online})

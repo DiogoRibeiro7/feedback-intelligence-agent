@@ -1,0 +1,21 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{HallucinationCheck}}
+\label{class:feedback_intelligence_agent.hallucination.HallucinationCheck}\label{schema:HallucinationCheck}\index{Classes!HallucinationCheck}
+
+Combined hallucination check exposed in diagnostics and evaluation.
+\apifield{Inherits}\texttt{BaseModel}
+\apifield{Fields}
+\begin{arglist}
+  \item[\texttt{risk}] \texttt{HallucinationRisk}, required
+  \item[\texttt{hallucination\_\allowbreak{}detected}] \texttt{bool}, required
+  \item[\texttt{evidence\_\allowbreak{}overlap}] \texttt{EvidenceOverlap}, required
+  \item[\texttt{judge}] \texttt{JudgeVerdict \textbar{} None}, default \texttt{None}
+\end{arglist}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}hallucination.\allowbreak{}py:78}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/hallucination.py#L78}{online}), pydantic model, module \cref{module:feedback_intelligence_agent.hallucination}

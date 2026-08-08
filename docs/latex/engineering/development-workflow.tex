@@ -1,0 +1,84 @@
+% Authored: development workflow.
+
+\chapter{Development Workflow}
+\label{ch:development-workflow}
+
+\section{Environment setup}
+
+\begin{lstlisting}[language=bash]
+poetry install            # Python package and dev dependencies
+cd frontend && npm install   # only for frontend work
+\end{lstlisting}
+
+Optional integrations are installed on demand, for example
+\texttt{poetry install -E qdrant -E otel}. CI installs no extras, which is what
+keeps the default path honest.
+
+\section{Branches}
+
+CI and the dependency-review workflow trigger on pushes and pull requests
+targeting \texttt{main} and \texttt{develop}; the security workflow triggers on
+\texttt{main} only. The repository therefore has two long-lived branches, with
+\texttt{main} carrying the stricter automated scrutiny.
+
+\section{The local loop}
+
+\srcfile{CONTRIBUTING.md} and \srcfile{AGENTS.md} both specify the same
+pre-pull-request sequence, and it matches the CI job step for step:
+
+\begin{lstlisting}[language=bash]
+poetry run ruff check .
+poetry run ruff format --check .
+poetry run mypy src
+poetry run pytest --cov=feedback_intelligence_agent --cov-fail-under=63
+poetry run python scripts/run_demo.py
+\end{lstlisting}
+
+\texttt{make ci} runs the same set plus \texttt{poetry build}. For frontend
+changes the additional commands are \texttt{npm audit} and
+\texttt{npm run build}.
+
+Documentation work adds one command:
+
+\begin{lstlisting}[language=bash]
+make docs
+\end{lstlisting}
+
+\section{Conventions contributors are asked to follow}
+
+Both instruction files state the same expectations, and they are visible in the
+code:
+
+\begin{itemize}[nosep]
+  \item keep the default path working without external APIs or private data;
+  \item keep modules small, typed, and explicit; do not remove annotations;
+  \item add tests for every new behaviour;
+  \item use Pydantic models for external request and response schemas;
+  \item use \texttt{pathlib.Path} for filesystem paths and
+    \texttt{numpy.typing} for arrays;
+  \item raise specific exceptions for data-quality problems;
+  \item prefer explicit interfaces over hidden global state;
+  \item do not introduce heavyweight frameworks without a clear improvement;
+  \item never commit secrets, real customer data, generated datasets, or local
+    artifacts;
+  \item keep each pull request focused on one change.
+\end{itemize}
+
+\section{Repository governance}
+
+The \srcfile{.github/} directory carries a \texttt{CODEOWNERS} file, a pull
+request template, three issue templates (bug report, feature request,
+documentation) with a template chooser configuration, a Dependabot
+configuration, and a release-notes categorisation file. Community health files
+--- \srcfile{CODE\_OF\_CONDUCT.md}, \srcfile{CONTRIBUTING.md},
+\srcfile{SECURITY.md}, \srcfile{SUPPORT.md} --- are present at the root.
+
+Dependabot opens grouped weekly pull requests for three ecosystems: pip
+(with runtime and development groups), npm for the frontend, and GitHub
+Actions, each limited to five open pull requests.
+
+The repository contains no commit-message convention file, no pre-commit
+configuration, and no branch-protection descriptor, so those aspects of the
+workflow cannot be documented from repository evidence.
+
+\noevidence

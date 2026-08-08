@@ -1,0 +1,61 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_engineering.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\begin{longtable}{>{\raggedright\arraybackslash\small}p{0.20\textwidth} >{\raggedright\arraybackslash\small}p{0.16\textwidth} >{\raggedright\arraybackslash\small}p{0.30\textwidth} >{\raggedright\arraybackslash\small}p{0.16\textwidth} >{\raggedright\arraybackslash\small}p{0.08\textwidth}}
+\caption{Quality gates implemented in the repository.}\label{tab:quality-gates}\\
+\toprule
+Gate & Tool & Local command & CI workflow & Blocking \\
+\midrule
+\endfirsthead
+\toprule
+Gate & Tool & Local command & CI workflow & Blocking \\
+\midrule
+\endhead
+\midrule
+\multicolumn{5}{r}{\footnotesize continued on next page}\\
+\endfoot
+\bottomrule
+\endlastfoot
+Formatting & \texttt{ruff format} & \texttt{poetry run ruff format -\allowbreak{}-\allowbreak{}check .\allowbreak{}} & CI & yes \\
+Linting & \texttt{ruff check} & \texttt{poetry run ruff check .\allowbreak{}} & CI & yes \\
+Type checking & \texttt{mypy (strict)\allowbreak{}} & \texttt{poetry run mypy src} & CI & yes \\
+Tests and coverage & \texttt{pytest,\allowbreak{} pytest-\allowbreak{}cov} & \texttt{poetry run pytest -\allowbreak{}-\allowbreak{}cov=feedback\_\allowbreak{}intelligence\_\allowbreak{}agent -\allowbreak{}-\allowbreak{}cov-\allowbreak{}report=term-\allowbreak{}missing -\allowbreak{}-\allowbreak{}cov-\allowbreak{}fail-\allowbreak{}under=\$(COVERAGE\_\allowbreak{}THRESHOLD)\allowbreak{}} & CI & yes \\
+Deterministic demo & \texttt{scripts/\allowbreak{}run\_\allowbreak{}demo.\allowbreak{}py} & \texttt{poetry run python scripts/\allowbreak{}run\_\allowbreak{}demo.\allowbreak{}py} & Release & yes \\
+Package build & \texttt{poetry build} & \texttt{poetry build} & CI & yes \\
+Security static analysis & \texttt{CodeQL} & -- & Security & yes \\
+Dependency review & \texttt{actions/\allowbreak{}dependency-\allowbreak{}review-\allowbreak{}action} & -- & Dependency Review & yes \\
+\end{longtable}
+
+\section{Gate configuration}
+
+\begin{longtable}{>{\raggedright\arraybackslash\small}p{0.25\textwidth} >{\raggedright\arraybackslash\small}p{0.65\textwidth}}
+\caption{Configured behaviour of each quality tool.}\label{tab:gate-configuration}\\
+\toprule
+Setting & Value \\
+\midrule
+\endfirsthead
+\toprule
+Setting & Value \\
+\midrule
+\endhead
+\midrule
+\multicolumn{2}{r}{\footnotesize continued on next page}\\
+\endfoot
+\bottomrule
+\endlastfoot
+ruff line-length & \texttt{100} \\
+ruff target-version & \texttt{py310} \\
+ruff rule sets & \texttt{E,\allowbreak{} F,\allowbreak{} I,\allowbreak{} B,\allowbreak{} UP,\allowbreak{} N,\allowbreak{} ANN,\allowbreak{} C4,\allowbreak{} SIM} \\
+ruff ignored rules & \texttt{ANN101,\allowbreak{} ANN102} \\
+mypy python\_version & \texttt{3.\allowbreak{}10} \\
+mypy strict & yes \\
+mypy plugins & \texttt{pydantic.\allowbreak{}mypy} \\
+mypy overrides & 6 modules with \texttt{ignore\_missing\_imports} (optional extras) \\
+pytest testpaths & \texttt{tests} \\
+pytest addopts & \texttt{-\allowbreak{}q} \\
+build backend & \texttt{poetry.\allowbreak{}core.\allowbreak{}masonry.\allowbreak{}api} \\
+\end{longtable}

@@ -1,0 +1,24 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{keyword\_coverage}}
+\label{func:feedback_intelligence_agent.evaluation.keyword_coverage}\index{Functions!keyword\_coverage}
+
+Fraction of expected keywords present in the answer (case-insensitive).
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+keyword_coverage(answer: str, expected_keywords: list[str]) -> float
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{answer}] \texttt{str}, required.
+  \item[\texttt{expected\_\allowbreak{}keywords}] \texttt{list[str]\allowbreak{}}, required.
+\end{arglist}
+\apifield{Value}\texttt{float}
+\apifield{Details}Returns 1.0 when no keywords are expected: an empty expectation set cannot be violated.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}evaluation.\allowbreak{}py:128}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/evaluation.py#L128}{online}), module \cref{module:feedback_intelligence_agent.evaluation}

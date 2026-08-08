@@ -1,0 +1,28 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{QueryExpander}}
+\label{class:feedback_intelligence_agent.query_expansion.QueryExpander}\index{Classes!QueryExpander}
+
+Protocol for deterministic or model-backed query expanders.
+\apifield{Inherits}\texttt{Protocol}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}query\_\allowbreak{}expansion.\allowbreak{}py:24}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/query_expansion.py#L24}{online}), protocol, module \cref{module:feedback_intelligence_agent.query_expansion}
+
+\subsection{\texttt{expand}}
+\label{method:feedback_intelligence_agent.query_expansion.QueryExpander.expand}\index{Methods!expand}
+Return an expanded query plus the terms that were added.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+expand(self, query: str) -> QueryExpansion
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{query}] \texttt{str}, required.
+\end{arglist}
+\apifield{Value}\texttt{QueryExpansion}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}query\_\allowbreak{}expansion.\allowbreak{}py:27}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/query_expansion.py#L27}{online})

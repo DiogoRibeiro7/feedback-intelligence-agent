@@ -1,0 +1,23 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{answer\_feedback\_get}}
+\label{func:feedback_intelligence_agent.cli.answer_feedback_get}\index{Functions!answer\_feedback\_get}
+
+Print one human feedback record.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+answer_feedback_get(feedback_id: Annotated[str, typer.Argument(help='Answer feedback identifier.')], store_path: Annotated[Path, typer.Option(help='Directory holding answer feedback JSON files.')] = Path('.artifacts/human_feedback')) -> None
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{feedback\_\allowbreak{}id}] \texttt{Annotated[str,\allowbreak{} typer.\allowbreak{}Argument(help='Answer feedback identifier.\allowbreak{}')\allowbreak{}]\allowbreak{}}, required.
+  \item[\texttt{store\_\allowbreak{}path}] \texttt{Annotated[Path,\allowbreak{} typer.\allowbreak{}Option(help='Directory holding answer feedback JSON files.\allowbreak{}')\allowbreak{}]\allowbreak{}}, default \texttt{Path('.\allowbreak{}artifacts/\allowbreak{}human\_\allowbreak{}feedback')\allowbreak{}}.
+\end{arglist}
+\apifield{Raises}\texttt{Exit}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}cli.\allowbreak{}py:841}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/cli.py#L841}{online}), module \cref{module:feedback_intelligence_agent.cli}

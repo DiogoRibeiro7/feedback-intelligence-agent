@@ -1,0 +1,27 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{StreamMetadata}}
+\label{class:feedback_intelligence_agent.schemas.StreamMetadata}\label{schema:StreamMetadata}\index{Classes!StreamMetadata}
+
+Payload of the final \texttt{metadata} SSE event of the `/query/stream` endpoint.
+\apifield{Inherits}\texttt{BaseModel}
+\apifield{Fields}
+\begin{arglist}
+  \item[\texttt{provider}] \texttt{str}, required
+  \item[\texttt{latency\_\allowbreak{}ms}] \texttt{float}, required
+  \item[\texttt{route}] \texttt{str}, required
+  \item[\texttt{confidence}] \texttt{float}, required
+  \item[\texttt{sources}] \texttt{list[str]\allowbreak{}}, required
+  \item[\texttt{retrieval\_\allowbreak{}scores}] \texttt{list[float]\allowbreak{}}, required
+  \item[\texttt{citations}] \texttt{list[Citation]\allowbreak{}}, required
+  \item[\texttt{recommended\_\allowbreak{}actions}] \texttt{list[str]\allowbreak{}}, default \texttt{list()\allowbreak{}}
+  \item[\texttt{guardrail}] \texttt{GuardrailDecision \textbar{} None}, default \texttt{None}
+\end{arglist}
+\apifield{Details}Sent after all \texttt{content} chunks so streaming clients can render the answer incrementally and then attach evidence, scores, and timing: \texttt{provider} names the LLM provider class, \texttt{latency\_\allowbreak{}ms} measures the full answer-generation time, \texttt{sources} lists the cited document IDs in citation order, and \texttt{retrieval\_\allowbreak{}scores} carries the per-citation retrieval scores.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}schemas.\allowbreak{}py:209}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/schemas.py#L209}{online}), pydantic model, module \cref{module:feedback_intelligence_agent.schemas}

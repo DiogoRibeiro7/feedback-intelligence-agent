@@ -1,0 +1,103 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{PromptRegistry}}
+\label{class:feedback_intelligence_agent.prompt_registry.PromptRegistry}\index{Classes!PromptRegistry}
+
+In-memory registry mapping prompt names to their versioned templates.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+PromptRegistry(self) -> None
+\end{lstlisting}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}prompt\_\allowbreak{}registry.\allowbreak{}py:99}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/prompt_registry.py#L99}{online}), class, module \cref{module:feedback_intelligence_agent.prompt_registry}
+
+\subsection{\texttt{register}}
+\label{method:feedback_intelligence_agent.prompt_registry.PromptRegistry.register}\index{Methods!register}
+Register a template and return it, rejecting duplicate name/version pairs.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+register(self, template: PromptTemplate) -> PromptTemplate
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{template}] \texttt{PromptTemplate}, required.
+\end{arglist}
+\apifield{Value}\texttt{PromptTemplate}
+\apifield{Raises}\texttt{ValueError}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}prompt\_\allowbreak{}registry.\allowbreak{}py:106}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/prompt_registry.py#L106}{online})
+
+\subsection{\texttt{get}}
+\label{method:feedback_intelligence_agent.prompt_registry.PromptRegistry.get}\index{Methods!get}
+Return a template by name and version (or the latest registered version).
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+get(self, name: str, version: str = LATEST_VERSION) -> PromptTemplate
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{name}] \texttt{str}, required.
+  \item[\texttt{version}] \texttt{str}, default \texttt{LATEST\_\allowbreak{}VERSION}.
+\end{arglist}
+\apifield{Value}\texttt{PromptTemplate}
+\apifield{Raises}\texttt{PromptNotFoundError}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}prompt\_\allowbreak{}registry.\allowbreak{}py:118}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/prompt_registry.py#L118}{online})
+
+\subsection{\texttt{names}}
+\label{method:feedback_intelligence_agent.prompt_registry.PromptRegistry.names}\index{Methods!names}
+Return all registered prompt names, sorted alphabetically.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+names(self) -> tuple[str, ...]
+\end{lstlisting}
+\apifield{Value}\texttt{tuple[str,\allowbreak{} .\allowbreak{}.\allowbreak{}.\allowbreak{}]\allowbreak{}}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}prompt\_\allowbreak{}registry.\allowbreak{}py:134}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/prompt_registry.py#L134}{online})
+
+\subsection{\texttt{versions}}
+\label{method:feedback_intelligence_agent.prompt_registry.PromptRegistry.versions}\index{Methods!versions}
+Return the registered versions for a prompt in registration order.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+versions(self, name: str) -> tuple[str, ...]
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{name}] \texttt{str}, required.
+\end{arglist}
+\apifield{Value}\texttt{tuple[str,\allowbreak{} .\allowbreak{}.\allowbreak{}.\allowbreak{}]\allowbreak{}}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}prompt\_\allowbreak{}registry.\allowbreak{}py:138}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/prompt_registry.py#L138}{online})
+
+\subsection{\texttt{list\_templates}}
+\label{method:feedback_intelligence_agent.prompt_registry.PromptRegistry.list_templates}\index{Methods!list\_templates}
+Return registered templates, optionally filtered by prompt name.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+list_templates(self, name: str | None = None) -> tuple[PromptTemplate, ...]
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{name}] \texttt{str \textbar{} None}, default \texttt{None}.
+\end{arglist}
+\apifield{Value}\texttt{tuple[PromptTemplate,\allowbreak{} .\allowbreak{}.\allowbreak{}.\allowbreak{}]\allowbreak{}}
+\apifield{Raises}\texttt{PromptNotFoundError}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}prompt\_\allowbreak{}registry.\allowbreak{}py:142}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/prompt_registry.py#L142}{online})
+
+\subsection{\texttt{render}}
+\label{method:feedback_intelligence_agent.prompt_registry.PromptRegistry.render}\index{Methods!render}
+Resolve a template and render it with the given variables.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+render(self, name: str, version: str = LATEST_VERSION, **variables: str) -> str
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{name}] \texttt{str}, required, positional-only.
+  \item[\texttt{version}] \texttt{str}, default \texttt{LATEST\_\allowbreak{}VERSION}, positional-only.
+  \item[\texttt{**variables}] \texttt{str}.
+\end{arglist}
+\apifield{Value}\texttt{str}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}prompt\_\allowbreak{}registry.\allowbreak{}py:157}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/prompt_registry.py#L157}{online})

@@ -1,0 +1,59 @@
+% Authored TikZ: architecture of the documentation generator.
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[
+  src/.style={rectangle, draw=black, align=center, font=\scriptsize,
+    text width=32mm, minimum height=7mm, inner sep=3pt},
+  tool/.style={rectangle, draw=black, rounded corners=2pt, align=center,
+    font=\scriptsize, text width=36mm, minimum height=7mm, inner sep=3pt,
+    fill=shadegrey},
+  model/.style={rectangle, draw=black, very thick, align=center,
+    font=\scriptsize, text width=36mm, minimum height=7mm, inner sep=3pt},
+  flow/.style={-{Latex[length=1.8mm]}, thick},
+  weak/.style={-{Latex[length=1.8mm]}, rulegrey, dashed},
+  node distance=3.6mm
+]
+  \node[src] (repo) {Repository source\\ \scriptsize Python, TOML, YAML, CSV, Make};
+
+  \node[tool, below=8mm of repo] (inspect) {\texttt{inspect\_repository.py}\\ \scriptsize files, deps, CI, tests};
+  \node[tool, left=6mm of inspect] (api) {\texttt{extract\_api.py}\\ \scriptsize AST only};
+  \node[tool, right=6mm of inspect] (deps) {\texttt{extract\_dependencies.py}\\ \scriptsize import graph};
+
+  \node[model, below=8mm of inspect] (jsonmodel) {Normalized documentation model\\ \scriptsize \texttt{docs/metadata/*.json}};
+
+  \node[tool, below=8mm of jsonmodel] (rarch) {\texttt{render\_architecture.py}};
+  \node[tool, left=6mm of rarch] (rref) {\texttt{render\_reference.py}};
+  \node[tool, right=6mm of rarch] (reng) {\texttt{render\_engineering.py}};
+
+  \node[model, below=8mm of rarch] (frags) {Generated LaTeX fragments\\ \scriptsize \texttt{docs/latex/generated/**}};
+  \node[src, below=7mm of frags] (mainrepo) {\texttt{docs/latex/main.tex}\\ \scriptsize + authored chapters};
+  \node[src, below=7mm of mainrepo] (pdf) {PDF\\ \scriptsize built separately by latexmk};
+
+  \node[tool, right=10mm of frags] (validate) {\texttt{validate\_docs.py}\\ \scriptsize labels, refs, escaping,\\ coverage, secrets, manifest};
+  \node[tool, left=10mm of frags] (latexutil) {\texttt{latex\_utils.py}\\ \scriptsize escaping + table primitives};
+
+  \draw[flow] (repo) -- (inspect);
+  \draw[flow] (repo.west) to[out=180, in=90] (api.north);
+  \draw[flow] (repo.east) to[out=0, in=90] (deps.north);
+  \draw[flow] (api) -- (jsonmodel);
+  \draw[flow] (inspect) -- (jsonmodel);
+  \draw[flow] (deps) -- (jsonmodel);
+  \draw[flow] (jsonmodel) -- (rref);
+  \draw[flow] (jsonmodel) -- (rarch);
+  \draw[flow] (jsonmodel) -- (reng);
+  \draw[flow] (rref) -- (frags);
+  \draw[flow] (rarch) -- (frags);
+  \draw[flow] (reng) -- (frags);
+  \draw[flow] (frags) -- (mainrepo);
+  \draw[flow] (mainrepo) -- (pdf);
+  \draw[weak] (latexutil) -- (frags);
+  \draw[weak] (frags) -- (validate);
+  \draw[weak] (jsonmodel.east) to[out=0, in=90] (validate.north);
+\end{tikzpicture}
+\caption{The documentation pipeline. Shaded boxes are tools, heavy boxes are
+intermediate artifacts. The JSON model is the only interface between the
+extraction and rendering layers: nothing below it reads Python source, and
+nothing above it emits markup.}
+\label{fig:documentation-pipeline}
+\end{figure}

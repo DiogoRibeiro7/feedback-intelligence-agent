@@ -1,8 +1,8 @@
 [tool.poetry]
 name = "feedback-intelligence-agent"
-version = "0.4.0"
+version = "0.5.0"
 description = "A production-style AI engineering project with RAG, evaluation, FastAPI, and local deterministic LLM fallback."
-authors = ["Diogo Ribeiro <hansolo.dj@gmail.com>"]
+authors = ["Diogo Ribeiro <dfr@esmad.ipp.pt>"]
 readme = "README.md"
 packages = [{ include = "feedback_intelligence_agent", from = "src" }]
 
@@ -54,7 +54,9 @@ build-backend = "poetry.core.masonry.api"
 [tool.ruff]
 line-length = 100
 target-version = "py310"
-src = ["src", "tests"]
+# "docs" is listed so the documentation toolchain in docs/tools is treated as
+# first-party for import sorting.
+src = ["src", "tests", "docs"]
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "B", "UP", "N", "ANN", "C4", "SIM"]

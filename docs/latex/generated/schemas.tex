@@ -1,0 +1,98 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\begin{longtable}{>{\raggedright\arraybackslash\small}p{0.28\textwidth} >{\small}r >{\raggedright\arraybackslash\small}p{0.16\textwidth} >{\raggedright\arraybackslash\small}p{0.42\textwidth}}
+\caption{Typed data contracts (Pydantic models) exposed by the package.}\label{tab:schemas}\\
+\toprule
+Model & Fields & Module & Purpose \\
+\midrule
+\endfirsthead
+\toprule
+Model & Fields & Module & Purpose \\
+\midrule
+\endhead
+\midrule
+\multicolumn{4}{r}{\footnotesize continued on next page}\\
+\endfoot
+\bottomrule
+\endlastfoot
+\cref{class:feedback_intelligence_agent.active_learning.ActiveLearningState} & 6 & \texttt{active\_\allowbreak{}learning} & Persisted workflow state for one reviewed answer. \\
+\cref{class:feedback_intelligence_agent.active_learning.UpdateActiveLearningStateRequest} & 3 & \texttt{active\_\allowbreak{}learning} & Request to assign or transition one active-learning queue item. \\
+\cref{class:feedback_intelligence_agent.auth.ApiPrincipal} & 2 & \texttt{auth} & Resolved API caller identity. \\
+\cref{class:feedback_intelligence_agent.benchmarking.BenchmarkReport} & 8 & \texttt{benchmarking} & Full benchmark report: configuration plus per-phase statistics. \\
+\cref{class:feedback_intelligence_agent.benchmarking.PhaseStats} & 7 & \texttt{benchmarking} & Summary statistics for one benchmarked phase, in milliseconds. \\
+\cref{class:feedback_intelligence_agent.config.Settings} & 52 & \texttt{config} & Runtime settings loaded from environment variables. \\
+\cref{class:feedback_intelligence_agent.data_contracts.ValidationIssue} & 4 & \texttt{data\_\allowbreak{}contracts} & Single validation finding for a feedback dataset. \\
+\cref{class:feedback_intelligence_agent.data_contracts.ValidationReport} & 6 & \texttt{data\_\allowbreak{}contracts} & Summary of validating a dataset against the feedback data contract. \\
+\cref{class:feedback_intelligence_agent.email_summaries.EmailSummary} & 6 & \texttt{email\_\allowbreak{}summaries} & Rendered email digest for saved insight reports. \\
+\cref{class:feedback_intelligence_agent.email_summaries.EmailSummaryDelivery} & 3 & \texttt{email\_\allowbreak{}summaries} & Result of rendering and optionally sending an email summary. \\
+\cref{class:feedback_intelligence_agent.email_summaries.EmailSummaryRequest} & 6 & \texttt{email\_\allowbreak{}summaries} & Request to render or send a saved-report email summary. \\
+\cref{class:feedback_intelligence_agent.evaluation.AnswerMetrics} & 8 & \texttt{evaluation} & Aggregate answer-quality metrics. \\
+\cref{class:feedback_intelligence_agent.evaluation.CaseResult} & 16 & \texttt{evaluation} & Per-case evaluation detail kept in the report for debugging. \\
+\cref{class:feedback_intelligence_agent.evaluation.EvaluationReport} & 5 & \texttt{evaluation} & Full evaluation report: aggregates plus per-case breakdown. \\
+\cref{class:feedback_intelligence_agent.evaluation.RetrievalMetrics} & 5 & \texttt{evaluation} & Aggregate retrieval metrics across answerable cases. \\
+\cref{class:feedback_intelligence_agent.experiments.AggregateMetrics} & 4 & \texttt{experiments} & Aggregate retrieval and answer metrics for one experiment run. \\
+\cref{class:feedback_intelligence_agent.experiments.ExperimentConfig} & 17 & \texttt{experiments} & Typed description of one experiment run. \\
+\cref{class:feedback_intelligence_agent.experiments.ExperimentResult} & 3 & \texttt{experiments} & Full, deterministic outcome of one experiment run. \\
+\cref{class:feedback_intelligence_agent.experiments.QueryResult} & 4 & \texttt{experiments} & Outcome of a single evaluation query within an experiment. \\
+\cref{class:feedback_intelligence_agent.experiments.RunMetadata} & 5 & \texttt{experiments} & Environment-specific metadata captured alongside an experiment. \\
+\cref{class:feedback_intelligence_agent.guardrails.GuardrailDecision} & 4 & \texttt{guardrails} & Outcome of one guardrail evaluation. \\
+\cref{class:feedback_intelligence_agent.hallucination.EvidenceOverlap} & 7 & \texttt{hallucination} & Lexical evidence-overlap result for one answer. \\
+\cref{class:feedback_intelligence_agent.hallucination.HallucinationCheck} & 4 & \texttt{hallucination} & Combined hallucination check exposed in diagnostics and evaluation. \\
+\cref{class:feedback_intelligence_agent.hallucination.JudgeVerdict} & 4 & \texttt{hallucination} & Optional LLM-as-judge verdict for answer support. \\
+\cref{class:feedback_intelligence_agent.human_feedback.ActiveLearningQueue} & 2 & \texttt{human\_\allowbreak{}feedback} & Ranked queue of reviewed answers that need follow-up. \\
+\cref{class:feedback_intelligence_agent.human_feedback.ActiveLearningQueueItem} & 16 & \texttt{human\_\allowbreak{}feedback} & One reviewed answer that should be revisited in the improvement loop. \\
+\cref{class:feedback_intelligence_agent.human_feedback.HumanFeedbackAnalytics} & 7 & \texttt{human\_\allowbreak{}feedback} & Aggregate useful/not-useful feedback metrics. \\
+\cref{class:feedback_intelligence_agent.human_feedback.HumanFeedbackGroupStats} & 5 & \texttt{human\_\allowbreak{}feedback} & Aggregated feedback counts for a route or tenant. \\
+\cref{class:feedback_intelligence_agent.human_feedback.HumanFeedbackRecord} & 9 & \texttt{human\_\allowbreak{}feedback} & Persisted human judgement tied to a generated answer. \\
+\cref{class:feedback_intelligence_agent.human_feedback.HumanFeedbackSummary} & 10 & \texttt{human\_\allowbreak{}feedback} & Lightweight feedback metadata for list endpoints and CLI output. \\
+\cref{class:feedback_intelligence_agent.human_feedback.SubmitHumanFeedbackRequest} & 6 & \texttt{human\_\allowbreak{}feedback} & Request to persist one human judgement on a generated answer. \\
+\cref{class:feedback_intelligence_agent.index_updates.IncrementalIndexResult} & 9 & \texttt{index\_\allowbreak{}updates} & Summary of an incremental JSON index update. \\
+\cref{class:feedback_intelligence_agent.jobs.JobRequest} & 2 & \texttt{jobs} & Request describing an ingestion job to run. \\
+\cref{class:feedback_intelligence_agent.jobs.JobResult} & 8 & \texttt{jobs} & Status and outcome of an ingestion job. \\
+\cref{class:feedback_intelligence_agent.lakehouse.LakehouseDataFile} & 5 & \texttt{lakehouse} & One data file produced by a lakehouse export. \\
+\cref{class:feedback_intelligence_agent.lakehouse.LakehouseExportResult} & 9 & \texttt{lakehouse} & Summary of a local lakehouse export. \\
+\cref{class:feedback_intelligence_agent.memory.ConversationMemory} & 2 & \texttt{memory} & Ordered turns of one conversation identified by \texttt{conversation\_\allowbreak{}id}. \\
+\cref{class:feedback_intelligence_agent.memory.ConversationTurn} & 5 & \texttt{memory} & One user/assistant exchange recorded in conversation memory. \\
+\cref{class:feedback_intelligence_agent.memory.QueryRewrite} & 4 & \texttt{memory} & Result of rewriting a follow-up question into a standalone question. \\
+\cref{class:feedback_intelligence_agent.output_parser.GeneratedAnswerPayload} & 3 & \texttt{output\_\allowbreak{}parser} & Validated answer payload expected from an LLM provider. \\
+\cref{class:feedback_intelligence_agent.output_parser.ParsedLLMOutput} & 4 & \texttt{output\_\allowbreak{}parser} & Parsed answer plus diagnostics about validation and repair. \\
+\cref{class:feedback_intelligence_agent.rate_limit.RateLimitDecision} & 4 & \texttt{rate\_\allowbreak{}limit} & Result of one rate-limit check. \\
+\cref{class:feedback_intelligence_agent.reports.InsightReportSummary} & 9 & \texttt{reports} & Lightweight report metadata for list endpoints and CLI output. \\
+\cref{class:feedback_intelligence_agent.reports.SaveInsightReportRequest} & 5 & \texttt{reports} & Request to persist one generated agent answer as an insight report. \\
+\cref{class:feedback_intelligence_agent.reports.SavedInsightReport} & 8 & \texttt{reports} & Persisted answer package that can be shared or revisited later. \\
+\cref{class:feedback_intelligence_agent.schemas.AgentAnswer} & 9 & \texttt{schemas} & Final answer returned by the insight agent. \\
+\cref{class:feedback_intelligence_agent.schemas.ChatRequest} & 10 & \texttt{schemas} & API request for the `/chat` endpoint. \\
+\cref{class:feedback_intelligence_agent.schemas.ChatResponse} & 2 & \texttt{schemas} & API response for the `/chat` endpoint. \\
+\cref{class:feedback_intelligence_agent.schemas.Citation} & 6 & \texttt{schemas} & Evidence citation exposed to agent and API consumers. \\
+\cref{class:feedback_intelligence_agent.schemas.DocumentChunk} & 4 & \texttt{schemas} & Searchable chunk derived from feedback. \\
+\cref{class:feedback_intelligence_agent.schemas.EvaluationCase} & 5 & \texttt{schemas} & Single evaluation case covering retrieval and answer quality. \\
+\cref{class:feedback_intelligence_agent.schemas.FeedbackRecord} & 8 & \texttt{schemas} & Single raw customer feedback record. \\
+\cref{class:feedback_intelligence_agent.schemas.IndexRequest} & 2 & \texttt{schemas} & API request for rebuilding the index from a CSV path. \\
+\cref{class:feedback_intelligence_agent.schemas.JobSubmitResponse} & 2 & \texttt{schemas} & API response returned when an ingestion job is submitted. \\
+\cref{class:feedback_intelligence_agent.schemas.MetadataFilters} & 7 & \texttt{schemas} & Optional filters applied to chunk metadata before final ranking. \\
+\cref{class:feedback_intelligence_agent.schemas.QueryRequest} & 9 & \texttt{schemas} & API request for the `/query` endpoint. \\
+\cref{class:feedback_intelligence_agent.schemas.QueryResponse} & 1 & \texttt{schemas} & API response for the `/query` endpoint. \\
+\cref{class:feedback_intelligence_agent.schemas.SearchResult} & 2 & \texttt{schemas} & A retrieved chunk with similarity score. \\
+\cref{class:feedback_intelligence_agent.schemas.StreamMetadata} & 9 & \texttt{schemas} & Payload of the final \texttt{metadata} SSE event of the `/query/stream` endpoint. \\
+\cref{class:feedback_intelligence_agent.schemas.ToolRunRecord} & 4 & \texttt{schemas} & Metadata about one tool invocation performed during an agent run. \\
+\cref{class:feedback_intelligence_agent.streaming_ingestion.StreamEnvelope} & 3 & \texttt{streaming\_\allowbreak{}ingestion} & One raw feedback event read from a stream. \\
+\cref{class:feedback_intelligence_agent.streaming_ingestion.StreamIngestionIssue} & 5 & \texttt{streaming\_\allowbreak{}ingestion} & Validation failure for one stream message. \\
+\cref{class:feedback_intelligence_agent.streaming_ingestion.StreamIngestionResult} & 7 & \texttt{streaming\_\allowbreak{}ingestion} & Summary of consuming a bounded stream batch. \\
+\cref{class:feedback_intelligence_agent.streaming_ingestion.StreamOffset} & 2 & \texttt{streaming\_\allowbreak{}ingestion} & Opaque position of one stream event. \\
+\cref{class:feedback_intelligence_agent.tools.IssueCluster} & 5 & \texttt{tools} & One recurring issue cluster with supporting documents. \\
+\cref{class:feedback_intelligence_agent.tools.IssueClusterInput} & 2 & \texttt{tools} & Controls for the issue clustering output size. \\
+\cref{class:feedback_intelligence_agent.tools.IssueClusterOutput} & 2 & \texttt{tools} & Recurring issue clusters detected in the feedback dataset. \\
+\cref{class:feedback_intelligence_agent.tools.SentimentSummaryInput} & 2 & \texttt{tools} & Optional filters applied before summarising sentiment. \\
+\cref{class:feedback_intelligence_agent.tools.SentimentSummaryOutput} & 5 & \texttt{tools} & Aggregated sentiment and rating distribution over the feedback dataset. \\
+\cref{class:feedback_intelligence_agent.tools.TicketDraftInput} & 2 & \texttt{tools} & Question and retrieved evidence used to draft a support ticket. \\
+\cref{class:feedback_intelligence_agent.tools.TicketDraftOutput} & 5 & \texttt{tools} & A drafted support ticket grounded in retrieved feedback. \\
+\cref{class:feedback_intelligence_agent.tools.TicketEvidence} & 3 & \texttt{tools} & One retrieved evidence item attached to a ticket draft. \\
+\cref{class:feedback_intelligence_agent.tools.ToolOutput} & 0 & \texttt{tools} & Base class for tool outputs that can render a human-readable summary. \\
+\cref{class:feedback_intelligence_agent.tools.ToolSelection} & 3 & \texttt{tools} & Outcome of routing one user query to a tool. \\
+\cref{class:feedback_intelligence_agent.vector_store.PersistedVectorStore} & 3 & \texttt{vector\_\allowbreak{}store} & Serializable representation of the vector store. \\
+\end{longtable}

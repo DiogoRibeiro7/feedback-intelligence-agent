@@ -1,0 +1,77 @@
+% ---------------------------------------------------------------------------
+% Standalone reference manual, in the spirit of the reference manuals CRAN
+% distributes with R packages: the documented objects and nothing else.
+%
+% This document shares its preamble, metadata, and every chapter file with
+% main.tex; it simply omits the architecture and engineering parts. Nothing is
+% duplicated, so the two documents cannot describe different revisions.
+%
+% Build:
+%   latexmk -pdf docs/latex/reference.tex
+%   make docs-pdf     (builds both this and main.tex)
+%
+% Authored file - safe to edit. The generator writes only metadata.tex and
+% everything under generated/.
+% ---------------------------------------------------------------------------
+\documentclass[10pt,a4paper,oneside]{report}
+
+\input{preamble}
+\input{metadata}
+
+\title{%
+  \Huge \projectname \\[6pt]
+  \Large Reference Manual \\[10pt]
+  \normalsize Public API, data contracts, commands, endpoints, configuration
+}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\noindent
+This is the reference half of the \projectname{} technical documentation at
+revision \texttt{\projectrevision}: every public module, class, function,
+method, data contract, command-line command, HTTP endpoint, and configuration
+variable, with signatures taken directly from the source, plus the mathematics
+the package implements.
+
+It deliberately contains no architecture narrative and no engineering
+material. Those form the second and third parts of the complete manual,
+\srcfile{docs/latex/main.tex}, which includes this same content unchanged.
+\end{abstract}
+
+\cleardoublepage
+\pdfbookmark[0]{Contents}{toc}
+\chapter*{Contents}
+\markboth{Contents}{Contents}
+\begin{multicols}{2}\small
+\makeatletter\@starttoc{toc}\makeatother
+\end{multicols}
+
+\chapter*{List of Tables}
+\markboth{List of Tables}{List of Tables}
+\addcontentsline{toc}{chapter}{List of Tables}
+\begin{multicols}{2}\small
+\makeatletter\@starttoc{lot}\makeatother
+\end{multicols}
+
+\input{reference/reference-manual}
+
+\appendix
+
+% A distinct key from the same appendix in main.tex: labels stay unique across
+% the whole source tree, which is what the documentation validator enforces.
+\chapter{Object Indexes}
+\label{app:reference-indexes}
+\input{reference/indexes}
+
+\bibliographystyle{plain}
+\bibliography{references}
+\addcontentsline{toc}{chapter}{Bibliography}
+
+\cleardoublepage
+\addcontentsline{toc}{chapter}{Index}
+\printindex
+
+\end{document}

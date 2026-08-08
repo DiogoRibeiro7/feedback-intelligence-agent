@@ -1,0 +1,82 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\begin{longtable}{>{\raggedright\arraybackslash\small}p{0.24\textwidth} >{\raggedright\arraybackslash\small}p{0.14\textwidth} >{\raggedright\arraybackslash\small}p{0.15\textwidth} >{\raggedright\arraybackslash\small}p{0.06\textwidth} >{\raggedright\arraybackslash\small}p{0.31\textwidth}}
+\caption{Environment variables read by the Settings model.}\label{tab:configuration}\\
+\toprule
+Variable & Type & Default & Secret & Purpose / Constraints \\
+\midrule
+\endfirsthead
+\toprule
+Variable & Type & Default & Secret & Purpose / Constraints \\
+\midrule
+\endhead
+\midrule
+\multicolumn{5}{r}{\footnotesize continued on next page}\\
+\endfoot
+\bottomrule
+\endlastfoot
+\texttt{FEEDBACK\_\allowbreak{}AGENT\_\allowbreak{}DATA\_\allowbreak{}PATH} & \texttt{Path} & \texttt{Path('data/\allowbreak{}sample\_\allowbreak{}feedback.\allowbreak{}csv')\allowbreak{}} & no & -- \\
+\texttt{FEEDBACK\_\allowbreak{}AGENT\_\allowbreak{}INDEX\_\allowbreak{}PATH} & \texttt{Path} & \texttt{Path('.\allowbreak{}artifacts/\allowbreak{}vector\_\allowbreak{}store.\allowbreak{}json')\allowbreak{}} & no & -- \\
+\texttt{FEEDBACK\_\allowbreak{}AGENT\_\allowbreak{}EMBEDDING\_\allowbreak{}DIM} & \texttt{int} & \texttt{512} & no & \texttt{ge=64,\allowbreak{} le=8192} \\
+\texttt{FEEDBACK\_\allowbreak{}AGENT\_\allowbreak{}VECTOR\_\allowbreak{}STORE} & \texttt{VectorStoreType} & \texttt{'json'} & no & -- \\
+\texttt{FEEDBACK\_\allowbreak{}AGENT\_\allowbreak{}QDRANT\_\allowbreak{}URL} & \texttt{str} & \texttt{'http:/\allowbreak{}/\allowbreak{}localhost:6333'} & no & -- \\
+\texttt{FEEDBACK\_\allowbreak{}AGENT\_\allowbreak{}QDRANT\_\allowbreak{}COLLECTION} & \texttt{str} & \texttt{'feedback\_\allowbreak{}intelligence'} & no & -- \\
+\texttt{FEEDBACK\_\allowbreak{}AGENT\_\allowbreak{}RETRIEVER\_\allowbreak{}TYPE} & \texttt{RetrieverType} & \texttt{'dense'} & no & -- \\
+\texttt{FEEDBACK\_\allowbreak{}AGENT\_\allowbreak{}DENSE\_\allowbreak{}WEIGHT} & \texttt{float} & \texttt{0.\allowbreak{}6} & no & \texttt{ge=0.\allowbreak{}0} \\
+\texttt{FEEDBACK\_\allowbreak{}AGENT\_\allowbreak{}LEXICAL\_\allowbreak{}WEIGHT} & \texttt{float} & \texttt{0.\allowbreak{}4} & no & \texttt{ge=0.\allowbreak{}0} \\
+\texttt{FEEDBACK\_\allowbreak{}AGENT\_\allowbreak{}LLM\_\allowbreak{}PROVIDER} & \texttt{Literal['local',\allowbreak{} 'openai',\allowbreak{} 'openai\_\allowbreak{}responses',\allowbreak{} 'anthropic',\allowbreak{} 'bedrock',\allowbreak{} 'ollama']\allowbreak{}} & \texttt{'local'} & no & LLM provider: local (default, no API key), openai, openai\_responses, anthropic, bedrock, or ollama. \\
+\texttt{OPENAI\_\allowbreak{}API\_\allowbreak{}KEY} & \texttt{str \textbar{} None} & \texttt{None} & yes & OpenAI-compatible provider (FEEDBACK\_AGENT\_LLM\_PROVIDER=openai). \\
+\texttt{OPENAI\_\allowbreak{}MODEL} & \texttt{str} & \texttt{'gpt-\allowbreak{}4o-\allowbreak{}mini'} & no & -- \\
+\texttt{OPENAI\_\allowbreak{}BASE\_\allowbreak{}URL} & \texttt{str} & \texttt{'https:/\allowbreak{}/\allowbreak{}api.\allowbreak{}openai.\allowbreak{}com'} & no & -- \\
+\texttt{ANTHROPIC\_\allowbreak{}API\_\allowbreak{}KEY} & \texttt{str \textbar{} None} & \texttt{None} & yes & Anthropic provider (FEEDBACK\_AGENT\_LLM\_PROVIDER=anthropic, requires the 'anthropic' extra). \\
+\texttt{ANTHROPIC\_\allowbreak{}MODEL} & \texttt{str} & \texttt{'claude-\allowbreak{}opus-\allowbreak{}4-\allowbreak{}8'} & no & -- \\
+\texttt{AWS\_\allowbreak{}BEDROCK\_\allowbreak{}MODEL} & \texttt{str} & \texttt{'anthropic.\allowbreak{}claude-\allowbreak{}3-\allowbreak{}haiku-\allowbreak{}20240307-\allowbreak{}v1:0'} & no & -- \\
+\texttt{AWS\_\allowbreak{}REGION} & \texttt{str \textbar{} None} & \texttt{None} & no & AWS Bedrock provider (FEEDBACK\_AGENT\_LLM\_PROVIDER=bedrock, requires the 'bedrock' extra). Credentials are resolved by the AWS SDK chain (env, profile, SSO, IAM role). \\
+\texttt{AWS\_\allowbreak{}BEDROCK\_\allowbreak{}MAX\_\allowbreak{}TOKENS} & \texttt{int} & \texttt{1024} & no & \texttt{ge=1} \\
+\texttt{AWS\_\allowbreak{}BEDROCK\_\allowbreak{}TEMPERATURE} & \texttt{float} & \texttt{0.\allowbreak{}2} & no & \texttt{ge=0.\allowbreak{}0} \\
+\texttt{FEEDBACK\_\allowbreak{}AGENT\_\allowbreak{}LLM\_\allowbreak{}RESILIENCE\_\allowbreak{}ENABLED} & \texttt{bool} & \texttt{True} & no & Remote LLM resilience wrapper (not applied to FEEDBACK\_AGENT\_LLM\_PROVIDER=local). \\
+\texttt{FEEDBACK\_\allowbreak{}AGENT\_\allowbreak{}LLM\_\allowbreak{}TIMEOUT\_\allowbreak{}SECONDS} & \texttt{float} & \texttt{30.\allowbreak{}0} & no & \texttt{gt=0.\allowbreak{}0} \\
+\texttt{FEEDBACK\_\allowbreak{}AGENT\_\allowbreak{}LLM\_\allowbreak{}RETRY\_\allowbreak{}MAX\_\allowbreak{}ATTEMPTS} & \texttt{int} & \texttt{3} & no & \texttt{ge=1} \\
+\texttt{FEEDBACK\_\allowbreak{}AGENT\_\allowbreak{}LLM\_\allowbreak{}RETRY\_\allowbreak{}BACKOFF\_\allowbreak{}SECONDS} & \texttt{float} & \texttt{0.\allowbreak{}25} & no & \texttt{ge=0.\allowbreak{}0} \\
+\texttt{FEEDBACK\_\allowbreak{}AGENT\_\allowbreak{}LLM\_\allowbreak{}CIRCUIT\_\allowbreak{}FAILURE\_\allowbreak{}THRESHOLD} & \texttt{int} & \texttt{3} & no & \texttt{ge=1} \\
+\texttt{FEEDBACK\_\allowbreak{}AGENT\_\allowbreak{}LLM\_\allowbreak{}CIRCUIT\_\allowbreak{}RECOVERY\_\allowbreak{}SECONDS} & \texttt{float} & \texttt{30.\allowbreak{}0} & no & \texttt{gt=0.\allowbreak{}0} \\
+\texttt{FEEDBACK\_\allowbreak{}AGENT\_\allowbreak{}HALLUCINATION\_\allowbreak{}JUDGE\_\allowbreak{}ENABLED} & \texttt{bool} & \texttt{False} & no & Optional semantic hallucination review. When true, the configured LLM provider is also used as a judge after deterministic evidence-overlap checks. \\
+\texttt{OLLAMA\_\allowbreak{}BASE\_\allowbreak{}URL} & \texttt{str} & \texttt{'http:/\allowbreak{}/\allowbreak{}localhost:11434'} & no & Ollama provider (FEEDBACK\_AGENT\_LLM\_PROVIDER=ollama, local server, no API key). \\
+\texttt{OLLAMA\_\allowbreak{}MODEL} & \texttt{str} & \texttt{'llama3.\allowbreak{}2'} & no & -- \\
+\texttt{FEEDBACK\_\allowbreak{}AGENT\_\allowbreak{}TELEMETRY\_\allowbreak{}ENABLED} & \texttt{bool} & \texttt{False} & no & Telemetry is disabled by default. Use backend=jsonl for local event logs or backend=opentelemetry with the optional 'otel' extra and a configured OTel SDK/exporter. \\
+\texttt{FEEDBACK\_\allowbreak{}AGENT\_\allowbreak{}TELEMETRY\_\allowbreak{}BACKEND} & \texttt{TelemetryBackend} & \texttt{'jsonl'} & no & -- \\
+\texttt{FEEDBACK\_\allowbreak{}AGENT\_\allowbreak{}TELEMETRY\_\allowbreak{}PATH} & \texttt{Path} & \texttt{Path('.\allowbreak{}artifacts/\allowbreak{}telemetry.\allowbreak{}jsonl')\allowbreak{}} & no & -- \\
+\texttt{FEEDBACK\_\allowbreak{}AGENT\_\allowbreak{}TELEMETRY\_\allowbreak{}SERVICE\_\allowbreak{}NAME} & \texttt{str} & \texttt{'feedback-\allowbreak{}intelligence-\allowbreak{}agent'} & no & -- \\
+\texttt{FEEDBACK\_\allowbreak{}AGENT\_\allowbreak{}CONVERSATION\_\allowbreak{}STORE\_\allowbreak{}PATH} & \texttt{Path} & \texttt{Path('.\allowbreak{}artifacts/\allowbreak{}conversations')\allowbreak{}} & no & -- \\
+\texttt{FEEDBACK\_\allowbreak{}AGENT\_\allowbreak{}JOB\_\allowbreak{}STORE\_\allowbreak{}PATH} & \texttt{Path} & \texttt{Path('.\allowbreak{}artifacts/\allowbreak{}jobs')\allowbreak{}} & no & -- \\
+\texttt{FEEDBACK\_\allowbreak{}AGENT\_\allowbreak{}REPORT\_\allowbreak{}STORE\_\allowbreak{}PATH} & \texttt{Path} & \texttt{Path('.\allowbreak{}artifacts/\allowbreak{}reports')\allowbreak{}} & no & -- \\
+\texttt{FEEDBACK\_\allowbreak{}AGENT\_\allowbreak{}HUMAN\_\allowbreak{}FEEDBACK\_\allowbreak{}STORE\_\allowbreak{}PATH} & \texttt{Path} & \texttt{Path('.\allowbreak{}artifacts/\allowbreak{}human\_\allowbreak{}feedback')\allowbreak{}} & no & -- \\
+\texttt{FEEDBACK\_\allowbreak{}AGENT\_\allowbreak{}ACTIVE\_\allowbreak{}LEARNING\_\allowbreak{}STATE\_\allowbreak{}STORE\_\allowbreak{}PATH} & \texttt{Path} & \texttt{Path('.\allowbreak{}artifacts/\allowbreak{}active\_\allowbreak{}learning')\allowbreak{}} & no & -- \\
+\texttt{FEEDBACK\_\allowbreak{}AGENT\_\allowbreak{}API\_\allowbreak{}AUTH\_\allowbreak{}ENABLED} & \texttt{bool} & \texttt{False} & no & Optional API-key authorization. Health and readiness remain open. \\
+\texttt{FEEDBACK\_\allowbreak{}AGENT\_\allowbreak{}API\_\allowbreak{}READER\_\allowbreak{}KEY} & \texttt{str \textbar{} None} & \texttt{None} & yes & -- \\
+\texttt{FEEDBACK\_\allowbreak{}AGENT\_\allowbreak{}API\_\allowbreak{}WRITER\_\allowbreak{}KEY} & \texttt{str \textbar{} None} & \texttt{None} & yes & -- \\
+\texttt{FEEDBACK\_\allowbreak{}AGENT\_\allowbreak{}API\_\allowbreak{}ADMIN\_\allowbreak{}KEY} & \texttt{str \textbar{} None} & \texttt{None} & yes & -- \\
+\texttt{FEEDBACK\_\allowbreak{}AGENT\_\allowbreak{}API\_\allowbreak{}RATE\_\allowbreak{}LIMIT\_\allowbreak{}ENABLED} & \texttt{bool} & \texttt{False} & no & Optional in-process fixed-window rate limiting for deployed API instances. \\
+\texttt{FEEDBACK\_\allowbreak{}AGENT\_\allowbreak{}API\_\allowbreak{}RATE\_\allowbreak{}LIMIT\_\allowbreak{}MAX\_\allowbreak{}REQUESTS} & \texttt{int} & \texttt{120} & no & \texttt{ge=1} \\
+\texttt{FEEDBACK\_\allowbreak{}AGENT\_\allowbreak{}API\_\allowbreak{}RATE\_\allowbreak{}LIMIT\_\allowbreak{}WINDOW\_\allowbreak{}SECONDS} & \texttt{float} & \texttt{60.\allowbreak{}0} & no & \texttt{gt=0.\allowbreak{}0} \\
+\texttt{FEEDBACK\_\allowbreak{}AGENT\_\allowbreak{}EMAIL\_\allowbreak{}SMTP\_\allowbreak{}HOST} & \texttt{str \textbar{} None} & \texttt{None} & no & -- \\
+\texttt{FEEDBACK\_\allowbreak{}AGENT\_\allowbreak{}EMAIL\_\allowbreak{}SMTP\_\allowbreak{}PORT} & \texttt{int} & \texttt{587} & no & \texttt{ge=1,\allowbreak{} le=65535} \\
+\texttt{FEEDBACK\_\allowbreak{}AGENT\_\allowbreak{}EMAIL\_\allowbreak{}FROM\_\allowbreak{}ADDRESS} & \texttt{str} & \texttt{'feedback-\allowbreak{}agent@example.\allowbreak{}local'} & no & -- \\
+\texttt{FEEDBACK\_\allowbreak{}AGENT\_\allowbreak{}EMAIL\_\allowbreak{}SMTP\_\allowbreak{}USERNAME} & \texttt{str \textbar{} None} & \texttt{None} & no & -- \\
+\texttt{FEEDBACK\_\allowbreak{}AGENT\_\allowbreak{}EMAIL\_\allowbreak{}SMTP\_\allowbreak{}PASSWORD} & \texttt{str \textbar{} None} & \texttt{None} & yes & -- \\
+\texttt{FEEDBACK\_\allowbreak{}AGENT\_\allowbreak{}EMAIL\_\allowbreak{}SMTP\_\allowbreak{}USE\_\allowbreak{}TLS} & \texttt{bool} & \texttt{True} & no & -- \\
+\texttt{FEEDBACK\_\allowbreak{}AGENT\_\allowbreak{}CORS\_\allowbreak{}ALLOW\_\allowbreak{}ORIGINS} & \texttt{str} & \texttt{'http:/\allowbreak{}/\allowbreak{}localhost:5173,\allowbreak{}http:/\allowbreak{}/\allowbreak{}localhost:4173,\allowbreak{}http:/\allowbreak{}/\allowbreak{}127.\allowbreak{}0.\allowbreak{}0.\allowbreak{}1:5173,\allowbreak{}http:/\allowbreak{}/\allowbreak{}127.\allowbreak{}0.\allowbreak{}0.\allowbreak{}1:4173'} & no & Comma-separated browser origins allowed to call the API (CORS). Use "*" to allow any origin for local demos, or leave empty to disable CORS. \\
+\end{longtable}
+
+\section{Template coverage}
+
+Read by the application but absent from \texttt{.env.example}: \texttt{FEEDBACK\_\allowbreak{}AGENT\_\allowbreak{}DENSE\_\allowbreak{}WEIGHT}, \texttt{FEEDBACK\_\allowbreak{}AGENT\_\allowbreak{}EMAIL\_\allowbreak{}FROM\_\allowbreak{}ADDRESS}, \texttt{FEEDBACK\_\allowbreak{}AGENT\_\allowbreak{}EMAIL\_\allowbreak{}SMTP\_\allowbreak{}HOST}, \texttt{FEEDBACK\_\allowbreak{}AGENT\_\allowbreak{}EMAIL\_\allowbreak{}SMTP\_\allowbreak{}PASSWORD}, \texttt{FEEDBACK\_\allowbreak{}AGENT\_\allowbreak{}EMAIL\_\allowbreak{}SMTP\_\allowbreak{}PORT}, \texttt{FEEDBACK\_\allowbreak{}AGENT\_\allowbreak{}EMAIL\_\allowbreak{}SMTP\_\allowbreak{}USERNAME}, \texttt{FEEDBACK\_\allowbreak{}AGENT\_\allowbreak{}EMAIL\_\allowbreak{}SMTP\_\allowbreak{}USE\_\allowbreak{}TLS}, \texttt{FEEDBACK\_\allowbreak{}AGENT\_\allowbreak{}LEXICAL\_\allowbreak{}WEIGHT}, \texttt{FEEDBACK\_\allowbreak{}AGENT\_\allowbreak{}QDRANT\_\allowbreak{}COLLECTION}, \texttt{FEEDBACK\_\allowbreak{}AGENT\_\allowbreak{}QDRANT\_\allowbreak{}URL}, \texttt{FEEDBACK\_\allowbreak{}AGENT\_\allowbreak{}RETRIEVER\_\allowbreak{}TYPE}, \texttt{FEEDBACK\_\allowbreak{}AGENT\_\allowbreak{}VECTOR\_\allowbreak{}STORE}.
+
+\section{Sensitive values}
+
+The variables below carry credentials. This manual documents their names, types, and defaults only; no value is read from the environment during documentation generation, and the declared default of every credential field in source is \texttt{None}: \texttt{OPENAI\_\allowbreak{}API\_\allowbreak{}KEY}, \texttt{ANTHROPIC\_\allowbreak{}API\_\allowbreak{}KEY}, \texttt{FEEDBACK\_\allowbreak{}AGENT\_\allowbreak{}API\_\allowbreak{}READER\_\allowbreak{}KEY}, \texttt{FEEDBACK\_\allowbreak{}AGENT\_\allowbreak{}API\_\allowbreak{}WRITER\_\allowbreak{}KEY}, \texttt{FEEDBACK\_\allowbreak{}AGENT\_\allowbreak{}API\_\allowbreak{}ADMIN\_\allowbreak{}KEY}, \texttt{FEEDBACK\_\allowbreak{}AGENT\_\allowbreak{}EMAIL\_\allowbreak{}SMTP\_\allowbreak{}PASSWORD}.

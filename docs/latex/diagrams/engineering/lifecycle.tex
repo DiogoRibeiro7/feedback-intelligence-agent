@@ -1,0 +1,54 @@
+% Authored TikZ: the engineering lifecycle as actually implemented.
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[
+  proc/.style={rectangle, draw=black, rounded corners=2pt, align=center,
+    font=\scriptsize, text width=34mm, minimum height=7mm, inner sep=3pt},
+  gate/.style={proc, fill=shadegrey},
+  result/.style={rectangle, draw=black, very thick, align=center,
+    font=\scriptsize, text width=34mm, minimum height=7mm, inner sep=3pt},
+  aside/.style={rectangle, draw=rulegrey, dashed, align=center,
+    font=\scriptsize, text width=32mm, minimum height=6mm, inner sep=3pt},
+  flow/.style={-{Latex[length=1.8mm]}, thick},
+  weak/.style={-{Latex[length=1.8mm]}, rulegrey, dashed},
+  node distance=3.4mm
+]
+  \node[proc] (dev) {Developer};
+  \node[proc, below=of dev] (src) {Source change\\ feature branch};
+  \node[gate, below=of src] (lint) {Lint\\ \texttt{ruff check .}};
+  \node[gate, below=of lint] (fmt) {Format check\\ \texttt{ruff format -{}-check .}};
+  \node[gate, below=of fmt] (types) {Type check\\ \texttt{mypy src} (strict)};
+  \node[gate, below=of types] (tests) {Tests + coverage floor\\ \texttt{pytest -{}-cov-fail-under=63}};
+  \node[gate, below=of tests] (demo) {Deterministic demo\\ \texttt{scripts/run\_demo.py}};
+  \node[gate, below=of demo] (build) {Package build\\ \texttt{poetry build}};
+  \node[result, below=of build] (artifact) {Versioned artifact\\ sdist + wheel in \texttt{dist/}};
+  \node[result, below=of artifact] (release) {Release\\ tag \texttt{v*} $\rightarrow$ Release workflow};
+
+  \foreach \a/\b in {dev/src, src/lint, lint/fmt, fmt/types, types/tests,
+                     tests/demo, demo/build, build/artifact, artifact/release}
+    \draw[flow] (\a) -- (\b);
+
+  \node[aside, right=12mm of lint] (codeql) {CodeQL analysis\\ python, js/ts, weekly};
+  \node[aside, below=of codeql] (depreview) {Dependency review\\ fail on high severity};
+  \node[aside, below=of depreview] (dependabot) {Dependabot\\ pip, npm, actions, weekly};
+  \node[aside, below=of dependabot] (docker) {Container build\\ + import smoke test};
+  \node[aside, below=of docker] (frontend) {Frontend build\\ \texttt{npm ci}, audit, build};
+  \node[aside, below=of frontend] (docs) {Documentation\\ \texttt{make docs} validation};
+
+  \draw[weak] (src.east) to[out=0, in=180] (codeql.west);
+  \draw[weak] (src.east) to[out=-10, in=180] (depreview.west);
+  \draw[weak] (src.east) to[out=-20, in=180] (docker.west);
+  \draw[weak] (src.east) to[out=-25, in=180] (frontend.west);
+  \draw[weak] (src.east) to[out=-30, in=180] (docs.west);
+  \draw[weak] (dependabot.west) to[out=180, in=-10] (src.east);
+
+  \node[aside, left=12mm of tests] (matrix) {Repeated on Python\\ 3.10, 3.11, 3.12};
+  \draw[weak] (matrix.east) -- (tests.west);
+\end{tikzpicture}
+\caption{The engineering lifecycle as implemented. The shaded column is the
+blocking \texttt{quality} job of the CI workflow, executed in order and
+short-circuiting on the first failure. Dashed boxes are independent workflows
+and automation with their own triggers; none of them gates the others.}
+\label{fig:engineering-lifecycle}
+\end{figure}

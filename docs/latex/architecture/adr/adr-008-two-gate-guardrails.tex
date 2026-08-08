@@ -1,0 +1,57 @@
+\section{ADR-008: Two independent guardrail gates}
+\label{adr:008}
+
+\subsection*{Status}
+
+Accepted; in force at revision \texttt{\projectrevisionshort}.
+
+\subsection*{Context}
+
+Two different untrusted texts reach the model in a retrieval-augmented flow:
+the user's question, and the retrieved feedback, which is itself user-authored
+content stored earlier. A single check on the question cannot protect against
+instructions embedded in retrieved evidence.
+
+\subsection*{Decision}
+
+The guardrail is split into two gates with distinct entry points and distinct
+placement in the flow:
+
+\begin{enumerate}[nosep]
+  \item \texttt{check\_input(question)} runs \emph{before} retrieval. A block
+    short-circuits the whole request into a safe refusal --- no retrieval
+    happens, no tool runs, no prompt is built, no provider is called.
+  \item \texttt{check\_context(chunk\_texts)} runs \emph{after} retrieval and
+    \emph{before} prompt construction. Suspicious chunks are dropped
+    individually and the request continues with the survivors.
+\end{enumerate}
+
+\subsection*{Consequences}
+
+\begin{itemize}
+  \item A refused question costs no retrieval and no generation.
+  \item Injection-shaped evidence degrades an answer rather than failing it:
+    dropping chunks preserves availability.
+  \item Both outcomes are observable. The refusal carries the
+    \texttt{GuardrailDecision} on the answer with its reason and severity, and
+    the number of dropped chunks appears in the run span and in the answer
+    diagnostics under \texttt{guardrail\_context\_dropped}.
+  \item The checks are deterministic pattern matching, so they run with no
+    model call, but they are correspondingly limited: an injection phrased
+    outside the pattern set passes.
+\end{itemize}
+
+\subsection*{Alternatives}
+
+One combined check over question and context, which could not distinguish
+``refuse the request'' from ``drop this evidence''; or a model-based classifier,
+which would contradict \cref{adr:001}.
+
+\subsection*{Evidence}
+
+\srcfile{src/feedback\_intelligence\_agent/guardrails.py}
+(\texttt{check\_input}, \texttt{check\_context},
+\texttt{is\_suspicious\_context}, \texttt{SAFE\_REFUSAL});
+\srcfile{src/feedback\_intelligence\_agent/agent.py}
+(\texttt{answer} calls the input gate before \texttt{\_retrieve} and the
+context gate after it); \srcfile{tests/test\_guardrails.py}.

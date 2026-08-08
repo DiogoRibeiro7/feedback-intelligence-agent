@@ -1,0 +1,22 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{answer\_feedback\_analytics}}
+\label{func:feedback_intelligence_agent.cli.answer_feedback_analytics}\index{Functions!answer\_feedback\_analytics}
+
+Summarise useful/not-useful human feedback.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+answer_feedback_analytics(tenant_id: Annotated[str | None, typer.Option(help='Only summarise feedback for this tenant id.')] = None, store_path: Annotated[Path, typer.Option(help='Directory holding answer feedback JSON files.')] = Path('.artifacts/human_feedback')) -> None
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{tenant\_\allowbreak{}id}] \texttt{Annotated[str \textbar{} None,\allowbreak{} typer.\allowbreak{}Option(help='Only summarise feedback for this tenant id.\allowbreak{}')\allowbreak{}]\allowbreak{}}, default \texttt{None}.
+  \item[\texttt{store\_\allowbreak{}path}] \texttt{Annotated[Path,\allowbreak{} typer.\allowbreak{}Option(help='Directory holding answer feedback JSON files.\allowbreak{}')\allowbreak{}]\allowbreak{}}, default \texttt{Path('.\allowbreak{}artifacts/\allowbreak{}human\_\allowbreak{}feedback')\allowbreak{}}.
+\end{arglist}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}cli.\allowbreak{}py:742}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/cli.py#L742}{online}), module \cref{module:feedback_intelligence_agent.cli}

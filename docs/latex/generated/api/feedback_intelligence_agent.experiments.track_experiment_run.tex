@@ -1,0 +1,26 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{track\_experiment\_run}}
+\label{func:feedback_intelligence_agent.experiments.track_experiment_run}\index{Functions!track\_experiment\_run}
+
+Log an experiment run to the configured tracking backend.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+track_experiment_run(result: ExperimentResult, metadata: RunMetadata, artifacts: dict[str, Path]) -> str | None
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{result}] \texttt{ExperimentResult}, required.
+  \item[\texttt{metadata}] \texttt{RunMetadata}, required.
+  \item[\texttt{artifacts}] \texttt{dict[str,\allowbreak{} Path]\allowbreak{}}, required.
+\end{arglist}
+\apifield{Value}\texttt{str \textbar{} None}
+\apifield{Raises}\texttt{ExperimentTrackingError}
+\apifield{Details}\texttt{tracking\_\allowbreak{}provider='none'} is the default and returns \texttt{None}. The MLflow backend is imported lazily so the default install remains lightweight.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}experiments.\allowbreak{}py:218}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/experiments.py#L218}{online}), module \cref{module:feedback_intelligence_agent.experiments}

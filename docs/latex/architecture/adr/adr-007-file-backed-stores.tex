@@ -1,0 +1,55 @@
+\section{ADR-007: File-backed JSON stores instead of a database}
+\label{adr:007}
+
+\subsection*{Status}
+
+Accepted; in force at revision \texttt{\projectrevisionshort}.
+
+\subsection*{Context}
+
+Five kinds of state outlive a request: conversations, ingestion jobs, saved
+insight reports, human answer feedback, and active-learning workflow state.
+
+\subsection*{Decision}
+
+Each is persisted as JSON files under a configurable directory beneath
+\srcfile{.artifacts/}, one file per entity, through a small store class
+(\texttt{JsonConversationStore}, \texttt{JsonJobStore},
+\texttt{JsonInsightReportStore}, \texttt{JsonHumanFeedbackStore},
+\texttt{JsonActiveLearningStateStore}). Records are re-validated against their
+Pydantic model on load. No database, ORM, or migration tool is present in the
+dependency set.
+
+\subsection*{Consequences}
+
+\begin{itemize}
+  \item No service is required to run the API, and CI needs no database
+    container.
+  \item Stored state is inspectable and diffable with ordinary tools, which
+    makes the workflow features easy to test.
+  \item Each store is behind a class boundary, so replacing the backing store
+    is a contained change.
+  \item There is no transactionality and no cross-process locking. Concurrent
+    writers to the same entity race on whole-file writes. The production
+    Compose file runs multiple Gunicorn workers, which makes this reachable in
+    that configuration.
+  \item Listing is a directory scan, so it degrades linearly with the number of
+    stored entities.
+\end{itemize}
+
+\subsection*{Alternatives}
+
+SQLite, which would add transactionality at the cost of a schema and
+migrations; or an external database, which would contradict \cref{adr:001}.
+The repository records no evaluation of either.
+
+\noevidence
+
+\subsection*{Evidence}
+
+\srcfile{src/feedback\_intelligence\_agent/memory.py}, \srcfile{jobs.py},
+\srcfile{reports.py}, \srcfile{human\_feedback.py},
+\srcfile{active\_learning.py};
+\srcfile{src/feedback\_intelligence\_agent/config.py} (the five
+\texttt{*\_store\_path} settings); \srcfile{pyproject.toml} (no database
+dependency); \srcfile{deploy/docker-compose.prod.yml} (multiple workers).

@@ -1,0 +1,50 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{OpenTelemetrySpan}}
+\label{class:feedback_intelligence_agent.telemetry.OpenTelemetrySpan}\index{Classes!OpenTelemetrySpan}
+
+Minimal span behavior used by the OpenTelemetry sink.
+\apifield{Inherits}\texttt{Protocol}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}telemetry.\allowbreak{}py:91}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/telemetry.py#L91}{online}), protocol, module \cref{module:feedback_intelligence_agent.telemetry}
+
+\subsection{\texttt{set\_attribute}}
+\label{method:feedback_intelligence_agent.telemetry.OpenTelemetrySpan.set_attribute}\index{Methods!set\_attribute}
+Set one scalar span attribute.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+set_attribute(self, key: str, value: TelemetryAttributeValue) -> None
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{key}] \texttt{str}, required.
+  \item[\texttt{value}] \texttt{TelemetryAttributeValue}, required.
+\end{arglist}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}telemetry.\allowbreak{}py:94}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/telemetry.py#L94}{online})
+
+\subsection{\texttt{set\_status}}
+\label{method:feedback_intelligence_agent.telemetry.OpenTelemetrySpan.set_status}\index{Methods!set\_status}
+Set the span status.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+set_status(self, status: object) -> None
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{status}] \texttt{object}, required.
+\end{arglist}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}telemetry.\allowbreak{}py:98}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/telemetry.py#L98}{online})
+
+\subsection{\texttt{end}}
+\label{method:feedback_intelligence_agent.telemetry.OpenTelemetrySpan.end}\index{Methods!end}
+Finish the span.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+end(self) -> None
+\end{lstlisting}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}telemetry.\allowbreak{}py:102}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/telemetry.py#L102}{online})

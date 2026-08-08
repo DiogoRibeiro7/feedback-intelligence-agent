@@ -1,0 +1,23 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{check\_context}}
+\label{func:feedback_intelligence_agent.guardrails.check_context}\index{Functions!check\_context}
+
+Check retrieved context for indirect prompt injection (pre-generation gate).
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+check_context(texts: Sequence[str]) -> GuardrailDecision
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{texts}] \texttt{Sequence[str]\allowbreak{}}, required.
+\end{arglist}
+\apifield{Value}\texttt{GuardrailDecision}
+\apifield{Details}The decision is \texttt{allowed=False} when any chunk carries injection-style content; callers should drop the suspicious chunks (identified per chunk with \texttt{is\_\allowbreak{}suspicious\_\allowbreak{}context}) and answer from the clean remainder.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}guardrails.\allowbreak{}py:199}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/guardrails.py#L199}{online}), module \cref{module:feedback_intelligence_agent.guardrails}

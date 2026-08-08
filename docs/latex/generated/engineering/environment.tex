@@ -1,0 +1,64 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_engineering.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+The template below is the version-controlled \texttt{.env.example}. Every credential slot ships empty; no secret value exists anywhere in the repository or in this manual.
+
+\begin{longtable}{>{\raggedright\arraybackslash\small}p{0.34\textwidth} >{\raggedright\arraybackslash\small}p{0.24\textwidth} >{\raggedright\arraybackslash\small}p{0.34\textwidth}}
+\caption{Environment template shipped with the repository.}\label{tab:env-template}\\
+\toprule
+Variable & Template value & Documented purpose \\
+\midrule
+\endfirsthead
+\toprule
+Variable & Template value & Documented purpose \\
+\midrule
+\endhead
+\midrule
+\multicolumn{3}{r}{\footnotesize continued on next page}\\
+\endfoot
+\bottomrule
+\endlastfoot
+\texttt{FEEDBACK\_\allowbreak{}AGENT\_\allowbreak{}DATA\_\allowbreak{}PATH} & \texttt{data/\allowbreak{}sample\_\allowbreak{}feedback.\allowbreak{}csv} &  \\
+\texttt{FEEDBACK\_\allowbreak{}AGENT\_\allowbreak{}INDEX\_\allowbreak{}PATH} & \texttt{.\allowbreak{}artifacts/\allowbreak{}vector\_\allowbreak{}store.\allowbreak{}json} &  \\
+\texttt{FEEDBACK\_\allowbreak{}AGENT\_\allowbreak{}EMBEDDING\_\allowbreak{}DIM} & \texttt{512} &  \\
+\texttt{FEEDBACK\_\allowbreak{}AGENT\_\allowbreak{}LLM\_\allowbreak{}PROVIDER} & \texttt{local} & LLM provider: local (default, no API key), openai, openai\_responses, anthropic, bedrock, or ollama. \\
+\texttt{OPENAI\_\allowbreak{}API\_\allowbreak{}KEY} & (empty) & OpenAI-compatible provider (FEEDBACK\_AGENT\_LLM\_PROVIDER=openai). \\
+\texttt{OPENAI\_\allowbreak{}MODEL} & \texttt{gpt-\allowbreak{}4o-\allowbreak{}mini} &  \\
+\texttt{OPENAI\_\allowbreak{}BASE\_\allowbreak{}URL} & \texttt{https:/\allowbreak{}/\allowbreak{}api.\allowbreak{}openai.\allowbreak{}com} &  \\
+\texttt{ANTHROPIC\_\allowbreak{}API\_\allowbreak{}KEY} & (empty) & Anthropic provider (FEEDBACK\_AGENT\_LLM\_PROVIDER=anthropic, requires the 'anthropic' extra). \\
+\texttt{ANTHROPIC\_\allowbreak{}MODEL} & \texttt{claude-\allowbreak{}opus-\allowbreak{}4-\allowbreak{}8} &  \\
+\texttt{AWS\_\allowbreak{}REGION} & (empty) & AWS Bedrock provider (FEEDBACK\_AGENT\_LLM\_PROVIDER=bedrock, requires the 'bedrock' extra). Credentials are resolved by the AWS SDK chain (env, profile, SSO, IAM role). \\
+\texttt{AWS\_\allowbreak{}BEDROCK\_\allowbreak{}MODEL} & \texttt{anthropic.\allowbreak{}claude-\allowbreak{}3-\allowbreak{}haiku-\allowbreak{}20240307-\allowbreak{}v1:0} &  \\
+\texttt{AWS\_\allowbreak{}BEDROCK\_\allowbreak{}MAX\_\allowbreak{}TOKENS} & \texttt{1024} &  \\
+\texttt{AWS\_\allowbreak{}BEDROCK\_\allowbreak{}TEMPERATURE} & \texttt{0.\allowbreak{}2} &  \\
+\texttt{FEEDBACK\_\allowbreak{}AGENT\_\allowbreak{}LLM\_\allowbreak{}RESILIENCE\_\allowbreak{}ENABLED} & \texttt{true} & Remote LLM resilience wrapper (not applied to FEEDBACK\_AGENT\_LLM\_PROVIDER=local). \\
+\texttt{FEEDBACK\_\allowbreak{}AGENT\_\allowbreak{}LLM\_\allowbreak{}TIMEOUT\_\allowbreak{}SECONDS} & \texttt{30} &  \\
+\texttt{FEEDBACK\_\allowbreak{}AGENT\_\allowbreak{}LLM\_\allowbreak{}RETRY\_\allowbreak{}MAX\_\allowbreak{}ATTEMPTS} & \texttt{3} &  \\
+\texttt{FEEDBACK\_\allowbreak{}AGENT\_\allowbreak{}LLM\_\allowbreak{}RETRY\_\allowbreak{}BACKOFF\_\allowbreak{}SECONDS} & \texttt{0.\allowbreak{}25} &  \\
+\texttt{FEEDBACK\_\allowbreak{}AGENT\_\allowbreak{}LLM\_\allowbreak{}CIRCUIT\_\allowbreak{}FAILURE\_\allowbreak{}THRESHOLD} & \texttt{3} &  \\
+\texttt{FEEDBACK\_\allowbreak{}AGENT\_\allowbreak{}LLM\_\allowbreak{}CIRCUIT\_\allowbreak{}RECOVERY\_\allowbreak{}SECONDS} & \texttt{30} &  \\
+\texttt{FEEDBACK\_\allowbreak{}AGENT\_\allowbreak{}HALLUCINATION\_\allowbreak{}JUDGE\_\allowbreak{}ENABLED} & \texttt{false} & Optional semantic hallucination review. When true, the configured LLM provider is also used as a judge after deterministic evidence-overlap checks. \\
+\texttt{OLLAMA\_\allowbreak{}BASE\_\allowbreak{}URL} & \texttt{http:/\allowbreak{}/\allowbreak{}localhost:11434} & Ollama provider (FEEDBACK\_AGENT\_LLM\_PROVIDER=ollama, local server, no API key). \\
+\texttt{OLLAMA\_\allowbreak{}MODEL} & \texttt{llama3.\allowbreak{}2} &  \\
+\texttt{FEEDBACK\_\allowbreak{}AGENT\_\allowbreak{}CONVERSATION\_\allowbreak{}STORE\_\allowbreak{}PATH} & \texttt{.\allowbreak{}artifacts/\allowbreak{}conversations} &  \\
+\texttt{FEEDBACK\_\allowbreak{}AGENT\_\allowbreak{}JOB\_\allowbreak{}STORE\_\allowbreak{}PATH} & \texttt{.\allowbreak{}artifacts/\allowbreak{}jobs} &  \\
+\texttt{FEEDBACK\_\allowbreak{}AGENT\_\allowbreak{}REPORT\_\allowbreak{}STORE\_\allowbreak{}PATH} & \texttt{.\allowbreak{}artifacts/\allowbreak{}reports} &  \\
+\texttt{FEEDBACK\_\allowbreak{}AGENT\_\allowbreak{}HUMAN\_\allowbreak{}FEEDBACK\_\allowbreak{}STORE\_\allowbreak{}PATH} & \texttt{.\allowbreak{}artifacts/\allowbreak{}human\_\allowbreak{}feedback} &  \\
+\texttt{FEEDBACK\_\allowbreak{}AGENT\_\allowbreak{}ACTIVE\_\allowbreak{}LEARNING\_\allowbreak{}STATE\_\allowbreak{}STORE\_\allowbreak{}PATH} & \texttt{.\allowbreak{}artifacts/\allowbreak{}active\_\allowbreak{}learning} &  \\
+\texttt{FEEDBACK\_\allowbreak{}AGENT\_\allowbreak{}API\_\allowbreak{}AUTH\_\allowbreak{}ENABLED} & \texttt{false} & Optional API-key authorization. Health and readiness remain open. \\
+\texttt{FEEDBACK\_\allowbreak{}AGENT\_\allowbreak{}API\_\allowbreak{}READER\_\allowbreak{}KEY} & (empty) &  \\
+\texttt{FEEDBACK\_\allowbreak{}AGENT\_\allowbreak{}API\_\allowbreak{}WRITER\_\allowbreak{}KEY} & (empty) &  \\
+\texttt{FEEDBACK\_\allowbreak{}AGENT\_\allowbreak{}API\_\allowbreak{}ADMIN\_\allowbreak{}KEY} & (empty) &  \\
+\texttt{FEEDBACK\_\allowbreak{}AGENT\_\allowbreak{}API\_\allowbreak{}RATE\_\allowbreak{}LIMIT\_\allowbreak{}ENABLED} & \texttt{false} & Optional in-process fixed-window rate limiting for deployed API instances. \\
+\texttt{FEEDBACK\_\allowbreak{}AGENT\_\allowbreak{}API\_\allowbreak{}RATE\_\allowbreak{}LIMIT\_\allowbreak{}MAX\_\allowbreak{}REQUESTS} & \texttt{120} &  \\
+\texttt{FEEDBACK\_\allowbreak{}AGENT\_\allowbreak{}API\_\allowbreak{}RATE\_\allowbreak{}LIMIT\_\allowbreak{}WINDOW\_\allowbreak{}SECONDS} & \texttt{60} &  \\
+\texttt{FEEDBACK\_\allowbreak{}AGENT\_\allowbreak{}TELEMETRY\_\allowbreak{}ENABLED} & \texttt{false} & Telemetry is disabled by default. Use backend=jsonl for local event logs or backend=opentelemetry with the optional 'otel' extra and a configured OTel SDK/exporter. \\
+\texttt{FEEDBACK\_\allowbreak{}AGENT\_\allowbreak{}TELEMETRY\_\allowbreak{}BACKEND} & \texttt{jsonl} &  \\
+\texttt{FEEDBACK\_\allowbreak{}AGENT\_\allowbreak{}TELEMETRY\_\allowbreak{}PATH} & \texttt{.\allowbreak{}artifacts/\allowbreak{}telemetry.\allowbreak{}jsonl} &  \\
+\texttt{FEEDBACK\_\allowbreak{}AGENT\_\allowbreak{}TELEMETRY\_\allowbreak{}SERVICE\_\allowbreak{}NAME} & \texttt{feedback-\allowbreak{}intelligence-\allowbreak{}agent} &  \\
+\texttt{FEEDBACK\_\allowbreak{}AGENT\_\allowbreak{}CORS\_\allowbreak{}ALLOW\_\allowbreak{}ORIGINS} & \texttt{http:/\allowbreak{}/\allowbreak{}localhost:5173,\allowbreak{}http:/\allowbreak{}/\allowbreak{}localhost:4173,\allowbreak{}http:/\allowbreak{}/\allowbreak{}127.\allowbreak{}0.\allowbreak{}0.\allowbreak{}1:5173,\allowbreak{}http:/\allowbreak{}/\allowbreak{}127.\allowbreak{}0.\allowbreak{}0.\allowbreak{}1:4173} & Comma-separated browser origins allowed to call the API (CORS). Use "*" to allow any origin for local demos, or leave empty to disable CORS. \\
+\end{longtable}

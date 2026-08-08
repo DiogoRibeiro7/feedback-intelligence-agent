@@ -1,0 +1,1688 @@
+{
+  "package": "feedback_intelligence_agent",
+  "module_count": 43,
+  "edge_count": 151,
+  "layer_order": [
+    "interface",
+    "application",
+    "domain",
+    "data",
+    "infrastructure",
+    "foundation",
+    "unclassified"
+  ],
+  "layers": {
+    "interface": [
+      "__init__",
+      "api",
+      "cli"
+    ],
+    "application": [
+      "active_learning",
+      "agent",
+      "benchmarking",
+      "email_summaries",
+      "evaluation",
+      "experiments",
+      "factory",
+      "human_feedback",
+      "jobs",
+      "reports"
+    ],
+    "domain": [
+      "chunking",
+      "citations",
+      "embeddings",
+      "guardrails",
+      "hallucination",
+      "lexical_search",
+      "memory",
+      "output_parser",
+      "privacy",
+      "prompt_registry",
+      "prompts",
+      "query_expansion",
+      "reranking",
+      "retrieval",
+      "synthetic_data",
+      "tools"
+    ],
+    "data": [
+      "data_contracts",
+      "index_updates",
+      "ingestion",
+      "lakehouse",
+      "qdrant_store",
+      "streaming_ingestion",
+      "vector_store"
+    ],
+    "infrastructure": [
+      "auth",
+      "llm",
+      "rate_limit",
+      "resilience",
+      "telemetry"
+    ],
+    "foundation": [
+      "config",
+      "schemas"
+    ]
+  },
+  "layer_edges": {
+    "application": [
+      "data",
+      "domain",
+      "foundation",
+      "infrastructure",
+      "interface"
+    ],
+    "data": [
+      "application",
+      "domain",
+      "foundation",
+      "infrastructure"
+    ],
+    "domain": [
+      "data",
+      "foundation",
+      "infrastructure"
+    ],
+    "foundation": [
+      "domain"
+    ],
+    "infrastructure": [
+      "domain",
+      "foundation"
+    ],
+    "interface": [
+      "application",
+      "data",
+      "domain",
+      "foundation",
+      "infrastructure"
+    ]
+  },
+  "nodes": [
+    {
+      "name": "__init__",
+      "qualified_name": "feedback_intelligence_agent",
+      "source": "src/feedback_intelligence_agent/__init__.py",
+      "layer": "interface",
+      "fan_out": 2,
+      "external_dependencies": [],
+      "optional_dependencies": [],
+      "lazy_imports": [],
+      "typing_only_imports": [],
+      "fan_in": 2
+    },
+    {
+      "name": "active_learning",
+      "qualified_name": "feedback_intelligence_agent.active_learning",
+      "source": "src/feedback_intelligence_agent/active_learning.py",
+      "layer": "application",
+      "fan_out": 1,
+      "external_dependencies": [
+        "pydantic"
+      ],
+      "optional_dependencies": [],
+      "lazy_imports": [],
+      "typing_only_imports": [],
+      "fan_in": 4
+    },
+    {
+      "name": "agent",
+      "qualified_name": "feedback_intelligence_agent.agent",
+      "source": "src/feedback_intelligence_agent/agent.py",
+      "layer": "application",
+      "fan_out": 12,
+      "external_dependencies": [],
+      "optional_dependencies": [],
+      "lazy_imports": [],
+      "typing_only_imports": [],
+      "fan_in": 5
+    },
+    {
+      "name": "api",
+      "qualified_name": "feedback_intelligence_agent.api",
+      "source": "src/feedback_intelligence_agent/api.py",
+      "layer": "interface",
+      "fan_out": 13,
+      "external_dependencies": [
+        "fastapi"
+      ],
+      "optional_dependencies": [],
+      "lazy_imports": [],
+      "typing_only_imports": [],
+      "fan_in": 0
+    },
+    {
+      "name": "auth",
+      "qualified_name": "feedback_intelligence_agent.auth",
+      "source": "src/feedback_intelligence_agent/auth.py",
+      "layer": "infrastructure",
+      "fan_out": 0,
+      "external_dependencies": [
+        "pydantic"
+      ],
+      "optional_dependencies": [],
+      "lazy_imports": [],
+      "typing_only_imports": [],
+      "fan_in": 1
+    },
+    {
+      "name": "benchmarking",
+      "qualified_name": "feedback_intelligence_agent.benchmarking",
+      "source": "src/feedback_intelligence_agent/benchmarking.py",
+      "layer": "application",
+      "fan_out": 8,
+      "external_dependencies": [
+        "pydantic"
+      ],
+      "optional_dependencies": [],
+      "lazy_imports": [],
+      "typing_only_imports": [],
+      "fan_in": 1
+    },
+    {
+      "name": "chunking",
+      "qualified_name": "feedback_intelligence_agent.chunking",
+      "source": "src/feedback_intelligence_agent/chunking.py",
+      "layer": "domain",
+      "fan_out": 2,
+      "external_dependencies": [],
+      "optional_dependencies": [],
+      "lazy_imports": [],
+      "typing_only_imports": [],
+      "fan_in": 5
+    },
+    {
+      "name": "citations",
+      "qualified_name": "feedback_intelligence_agent.citations",
+      "source": "src/feedback_intelligence_agent/citations.py",
+      "layer": "domain",
+      "fan_out": 1,
+      "external_dependencies": [],
+      "optional_dependencies": [],
+      "lazy_imports": [],
+      "typing_only_imports": [],
+      "fan_in": 5
+    },
+    {
+      "name": "cli",
+      "qualified_name": "feedback_intelligence_agent.cli",
+      "source": "src/feedback_intelligence_agent/cli.py",
+      "layer": "interface",
+      "fan_out": 21,
+      "external_dependencies": [
+        "typer",
+        "uvicorn"
+      ],
+      "optional_dependencies": [],
+      "lazy_imports": [],
+      "typing_only_imports": [],
+      "fan_in": 0
+    },
+    {
+      "name": "config",
+      "qualified_name": "feedback_intelligence_agent.config",
+      "source": "src/feedback_intelligence_agent/config.py",
+      "layer": "foundation",
+      "fan_out": 0,
+      "external_dependencies": [
+        "pydantic",
+        "pydantic_settings"
+      ],
+      "optional_dependencies": [],
+      "lazy_imports": [],
+      "typing_only_imports": [],
+      "fan_in": 6
+    },
+    {
+      "name": "data_contracts",
+      "qualified_name": "feedback_intelligence_agent.data_contracts",
+      "source": "src/feedback_intelligence_agent/data_contracts.py",
+      "layer": "data",
+      "fan_out": 1,
+      "external_dependencies": [
+        "pandas",
+        "pydantic"
+      ],
+      "optional_dependencies": [],
+      "lazy_imports": [],
+      "typing_only_imports": [],
+      "fan_in": 5
+    },
+    {
+      "name": "email_summaries",
+      "qualified_name": "feedback_intelligence_agent.email_summaries",
+      "source": "src/feedback_intelligence_agent/email_summaries.py",
+      "layer": "application",
+      "fan_out": 1,
+      "external_dependencies": [
+        "pydantic"
+      ],
+      "optional_dependencies": [],
+      "lazy_imports": [],
+      "typing_only_imports": [],
+      "fan_in": 2
+    },
+    {
+      "name": "embeddings",
+      "qualified_name": "feedback_intelligence_agent.embeddings",
+      "source": "src/feedback_intelligence_agent/embeddings.py",
+      "layer": "domain",
+      "fan_out": 0,
+      "external_dependencies": [
+        "numpy"
+      ],
+      "optional_dependencies": [],
+      "lazy_imports": [],
+      "typing_only_imports": [],
+      "fan_in": 6
+    },
+    {
+      "name": "evaluation",
+      "qualified_name": "feedback_intelligence_agent.evaluation",
+      "source": "src/feedback_intelligence_agent/evaluation.py",
+      "layer": "application",
+      "fan_out": 5,
+      "external_dependencies": [
+        "pydantic"
+      ],
+      "optional_dependencies": [],
+      "lazy_imports": [],
+      "typing_only_imports": [],
+      "fan_in": 3
+    },
+    {
+      "name": "experiments",
+      "qualified_name": "feedback_intelligence_agent.experiments",
+      "source": "src/feedback_intelligence_agent/experiments.py",
+      "layer": "application",
+      "fan_out": 9,
+      "external_dependencies": [
+        "mlflow",
+        "platform",
+        "pydantic",
+        "yaml"
+      ],
+      "optional_dependencies": [
+        "mlflow"
+      ],
+      "lazy_imports": [],
+      "typing_only_imports": [],
+      "fan_in": 1
+    },
+    {
+      "name": "factory",
+      "qualified_name": "feedback_intelligence_agent.factory",
+      "source": "src/feedback_intelligence_agent/factory.py",
+      "layer": "application",
+      "fan_out": 21,
+      "external_dependencies": [],
+      "optional_dependencies": [],
+      "lazy_imports": [
+        "active_learning",
+        "human_feedback",
+        "jobs",
+        "qdrant_store",
+        "reports"
+      ],
+      "typing_only_imports": [
+        "active_learning",
+        "human_feedback",
+        "jobs",
+        "reports"
+      ],
+      "fan_in": 6
+    },
+    {
+      "name": "guardrails",
+      "qualified_name": "feedback_intelligence_agent.guardrails",
+      "source": "src/feedback_intelligence_agent/guardrails.py",
+      "layer": "domain",
+      "fan_out": 0,
+      "external_dependencies": [
+        "pydantic"
+      ],
+      "optional_dependencies": [],
+      "lazy_imports": [],
+      "typing_only_imports": [],
+      "fan_in": 2
+    },
+    {
+      "name": "hallucination",
+      "qualified_name": "feedback_intelligence_agent.hallucination",
+      "source": "src/feedback_intelligence_agent/hallucination.py",
+      "layer": "domain",
+      "fan_out": 2,
+      "external_dependencies": [
+        "pydantic"
+      ],
+      "optional_dependencies": [],
+      "lazy_imports": [],
+      "typing_only_imports": [],
+      "fan_in": 3
+    },
+    {
+      "name": "human_feedback",
+      "qualified_name": "feedback_intelligence_agent.human_feedback",
+      "source": "src/feedback_intelligence_agent/human_feedback.py",
+      "layer": "application",
+      "fan_out": 1,
+      "external_dependencies": [
+        "pydantic"
+      ],
+      "optional_dependencies": [],
+      "lazy_imports": [],
+      "typing_only_imports": [],
+      "fan_in": 5
+    },
+    {
+      "name": "index_updates",
+      "qualified_name": "feedback_intelligence_agent.index_updates",
+      "source": "src/feedback_intelligence_agent/index_updates.py",
+      "layer": "data",
+      "fan_out": 6,
+      "external_dependencies": [
+        "pydantic"
+      ],
+      "optional_dependencies": [],
+      "lazy_imports": [],
+      "typing_only_imports": [],
+      "fan_in": 1
+    },
+    {
+      "name": "ingestion",
+      "qualified_name": "feedback_intelligence_agent.ingestion",
+      "source": "src/feedback_intelligence_agent/ingestion.py",
+      "layer": "data",
+      "fan_out": 3,
+      "external_dependencies": [],
+      "optional_dependencies": [],
+      "lazy_imports": [],
+      "typing_only_imports": [],
+      "fan_in": 5
+    },
+    {
+      "name": "jobs",
+      "qualified_name": "feedback_intelligence_agent.jobs",
+      "source": "src/feedback_intelligence_agent/jobs.py",
+      "layer": "application",
+      "fan_out": 7,
+      "external_dependencies": [
+        "pydantic"
+      ],
+      "optional_dependencies": [],
+      "lazy_imports": [],
+      "typing_only_imports": [],
+      "fan_in": 4
+    },
+    {
+      "name": "lakehouse",
+      "qualified_name": "feedback_intelligence_agent.lakehouse",
+      "source": "src/feedback_intelligence_agent/lakehouse.py",
+      "layer": "data",
+      "fan_out": 4,
+      "external_dependencies": [
+        "pydantic"
+      ],
+      "optional_dependencies": [],
+      "lazy_imports": [],
+      "typing_only_imports": [],
+      "fan_in": 1
+    },
+    {
+      "name": "lexical_search",
+      "qualified_name": "feedback_intelligence_agent.lexical_search",
+      "source": "src/feedback_intelligence_agent/lexical_search.py",
+      "layer": "domain",
+      "fan_out": 2,
+      "external_dependencies": [],
+      "optional_dependencies": [],
+      "lazy_imports": [],
+      "typing_only_imports": [],
+      "fan_in": 1
+    },
+    {
+      "name": "llm",
+      "qualified_name": "feedback_intelligence_agent.llm",
+      "source": "src/feedback_intelligence_agent/llm.py",
+      "layer": "infrastructure",
+      "fan_out": 2,
+      "external_dependencies": [
+        "anthropic",
+        "boto3",
+        "botocore",
+        "httpx"
+      ],
+      "optional_dependencies": [
+        "anthropic",
+        "boto3"
+      ],
+      "lazy_imports": [],
+      "typing_only_imports": [],
+      "fan_in": 5
+    },
+    {
+      "name": "memory",
+      "qualified_name": "feedback_intelligence_agent.memory",
+      "source": "src/feedback_intelligence_agent/memory.py",
+      "layer": "domain",
+      "fan_out": 1,
+      "external_dependencies": [
+        "pydantic"
+      ],
+      "optional_dependencies": [],
+      "lazy_imports": [],
+      "typing_only_imports": [],
+      "fan_in": 3
+    },
+    {
+      "name": "output_parser",
+      "qualified_name": "feedback_intelligence_agent.output_parser",
+      "source": "src/feedback_intelligence_agent/output_parser.py",
+      "layer": "domain",
+      "fan_out": 0,
+      "external_dependencies": [
+        "pydantic"
+      ],
+      "optional_dependencies": [],
+      "lazy_imports": [],
+      "typing_only_imports": [],
+      "fan_in": 1
+    },
+    {
+      "name": "privacy",
+      "qualified_name": "feedback_intelligence_agent.privacy",
+      "source": "src/feedback_intelligence_agent/privacy.py",
+      "layer": "domain",
+      "fan_out": 1,
+      "external_dependencies": [],
+      "optional_dependencies": [],
+      "lazy_imports": [],
+      "typing_only_imports": [],
+      "fan_in": 3
+    },
+    {
+      "name": "prompt_registry",
+      "qualified_name": "feedback_intelligence_agent.prompt_registry",
+      "source": "src/feedback_intelligence_agent/prompt_registry.py",
+      "layer": "domain",
+      "fan_out": 0,
+      "external_dependencies": [],
+      "optional_dependencies": [],
+      "lazy_imports": [],
+      "typing_only_imports": [],
+      "fan_in": 2
+    },
+    {
+      "name": "prompts",
+      "qualified_name": "feedback_intelligence_agent.prompts",
+      "source": "src/feedback_intelligence_agent/prompts.py",
+      "layer": "domain",
+      "fan_out": 3,
+      "external_dependencies": [],
+      "optional_dependencies": [],
+      "lazy_imports": [],
+      "typing_only_imports": [],
+      "fan_in": 2
+    },
+    {
+      "name": "qdrant_store",
+      "qualified_name": "feedback_intelligence_agent.qdrant_store",
+      "source": "src/feedback_intelligence_agent/qdrant_store.py",
+      "layer": "data",
+      "fan_out": 1,
+      "external_dependencies": [
+        "numpy",
+        "qdrant_client"
+      ],
+      "optional_dependencies": [
+        "qdrant_client"
+      ],
+      "lazy_imports": [],
+      "typing_only_imports": [],
+      "fan_in": 1
+    },
+    {
+      "name": "query_expansion",
+      "qualified_name": "feedback_intelligence_agent.query_expansion",
+      "source": "src/feedback_intelligence_agent/query_expansion.py",
+      "layer": "domain",
+      "fan_out": 0,
+      "external_dependencies": [],
+      "optional_dependencies": [],
+      "lazy_imports": [],
+      "typing_only_imports": [],
+      "fan_in": 3
+    },
+    {
+      "name": "rate_limit",
+      "qualified_name": "feedback_intelligence_agent.rate_limit",
+      "source": "src/feedback_intelligence_agent/rate_limit.py",
+      "layer": "infrastructure",
+      "fan_out": 0,
+      "external_dependencies": [
+        "pydantic"
+      ],
+      "optional_dependencies": [],
+      "lazy_imports": [],
+      "typing_only_imports": [],
+      "fan_in": 1
+    },
+    {
+      "name": "reports",
+      "qualified_name": "feedback_intelligence_agent.reports",
+      "source": "src/feedback_intelligence_agent/reports.py",
+      "layer": "application",
+      "fan_out": 1,
+      "external_dependencies": [
+        "pydantic"
+      ],
+      "optional_dependencies": [],
+      "lazy_imports": [],
+      "typing_only_imports": [],
+      "fan_in": 5
+    },
+    {
+      "name": "reranking",
+      "qualified_name": "feedback_intelligence_agent.reranking",
+      "source": "src/feedback_intelligence_agent/reranking.py",
+      "layer": "domain",
+      "fan_out": 1,
+      "external_dependencies": [],
+      "optional_dependencies": [],
+      "lazy_imports": [],
+      "typing_only_imports": [],
+      "fan_in": 1
+    },
+    {
+      "name": "resilience",
+      "qualified_name": "feedback_intelligence_agent.resilience",
+      "source": "src/feedback_intelligence_agent/resilience.py",
+      "layer": "infrastructure",
+      "fan_out": 2,
+      "external_dependencies": [
+        "concurrent"
+      ],
+      "optional_dependencies": [],
+      "lazy_imports": [],
+      "typing_only_imports": [],
+      "fan_in": 1
+    },
+    {
+      "name": "retrieval",
+      "qualified_name": "feedback_intelligence_agent.retrieval",
+      "source": "src/feedback_intelligence_agent/retrieval.py",
+      "layer": "domain",
+      "fan_out": 4,
+      "external_dependencies": [],
+      "optional_dependencies": [],
+      "lazy_imports": [],
+      "typing_only_imports": [],
+      "fan_in": 3
+    },
+    {
+      "name": "schemas",
+      "qualified_name": "feedback_intelligence_agent.schemas",
+      "source": "src/feedback_intelligence_agent/schemas.py",
+      "layer": "foundation",
+      "fan_out": 1,
+      "external_dependencies": [
+        "pydantic"
+      ],
+      "optional_dependencies": [],
+      "lazy_imports": [],
+      "typing_only_imports": [],
+      "fan_in": 26
+    },
+    {
+      "name": "streaming_ingestion",
+      "qualified_name": "feedback_intelligence_agent.streaming_ingestion",
+      "source": "src/feedback_intelligence_agent/streaming_ingestion.py",
+      "layer": "data",
+      "fan_out": 4,
+      "external_dependencies": [
+        "boto3",
+        "confluent_kafka",
+        "pydantic"
+      ],
+      "optional_dependencies": [
+        "boto3",
+        "confluent_kafka"
+      ],
+      "lazy_imports": [],
+      "typing_only_imports": [],
+      "fan_in": 1
+    },
+    {
+      "name": "synthetic_data",
+      "qualified_name": "feedback_intelligence_agent.synthetic_data",
+      "source": "src/feedback_intelligence_agent/synthetic_data.py",
+      "layer": "domain",
+      "fan_out": 1,
+      "external_dependencies": [],
+      "optional_dependencies": [],
+      "lazy_imports": [],
+      "typing_only_imports": [],
+      "fan_in": 1
+    },
+    {
+      "name": "telemetry",
+      "qualified_name": "feedback_intelligence_agent.telemetry",
+      "source": "src/feedback_intelligence_agent/telemetry.py",
+      "layer": "infrastructure",
+      "fan_out": 0,
+      "external_dependencies": [
+        "contextlib",
+        "opentelemetry"
+      ],
+      "optional_dependencies": [
+        "opentelemetry"
+      ],
+      "lazy_imports": [],
+      "typing_only_imports": [],
+      "fan_in": 10
+    },
+    {
+      "name": "tools",
+      "qualified_name": "feedback_intelligence_agent.tools",
+      "source": "src/feedback_intelligence_agent/tools.py",
+      "layer": "domain",
+      "fan_out": 2,
+      "external_dependencies": [
+        "pydantic"
+      ],
+      "optional_dependencies": [],
+      "lazy_imports": [],
+      "typing_only_imports": [],
+      "fan_in": 2
+    },
+    {
+      "name": "vector_store",
+      "qualified_name": "feedback_intelligence_agent.vector_store",
+      "source": "src/feedback_intelligence_agent/vector_store.py",
+      "layer": "data",
+      "fan_out": 1,
+      "external_dependencies": [
+        "numpy",
+        "pydantic"
+      ],
+      "optional_dependencies": [],
+      "lazy_imports": [],
+      "typing_only_imports": [],
+      "fan_in": 6
+    }
+  ],
+  "edges": [
+    {
+      "source": "__init__",
+      "target": "agent",
+      "context": "eager",
+      "names": "FeedbackInsightAgent"
+    },
+    {
+      "source": "__init__",
+      "target": "config",
+      "context": "eager",
+      "names": "Settings"
+    },
+    {
+      "source": "active_learning",
+      "target": "human_feedback",
+      "context": "eager",
+      "names": "ActiveLearningQueue"
+    },
+    {
+      "source": "agent",
+      "target": "citations",
+      "context": "eager",
+      "names": "build_citations"
+    },
+    {
+      "source": "agent",
+      "target": "guardrails",
+      "context": "eager",
+      "names": "GuardrailDecision, SAFE_REFUSAL, check_context, check_input, is_suspicious_context"
+    },
+    {
+      "source": "agent",
+      "target": "hallucination",
+      "context": "eager",
+      "names": "EvidenceOverlapHallucinationChecker, HallucinationCheck"
+    },
+    {
+      "source": "agent",
+      "target": "llm",
+      "context": "eager",
+      "names": "LLMProvider"
+    },
+    {
+      "source": "agent",
+      "target": "memory",
+      "context": "eager",
+      "names": "ConversationMemory, ConversationStore, ConversationTurn, DeterministicQueryRewriter, QueryRewrite, QueryRewriter, new_conversation_id"
+    },
+    {
+      "source": "agent",
+      "target": "output_parser",
+      "context": "eager",
+      "names": "parse_llm_output"
+    },
+    {
+      "source": "agent",
+      "target": "prompts",
+      "context": "eager",
+      "names": "build_grounded_prompt"
+    },
+    {
+      "source": "agent",
+      "target": "reranking",
+      "context": "eager",
+      "names": "DeterministicJudgeReranker, Reranker"
+    },
+    {
+      "source": "agent",
+      "target": "retrieval",
+      "context": "eager",
+      "names": "Retriever"
+    },
+    {
+      "source": "agent",
+      "target": "schemas",
+      "context": "eager",
+      "names": "AgentAnswer, Citation, MetadataFilters, SearchResult, ToolRunRecord"
+    },
+    {
+      "source": "agent",
+      "target": "telemetry",
+      "context": "eager",
+      "names": "Telemetry, log_event"
+    },
+    {
+      "source": "agent",
+      "target": "tools",
+      "context": "eager",
+      "names": "ToolError, ToolRegistry, ToolRouter"
+    },
+    {
+      "source": "api",
+      "target": "__init__",
+      "context": "eager",
+      "names": "__version__"
+    },
+    {
+      "source": "api",
+      "target": "active_learning",
+      "context": "eager",
+      "names": "ActiveLearningState, ActiveLearningStatus, UpdateActiveLearningStateRequest, apply_active_learning_states"
+    },
+    {
+      "source": "api",
+      "target": "auth",
+      "context": "eager",
+      "names": "ApiAuthConfigurationError, ApiAuthenticationError, ApiPermissionError, ApiPrincipal, ApiRole, require_api_role"
+    },
+    {
+      "source": "api",
+      "target": "config",
+      "context": "eager",
+      "names": "Settings"
+    },
+    {
+      "source": "api",
+      "target": "email_summaries",
+      "context": "eager",
+      "names": "EmailSummaryDelivery, EmailSummaryRequest, deliver_email_summary, render_email_summary, select_reports_for_summary"
+    },
+    {
+      "source": "api",
+      "target": "factory",
+      "context": "eager",
+      "names": "build_active_learning_state_store, build_agent, build_conversation_store, build_human_feedback_store, build_index, build_job_store, build_report_store"
+    },
+    {
+      "source": "api",
+      "target": "human_feedback",
+      "context": "eager",
+      "names": "ActiveLearningQueue, HumanFeedbackAnalytics, HumanFeedbackRecord, HumanFeedbackSummary, SubmitHumanFeedbackRequest, build_active_learning_queue, summarise_human_feedback"
+    },
+    {
+      "source": "api",
+      "target": "jobs",
+      "context": "eager",
+      "names": "JobRequest, JobResult, run_ingestion_job"
+    },
+    {
+      "source": "api",
+      "target": "memory",
+      "context": "eager",
+      "names": "ConversationMemory"
+    },
+    {
+      "source": "api",
+      "target": "rate_limit",
+      "context": "eager",
+      "names": "InMemoryRateLimiter, RateLimitDecision"
+    },
+    {
+      "source": "api",
+      "target": "reports",
+      "context": "eager",
+      "names": "InsightReportSummary, SaveInsightReportRequest, SavedInsightReport, render_report_markdown"
+    },
+    {
+      "source": "api",
+      "target": "schemas",
+      "context": "eager",
+      "names": "AgentAnswer, ChatRequest, ChatResponse, IndexRequest, JobSubmitResponse, QueryRequest, QueryResponse, StreamMetadata"
+    },
+    {
+      "source": "api",
+      "target": "telemetry",
+      "context": "eager",
+      "names": "configure_logging, log_event"
+    },
+    {
+      "source": "benchmarking",
+      "target": "agent",
+      "context": "eager",
+      "names": "FeedbackInsightAgent"
+    },
+    {
+      "source": "benchmarking",
+      "target": "chunking",
+      "context": "eager",
+      "names": "feedback_to_chunks"
+    },
+    {
+      "source": "benchmarking",
+      "target": "config",
+      "context": "eager",
+      "names": "Settings"
+    },
+    {
+      "source": "benchmarking",
+      "target": "embeddings",
+      "context": "eager",
+      "names": "HashingEmbeddingModel"
+    },
+    {
+      "source": "benchmarking",
+      "target": "evaluation",
+      "context": "eager",
+      "names": "load_evaluation_cases"
+    },
+    {
+      "source": "benchmarking",
+      "target": "factory",
+      "context": "eager",
+      "names": "build_llm, build_retriever, chunk_to_embedding_text"
+    },
+    {
+      "source": "benchmarking",
+      "target": "ingestion",
+      "context": "eager",
+      "names": "load_feedback_csv"
+    },
+    {
+      "source": "benchmarking",
+      "target": "vector_store",
+      "context": "eager",
+      "names": "InMemoryVectorStore"
+    },
+    {
+      "source": "chunking",
+      "target": "privacy",
+      "context": "eager",
+      "names": "redact_pii"
+    },
+    {
+      "source": "chunking",
+      "target": "schemas",
+      "context": "eager",
+      "names": "DocumentChunk, FeedbackRecord"
+    },
+    {
+      "source": "citations",
+      "target": "schemas",
+      "context": "eager",
+      "names": "Citation, SearchResult"
+    },
+    {
+      "source": "cli",
+      "target": "active_learning",
+      "context": "eager",
+      "names": "ActiveLearningStatus, JsonActiveLearningStateStore, UpdateActiveLearningStateRequest, apply_active_learning_states"
+    },
+    {
+      "source": "cli",
+      "target": "benchmarking",
+      "context": "eager",
+      "names": "run_benchmark, write_benchmark_outputs"
+    },
+    {
+      "source": "cli",
+      "target": "citations",
+      "context": "eager",
+      "names": "render_citations"
+    },
+    {
+      "source": "cli",
+      "target": "config",
+      "context": "eager",
+      "names": "Settings"
+    },
+    {
+      "source": "cli",
+      "target": "data_contracts",
+      "context": "eager",
+      "names": "DataContractError, validate_feedback_csv"
+    },
+    {
+      "source": "cli",
+      "target": "email_summaries",
+      "context": "eager",
+      "names": "EmailSummaryDelivery, EmailSummaryRequest, deliver_email_summary, render_email_summary, select_reports_for_summary"
+    },
+    {
+      "source": "cli",
+      "target": "evaluation",
+      "context": "eager",
+      "names": "evaluate_system, load_evaluation_cases"
+    },
+    {
+      "source": "cli",
+      "target": "experiments",
+      "context": "eager",
+      "names": "ExperimentConfig, collect_run_metadata, run_experiment, track_experiment_run, write_experiment_outputs"
+    },
+    {
+      "source": "cli",
+      "target": "factory",
+      "context": "eager",
+      "names": "build_agent, build_conversation_store, build_index, build_job_store, build_retriever, build_telemetry, load_or_build_index"
+    },
+    {
+      "source": "cli",
+      "target": "human_feedback",
+      "context": "eager",
+      "names": "HumanFeedbackRating, JsonHumanFeedbackStore, SubmitHumanFeedbackRequest, build_active_learning_queue, summarise_human_feedback"
+    },
+    {
+      "source": "cli",
+      "target": "index_updates",
+      "context": "eager",
+      "names": "update_json_index"
+    },
+    {
+      "source": "cli",
+      "target": "ingestion",
+      "context": "eager",
+      "names": "load_feedback_csv"
+    },
+    {
+      "source": "cli",
+      "target": "jobs",
+      "context": "eager",
+      "names": "JobRequest, run_ingestion_job"
+    },
+    {
+      "source": "cli",
+      "target": "lakehouse",
+      "context": "eager",
+      "names": "DEFAULT_PARTITION_COLUMNS, LakehouseTableFormat, export_feedback_lakehouse"
+    },
+    {
+      "source": "cli",
+      "target": "prompt_registry",
+      "context": "eager",
+      "names": "LATEST_VERSION, PromptNotFoundError, PromptVariableError"
+    },
+    {
+      "source": "cli",
+      "target": "prompts",
+      "context": "eager",
+      "names": "PROMPT_REGISTRY"
+    },
+    {
+      "source": "cli",
+      "target": "reports",
+      "context": "eager",
+      "names": "JsonInsightReportStore, SaveInsightReportRequest, render_report_markdown"
+    },
+    {
+      "source": "cli",
+      "target": "schemas",
+      "context": "eager",
+      "names": "ChatResponse, FeedbackChannel, MetadataFilters"
+    },
+    {
+      "source": "cli",
+      "target": "streaming_ingestion",
+      "context": "eager",
+      "names": "JsonlFeedbackStream, consume_feedback_stream, write_stream_records_csv"
+    },
+    {
+      "source": "cli",
+      "target": "synthetic_data",
+      "context": "eager",
+      "names": "SyntheticDataConfig, write_feedback_csv"
+    },
+    {
+      "source": "cli",
+      "target": "telemetry",
+      "context": "eager",
+      "names": "configure_logging"
+    },
+    {
+      "source": "data_contracts",
+      "target": "schemas",
+      "context": "eager",
+      "names": "FeedbackChannel, FeedbackRecord"
+    },
+    {
+      "source": "email_summaries",
+      "target": "reports",
+      "context": "eager",
+      "names": "InsightReportStore, SavedInsightReport"
+    },
+    {
+      "source": "evaluation",
+      "target": "agent",
+      "context": "eager",
+      "names": "FeedbackInsightAgent"
+    },
+    {
+      "source": "evaluation",
+      "target": "hallucination",
+      "context": "eager",
+      "names": "EvidenceOverlapHallucinationChecker, HallucinationCheck"
+    },
+    {
+      "source": "evaluation",
+      "target": "retrieval",
+      "context": "eager",
+      "names": "Retriever"
+    },
+    {
+      "source": "evaluation",
+      "target": "schemas",
+      "context": "eager",
+      "names": "AgentAnswer, EvaluationCase, SearchResult"
+    },
+    {
+      "source": "evaluation",
+      "target": "telemetry",
+      "context": "eager",
+      "names": "Telemetry"
+    },
+    {
+      "source": "experiments",
+      "target": "__init__",
+      "context": "eager",
+      "names": "__version__"
+    },
+    {
+      "source": "experiments",
+      "target": "agent",
+      "context": "eager",
+      "names": "FeedbackInsightAgent"
+    },
+    {
+      "source": "experiments",
+      "target": "chunking",
+      "context": "eager",
+      "names": "feedback_to_chunks"
+    },
+    {
+      "source": "experiments",
+      "target": "config",
+      "context": "eager",
+      "names": "RetrieverType, Settings"
+    },
+    {
+      "source": "experiments",
+      "target": "embeddings",
+      "context": "eager",
+      "names": "HashingEmbeddingModel"
+    },
+    {
+      "source": "experiments",
+      "target": "evaluation",
+      "context": "eager",
+      "names": "AnswerMetrics, CaseResult, RetrievalMetrics, aggregate_report, evaluate_case_detailed, load_evaluation_cases"
+    },
+    {
+      "source": "experiments",
+      "target": "factory",
+      "context": "eager",
+      "names": "build_llm, build_retriever, chunk_to_embedding_text"
+    },
+    {
+      "source": "experiments",
+      "target": "ingestion",
+      "context": "eager",
+      "names": "load_feedback_csv"
+    },
+    {
+      "source": "experiments",
+      "target": "vector_store",
+      "context": "eager",
+      "names": "InMemoryVectorStore"
+    },
+    {
+      "source": "factory",
+      "target": "active_learning",
+      "context": "lazy",
+      "names": "JsonActiveLearningStateStore"
+    },
+    {
+      "source": "factory",
+      "target": "active_learning",
+      "context": "typing",
+      "names": "JsonActiveLearningStateStore"
+    },
+    {
+      "source": "factory",
+      "target": "agent",
+      "context": "eager",
+      "names": "FeedbackInsightAgent"
+    },
+    {
+      "source": "factory",
+      "target": "chunking",
+      "context": "eager",
+      "names": "feedback_to_chunks"
+    },
+    {
+      "source": "factory",
+      "target": "config",
+      "context": "eager",
+      "names": "Settings"
+    },
+    {
+      "source": "factory",
+      "target": "embeddings",
+      "context": "eager",
+      "names": "HashingEmbeddingModel"
+    },
+    {
+      "source": "factory",
+      "target": "hallucination",
+      "context": "eager",
+      "names": "EvidenceOverlapHallucinationChecker, LLMHallucinationJudge"
+    },
+    {
+      "source": "factory",
+      "target": "human_feedback",
+      "context": "lazy",
+      "names": "JsonHumanFeedbackStore"
+    },
+    {
+      "source": "factory",
+      "target": "human_feedback",
+      "context": "typing",
+      "names": "JsonHumanFeedbackStore"
+    },
+    {
+      "source": "factory",
+      "target": "ingestion",
+      "context": "eager",
+      "names": "load_feedback_csv"
+    },
+    {
+      "source": "factory",
+      "target": "jobs",
+      "context": "lazy",
+      "names": "JsonJobStore"
+    },
+    {
+      "source": "factory",
+      "target": "jobs",
+      "context": "typing",
+      "names": "JsonJobStore"
+    },
+    {
+      "source": "factory",
+      "target": "lexical_search",
+      "context": "eager",
+      "names": "BM25Retriever"
+    },
+    {
+      "source": "factory",
+      "target": "llm",
+      "context": "eager",
+      "names": "AnthropicLLM, BedrockConverseLLM, DeterministicLLM, LLMProvider, OllamaLLM, OpenAIChatLLM, OpenAIResponsesLLM"
+    },
+    {
+      "source": "factory",
+      "target": "memory",
+      "context": "eager",
+      "names": "JsonConversationStore"
+    },
+    {
+      "source": "factory",
+      "target": "qdrant_store",
+      "context": "lazy",
+      "names": "QdrantVectorStore"
+    },
+    {
+      "source": "factory",
+      "target": "query_expansion",
+      "context": "eager",
+      "names": "ProductTerminologyExpander"
+    },
+    {
+      "source": "factory",
+      "target": "reports",
+      "context": "lazy",
+      "names": "JsonInsightReportStore"
+    },
+    {
+      "source": "factory",
+      "target": "reports",
+      "context": "typing",
+      "names": "JsonInsightReportStore"
+    },
+    {
+      "source": "factory",
+      "target": "resilience",
+      "context": "eager",
+      "names": "ResiliencePolicy, ResilientLLMProvider"
+    },
+    {
+      "source": "factory",
+      "target": "retrieval",
+      "context": "eager",
+      "names": "HybridRetriever, QueryEngine, Retriever"
+    },
+    {
+      "source": "factory",
+      "target": "schemas",
+      "context": "eager",
+      "names": "DocumentChunk"
+    },
+    {
+      "source": "factory",
+      "target": "telemetry",
+      "context": "eager",
+      "names": "JsonlTelemetrySink, OpenTelemetryTraceSink, Telemetry"
+    },
+    {
+      "source": "factory",
+      "target": "tools",
+      "context": "eager",
+      "names": "build_default_tools"
+    },
+    {
+      "source": "factory",
+      "target": "vector_store",
+      "context": "eager",
+      "names": "InMemoryVectorStore, VectorStore"
+    },
+    {
+      "source": "hallucination",
+      "target": "llm",
+      "context": "eager",
+      "names": "LLMProvider"
+    },
+    {
+      "source": "hallucination",
+      "target": "schemas",
+      "context": "eager",
+      "names": "SearchResult"
+    },
+    {
+      "source": "human_feedback",
+      "target": "schemas",
+      "context": "eager",
+      "names": "AgentAnswer"
+    },
+    {
+      "source": "index_updates",
+      "target": "chunking",
+      "context": "eager",
+      "names": "feedback_to_chunks"
+    },
+    {
+      "source": "index_updates",
+      "target": "embeddings",
+      "context": "eager",
+      "names": "HashingEmbeddingModel"
+    },
+    {
+      "source": "index_updates",
+      "target": "factory",
+      "context": "eager",
+      "names": "chunk_to_embedding_text"
+    },
+    {
+      "source": "index_updates",
+      "target": "schemas",
+      "context": "eager",
+      "names": "FeedbackRecord"
+    },
+    {
+      "source": "index_updates",
+      "target": "telemetry",
+      "context": "eager",
+      "names": "Telemetry"
+    },
+    {
+      "source": "index_updates",
+      "target": "vector_store",
+      "context": "eager",
+      "names": "InMemoryVectorStore"
+    },
+    {
+      "source": "ingestion",
+      "target": "data_contracts",
+      "context": "eager",
+      "names": "DataContractError, REQUIRED_COLUMNS, validate_feedback_csv"
+    },
+    {
+      "source": "ingestion",
+      "target": "schemas",
+      "context": "eager",
+      "names": "FeedbackRecord"
+    },
+    {
+      "source": "ingestion",
+      "target": "telemetry",
+      "context": "eager",
+      "names": "Telemetry"
+    },
+    {
+      "source": "jobs",
+      "target": "chunking",
+      "context": "eager",
+      "names": "feedback_to_chunks"
+    },
+    {
+      "source": "jobs",
+      "target": "data_contracts",
+      "context": "eager",
+      "names": "DataContractError"
+    },
+    {
+      "source": "jobs",
+      "target": "embeddings",
+      "context": "eager",
+      "names": "HashingEmbeddingModel"
+    },
+    {
+      "source": "jobs",
+      "target": "factory",
+      "context": "eager",
+      "names": "chunk_to_embedding_text"
+    },
+    {
+      "source": "jobs",
+      "target": "ingestion",
+      "context": "eager",
+      "names": "FeedbackIngestionError, load_feedback_csv"
+    },
+    {
+      "source": "jobs",
+      "target": "telemetry",
+      "context": "eager",
+      "names": "Telemetry, get_logger"
+    },
+    {
+      "source": "jobs",
+      "target": "vector_store",
+      "context": "eager",
+      "names": "InMemoryVectorStore"
+    },
+    {
+      "source": "lakehouse",
+      "target": "data_contracts",
+      "context": "eager",
+      "names": "REQUIRED_COLUMNS"
+    },
+    {
+      "source": "lakehouse",
+      "target": "privacy",
+      "context": "eager",
+      "names": "redact_feedback_record"
+    },
+    {
+      "source": "lakehouse",
+      "target": "schemas",
+      "context": "eager",
+      "names": "FeedbackRecord"
+    },
+    {
+      "source": "lakehouse",
+      "target": "telemetry",
+      "context": "eager",
+      "names": "Telemetry"
+    },
+    {
+      "source": "lexical_search",
+      "target": "query_expansion",
+      "context": "eager",
+      "names": "QueryExpander"
+    },
+    {
+      "source": "lexical_search",
+      "target": "schemas",
+      "context": "eager",
+      "names": "DocumentChunk, SearchResult"
+    },
+    {
+      "source": "llm",
+      "target": "citations",
+      "context": "eager",
+      "names": "build_citations, citation_marker"
+    },
+    {
+      "source": "llm",
+      "target": "schemas",
+      "context": "eager",
+      "names": "SearchResult"
+    },
+    {
+      "source": "memory",
+      "target": "llm",
+      "context": "eager",
+      "names": "LLMProvider"
+    },
+    {
+      "source": "privacy",
+      "target": "schemas",
+      "context": "eager",
+      "names": "FeedbackRecord"
+    },
+    {
+      "source": "prompts",
+      "target": "citations",
+      "context": "eager",
+      "names": "build_citations, citation_marker"
+    },
+    {
+      "source": "prompts",
+      "target": "prompt_registry",
+      "context": "eager",
+      "names": "PromptRegistry, PromptTemplate"
+    },
+    {
+      "source": "prompts",
+      "target": "schemas",
+      "context": "eager",
+      "names": "SearchResult"
+    },
+    {
+      "source": "qdrant_store",
+      "target": "schemas",
+      "context": "eager",
+      "names": "DocumentChunk, SearchResult"
+    },
+    {
+      "source": "reports",
+      "target": "schemas",
+      "context": "eager",
+      "names": "AgentAnswer"
+    },
+    {
+      "source": "reranking",
+      "target": "schemas",
+      "context": "eager",
+      "names": "SearchResult"
+    },
+    {
+      "source": "resilience",
+      "target": "llm",
+      "context": "eager",
+      "names": "LLMProvider, LLMProviderError, ProviderCapabilities"
+    },
+    {
+      "source": "resilience",
+      "target": "schemas",
+      "context": "eager",
+      "names": "SearchResult"
+    },
+    {
+      "source": "retrieval",
+      "target": "embeddings",
+      "context": "eager",
+      "names": "EmbeddingModel"
+    },
+    {
+      "source": "retrieval",
+      "target": "query_expansion",
+      "context": "eager",
+      "names": "QueryExpander"
+    },
+    {
+      "source": "retrieval",
+      "target": "schemas",
+      "context": "eager",
+      "names": "DocumentChunk, SearchResult"
+    },
+    {
+      "source": "retrieval",
+      "target": "vector_store",
+      "context": "eager",
+      "names": "VectorStore"
+    },
+    {
+      "source": "schemas",
+      "target": "guardrails",
+      "context": "eager",
+      "names": "GuardrailDecision"
+    },
+    {
+      "source": "streaming_ingestion",
+      "target": "data_contracts",
+      "context": "eager",
+      "names": "REQUIRED_COLUMNS, ValidationIssue"
+    },
+    {
+      "source": "streaming_ingestion",
+      "target": "privacy",
+      "context": "eager",
+      "names": "redact_feedback_record, redact_pii"
+    },
+    {
+      "source": "streaming_ingestion",
+      "target": "schemas",
+      "context": "eager",
+      "names": "FeedbackRecord"
+    },
+    {
+      "source": "streaming_ingestion",
+      "target": "telemetry",
+      "context": "eager",
+      "names": "Telemetry"
+    },
+    {
+      "source": "synthetic_data",
+      "target": "schemas",
+      "context": "eager",
+      "names": "FeedbackChannel"
+    },
+    {
+      "source": "tools",
+      "target": "citations",
+      "context": "eager",
+      "names": "summarize_evidence"
+    },
+    {
+      "source": "tools",
+      "target": "schemas",
+      "context": "eager",
+      "names": "DocumentChunk, SearchResult"
+    },
+    {
+      "source": "vector_store",
+      "target": "schemas",
+      "context": "eager",
+      "names": "DocumentChunk, SearchResult"
+    }
+  ],
+  "cycles": {
+    "runtime": [],
+    "including_deferred": [
+      [
+        "factory",
+        "jobs"
+      ]
+    ],
+    "self_loops": []
+  },
+  "most_depended_upon": [
+    {
+      "module": "schemas",
+      "fan_in": 26,
+      "fan_out": 1
+    },
+    {
+      "module": "telemetry",
+      "fan_in": 10,
+      "fan_out": 0
+    },
+    {
+      "module": "config",
+      "fan_in": 6,
+      "fan_out": 0
+    },
+    {
+      "module": "embeddings",
+      "fan_in": 6,
+      "fan_out": 0
+    },
+    {
+      "module": "factory",
+      "fan_in": 6,
+      "fan_out": 21
+    },
+    {
+      "module": "vector_store",
+      "fan_in": 6,
+      "fan_out": 1
+    },
+    {
+      "module": "agent",
+      "fan_in": 5,
+      "fan_out": 12
+    },
+    {
+      "module": "chunking",
+      "fan_in": 5,
+      "fan_out": 2
+    },
+    {
+      "module": "citations",
+      "fan_in": 5,
+      "fan_out": 1
+    },
+    {
+      "module": "data_contracts",
+      "fan_in": 5,
+      "fan_out": 1
+    }
+  ]
+}

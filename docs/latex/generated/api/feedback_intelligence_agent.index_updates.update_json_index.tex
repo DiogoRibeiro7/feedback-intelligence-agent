@@ -1,0 +1,28 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{update\_json\_index}}
+\label{func:feedback_intelligence_agent.index_updates.update_json_index}\index{Functions!update\_json\_index}
+
+Merge validated records into a persisted JSON vector index.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+update_json_index(records: list[FeedbackRecord], index_path: str | Path, *, embedding_dim: int, chunk_size: int = 80, chunk_overlap: int = 16, telemetry: Telemetry | None = None) -> IncrementalIndexResult
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{records}] \texttt{list[FeedbackRecord]\allowbreak{}}, required.
+  \item[\texttt{index\_\allowbreak{}path}] \texttt{str \textbar{} Path}, required.
+  \item[\texttt{embedding\_\allowbreak{}dim}] \texttt{int}, required, keyword-only.
+  \item[\texttt{chunk\_\allowbreak{}size}] \texttt{int}, default \texttt{80}, keyword-only.
+  \item[\texttt{chunk\_\allowbreak{}overlap}] \texttt{int}, default \texttt{16}, keyword-only.
+  \item[\texttt{telemetry}] \texttt{Telemetry \textbar{} None}, default \texttt{None}, keyword-only.
+\end{arglist}
+\apifield{Value}\texttt{IncrementalIndexResult}
+\apifield{Raises}\texttt{ValueError}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}index\_\allowbreak{}updates.\allowbreak{}py:37}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/index_updates.py#L37}{online}), module \cref{module:feedback_intelligence_agent.index_updates}

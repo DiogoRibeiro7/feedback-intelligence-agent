@@ -1,0 +1,52 @@
+\section{ADR-003: One composition root}
+\label{adr:003}
+
+\subsection*{Status}
+
+Accepted; in force at revision \texttt{\projectrevisionshort}.
+
+\subsection*{Context}
+
+Three entry points --- library, CLI, and HTTP API --- need the same wired
+object graph, and that graph depends on configuration in several independent
+dimensions: provider, retriever, vector store, telemetry backend, resilience,
+and judge.
+
+\subsection*{Decision}
+
+All construction lives in
+\cref{module:feedback_intelligence_agent.factory}. Every consumer calls a
+\texttt{build\_*} function; no other module branches on a configuration value
+to choose an implementation.
+
+\subsection*{Consequences}
+
+\begin{itemize}
+  \item \texttt{factory} has the highest fan-out in the package, which the
+    coupling table in \cref{ch:dependencies} shows directly. That is the
+    intended shape of a composition root rather than an accident.
+  \item Every other module can be constructed directly with explicit
+    collaborators, which is what the unit tests do; they never go through the
+    factory.
+  \item Adding a provider is a two-file change: an adapter class and one branch
+    in \texttt{build\_llm}.
+  \item A configuration error surfaces at construction with a message naming
+    the missing variable, not at first use.
+  \item Because the factory imports nearly everything, importing it eagerly
+    would pull in optional adapters; this is the direct cause of the deferred
+    imports recorded in \cref{adr:005} and \cref{adr:006}.
+\end{itemize}
+
+\subsection*{Alternatives}
+
+A dependency-injection container, which \srcfile{AGENTS.md} discourages (``Do
+not introduce heavyweight frameworks''); or per-entry-point construction, which
+would duplicate the provider-selection logic three times.
+
+\subsection*{Evidence}
+
+\srcfile{src/feedback\_intelligence\_agent/factory.py};
+\srcfile{api.py} (\texttt{create\_app} calls \texttt{build\_*} only);
+\srcfile{cli.py} (imports \texttt{build\_agent}, \texttt{build\_index},
+\texttt{build\_retriever}, \texttt{build\_telemetry}, \ldots);
+\srcfile{docs/metadata/module-dependencies.json} (fan-out).

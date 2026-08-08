@@ -1,0 +1,24 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{extract\_entities}}
+\label{func:feedback_intelligence_agent.memory.extract_entities}\index{Functions!extract\_entities}
+
+Extract salient content tokens from text, preserving first-seen order.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+extract_entities(text: str, *, limit: int = 4) -> list[str]
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{text}] \texttt{str}, required.
+  \item[\texttt{limit}] \texttt{int}, default \texttt{4}, keyword-only.
+\end{arglist}
+\apifield{Value}\texttt{list[str]\allowbreak{}}
+\apifield{Details}Tokens are lowercased, at least three characters long, and filtered against a small stopword list, so the result approximates the entities and topics mentioned in the previous turn.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}memory.\allowbreak{}py:240}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/memory.py#L240}{online}), module \cref{module:feedback_intelligence_agent.memory}

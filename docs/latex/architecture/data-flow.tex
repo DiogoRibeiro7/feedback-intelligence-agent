@@ -1,0 +1,105 @@
+% Authored: data lineage.
+
+\chapter{Data Flow and Lineage}
+\label{ch:data-flow}
+
+\section{Scope}
+
+All data used by this repository originates inside it. There is no download
+script, no external data source, no acquisition date, and no checksum
+manifest; \srcfile{data/sample\_feedback.csv} and the fixtures under
+\srcfile{examples/} are authored files under version control. Lineage
+therefore begins at a repository artifact rather than at an external source,
+and this chapter documents the transformation chain rather than a provenance
+chain.
+
+Additional data can enter at run time --- an operator-supplied CSV, a JSONL
+stream, a Kafka or Kinesis topic, or a synthetic dataset --- and every such
+path passes through the same contract validation as the sample dataset.
+
+\input{diagrams/architecture/data-flow}
+
+\section{Stages}
+
+\begin{description}
+  \item[Raw CSV $\rightarrow$ validated records.]
+    \cref{func:feedback_intelligence_agent.data_contracts.validate_feedback_csv}
+    reads the file with pandas as strings (no type inference, no NA
+    substitution) and validates each row against \texttt{FeedbackRecord}. It
+    reports missing required columns, unexpected columns, empty text, invalid
+    ratings, unparseable timestamps, duplicate \texttt{feedback\_id} within a
+    tenant, and unknown sentiment values, each with a 1-based CSV line number.
+    In strict mode any error aborts the load; otherwise invalid rows are
+    dropped and reported.
+  \item[Validated records $\rightarrow$ chunks.]
+    \cref{func:feedback_intelligence_agent.chunking.feedback_to_chunks} redacts
+    PII, splits text into overlapping word windows (80 words, 16 overlapping by
+    default), and attaches the metadata used later for filtering and reranking.
+    Chunk identifiers are \texttt{\{source\_id\}::chunk-\{n\}} and source
+    identifiers are tenant-scoped unless the tenant is \texttt{default}, which
+    preserves the identifiers of pre-tenant datasets.
+  \item[Chunks $\rightarrow$ vectors.] The embedding text is not the chunk text:
+    \cref{func:feedback_intelligence_agent.factory.chunk_to_embedding_text}
+    prefixes tenant, segment, channel, rating, and creation date. The visible
+    citation keeps the original text, but retrieval sees the structured
+    metadata too. Both the JSON and Qdrant paths use this same function, and so
+    does incremental update, which is what keeps an incrementally updated index
+    identical to a rebuilt one.
+  \item[Vectors $\rightarrow$ index.] \texttt{InMemoryVectorStore} validates
+    dimensions on insert and persists to a single JSON file; the Qdrant store
+    writes to a collection.
+  \item[Index $\rightarrow$ results $\rightarrow$ answer.] See
+    \cref{sec:runtime-stages}.
+  \item[Records $\rightarrow$ lakehouse export.]
+    \cref{func:feedback_intelligence_agent.lakehouse.export_feedback_lakehouse}
+    writes deterministic partitioned JSONL files plus Delta-style or
+    Iceberg-style metadata, with records redacted on the way out. Partition
+    columns are restricted to a validated allow-list; the default partitioning
+    is by creation date and channel.
+  \item[Stream $\rightarrow$ records $\rightarrow$ CSV.]
+    \cref{func:feedback_intelligence_agent.streaming_ingestion.consume_feedback_stream}
+    validates each event against the same contract, redacts it, and reports
+    per-event issues with the stream offset, so a malformed event does not stop
+    the consumer.
+\end{description}
+
+\section{Redaction placement}
+
+PII redaction is applied at two points on the data path --- chunking and
+lakehouse export --- and to stream records on ingestion. It is applied
+\emph{before} text is stored or indexed, not when it is displayed. The
+consequence is that the redaction is durable: a redacted chunk cannot leak
+through a retrieval result, a citation quote, a saved report, or an exported
+data file, because the unredacted text was never written to any of them.
+
+\section{Local artifacts}
+
+Run-time artifacts are written under \srcfile{.artifacts/}, which is ignored by
+git. Their paths are all configurable:
+
+\begin{longtable}{p{0.34\textwidth} p{0.30\textwidth} p{0.28\textwidth}}
+\toprule
+Artifact & Default path & Producer \\
+\midrule
+\endfirsthead
+\toprule
+Artifact & Default path & Producer \\
+\midrule
+\endhead
+\bottomrule
+\endlastfoot
+Vector index & \texttt{.artifacts/vector\_store.json} & \texttt{build\_index} \\
+Telemetry events & \texttt{.artifacts/telemetry.jsonl} & \texttt{JsonlTelemetrySink} \\
+Conversations & \texttt{.artifacts/conversations/} & \texttt{JsonConversationStore} \\
+Ingestion jobs & \texttt{.artifacts/jobs/} & \texttt{JsonJobStore} \\
+Saved reports & \texttt{.artifacts/reports/} & \texttt{JsonInsightReportStore} \\
+Human feedback & \texttt{.artifacts/human\_feedback/} & \texttt{JsonHumanFeedbackStore} \\
+Active-learning state & \texttt{.artifacts/active\_learning/} & \texttt{JsonActiveLearningStateStore} \\
+Experiment outputs & configured per experiment & \texttt{write\_experiment\_outputs} \\
+Benchmark outputs & configured per run & \texttt{write\_benchmark\_outputs} \\
+\end{longtable}
+
+\section{Generated provenance tables}
+
+The dataset inventory and the full transformation table, both generated from
+the repository, appear in \cref{ch:reproducibility}.

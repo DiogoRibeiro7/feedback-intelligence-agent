@@ -1,0 +1,32 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{run\_benchmark}}
+\label{func:feedback_intelligence_agent.benchmarking.run_benchmark}\index{Functions!run\_benchmark}
+
+Benchmark the four pipeline phases and return a typed report.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+run_benchmark(*, dataset_path: str | Path, queries_path: str | Path, repetitions: int = 5, warmup: int = 1, top_k: int = 4, settings: Settings | None = None) -> BenchmarkReport
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{dataset\_\allowbreak{}path}] \texttt{str \textbar{} Path}, required, keyword-only. Feedback CSV used to build the index.
+  \item[\texttt{queries\_\allowbreak{}path}] \texttt{str \textbar{} Path}, required, keyword-only. JSONL evaluation cases supplying benchmark questions.
+  \item[\texttt{repetitions}] \texttt{int}, default \texttt{5}, keyword-only. Number of measured repetitions per phase (\textgreater{}= 1).
+  \item[\texttt{warmup}] \texttt{int}, default \texttt{1}, keyword-only. Number of discarded warmup repetitions per phase (\textgreater{}= 0).
+  \item[\texttt{top\_\allowbreak{}k}] \texttt{int}, default \texttt{4}, keyword-only. Number of chunks retrieved per query.
+  \item[\texttt{settings}] \texttt{Settings \textbar{} None}, default \texttt{None}, keyword-only. Optional settings override; defaults to a local configuration.
+\end{arglist}
+\apifield{Value}\texttt{BenchmarkReport}. A \texttt{BenchmarkReport} with per-phase summary statistics.
+\apifield{Raises}
+\begin{arglist}
+  \item[\texttt{ValueError}] If \texttt{repetitions} \textless{} 1, \texttt{warmup} \textless{} 0, or there are no queries.
+\end{arglist}
+\apifield{Details}The benchmark builds a fresh in-memory index from \texttt{dataset\_\allowbreak{}path} (the persisted application index is never touched) and uses the deterministic local LLM provider unless \texttt{settings} selects another one.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}benchmarking.\allowbreak{}py:151}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/benchmarking.py#L151}{online}), module \cref{module:feedback_intelligence_agent.benchmarking}

@@ -1,0 +1,26 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{consume\_feedback\_stream}}
+\label{func:feedback_intelligence_agent.streaming_ingestion.consume_feedback_stream}\index{Functions!consume\_feedback\_stream}
+
+Consume, validate, and checkpoint a bounded batch of feedback events.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+consume_feedback_stream(stream: FeedbackStream, *, max_messages: int, dead_letter_path: str | Path | None = None, telemetry: Telemetry | None = None) -> StreamIngestionResult
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{stream}] \texttt{FeedbackStream}, required.
+  \item[\texttt{max\_\allowbreak{}messages}] \texttt{int}, required, keyword-only.
+  \item[\texttt{dead\_\allowbreak{}letter\_\allowbreak{}path}] \texttt{str \textbar{} Path \textbar{} None}, default \texttt{None}, keyword-only.
+  \item[\texttt{telemetry}] \texttt{Telemetry \textbar{} None}, default \texttt{None}, keyword-only.
+\end{arglist}
+\apifield{Value}\texttt{StreamIngestionResult}
+\apifield{Raises}\texttt{ValueError}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}streaming\_\allowbreak{}ingestion.\allowbreak{}py:295}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/streaming_ingestion.py#L295}{online}), module \cref{module:feedback_intelligence_agent.streaming_ingestion}

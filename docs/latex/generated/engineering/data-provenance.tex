@@ -1,0 +1,59 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_engineering.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\section{Version-controlled datasets}
+
+Every dataset used by demos, tests, and CI is authored inside the repository. The repository records no external data source, no acquisition script, no download URL, and no checksum manifest, so there is no external provenance chain to document.
+
+\begin{longtable}{>{\raggedright\arraybackslash\small}p{0.26\textwidth} >{\raggedright\arraybackslash\small}p{0.08\textwidth} >{\raggedright\arraybackslash\small}p{0.09\textwidth} >{\raggedright\arraybackslash\small}p{0.39\textwidth} >{\raggedright\arraybackslash\small}p{0.10\textwidth}}
+\caption{Datasets and example inputs under version control.}\label{tab:datasets}\\
+\toprule
+Artifact & Format & Records & Fields & Bytes \\
+\midrule
+\endfirsthead
+\toprule
+Artifact & Format & Records & Fields & Bytes \\
+\midrule
+\endhead
+\midrule
+\multicolumn{5}{r}{\footnotesize continued on next page}\\
+\endfoot
+\bottomrule
+\endlastfoot
+\texttt{data/\allowbreak{}sample\_\allowbreak{}feedback.\allowbreak{}csv} & csv & 12 & \texttt{feedback\_\allowbreak{}id,\allowbreak{} customer\_\allowbreak{}segment,\allowbreak{} channel,\allowbreak{} rating,\allowbreak{} text,\allowbreak{} created\_\allowbreak{}at} & 2292 \\
+\texttt{examples/\allowbreak{}experiment\_\allowbreak{}config.\allowbreak{}yaml} & yaml & -- & -- & 717 \\
+\texttt{examples/\allowbreak{}queries.\allowbreak{}jsonl} & jsonl & 5 & \texttt{expected\_\allowbreak{}keywords,\allowbreak{} is\_\allowbreak{}answerable,\allowbreak{} question,\allowbreak{} relevant\_\allowbreak{}document\_\allowbreak{}ids} & 906 \\
+\texttt{examples/\allowbreak{}stream\_\allowbreak{}feedback.\allowbreak{}jsonl} & jsonl & 2 & \texttt{channel,\allowbreak{} created\_\allowbreak{}at,\allowbreak{} customer\_\allowbreak{}segment,\allowbreak{} feedback\_\allowbreak{}id,\allowbreak{} rating,\allowbreak{} text} & 428 \\
+\texttt{examples/\allowbreak{}tool\_\allowbreak{}queries.\allowbreak{}jsonl} & jsonl & 9 & \texttt{expected\_\allowbreak{}tool,\allowbreak{} note,\allowbreak{} question} & 1612 \\
+\end{longtable}
+
+\section{Artifact lineage}
+
+\begin{longtable}{>{\raggedright\arraybackslash\small}p{0.17\textwidth} >{\raggedright\arraybackslash\small}p{0.18\textwidth} >{\raggedright\arraybackslash\small}p{0.20\textwidth} >{\raggedright\arraybackslash\small}p{0.22\textwidth} >{\raggedright\arraybackslash\small}p{0.17\textwidth}}
+\caption{Transformation chain from raw CSV to published artifacts.}\label{tab:lineage}\\
+\toprule
+Source artifact & Producer & Transformation & Validation performed & Destination artifact \\
+\midrule
+\endfirsthead
+\toprule
+Source artifact & Producer & Transformation & Validation performed & Destination artifact \\
+\midrule
+\endhead
+\midrule
+\multicolumn{5}{r}{\footnotesize continued on next page}\\
+\endfoot
+\bottomrule
+\endlastfoot
+data/sample\_feedback.csv & Authored in the repository (no external source) & \texttt{load\_feedback\_csv} & \texttt{validate\_feedback\_csv} (data contract) & Validated \texttt{FeedbackRecord} list \\
+Validated records & \texttt{load\_feedback\_csv} & \texttt{feedback\_to\_chunks} & PII redaction via \texttt{redact\_pii} & \texttt{DocumentChunk} list \\
+Document chunks & \texttt{feedback\_to\_chunks} & \texttt{HashingEmbeddingModel.embed} & Dimension check in \texttt{InMemoryVectorStore.add} & .artifacts/vector\_store.json \\
+Vector index & \texttt{build\_index} & \texttt{QueryEngine} / \texttt{BM25Retriever} / \texttt{HybridRetriever} & Guardrail context check & Ranked \texttt{SearchResult} list \\
+Search results & Retriever & \texttt{FeedbackInsightAgent.answer} & Evidence-overlap hallucination check & \texttt{AgentAnswer} with citations \\
+Agent answers & \texttt{FeedbackInsightAgent} & \texttt{evaluate\_system} & Metric aggregation over evaluation cases & \texttt{EvaluationReport} JSON \\
+Validated records & \texttt{load\_feedback\_csv} & \texttt{export\_feedback\_lakehouse} & Partition column validation, record redaction & Partitioned JSONL + table metadata \\
+Stream events & \texttt{JsonlFeedbackStream} / Kafka / Kinesis & \texttt{consume\_feedback\_stream} & Per-event contract validation & \texttt{StreamIngestionResult} + CSV \\
+\end{longtable}

@@ -1,0 +1,28 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{percentile}}
+\label{func:feedback_intelligence_agent.benchmarking.percentile}\index{Functions!percentile}
+
+Return the \texttt{fraction} percentile of \texttt{values} (e.g. 0.95 for p95).
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+percentile(values: list[float], fraction: float) -> float
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{values}] \texttt{list[float]\allowbreak{}}, required. Non-empty list of samples (order does not matter).
+  \item[\texttt{fraction}] \texttt{float}, required. Percentile as a fraction in \texttt{[0.\allowbreak{}0,\allowbreak{} 1.\allowbreak{}0]\allowbreak{}}.
+\end{arglist}
+\apifield{Value}\texttt{float}. The sample at the nearest rank for \texttt{fraction}.
+\apifield{Raises}
+\begin{arglist}
+  \item[\texttt{ValueError}] If \texttt{values} is empty or \texttt{fraction} is outside \texttt{[0,\allowbreak{} 1]\allowbreak{}}.
+\end{arglist}
+\apifield{Details}Uses the *nearest-rank* method on the sorted samples: the rank is \texttt{ceil(fraction * n)\allowbreak{}} (clamped to \texttt{[1,\allowbreak{} n]\allowbreak{}}) and the value at that 1-based rank is returned. Nearest-rank is chosen over interpolation because it always returns an actually-observed sample, which is easy to reason about for latency SLOs and avoids fabricating values between measurements.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}benchmarking.\allowbreak{}py:51}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/benchmarking.py#L51}{online}), module \cref{module:feedback_intelligence_agent.benchmarking}

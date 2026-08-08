@@ -1,0 +1,63 @@
+% Authored: build interface and packaging.
+
+\chapter{Build and Packaging}
+\label{ch:build}
+
+\section{Build interface}
+
+The Makefile is the documented interface. Every target is a thin wrapper over a
+Poetry command, so nothing is hidden behind Make-specific logic and every
+target can be run directly if Make is unavailable.
+
+\input{generated/engineering/build-interface}
+
+\section{Python packaging}
+
+The distribution is built by \texttt{poetry-core} from the \texttt{src} layout:
+\texttt{packages = [\{ include = "feedback\_intelligence\_agent", from = "src" \}]}.
+\texttt{poetry build} produces both an sdist and a wheel into \srcfile{dist/}.
+The build runs on every push as the final CI step, so packaging breakage
+surfaces immediately rather than at release time.
+
+One console script is declared:
+\texttt{feedback-agent = "feedback\_intelligence\_agent.cli:app"}.
+
+Version numbers appear in three places and must agree: the
+\texttt{version} field in \srcfile{pyproject.toml}, the
+\texttt{\_\_version\_\_} attribute in the package \texttt{\_\_init\_\_}, and
+the \texttt{version} fields of \srcfile{CITATION.cff} and
+\srcfile{.zenodo.json}. Nothing in the repository enforces the agreement; see
+\cref{ch:improvements}.
+
+\section{Container images}
+
+\input{generated/engineering/containers}
+
+The application image is a single-stage \texttt{python:3.11-slim} build that
+installs Poetry at a pinned version, copies \srcfile{pyproject.toml},
+\srcfile{poetry.lock}, \srcfile{README.md}, \srcfile{src}, \srcfile{data},
+\srcfile{docs}, and \srcfile{scripts}, then installs the main dependency group
+followed by the project itself. It sets
+\texttt{POETRY\_VIRTUALENVS\_CREATE=false} so packages land in the system
+environment, exposes port 8000, and runs Uvicorn against the application
+factory.
+
+Two properties are worth calling out because they are deliberate:
+
+\begin{itemize}[nosep]
+  \item \srcfile{data/} is copied into the image, so a container started with
+    no configuration can build an index and answer questions offline --- the
+    containerised expression of \cref{adr:001}.
+  \item The lock file is copied before installation, so the image resolves to
+    the locked dependency set rather than to whatever is current.
+\end{itemize}
+
+The frontend image is a two-stage \texttt{node:22-alpine} build that installs
+with \texttt{npm ci}, builds, and serves the preview server on port 4173.
+
+\section{Frontend build}
+
+The browser client is built with Vite and TypeScript. Its scripts are declared
+in \srcfile{frontend/package.json} and it is built in CI by the frontend
+workflow and again by the release workflow, whose artifact upload makes the
+built assets available for a release.

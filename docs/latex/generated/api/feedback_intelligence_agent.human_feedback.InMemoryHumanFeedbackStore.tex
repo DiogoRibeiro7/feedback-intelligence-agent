@@ -1,0 +1,59 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{InMemoryHumanFeedbackStore}}
+\label{class:feedback_intelligence_agent.human_feedback.InMemoryHumanFeedbackStore}\index{Classes!InMemoryHumanFeedbackStore}
+
+Dict-backed human feedback store for tests.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+InMemoryHumanFeedbackStore(self) -> None
+\end{lstlisting}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}human\_\allowbreak{}feedback.\allowbreak{}py:190}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/human_feedback.py#L190}{online}), class, module \cref{module:feedback_intelligence_agent.human_feedback}
+
+\subsection{\texttt{save}}
+\label{method:feedback_intelligence_agent.human_feedback.InMemoryHumanFeedbackStore.save}\index{Methods!save}
+Persist a feedback record in memory.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+save(self, request: SubmitHumanFeedbackRequest) -> HumanFeedbackRecord
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{request}] \texttt{SubmitHumanFeedbackRequest}, required.
+\end{arglist}
+\apifield{Value}\texttt{HumanFeedbackRecord}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}human\_\allowbreak{}feedback.\allowbreak{}py:197}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/human_feedback.py#L197}{online})
+
+\subsection{\texttt{get}}
+\label{method:feedback_intelligence_agent.human_feedback.InMemoryHumanFeedbackStore.get}\index{Methods!get}
+Return a deep copy of a stored feedback record, or None.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+get(self, feedback_id: str) -> HumanFeedbackRecord | None
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{feedback\_\allowbreak{}id}] \texttt{str}, required.
+\end{arglist}
+\apifield{Value}\texttt{HumanFeedbackRecord \textbar{} None}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}human\_\allowbreak{}feedback.\allowbreak{}py:203}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/human_feedback.py#L203}{online})
+
+\subsection{\texttt{list}}
+\label{method:feedback_intelligence_agent.human_feedback.InMemoryHumanFeedbackStore.list}\index{Methods!list}
+Return feedback summaries sorted newest first.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+list(self, *, tenant_id: str | None = None) -> list[HumanFeedbackSummary]
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{tenant\_\allowbreak{}id}] \texttt{str \textbar{} None}, default \texttt{None}, keyword-only.
+\end{arglist}
+\apifield{Value}\texttt{list[HumanFeedbackSummary]\allowbreak{}}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}human\_\allowbreak{}feedback.\allowbreak{}py:209}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/human_feedback.py#L209}{online})

@@ -1,0 +1,29 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{OpenTelemetryTracer}}
+\label{class:feedback_intelligence_agent.telemetry.OpenTelemetryTracer}\index{Classes!OpenTelemetryTracer}
+
+Minimal tracer behavior used by the OpenTelemetry sink.
+\apifield{Inherits}\texttt{Protocol}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}telemetry.\allowbreak{}py:107}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/telemetry.py#L107}{online}), protocol, module \cref{module:feedback_intelligence_agent.telemetry}
+
+\subsection{\texttt{start\_span}}
+\label{method:feedback_intelligence_agent.telemetry.OpenTelemetryTracer.start_span}\index{Methods!start\_span}
+Start a span with initial attributes.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+start_span(self, name: str, *, attributes: Mapping[str, TelemetryAttributeValue]) -> OpenTelemetrySpan
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{name}] \texttt{str}, required.
+  \item[\texttt{attributes}] \texttt{Mapping[str,\allowbreak{} TelemetryAttributeValue]\allowbreak{}}, required, keyword-only.
+\end{arglist}
+\apifield{Value}\texttt{OpenTelemetrySpan}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}telemetry.\allowbreak{}py:110}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/telemetry.py#L110}{online})

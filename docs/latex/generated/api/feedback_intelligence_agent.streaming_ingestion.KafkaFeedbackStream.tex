@@ -1,0 +1,53 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{KafkaFeedbackStream}}
+\label{class:feedback_intelligence_agent.streaming_ingestion.KafkaFeedbackStream}\index{Classes!KafkaFeedbackStream}
+
+Kafka-backed feedback stream using the optional \texttt{confluent-\allowbreak{}kafka} package.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+KafkaFeedbackStream(self, *, topic: str, bootstrap_servers: str, group_id: str, consumer: KafkaConsumerProtocol | None = None, poll_timeout_seconds: float = 1.0) -> None
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{topic}] \texttt{str}, required, keyword-only.
+  \item[\texttt{bootstrap\_\allowbreak{}servers}] \texttt{str}, required, keyword-only.
+  \item[\texttt{group\_\allowbreak{}id}] \texttt{str}, required, keyword-only.
+  \item[\texttt{consumer}] \texttt{KafkaConsumerProtocol \textbar{} None}, default \texttt{None}, keyword-only.
+  \item[\texttt{poll\_\allowbreak{}timeout\_\allowbreak{}seconds}] \texttt{float}, default \texttt{1.\allowbreak{}0}, keyword-only.
+\end{arglist}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}streaming\_\allowbreak{}ingestion.\allowbreak{}py:188}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/streaming_ingestion.py#L188}{online}), class, module \cref{module:feedback_intelligence_agent.streaming_ingestion}
+
+\subsection{\texttt{poll}}
+\label{method:feedback_intelligence_agent.streaming_ingestion.KafkaFeedbackStream.poll}\index{Methods!poll}
+Poll Kafka messages and decode JSON feedback payloads.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+poll(self, max_messages: int) -> list[StreamEnvelope]
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{max\_\allowbreak{}messages}] \texttt{int}, required.
+\end{arglist}
+\apifield{Value}\texttt{list[StreamEnvelope]\allowbreak{}}
+\apifield{Raises}\texttt{ValueError}, \texttt{StreamIngestionError}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}streaming\_\allowbreak{}ingestion.\allowbreak{}py:222}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/streaming_ingestion.py#L222}{online})
+
+\subsection{\texttt{ack}}
+\label{method:feedback_intelligence_agent.streaming_ingestion.KafkaFeedbackStream.ack}\index{Methods!ack}
+Commit one Kafka message by offset when the consumer supports it.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+ack(self, envelope: StreamEnvelope) -> None
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{envelope}] \texttt{StreamEnvelope}, required.
+\end{arglist}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}streaming\_\allowbreak{}ingestion.\allowbreak{}py:237}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/streaming_ingestion.py#L237}{online})

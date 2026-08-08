@@ -1,0 +1,366 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_engineering.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\begin{longtable}{>{\raggedright\arraybackslash\small}p{0.18\textwidth} >{\raggedright\arraybackslash\small}p{0.28\textwidth} >{\raggedright\arraybackslash\small}p{0.26\textwidth} >{\raggedright\arraybackslash\small}p{0.08\textwidth} >{\raggedright\arraybackslash\small}p{0.14\textwidth}}
+\caption{GitHub Actions workflows.}\label{tab:ci-workflows}\\
+\toprule
+Workflow & File & Triggers & Jobs & Concurrency group \\
+\midrule
+\endfirsthead
+\toprule
+Workflow & File & Triggers & Jobs & Concurrency group \\
+\midrule
+\endhead
+\midrule
+\multicolumn{5}{r}{\footnotesize continued on next page}\\
+\endfoot
+\bottomrule
+\endlastfoot
+CI & \texttt{.\allowbreak{}github/\allowbreak{}workflows/\allowbreak{}ci.\allowbreak{}yml} & pull\_request, push & 2 & yes \\
+Dependency Review & \texttt{.\allowbreak{}github/\allowbreak{}workflows/\allowbreak{}dependency-\allowbreak{}review.\allowbreak{}yml} & pull\_request & 1 & no \\
+Docker & \texttt{.\allowbreak{}github/\allowbreak{}workflows/\allowbreak{}docker.\allowbreak{}yml} & pull\_request, push & 1 & yes \\
+Frontend CI & \texttt{.\allowbreak{}github/\allowbreak{}workflows/\allowbreak{}frontend.\allowbreak{}yml} & pull\_request, push & 1 & yes \\
+Release & \texttt{.\allowbreak{}github/\allowbreak{}workflows/\allowbreak{}release.\allowbreak{}yml} & push, workflow\_dispatch & 1 & no \\
+Security & \texttt{.\allowbreak{}github/\allowbreak{}workflows/\allowbreak{}security.\allowbreak{}yml} & pull\_request, push, schedule & 1 & yes \\
+\end{longtable}
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[
+  stage/.style={rectangle, draw=black, rounded corners=2pt, align=center,
+    minimum width=32mm, minimum height=8mm, font=\small},
+  flow/.style={-{Latex[length=2mm]}, thick},
+  node distance=6mm
+]
+  \node[stage] (trigger) {Push / pull request\\ \texttt{main}, \texttt{develop}};
+  \node[stage, below=of trigger] (s0) {Lint};
+  \draw[flow] (trigger) -- (s0);
+  \node[stage, below=of s0] (s1) {Format check};
+  \draw[flow] (s0) -- (s1);
+  \node[stage, below=of s1] (s2) {Type check};
+  \draw[flow] (s1) -- (s2);
+  \node[stage, below=of s2] (s3) {Test with coverage};
+  \draw[flow] (s2) -- (s3);
+  \node[stage, below=of s3] (s4) {Run deterministic demo};
+  \draw[flow] (s3) -- (s4);
+  \node[stage, below=of s4] (s5) {Build package};
+  \draw[flow] (s4) -- (s5);
+  \node[stage, below=of s5] (matrix) {Repeated for Python\\ 3.10, 3.11, 3.12};
+  \draw[flow] (s5) -- (matrix);
+  \node[stage, right=28mm of trigger] (sec) {Security workflow\\ CodeQL (python, js/ts)};
+  \node[stage, below=of sec] (dep) {Dependency review\\ (pull requests)};
+  \node[stage, below=of dep] (docker) {Docker workflow\\ build + smoke test};
+  \node[stage, below=of docker] (front) {Frontend workflow\\ npm ci, audit, build};
+  \node[stage, below=of front] (rel) {Release workflow\\ tag \texttt{v*} or manual};
+  \draw[flow] (trigger) -- (sec);
+  \draw[flow] (sec) -- (dep);
+  \draw[flow] (dep) -- (docker);
+  \draw[flow] (docker) -- (front);
+  \draw[flow] (front) -- (rel);
+\end{tikzpicture}
+\caption{Continuous integration as implemented. The left column is the blocking \texttt{quality} job of the CI workflow, executed once per Python version in the matrix; the right column lists the independent workflows and their own triggers. No workflow declares a \texttt{needs} dependency on another, so the columns run concurrently.}
+\label{fig:ci-pipeline}
+\end{figure}
+
+\section{Workflow: CI}
+\label{ci:.github-workflows-ci.yml}
+
+\subsection*{Triggers}
+\begin{itemize}[nosep]
+  \item pull\_request (branches: main, develop)
+  \item push (branches: main, develop)
+\end{itemize}
+
+\subsection*{Permissions}
+\begin{itemize}[nosep]
+  \item contents: read
+\end{itemize}
+
+\subsection*{Job \texttt{quality}}
+\begin{itemize}[nosep]
+  \item Runner: ubuntu-latest
+  \item Matrix: python-version: 3.10, 3.11, 3.12
+  \item Depends on: nothing
+  \item Steps: 10
+\end{itemize}
+
+\begin{longtable}{>{\raggedright\arraybackslash\small}p{0.04\textwidth} >{\raggedright\arraybackslash\small}p{0.24\textwidth} >{\raggedright\arraybackslash\small}p{0.26\textwidth} >{\raggedright\arraybackslash\small}p{0.36\textwidth}}
+\toprule
+\# & Step & Action & Command \\
+\midrule
+\endfirsthead
+\toprule
+\# & Step & Action & Command \\
+\midrule
+\endhead
+\midrule
+\multicolumn{4}{r}{\footnotesize continued on next page}\\
+\endfoot
+\bottomrule
+\endlastfoot
+1 & Checkout & \texttt{actions/\allowbreak{}checkout@v4} & -- \\
+2 & Install Poetry & -- & \texttt{pipx install poetry==2.\allowbreak{}2.\allowbreak{}1} \\
+3 & Set up Python & \texttt{actions/\allowbreak{}setup-\allowbreak{}python@v5} & -- \\
+4 & Install dependencies & -- & \texttt{poetry install -\allowbreak{}-\allowbreak{}with dev} \\
+5 & Lint & -- & \texttt{poetry run ruff check .\allowbreak{}} \\
+6 & Format check & -- & \texttt{poetry run ruff format -\allowbreak{}-\allowbreak{}check .\allowbreak{}} \\
+7 & Type check & -- & \texttt{poetry run mypy src} \\
+8 & Test with coverage & -- & \texttt{poetry run pytest -\allowbreak{}-\allowbreak{}cov=feedback\_\allowbreak{}intelligence\_\allowbreak{}agent -\allowbreak{}-\allowbreak{}cov-\allowbreak{}report=term-\allowbreak{}missing -\allowbreak{}-\allowbreak{}cov-\allowbreak{}fail-\allowbreak{}under=63} \\
+9 & Run deterministic demo & -- & \texttt{poetry run python scripts/\allowbreak{}run\_\allowbreak{}demo.\allowbreak{}py} \\
+10 & Build package & -- & \texttt{poetry build} \\
+\end{longtable}
+
+\subsection*{Job \texttt{documentation}}
+\begin{itemize}[nosep]
+  \item Runner: ubuntu-latest
+  \item Matrix: none
+  \item Depends on: nothing
+  \item Steps: 8
+\end{itemize}
+
+\begin{longtable}{>{\raggedright\arraybackslash\small}p{0.04\textwidth} >{\raggedright\arraybackslash\small}p{0.24\textwidth} >{\raggedright\arraybackslash\small}p{0.26\textwidth} >{\raggedright\arraybackslash\small}p{0.36\textwidth}}
+\toprule
+\# & Step & Action & Command \\
+\midrule
+\endfirsthead
+\toprule
+\# & Step & Action & Command \\
+\midrule
+\endhead
+\midrule
+\multicolumn{4}{r}{\footnotesize continued on next page}\\
+\endfoot
+\bottomrule
+\endlastfoot
+1 & Checkout & \texttt{actions/\allowbreak{}checkout@v4} & -- \\
+2 & Install Poetry & -- & \texttt{pipx install poetry==2.\allowbreak{}2.\allowbreak{}1} \\
+3 & Set up Python & \texttt{actions/\allowbreak{}setup-\allowbreak{}python@v5} & -- \\
+4 & Install dependencies & -- & \texttt{poetry install -\allowbreak{}-\allowbreak{}with dev} \\
+5 & Type check documentation toolchain & -- & \texttt{poetry run mypy -\allowbreak{}-\allowbreak{}python-\allowbreak{}version 3.\allowbreak{}11 docs/\allowbreak{}tools} \\
+6 & Test documentation toolchain & -- & \texttt{poetry run pytest tests/\allowbreak{}test\_\allowbreak{}docs\_\allowbreak{}tools.\allowbreak{}py} \\
+7 & Regenerate and validate documentation & -- & \texttt{revision=\$(python -\allowbreak{}c "import json;print(json.\allowbreak{}load(open('docs/\allowbreak{}metadata/\allowbreak{}documentation-\allowbreak{}manifest.\allowbreak{}json')\allowbreak{})\allowbreak{}['revision']\allowbreak{})\allowbreak{}")\allowbreak{} echo "Regenerating as of the documented revision \$\{revision\}" make docs REVISION="\$\{revision\}"} \\
+8 & Fail if regeneration changed tracked files & -- & \texttt{if ! git diff -\allowbreak{}-\allowbreak{}quiet -\allowbreak{}-\allowbreak{} docs/\allowbreak{}; then echo "Generated documentation is out of date.\allowbreak{} Run 'make docs' and commit the result.\allowbreak{}" git diff -\allowbreak{}-\allowbreak{}stat -\allowbreak{}-\allowbreak{} docs/\allowbreak{} exit 1 fi} \\
+\end{longtable}
+
+\section{Workflow: Dependency Review}
+\label{ci:.github-workflows-dependency-review.yml}
+
+\subsection*{Triggers}
+\begin{itemize}[nosep]
+  \item pull\_request (branches: main, develop)
+\end{itemize}
+
+\subsection*{Permissions}
+\begin{itemize}[nosep]
+  \item contents: read
+  \item pull-requests: write
+\end{itemize}
+
+\subsection*{Job \texttt{dependency-review}}
+\begin{itemize}[nosep]
+  \item Runner: ubuntu-latest
+  \item Matrix: none
+  \item Depends on: nothing
+  \item Steps: 2
+\end{itemize}
+
+\begin{longtable}{>{\raggedright\arraybackslash\small}p{0.04\textwidth} >{\raggedright\arraybackslash\small}p{0.24\textwidth} >{\raggedright\arraybackslash\small}p{0.26\textwidth} >{\raggedright\arraybackslash\small}p{0.36\textwidth}}
+\toprule
+\# & Step & Action & Command \\
+\midrule
+\endfirsthead
+\toprule
+\# & Step & Action & Command \\
+\midrule
+\endhead
+\midrule
+\multicolumn{4}{r}{\footnotesize continued on next page}\\
+\endfoot
+\bottomrule
+\endlastfoot
+1 & Checkout & \texttt{actions/\allowbreak{}checkout@v4} & -- \\
+2 & Review dependency changes & \texttt{actions/\allowbreak{}dependency-\allowbreak{}review-\allowbreak{}action@v4} & -- \\
+\end{longtable}
+
+\section{Workflow: Docker}
+\label{ci:.github-workflows-docker.yml}
+
+\subsection*{Triggers}
+\begin{itemize}[nosep]
+  \item pull\_request (branches: main, develop; paths: Dockerfile, docker-compose.yml, pyproject.toml, poetry.lock, src/**, scripts/**, data/sample\_feedback.csv, .github/workflows/docker.yml)
+  \item push (branches: main, develop; paths: Dockerfile, docker-compose.yml, pyproject.toml, poetry.lock, src/**, scripts/**, data/sample\_feedback.csv, .github/workflows/docker.yml)
+\end{itemize}
+
+\subsection*{Permissions}
+\begin{itemize}[nosep]
+  \item contents: read
+\end{itemize}
+
+\subsection*{Job \texttt{build}}
+\begin{itemize}[nosep]
+  \item Runner: ubuntu-latest
+  \item Matrix: none
+  \item Depends on: nothing
+  \item Steps: 3
+\end{itemize}
+
+\begin{longtable}{>{\raggedright\arraybackslash\small}p{0.04\textwidth} >{\raggedright\arraybackslash\small}p{0.24\textwidth} >{\raggedright\arraybackslash\small}p{0.26\textwidth} >{\raggedright\arraybackslash\small}p{0.36\textwidth}}
+\toprule
+\# & Step & Action & Command \\
+\midrule
+\endfirsthead
+\toprule
+\# & Step & Action & Command \\
+\midrule
+\endhead
+\midrule
+\multicolumn{4}{r}{\footnotesize continued on next page}\\
+\endfoot
+\bottomrule
+\endlastfoot
+1 & Checkout & \texttt{actions/\allowbreak{}checkout@v4} & -- \\
+2 & Build image & -- & \texttt{docker build -\allowbreak{}t feedback-\allowbreak{}intelligence-\allowbreak{}agent:ci .\allowbreak{}} \\
+3 & Smoke test container & -- & \texttt{docker run -\allowbreak{}-\allowbreak{}rm -\allowbreak{}-\allowbreak{}entrypoint python feedback-\allowbreak{}intelligence-\allowbreak{}agent:ci -\allowbreak{}c "import feedback\_\allowbreak{}intelligence\_\allowbreak{}agent; print(feedback\_\allowbreak{}intelligence\_\allowbreak{}agent.\allowbreak{}\_\allowbreak{}\_\allowbreak{}name\_\allowbreak{}\_\allowbreak{})\allowbreak{}"} \\
+\end{longtable}
+
+\section{Workflow: Frontend CI}
+\label{ci:.github-workflows-frontend.yml}
+
+\subsection*{Triggers}
+\begin{itemize}[nosep]
+  \item pull\_request (branches: main, develop; paths: frontend/**, .github/workflows/frontend.yml)
+  \item push (branches: main, develop; paths: frontend/**, .github/workflows/frontend.yml)
+\end{itemize}
+
+\subsection*{Permissions}
+\begin{itemize}[nosep]
+  \item contents: read
+\end{itemize}
+
+\subsection*{Job \texttt{frontend}}
+\begin{itemize}[nosep]
+  \item Runner: ubuntu-latest
+  \item Matrix: none
+  \item Depends on: nothing
+  \item Steps: 5
+\end{itemize}
+
+\begin{longtable}{>{\raggedright\arraybackslash\small}p{0.04\textwidth} >{\raggedright\arraybackslash\small}p{0.24\textwidth} >{\raggedright\arraybackslash\small}p{0.26\textwidth} >{\raggedright\arraybackslash\small}p{0.36\textwidth}}
+\toprule
+\# & Step & Action & Command \\
+\midrule
+\endfirsthead
+\toprule
+\# & Step & Action & Command \\
+\midrule
+\endhead
+\midrule
+\multicolumn{4}{r}{\footnotesize continued on next page}\\
+\endfoot
+\bottomrule
+\endlastfoot
+1 & Checkout & \texttt{actions/\allowbreak{}checkout@v4} & -- \\
+2 & Set up Node & \texttt{actions/\allowbreak{}setup-\allowbreak{}node@v4} & -- \\
+3 & Install dependencies & -- & \texttt{npm ci} \\
+4 & Audit dependencies & -- & \texttt{npm audit} \\
+5 & Build & -- & \texttt{npm run build} \\
+\end{longtable}
+
+\section{Workflow: Release}
+\label{ci:.github-workflows-release.yml}
+
+\subsection*{Triggers}
+\begin{itemize}[nosep]
+  \item push (tags: v*)
+  \item workflow\_dispatch
+\end{itemize}
+
+\subsection*{Permissions}
+\begin{itemize}[nosep]
+  \item contents: read
+\end{itemize}
+
+\subsection*{Job \texttt{validate-release}}
+\begin{itemize}[nosep]
+  \item Runner: ubuntu-latest
+  \item Matrix: none
+  \item Depends on: nothing
+  \item Steps: 13
+\end{itemize}
+
+\begin{longtable}{>{\raggedright\arraybackslash\small}p{0.04\textwidth} >{\raggedright\arraybackslash\small}p{0.24\textwidth} >{\raggedright\arraybackslash\small}p{0.26\textwidth} >{\raggedright\arraybackslash\small}p{0.36\textwidth}}
+\toprule
+\# & Step & Action & Command \\
+\midrule
+\endfirsthead
+\toprule
+\# & Step & Action & Command \\
+\midrule
+\endhead
+\midrule
+\multicolumn{4}{r}{\footnotesize continued on next page}\\
+\endfoot
+\bottomrule
+\endlastfoot
+1 & Checkout & \texttt{actions/\allowbreak{}checkout@v4} & -- \\
+2 & Install Poetry & -- & \texttt{pipx install poetry==2.\allowbreak{}2.\allowbreak{}1} \\
+3 & Set up Python & \texttt{actions/\allowbreak{}setup-\allowbreak{}python@v5} & -- \\
+4 & Set up Node & \texttt{actions/\allowbreak{}setup-\allowbreak{}node@v4} & -- \\
+5 & Install Python dependencies & -- & \texttt{poetry install -\allowbreak{}-\allowbreak{}with dev} \\
+6 & Install frontend dependencies & -- & \texttt{npm ci} \\
+7 & Validate Zenodo metadata & -- & \texttt{python -\allowbreak{}m json.\allowbreak{}tool .\allowbreak{}zenodo.\allowbreak{}json} \\
+8 & Validate citation metadata & -- & \texttt{poetry run python -\allowbreak{}c "from pathlib import Path; import yaml; yaml.\allowbreak{}safe\_\allowbreak{}load(Path('CITATION.\allowbreak{}cff')\allowbreak{}.\allowbreak{}read\_\allowbreak{}text(encoding='utf-\allowbreak{}8')\allowbreak{})\allowbreak{}"} \\
+9 & Run deterministic demo & -- & \texttt{poetry run python scripts/\allowbreak{}run\_\allowbreak{}demo.\allowbreak{}py} \\
+10 & Build Python package & -- & \texttt{poetry build} \\
+11 & Build frontend & -- & \texttt{npm run build} \\
+12 & Upload Python distributions & \texttt{actions/\allowbreak{}upload-\allowbreak{}artifact@v4} & -- \\
+13 & Upload frontend build & \texttt{actions/\allowbreak{}upload-\allowbreak{}artifact@v4} & -- \\
+\end{longtable}
+
+\section{Workflow: Security}
+\label{ci:.github-workflows-security.yml}
+
+\subsection*{Triggers}
+\begin{itemize}[nosep]
+  \item pull\_request (branches: main)
+  \item push (branches: main)
+  \item schedule
+\end{itemize}
+
+\subsection*{Permissions}
+\begin{itemize}[nosep]
+  \item actions: read
+  \item contents: read
+  \item security-events: write
+\end{itemize}
+
+\subsection*{Job \texttt{codeql}}
+\begin{itemize}[nosep]
+  \item Runner: ubuntu-latest
+  \item Matrix: language: python, javascript-typescript
+  \item Depends on: nothing
+  \item Steps: 3
+\end{itemize}
+
+\begin{longtable}{>{\raggedright\arraybackslash\small}p{0.04\textwidth} >{\raggedright\arraybackslash\small}p{0.24\textwidth} >{\raggedright\arraybackslash\small}p{0.26\textwidth} >{\raggedright\arraybackslash\small}p{0.36\textwidth}}
+\toprule
+\# & Step & Action & Command \\
+\midrule
+\endfirsthead
+\toprule
+\# & Step & Action & Command \\
+\midrule
+\endhead
+\midrule
+\multicolumn{4}{r}{\footnotesize continued on next page}\\
+\endfoot
+\bottomrule
+\endlastfoot
+1 & Checkout & \texttt{actions/\allowbreak{}checkout@v4} & -- \\
+2 & Initialize CodeQL & \texttt{github/\allowbreak{}codeql-\allowbreak{}action/\allowbreak{}init@v3} & -- \\
+3 & Perform CodeQL analysis & \texttt{github/\allowbreak{}codeql-\allowbreak{}action/\allowbreak{}analyze@v3} & -- \\
+\end{longtable}

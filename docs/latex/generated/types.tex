@@ -1,0 +1,102 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\section{Enumerations}
+
+\begin{longtable}{>{\raggedright\arraybackslash\small}p{0.26\textwidth} >{\raggedright\arraybackslash\small}p{0.30\textwidth} >{\raggedright\arraybackslash\small}p{0.36\textwidth}}
+\caption{Enumerations exposed by the package.}\label{tab:enumerations}\\
+\toprule
+Enumeration & Members & Summary \\
+\midrule
+\endfirsthead
+\toprule
+Enumeration & Members & Summary \\
+\midrule
+\endhead
+\midrule
+\multicolumn{3}{r}{\footnotesize continued on next page}\\
+\endfoot
+\bottomrule
+\endlastfoot
+\cref{class:feedback_intelligence_agent.active_learning.ActiveLearningStatus} & \texttt{open}, \texttt{assigned}, \texttt{in\_\allowbreak{}progress}, \texttt{resolved}, \texttt{dismissed} & Workflow states for active-learning queue items. \\
+\cref{class:feedback_intelligence_agent.auth.ApiRole} & \texttt{reader}, \texttt{writer}, \texttt{admin} & API roles ordered from least to most privileged. \\
+\cref{class:feedback_intelligence_agent.cli.ReportExportFormat} & \texttt{markdown} & Saved report export formats selectable from the command line. \\
+\cref{class:feedback_intelligence_agent.cli.RetrieverChoice} & \texttt{dense}, \texttt{lexical}, \texttt{hybrid} & Retriever strategies selectable from the command line. \\
+\cref{class:feedback_intelligence_agent.human_feedback.HumanFeedbackRating} & \texttt{useful}, \texttt{not\_\allowbreak{}useful} & Allowed human judgement labels for an answer. \\
+\cref{class:feedback_intelligence_agent.jobs.JobStatus} & \texttt{pending}, \texttt{running}, \texttt{succeeded}, \texttt{failed} & Lifecycle status of an ingestion job. \\
+\cref{class:feedback_intelligence_agent.lakehouse.LakehouseDataFormat} & \texttt{jsonl} & Data file encoding used by the dependency-light exporter. \\
+\cref{class:feedback_intelligence_agent.lakehouse.LakehouseTableFormat} & \texttt{delta}, \texttt{iceberg} & Metadata layout to write around exported feedback files. \\
+\cref{class:feedback_intelligence_agent.schemas.FeedbackChannel} & \texttt{support\_\allowbreak{}ticket}, \texttt{app\_\allowbreak{}review}, \texttt{sales\_\allowbreak{}call}, \texttt{nps\_\allowbreak{}survey}, \texttt{community} & Supported feedback channels. \\
+\end{longtable}
+
+\section{Protocols}
+
+Protocols define the structural interfaces the package programs against. Any object providing the listed methods can be substituted without inheritance.
+
+\begin{longtable}{>{\raggedright\arraybackslash\small}p{0.26\textwidth} >{\raggedright\arraybackslash\small}p{0.28\textwidth} >{\raggedright\arraybackslash\small}p{0.38\textwidth}}
+\caption{Structural protocols exposed by the package.}\label{tab:protocols}\\
+\toprule
+Protocol & Required methods & Summary \\
+\midrule
+\endfirsthead
+\toprule
+Protocol & Required methods & Summary \\
+\midrule
+\endhead
+\midrule
+\multicolumn{3}{r}{\footnotesize continued on next page}\\
+\endfoot
+\bottomrule
+\endlastfoot
+\cref{class:feedback_intelligence_agent.active_learning.ActiveLearningStateStore} & \texttt{get}, \texttt{update}, \texttt{list} & Protocol implemented by active-learning state stores. \\
+\cref{class:feedback_intelligence_agent.embeddings.EmbeddingModel} & \texttt{embed} & Protocol implemented by all embedding providers. \\
+\cref{class:feedback_intelligence_agent.hallucination.HallucinationJudge} & \texttt{judge} & Protocol for semantic answer-support judges. \\
+\cref{class:feedback_intelligence_agent.human_feedback.HumanFeedbackStore} & \texttt{save}, \texttt{get}, \texttt{list} & Protocol implemented by human feedback persistence backends. \\
+\cref{class:feedback_intelligence_agent.jobs.JobStore} & \texttt{create}, \texttt{get}, \texttt{update} & Protocol implemented by job persistence backends. \\
+\cref{class:feedback_intelligence_agent.llm.BedrockExceptionTypes} & -- & Exception classes exposed by \texttt{botocore.\allowbreak{}exceptions}. \\
+\cref{class:feedback_intelligence_agent.llm.BedrockRuntimeClient} & \texttt{converse} & Small protocol for the Bedrock Runtime client methods used here. \\
+\cref{class:feedback_intelligence_agent.llm.LLMProvider} & \texttt{generate} & Protocol for text generation providers. \\
+\cref{class:feedback_intelligence_agent.memory.ConversationStore} & \texttt{get}, \texttt{save}, \texttt{conversation\_\allowbreak{}ids} & Protocol implemented by conversation persistence backends. \\
+\cref{class:feedback_intelligence_agent.memory.QueryRewriter} & \texttt{rewrite} & Protocol for converting follow-up questions into standalone questions. \\
+\cref{class:feedback_intelligence_agent.query_expansion.QueryExpander} & \texttt{expand} & Protocol for deterministic or model-backed query expanders. \\
+\cref{class:feedback_intelligence_agent.reports.InsightReportStore} & \texttt{save}, \texttt{get}, \texttt{list} & Protocol implemented by report persistence backends. \\
+\cref{class:feedback_intelligence_agent.reranking.Reranker} & \texttt{rerank} & Protocol for candidate rerankers. \\
+\cref{class:feedback_intelligence_agent.retrieval.Retriever} & \texttt{search} & Protocol implemented by all retrievers (dense, lexical, hybrid). \\
+\cref{class:feedback_intelligence_agent.streaming_ingestion.FeedbackStream} & \texttt{poll}, \texttt{ack} & Protocol implemented by bounded feedback stream consumers. \\
+\cref{class:feedback_intelligence_agent.telemetry.OpenTelemetrySpan} & \texttt{set\_\allowbreak{}attribute}, \texttt{set\_\allowbreak{}status}, \texttt{end} & Minimal span behavior used by the OpenTelemetry sink. \\
+\cref{class:feedback_intelligence_agent.telemetry.OpenTelemetryTracer} & \texttt{start\_\allowbreak{}span} & Minimal tracer behavior used by the OpenTelemetry sink. \\
+\cref{class:feedback_intelligence_agent.telemetry.TelemetrySink} & \texttt{emit} & Protocol implemented by telemetry sinks. \\
+\cref{class:feedback_intelligence_agent.vector_store.VectorStore} & \texttt{add}, \texttt{search} & Interface shared by every vector store backend. \\
+\end{longtable}
+
+\section{Type Aliases}
+
+\begin{longtable}{>{\raggedright\arraybackslash\small}p{0.24\textwidth} >{\raggedright\arraybackslash\small}p{0.48\textwidth} >{\raggedright\arraybackslash\small}p{0.20\textwidth}}
+\caption{Type aliases exposed by the package.}\label{tab:type-aliases}\\
+\toprule
+Alias & Definition & Module \\
+\midrule
+\endfirsthead
+\toprule
+Alias & Definition & Module \\
+\midrule
+\endhead
+\midrule
+\multicolumn{3}{r}{\footnotesize continued on next page}\\
+\endfoot
+\bottomrule
+\endlastfoot
+\texttt{RetrieverType} & \texttt{Literal['dense',\allowbreak{} 'lexical',\allowbreak{} 'hybrid']\allowbreak{}} & \texttt{config} \\
+\texttt{TelemetryBackend} & \texttt{Literal['jsonl',\allowbreak{} 'opentelemetry']\allowbreak{}} & \texttt{config} \\
+\texttt{VectorStoreType} & \texttt{Literal['json',\allowbreak{} 'qdrant']\allowbreak{}} & \texttt{config} \\
+\texttt{TrackingProvider} & \texttt{Literal['none',\allowbreak{} 'mlflow']\allowbreak{}} & \texttt{experiments} \\
+\texttt{Severity} & \texttt{Literal['low',\allowbreak{} 'medium',\allowbreak{} 'high']\allowbreak{}} & \texttt{guardrails} \\
+\texttt{HallucinationRisk} & \texttt{Literal['low',\allowbreak{} 'medium',\allowbreak{} 'high']\allowbreak{}} & \texttt{hallucination} \\
+\texttt{JudgeLabel} & \texttt{Literal['supported',\allowbreak{} 'unsupported',\allowbreak{} 'uncertain']\allowbreak{}} & \texttt{hallucination} \\
+\texttt{OutputFormat} & \texttt{Literal['json',\allowbreak{} 'repaired\_\allowbreak{}json',\allowbreak{} 'sectioned',\allowbreak{} 'raw']\allowbreak{}} & \texttt{output\_\allowbreak{}parser} \\
+\texttt{CircuitState} & \texttt{Literal['closed',\allowbreak{} 'open',\allowbreak{} 'half\_\allowbreak{}open']\allowbreak{}} & \texttt{resilience} \\
+\end{longtable}

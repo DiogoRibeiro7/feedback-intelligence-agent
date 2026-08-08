@@ -1,0 +1,41 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{ValidationReport}}
+\label{class:feedback_intelligence_agent.data_contracts.ValidationReport}\label{schema:ValidationReport}\index{Classes!ValidationReport}
+
+Summary of validating a dataset against the feedback data contract.
+\apifield{Inherits}\texttt{BaseModel}
+\apifield{Fields}
+\begin{arglist}
+  \item[\texttt{source}] \texttt{str}, required
+  \item[\texttt{total\_\allowbreak{}rows}] \texttt{int}, required
+  \item[\texttt{valid\_\allowbreak{}rows}] \texttt{int}, required
+  \item[\texttt{invalid\_\allowbreak{}rows}] \texttt{int}, required
+  \item[\texttt{errors}] \texttt{list[ValidationIssue]\allowbreak{}}, default \texttt{list()\allowbreak{}}
+  \item[\texttt{warnings}] \texttt{list[ValidationIssue]\allowbreak{}}, default \texttt{list()\allowbreak{}}
+\end{arglist}
+\apifield{Properties}
+\begin{arglist}
+  \item[\texttt{is\_\allowbreak{}valid}] Whether the dataset passed validation without any errors.
+\end{arglist}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}data\_\allowbreak{}contracts.\allowbreak{}py:62}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/data_contracts.py#L62}{online}), pydantic model, module \cref{module:feedback_intelligence_agent.data_contracts}
+
+\subsection{\texttt{summary}}
+\label{method:feedback_intelligence_agent.data_contracts.ValidationReport.summary}\index{Methods!summary}
+Build a human-readable summary of the validation outcome.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+summary(self, *, max_issues: int = 10) -> str
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{max\_\allowbreak{}issues}] \texttt{int}, default \texttt{10}, keyword-only.
+\end{arglist}
+\apifield{Value}\texttt{str}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}data\_\allowbreak{}contracts.\allowbreak{}py:77}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/data_contracts.py#L77}{online})

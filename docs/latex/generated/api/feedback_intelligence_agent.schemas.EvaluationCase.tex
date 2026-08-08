@@ -1,0 +1,23 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{EvaluationCase}}
+\label{class:feedback_intelligence_agent.schemas.EvaluationCase}\label{schema:EvaluationCase}\index{Classes!EvaluationCase}
+
+Single evaluation case covering retrieval and answer quality.
+\apifield{Inherits}\texttt{BaseModel}
+\apifield{Fields}
+\begin{arglist}
+  \item[\texttt{model\_\allowbreak{}config}] default \texttt{ConfigDict(populate\_\allowbreak{}by\_\allowbreak{}name=True)\allowbreak{}}
+  \item[\texttt{question}] \texttt{str}, required, \texttt{min\_\allowbreak{}length=1}
+  \item[\texttt{expected\_\allowbreak{}keywords}] \texttt{list[str]\allowbreak{}}, default \texttt{list()\allowbreak{}}
+  \item[\texttt{relevant\_\allowbreak{}document\_\allowbreak{}ids}] \texttt{list[str]\allowbreak{}}, default \texttt{list()\allowbreak{}}, \texttt{validation\_\allowbreak{}alias=AliasChoices('relevant\_\allowbreak{}document\_\allowbreak{}ids',\allowbreak{} 'relevant\_\allowbreak{}source\_\allowbreak{}ids')\allowbreak{}}
+  \item[\texttt{is\_\allowbreak{}answerable}] \texttt{bool}, default \texttt{True}
+\end{arglist}
+\apifield{Details}The \texttt{relevant\_\allowbreak{}source\_\allowbreak{}ids} field name is accepted as a legacy alias for \texttt{relevant\_\allowbreak{}document\_\allowbreak{}ids} so older evaluation files keep loading.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}schemas.\allowbreak{}py:296}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/schemas.py#L296}{online}), pydantic model, module \cref{module:feedback_intelligence_agent.schemas}

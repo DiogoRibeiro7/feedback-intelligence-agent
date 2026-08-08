@@ -1,0 +1,30 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{answer\_feedback\_submit}}
+\label{func:feedback_intelligence_agent.cli.answer_feedback_submit}\index{Functions!answer\_feedback\_submit}
+
+Answer a question and save the human judgement for that answer.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+answer_feedback_submit(question: Annotated[str, typer.Argument(help='Question to answer and review.')], rating: Annotated[HumanFeedbackRating, typer.Option(help='Human rating for the generated answer.')], comment: Annotated[str | None, typer.Option(help='Optional human review comment.')] = None, report_id: Annotated[str | None, typer.Option(help='Optional saved report id linked to this feedback.')] = None, tenant_id: Annotated[str, typer.Option(help='Tenant id for retrieval and feedback scoping.')] = 'default', tag: Annotated[list[str] | None, typer.Option('--tag', help='Feedback tag. Repeat for multiple tags.')] = None, store_path: Annotated[Path, typer.Option(help='Directory holding answer feedback JSON files.')] = Path('.artifacts/human_feedback'), index_path: Annotated[Path, typer.Option(help='Path to vector index.')] = Path('.artifacts/vector_store.json'), top_k: Annotated[int, typer.Option(help='Number of chunks to retrieve.')] = 4) -> None
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{question}] \texttt{Annotated[str,\allowbreak{} typer.\allowbreak{}Argument(help='Question to answer and review.\allowbreak{}')\allowbreak{}]\allowbreak{}}, required.
+  \item[\texttt{rating}] \texttt{Annotated[HumanFeedbackRating,\allowbreak{} typer.\allowbreak{}Option(help='Human rating for the generated answer.\allowbreak{}')\allowbreak{}]\allowbreak{}}, required.
+  \item[\texttt{comment}] \texttt{Annotated[str \textbar{} None,\allowbreak{} typer.\allowbreak{}Option(help='Optional human review comment.\allowbreak{}')\allowbreak{}]\allowbreak{}}, default \texttt{None}.
+  \item[\texttt{report\_\allowbreak{}id}] \texttt{Annotated[str \textbar{} None,\allowbreak{} typer.\allowbreak{}Option(help='Optional saved report id linked to this feedback.\allowbreak{}')\allowbreak{}]\allowbreak{}}, default \texttt{None}.
+  \item[\texttt{tenant\_\allowbreak{}id}] \texttt{Annotated[str,\allowbreak{} typer.\allowbreak{}Option(help='Tenant id for retrieval and feedback scoping.\allowbreak{}')\allowbreak{}]\allowbreak{}}, default \texttt{'default'}.
+  \item[\texttt{tag}] \texttt{Annotated[list[str]\allowbreak{} \textbar{} None,\allowbreak{} typer.\allowbreak{}Option('-\allowbreak{}-\allowbreak{}tag',\allowbreak{} help='Feedback tag.\allowbreak{} Repeat for multiple tags.\allowbreak{}')\allowbreak{}]\allowbreak{}}, default \texttt{None}.
+  \item[\texttt{store\_\allowbreak{}path}] \texttt{Annotated[Path,\allowbreak{} typer.\allowbreak{}Option(help='Directory holding answer feedback JSON files.\allowbreak{}')\allowbreak{}]\allowbreak{}}, default \texttt{Path('.\allowbreak{}artifacts/\allowbreak{}human\_\allowbreak{}feedback')\allowbreak{}}.
+  \item[\texttt{index\_\allowbreak{}path}] \texttt{Annotated[Path,\allowbreak{} typer.\allowbreak{}Option(help='Path to vector index.\allowbreak{}')\allowbreak{}]\allowbreak{}}, default \texttt{Path('.\allowbreak{}artifacts/\allowbreak{}vector\_\allowbreak{}store.\allowbreak{}json')\allowbreak{}}.
+  \item[\texttt{top\_\allowbreak{}k}] \texttt{Annotated[int,\allowbreak{} typer.\allowbreak{}Option(help='Number of chunks to retrieve.\allowbreak{}')\allowbreak{}]\allowbreak{}}, default \texttt{4}.
+\end{arglist}
+\apifield{Raises}\texttt{Exit}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}cli.\allowbreak{}py:676}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/cli.py#L676}{online}), module \cref{module:feedback_intelligence_agent.cli}

@@ -1,0 +1,61 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{ExperimentConfig}}
+\label{class:feedback_intelligence_agent.experiments.ExperimentConfig}\label{schema:ExperimentConfig}\index{Classes!ExperimentConfig}
+
+Typed description of one experiment run.
+\apifield{Inherits}\texttt{BaseModel}
+\apifield{Fields}
+\begin{arglist}
+  \item[\texttt{name}] \texttt{str}, default \texttt{'experiment'}, \texttt{min\_\allowbreak{}length=1}
+  \item[\texttt{description}] \texttt{str}, default \texttt{''}
+  \item[\texttt{dataset\_\allowbreak{}path}] \texttt{Path}, default \texttt{Path('data/\allowbreak{}sample\_\allowbreak{}feedback.\allowbreak{}csv')\allowbreak{}}
+  \item[\texttt{queries\_\allowbreak{}path}] \texttt{Path}, default \texttt{Path('examples/\allowbreak{}queries.\allowbreak{}jsonl')\allowbreak{}}
+  \item[\texttt{output\_\allowbreak{}dir}] \texttt{Path}, default \texttt{Path('.\allowbreak{}artifacts/\allowbreak{}experiments/\allowbreak{}default')\allowbreak{}}
+  \item[\texttt{chunk\_\allowbreak{}size}] \texttt{int}, default \texttt{80}, \texttt{ge=1}. Maximum words per chunk.
+  \item[\texttt{chunk\_\allowbreak{}overlap}] \texttt{int}, default \texttt{16}, \texttt{ge=0}. Words shared between chunks.
+  \item[\texttt{top\_\allowbreak{}k}] \texttt{int}, default \texttt{4}, \texttt{ge=1,\allowbreak{} le=12}
+  \item[\texttt{embedding\_\allowbreak{}provider}] \texttt{Literal['hashing']\allowbreak{}}, default \texttt{'hashing'}
+  \item[\texttt{embedding\_\allowbreak{}dim}] \texttt{int}, default \texttt{512}, \texttt{ge=64,\allowbreak{} le=8192}
+  \item[\texttt{llm\_\allowbreak{}provider}] \texttt{Literal['local',\allowbreak{} 'openai',\allowbreak{} 'openai\_\allowbreak{}responses',\allowbreak{} 'bedrock']\allowbreak{}}, default \texttt{'local'}
+  \item[\texttt{retriever\_\allowbreak{}type}] \texttt{RetrieverType}, default \texttt{'dense'}
+  \item[\texttt{dense\_\allowbreak{}weight}] \texttt{float}, default \texttt{0.\allowbreak{}6}, \texttt{ge=0.\allowbreak{}0}
+  \item[\texttt{lexical\_\allowbreak{}weight}] \texttt{float}, default \texttt{0.\allowbreak{}4}, \texttt{ge=0.\allowbreak{}0}
+  \item[\texttt{tracking\_\allowbreak{}provider}] \texttt{TrackingProvider}, default \texttt{'none'}
+  \item[\texttt{tracking\_\allowbreak{}uri}] \texttt{str \textbar{} None}, default \texttt{None}
+  \item[\texttt{tracking\_\allowbreak{}experiment\_\allowbreak{}name}] \texttt{str}, default \texttt{'feedback-\allowbreak{}intelligence-\allowbreak{}agent'}
+\end{arglist}
+\apifield{Details}The configuration covers the full pipeline: chunking, embedding, retrieval strategy, answer generation, and the dataset and query files used for evaluation.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}experiments.\allowbreak{}py:52}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/experiments.py#L52}{online}), pydantic model, module \cref{module:feedback_intelligence_agent.experiments}
+
+\subsection{\texttt{check\_chunk\_overlap}}
+\label{method:feedback_intelligence_agent.experiments.ExperimentConfig.check_chunk_overlap}\index{Methods!check\_chunk\_overlap}
+Reject overlaps that would prevent chunking from terminating.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+check_chunk_overlap(self) -> ExperimentConfig
+\end{lstlisting}
+\apifield{Value}\texttt{ExperimentConfig}
+\apifield{Raises}\texttt{ValueError}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}experiments.\allowbreak{}py:79}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/experiments.py#L79}{online})
+
+\subsection{\texttt{from\_yaml}}
+\label{method:feedback_intelligence_agent.experiments.ExperimentConfig.from_yaml}\index{Methods!from\_yaml}
+Load and validate an experiment configuration from a YAML file.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+from_yaml(cls, path: str | Path) -> ExperimentConfig
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{path}] \texttt{str \textbar{} Path}, required.
+\end{arglist}
+\apifield{Value}\texttt{ExperimentConfig}
+\apifield{Raises}\texttt{ValueError}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}experiments.\allowbreak{}py:86}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/experiments.py#L86}{online})

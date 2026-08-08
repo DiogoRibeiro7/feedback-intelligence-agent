@@ -1,0 +1,24 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{aggregate\_report}}
+\label{func:feedback_intelligence_agent.evaluation.aggregate_report}\index{Functions!aggregate\_report}
+
+Aggregate per-case results into a typed \texttt{EvaluationReport}.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+aggregate_report(case_results: list[CaseResult], *, top_k: int = 4) -> EvaluationReport
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{case\_\allowbreak{}results}] \texttt{list[CaseResult]\allowbreak{}}, required.
+  \item[\texttt{top\_\allowbreak{}k}] \texttt{int}, default \texttt{4}, keyword-only.
+\end{arglist}
+\apifield{Value}\texttt{EvaluationReport}
+\apifield{Details}Retrieval and citation metrics are averaged over answerable cases only; answer metrics are averaged over all cases.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}evaluation.\allowbreak{}py:355}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/evaluation.py#L355}{online}), module \cref{module:feedback_intelligence_agent.evaluation}

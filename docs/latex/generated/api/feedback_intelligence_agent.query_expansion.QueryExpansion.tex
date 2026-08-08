@@ -1,0 +1,23 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{QueryExpansion}}
+\label{class:feedback_intelligence_agent.query_expansion.QueryExpansion}\index{Classes!QueryExpansion}
+
+Result of expanding a user query with domain terminology.
+\apifield{Attributes}
+\begin{arglist}
+  \item[\texttt{original\_\allowbreak{}query}] \texttt{str}, required
+  \item[\texttt{expanded\_\allowbreak{}query}] \texttt{str}, required
+  \item[\texttt{added\_\allowbreak{}terms}] \texttt{tuple[str,\allowbreak{} .\allowbreak{}.\allowbreak{}.\allowbreak{}]\allowbreak{}}, required
+\end{arglist}
+\apifield{Properties}
+\begin{arglist}
+  \item[\texttt{was\_\allowbreak{}expanded}] Return True when expansion added at least one term.
+\end{arglist}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}query\_\allowbreak{}expansion.\allowbreak{}py:11}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/query_expansion.py#L11}{online}), dataclass, module \cref{module:feedback_intelligence_agent.query_expansion}

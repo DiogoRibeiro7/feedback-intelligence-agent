@@ -1,0 +1,28 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{stream\_ingest}}
+\label{func:feedback_intelligence_agent.cli.stream_ingest}\index{Functions!stream\_ingest}
+
+Consume a bounded local stream batch and write validated feedback records.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+stream_ingest(input: Annotated[Path, typer.Option(help='JSONL stream file of feedback events.')], output: Annotated[Path, typer.Option(help='CSV path for accepted feedback records.')] = Path('.artifacts/stream_feedback.csv'), dead_letter: Annotated[Path | None, typer.Option(help='Optional JSONL path for rejected stream messages.')] = Path('.artifacts/stream_dead_letters.jsonl'), max_messages: Annotated[int, typer.Option(help='Maximum stream messages to consume in this batch.')] = 100, update_index: Annotated[bool, typer.Option(help='Merge accepted stream records into a JSON vector index.')] = False, index_path: Annotated[Path, typer.Option(help='JSON vector index path to update.')] = Path('.artifacts/vector_store.json'), embedding_dim: Annotated[int, typer.Option(help='Hashing embedding dimension.')] = 512) -> None
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{input}] \texttt{Annotated[Path,\allowbreak{} typer.\allowbreak{}Option(help='JSONL stream file of feedback events.\allowbreak{}')\allowbreak{}]\allowbreak{}}, required.
+  \item[\texttt{output}] \texttt{Annotated[Path,\allowbreak{} typer.\allowbreak{}Option(help='CSV path for accepted feedback records.\allowbreak{}')\allowbreak{}]\allowbreak{}}, default \texttt{Path('.\allowbreak{}artifacts/\allowbreak{}stream\_\allowbreak{}feedback.\allowbreak{}csv')\allowbreak{}}.
+  \item[\texttt{dead\_\allowbreak{}letter}] \texttt{Annotated[Path \textbar{} None,\allowbreak{} typer.\allowbreak{}Option(help='Optional JSONL path for rejected stream messages.\allowbreak{}')\allowbreak{}]\allowbreak{}}, default \texttt{Path('.\allowbreak{}artifacts/\allowbreak{}stream\_\allowbreak{}dead\_\allowbreak{}letters.\allowbreak{}jsonl')\allowbreak{}}.
+  \item[\texttt{max\_\allowbreak{}messages}] \texttt{Annotated[int,\allowbreak{} typer.\allowbreak{}Option(help='Maximum stream messages to consume in this batch.\allowbreak{}')\allowbreak{}]\allowbreak{}}, default \texttt{100}.
+  \item[\texttt{update\_\allowbreak{}index}] \texttt{Annotated[bool,\allowbreak{} typer.\allowbreak{}Option(help='Merge accepted stream records into a JSON vector index.\allowbreak{}')\allowbreak{}]\allowbreak{}}, default \texttt{False}.
+  \item[\texttt{index\_\allowbreak{}path}] \texttt{Annotated[Path,\allowbreak{} typer.\allowbreak{}Option(help='JSON vector index path to update.\allowbreak{}')\allowbreak{}]\allowbreak{}}, default \texttt{Path('.\allowbreak{}artifacts/\allowbreak{}vector\_\allowbreak{}store.\allowbreak{}json')\allowbreak{}}.
+  \item[\texttt{embedding\_\allowbreak{}dim}] \texttt{Annotated[int,\allowbreak{} typer.\allowbreak{}Option(help='Hashing embedding dimension.\allowbreak{}')\allowbreak{}]\allowbreak{}}, default \texttt{512}.
+\end{arglist}
+\apifield{Details}This command uses the same streaming validation path as Kafka/Kinesis adapters, but reads from a JSONL file so local demos and CI remain deterministic.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}cli.\allowbreak{}py:191}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/cli.py#L191}{online}), module \cref{module:feedback_intelligence_agent.cli}

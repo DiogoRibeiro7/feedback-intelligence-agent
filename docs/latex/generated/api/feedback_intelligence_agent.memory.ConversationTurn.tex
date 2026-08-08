@@ -1,0 +1,22 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{ConversationTurn}}
+\label{class:feedback_intelligence_agent.memory.ConversationTurn}\label{schema:ConversationTurn}\index{Classes!ConversationTurn}
+
+One user/assistant exchange recorded in conversation memory.
+\apifield{Inherits}\texttt{BaseModel}
+\apifield{Fields}
+\begin{arglist}
+  \item[\texttt{user\_\allowbreak{}message}] \texttt{str}, required. The question exactly as the user asked it.
+  \item[\texttt{assistant\_\allowbreak{}answer}] \texttt{str}, required. The answer text returned by the agent.
+  \item[\texttt{retrieved\_\allowbreak{}document\_\allowbreak{}ids}] \texttt{list[str]\allowbreak{}}, default \texttt{list()\allowbreak{}}. IDs of the documents cited by the answer.
+  \item[\texttt{timestamp}] \texttt{datetime}, default \texttt{lambda: datetime.\allowbreak{}now(timezone.\allowbreak{}utc)\allowbreak{}()\allowbreak{}}. UTC time at which the turn was recorded.
+  \item[\texttt{metadata}] \texttt{dict[str,\allowbreak{} Any]\allowbreak{}}, default \texttt{dict()\allowbreak{}}. Optional structured attributes (route, confidence, the rewritten retrieval question, etc.).
+\end{arglist}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}memory.\allowbreak{}py:98}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/memory.py#L98}{online}), pydantic model, module \cref{module:feedback_intelligence_agent.memory}

@@ -1,0 +1,24 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{build\_retriever}}
+\label{func:feedback_intelligence_agent.factory.build_retriever}\index{Functions!build\_retriever}
+
+Construct the configured retriever over an existing vector store.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+build_retriever(settings: Settings, vector_store: VectorStore) -> Retriever
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{settings}] \texttt{Settings}, required.
+  \item[\texttt{vector\_\allowbreak{}store}] \texttt{VectorStore}, required.
+\end{arglist}
+\apifield{Value}\texttt{Retriever}
+\apifield{Details}\texttt{dense} keeps the original vector-similarity behaviour, \texttt{lexical} uses the local BM25 index, and \texttt{hybrid} combines both with the configured \texttt{dense\_\allowbreak{}weight} and \texttt{lexical\_\allowbreak{}weight}.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}factory.\allowbreak{}py:211}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/factory.py#L211}{online}), module \cref{module:feedback_intelligence_agent.factory}

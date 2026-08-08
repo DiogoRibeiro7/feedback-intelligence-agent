@@ -1,0 +1,23 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{write\_benchmark\_outputs}}
+\label{func:feedback_intelligence_agent.benchmarking.write_benchmark_outputs}\index{Functions!write\_benchmark\_outputs}
+
+Write the report as JSON and Markdown into \texttt{output\_\allowbreak{}dir}.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+write_benchmark_outputs(report: BenchmarkReport, output_dir: str | Path) -> dict[str, Path]
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{report}] \texttt{BenchmarkReport}, required. The benchmark report to persist.
+  \item[\texttt{output\_\allowbreak{}dir}] \texttt{str \textbar{} Path}, required. Destination directory (created if missing).
+\end{arglist}
+\apifield{Value}\texttt{dict[str,\allowbreak{} Path]\allowbreak{}}. Mapping of artifact filename to the path written.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}benchmarking.\allowbreak{}py:270}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/benchmarking.py#L270}{online}), module \cref{module:feedback_intelligence_agent.benchmarking}

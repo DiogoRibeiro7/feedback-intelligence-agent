@@ -1,0 +1,72 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_engineering.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\section{Container images}
+
+\begin{longtable}{>{\raggedright\arraybackslash\small}p{0.22\textwidth} >{\raggedright\arraybackslash\small}p{0.24\textwidth} >{\raggedright\arraybackslash\small}p{0.10\textwidth} >{\raggedright\arraybackslash\small}p{0.36\textwidth}}
+\caption{Container images defined in the repository.}\label{tab:container-images}\\
+\toprule
+Dockerfile & Base image(s) & Ports & Entrypoint \\
+\midrule
+\endfirsthead
+\toprule
+Dockerfile & Base image(s) & Ports & Entrypoint \\
+\midrule
+\endhead
+\midrule
+\multicolumn{4}{r}{\footnotesize continued on next page}\\
+\endfoot
+\bottomrule
+\endlastfoot
+\texttt{Dockerfile} & \texttt{python:3.\allowbreak{}11-\allowbreak{}slim} & 8000 & \texttt{["uvicorn",\allowbreak{} "feedback\_\allowbreak{}intelligence\_\allowbreak{}agent.\allowbreak{}api:create\_\allowbreak{}app",\allowbreak{} "-\allowbreak{}-\allowbreak{}factory",\allowbreak{} "-\allowbreak{}-\allowbreak{}host",\allowbreak{} "0.\allowbreak{}0.\allowbreak{}0.\allowbreak{}0",\allowbreak{} "-\allowbreak{}-\allowbreak{}port",\allowbreak{} "8000"]\allowbreak{}} \\
+\texttt{frontend/\allowbreak{}Dockerfile} & \texttt{node:22-\allowbreak{}alpine}, \texttt{node:22-\allowbreak{}alpine} & 4173 & \texttt{["npm",\allowbreak{} "run",\allowbreak{} "preview"]\allowbreak{}} \\
+\end{longtable}
+
+\section{Compose stacks}
+
+\begin{longtable}{>{\raggedright\arraybackslash\small}p{0.26\textwidth} >{\raggedright\arraybackslash\small}p{0.18\textwidth} >{\raggedright\arraybackslash\small}p{0.20\textwidth} >{\raggedright\arraybackslash\small}p{0.14\textwidth} >{\raggedright\arraybackslash\small}p{0.12\textwidth}}
+\caption{Compose services.}\label{tab:compose-services}\\
+\toprule
+File & Service & Image & Ports & Healthcheck \\
+\midrule
+\endfirsthead
+\toprule
+File & Service & Image & Ports & Healthcheck \\
+\midrule
+\endhead
+\midrule
+\multicolumn{5}{r}{\footnotesize continued on next page}\\
+\endfoot
+\bottomrule
+\endlastfoot
+\texttt{docker-\allowbreak{}compose.\allowbreak{}yml} & \texttt{feedback-\allowbreak{}agent} & built locally & 8000:8000 & no \\
+\texttt{docker-\allowbreak{}compose.\allowbreak{}yml} & \texttt{frontend} & built locally & 4173:4173 & no \\
+\texttt{docker-\allowbreak{}compose.\allowbreak{}yml} & \texttt{qdrant} & \texttt{qdrant/\allowbreak{}qdrant:latest} & 6333:6333, 6334:6334 & no \\
+\texttt{deploy/\allowbreak{}docker-\allowbreak{}compose.\allowbreak{}prod.\allowbreak{}yml} & \texttt{api} & \texttt{feedback-\allowbreak{}intelligence-\allowbreak{}agent:latest} & 8000:8000 & yes \\
+\end{longtable}
+
+\section{Deployment descriptors}
+
+\begin{longtable}{>{\raggedright\arraybackslash\small}p{0.40\textwidth} >{\raggedright\arraybackslash\small}p{0.52\textwidth}}
+\caption{Deployment descriptors present in the repository.}\label{tab:deployments}\\
+\toprule
+Descriptor & Target \\
+\midrule
+\endfirsthead
+\toprule
+Descriptor & Target \\
+\midrule
+\endhead
+\midrule
+\multicolumn{2}{r}{\footnotesize continued on next page}\\
+\endfoot
+\bottomrule
+\endlastfoot
+\texttt{deploy/\allowbreak{}docker-\allowbreak{}compose.\allowbreak{}prod.\allowbreak{}yml} & Production-like Docker Compose stack. \\
+\texttt{deploy/\allowbreak{}ecs-\allowbreak{}fargate-\allowbreak{}task-\allowbreak{}definition.\allowbreak{}json} & AWS ECS Fargate task definition. \\
+\texttt{deploy/\allowbreak{}fly.\allowbreak{}toml} & Fly.io application configuration. \\
+\end{longtable}

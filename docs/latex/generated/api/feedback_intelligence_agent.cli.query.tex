@@ -1,0 +1,33 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{query}}
+\label{func:feedback_intelligence_agent.cli.query}\index{Functions!query}
+
+Ask a question against the indexed feedback.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+query(question: Annotated[str, typer.Argument(help='Question to ask over feedback data.')], index_path: Annotated[Path, typer.Option(help='Path to vector index.')] = Path('.artifacts/vector_store.json'), top_k: Annotated[int, typer.Option(help='Number of chunks to retrieve.')] = 4, retriever: Annotated[RetrieverChoice, typer.Option(help='Retrieval strategy: dense, lexical, or hybrid.')] = RetrieverChoice.dense, dense_weight: Annotated[float, typer.Option(help='Dense score weight for hybrid retrieval.')] = 0.6, lexical_weight: Annotated[float, typer.Option(help='Lexical score weight for hybrid retrieval.')] = 0.4, customer_segment: Annotated[str | None, typer.Option(help='Filter retrieved feedback by customer segment.')] = None, tenant_id: Annotated[str | None, typer.Option(help='Filter retrieved feedback by tenant id.')] = None, channel: Annotated[FeedbackChannel | None, typer.Option(help='Filter retrieved feedback by channel.')] = None, min_rating: Annotated[int | None, typer.Option(help='Minimum feedback rating to retrieve.')] = None, max_rating: Annotated[int | None, typer.Option(help='Maximum feedback rating to retrieve.')] = None, created_after: Annotated[datetime | None, typer.Option(help='Only retrieve feedback created at or after this time.')] = None, created_before: Annotated[datetime | None, typer.Option(help='Only retrieve feedback created at or before this time.')] = None) -> None
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{question}] \texttt{Annotated[str,\allowbreak{} typer.\allowbreak{}Argument(help='Question to ask over feedback data.\allowbreak{}')\allowbreak{}]\allowbreak{}}, required.
+  \item[\texttt{index\_\allowbreak{}path}] \texttt{Annotated[Path,\allowbreak{} typer.\allowbreak{}Option(help='Path to vector index.\allowbreak{}')\allowbreak{}]\allowbreak{}}, default \texttt{Path('.\allowbreak{}artifacts/\allowbreak{}vector\_\allowbreak{}store.\allowbreak{}json')\allowbreak{}}.
+  \item[\texttt{top\_\allowbreak{}k}] \texttt{Annotated[int,\allowbreak{} typer.\allowbreak{}Option(help='Number of chunks to retrieve.\allowbreak{}')\allowbreak{}]\allowbreak{}}, default \texttt{4}.
+  \item[\texttt{retriever}] \texttt{Annotated[RetrieverChoice,\allowbreak{} typer.\allowbreak{}Option(help='Retrieval strategy: dense,\allowbreak{} lexical,\allowbreak{} or hybrid.\allowbreak{}')\allowbreak{}]\allowbreak{}}, default \texttt{RetrieverChoice.\allowbreak{}dense}.
+  \item[\texttt{dense\_\allowbreak{}weight}] \texttt{Annotated[float,\allowbreak{} typer.\allowbreak{}Option(help='Dense score weight for hybrid retrieval.\allowbreak{}')\allowbreak{}]\allowbreak{}}, default \texttt{0.\allowbreak{}6}.
+  \item[\texttt{lexical\_\allowbreak{}weight}] \texttt{Annotated[float,\allowbreak{} typer.\allowbreak{}Option(help='Lexical score weight for hybrid retrieval.\allowbreak{}')\allowbreak{}]\allowbreak{}}, default \texttt{0.\allowbreak{}4}.
+  \item[\texttt{customer\_\allowbreak{}segment}] \texttt{Annotated[str \textbar{} None,\allowbreak{} typer.\allowbreak{}Option(help='Filter retrieved feedback by customer segment.\allowbreak{}')\allowbreak{}]\allowbreak{}}, default \texttt{None}.
+  \item[\texttt{tenant\_\allowbreak{}id}] \texttt{Annotated[str \textbar{} None,\allowbreak{} typer.\allowbreak{}Option(help='Filter retrieved feedback by tenant id.\allowbreak{}')\allowbreak{}]\allowbreak{}}, default \texttt{None}.
+  \item[\texttt{channel}] \texttt{Annotated[FeedbackChannel \textbar{} None,\allowbreak{} typer.\allowbreak{}Option(help='Filter retrieved feedback by channel.\allowbreak{}')\allowbreak{}]\allowbreak{}}, default \texttt{None}.
+  \item[\texttt{min\_\allowbreak{}rating}] \texttt{Annotated[int \textbar{} None,\allowbreak{} typer.\allowbreak{}Option(help='Minimum feedback rating to retrieve.\allowbreak{}')\allowbreak{}]\allowbreak{}}, default \texttt{None}.
+  \item[\texttt{max\_\allowbreak{}rating}] \texttt{Annotated[int \textbar{} None,\allowbreak{} typer.\allowbreak{}Option(help='Maximum feedback rating to retrieve.\allowbreak{}')\allowbreak{}]\allowbreak{}}, default \texttt{None}.
+  \item[\texttt{created\_\allowbreak{}after}] \texttt{Annotated[datetime \textbar{} None,\allowbreak{} typer.\allowbreak{}Option(help='Only retrieve feedback created at or after this time.\allowbreak{}')\allowbreak{}]\allowbreak{}}, default \texttt{None}.
+  \item[\texttt{created\_\allowbreak{}before}] \texttt{Annotated[datetime \textbar{} None,\allowbreak{} typer.\allowbreak{}Option(help='Only retrieve feedback created at or before this time.\allowbreak{}')\allowbreak{}]\allowbreak{}}, default \texttt{None}.
+\end{arglist}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}cli.\allowbreak{}py:333}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/cli.py#L333}{online}), module \cref{module:feedback_intelligence_agent.cli}

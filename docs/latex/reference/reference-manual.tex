@@ -1,0 +1,275 @@
+% Authored: driver for the reference part.
+
+\chapter{Reference Manual Overview}
+\label{ch:reference-overview}
+
+This part enumerates the public surface of the \pkg{feedback\_intelligence\_agent}
+package at revision \texttt{\projectrevision}. It answers one question only:
+\emph{what does the repository expose, and with what contract?}
+
+\section{What counts as public}
+
+The package declares no namespace packages and no subpackages; every module is
+a direct child of \pkg{feedback\_intelligence\_agent}. An object is treated as
+public when both conditions hold:
+
+\begin{enumerate}[nosep]
+  \item its name does not begin with an underscore, and
+  \item if its module declares \texttt{\_\_all\_\_}, the name appears in it.
+\end{enumerate}
+
+Modules that declare \texttt{\_\_all\_\_} (\pkg{ingestion} and
+\pkg{streaming\_ingestion}) are therefore narrower than their non-underscore
+name set; every other module exports all of its non-underscore top-level
+names. Private objects are counted but not documented; their names are recorded
+in \srcfile{docs/metadata/api-index.json} under \texttt{private\_objects} so
+that the public/private split is auditable.
+
+The package's own \texttt{\_\_init\_\_} re-exports exactly two names,
+\texttt{FeedbackInsightAgent} and \texttt{Settings}, which form the smallest
+useful import surface for a library consumer.
+
+\section{How to read an entry}
+
+Each function and class occupies its own section with a stable label, so
+cross-references survive regeneration:
+
+\begin{lstlisting}
+\label{module:feedback_intelligence_agent.retrieval}
+\label{class:feedback_intelligence_agent.retrieval.HybridRetriever}
+\label{func:feedback_intelligence_agent.evaluation.precision_at_k}
+\label{method:feedback_intelligence_agent.agent.FeedbackInsightAgent.answer}
+\label{cli:query}
+\label{http:GET-/query}
+\label{schema:AgentAnswer}
+\end{lstlisting}
+
+Signatures are rendered from the abstract syntax tree, so they match the
+implementation by construction rather than by convention: parameter names,
+annotations, defaults, keyword-only markers, and return annotations are all
+taken from the definition itself.
+
+The \emph{Raises} section of an entry is the union of two sources: exception
+types raised syntactically inside the function body, and exception types named
+in the docstring's \texttt{Raises:} block. Exceptions propagating from called
+code are not inferred, so the section is a lower bound rather than a complete
+specification.
+
+Empty sections are omitted. A function without documented parameters shows no
+parameter table; a function returning \texttt{None} shows no \emph{Returns}
+section.
+
+\section{Chapters in this part}
+
+\begin{description}[nosep]
+  \item[\cref{ch:project-metadata}] Project identity, licensing, revision, and
+    the size of the documented surface.
+  \item[\cref{ch:modules}] One section per module: purpose, source, exports,
+    and the objects it defines.
+  \item[\cref{ch:classes}] Every public class, protocol, enumeration,
+    dataclass, and exception.
+  \item[\cref{ch:functions}] Every public module-level function.
+  \item[\cref{ch:types}] Enumerations, structural protocols, and type aliases,
+    gathered for quick lookup.
+  \item[\cref{ch:schemas}] The typed data contracts, field by field.
+  \item[\cref{ch:cli}] The command-line interface.
+  \item[\cref{ch:http}] The HTTP API.
+  \item[\cref{ch:configuration}] Configuration and environment variables.
+  \item[\cref{ch:mathematics}] The mathematical and statistical methods the
+    package implements.
+\end{description}
+
+\chapter{Project Metadata}
+\label{ch:project-metadata}
+
+\input{generated/project-metadata}
+
+\chapter{Modules}
+\label{ch:modules}
+
+The package is a flat collection of focused modules. The table below lists all
+of them with their size and purpose; the sections that follow give each module
+its own labelled entry with the objects it defines.
+
+\input{generated/modules}
+
+\chapter{Classes}
+\label{ch:classes}
+
+Every public class is documented here with its inheritance, constructor,
+attributes or fields, properties, and public methods. Methods are documented
+with the same rigour as module-level functions: signature, parameters,
+returns, and raises.
+
+Pydantic models appear here in full and again, field by field, in
+\cref{ch:schemas}; enumerations and protocols appear here in full and in
+summary form in \cref{ch:types}.
+
+\input{generated/api/_classes}
+
+\chapter{Functions}
+\label{ch:functions}
+
+\input{generated/api/_functions}
+
+\chapter{Types and Protocols}
+\label{ch:types}
+
+This chapter gathers the vocabulary types of the package. Protocols matter
+disproportionately here: the package programs against structural interfaces
+(\texttt{Retriever}, \texttt{LLMProvider}, \texttt{EmbeddingModel},
+\texttt{Reranker}, \texttt{QueryRewriter}, \texttt{HallucinationJudge},
+\texttt{VectorStore}, \texttt{FeedbackStream}) rather than against concrete
+classes, which is what makes the deterministic local implementations
+substitutable for remote ones without touching the orchestration code.
+
+\input{generated/types}
+
+\section{Constants}
+
+\input{generated/constants}
+
+\chapter{Data Contracts and Schemas}
+\label{ch:schemas}
+
+Every value crossing a boundary --- a CSV row, an HTTP request or response, a
+persisted conversation, a tool output, an evaluation report --- is a Pydantic
+model. Validation therefore happens at the boundary and the interior code can
+assume well-formed data.
+
+The tables in this chapter give, for each field: its type, whether it is
+required, its default, and the validation constraints declared on it. Constraints
+are read from the \texttt{Field(...)} call, so bounds such as
+\texttt{ge=1, le=5} on a rating or \texttt{min\_length=3} on feedback text are
+documented exactly as enforced.
+
+\section{Semantics of the feedback record}
+
+The core input contract, \texttt{FeedbackRecord}, carries units and domains
+that the type annotations alone do not convey:
+
+\begin{description}[nosep]
+  \item[\texttt{tenant\_id}] Lower-cased on validation; \texttt{"default"} when
+    absent. Scopes both retrieval filtering and chunk identifiers.
+  \item[\texttt{rating}] Integer on a 1--5 ordinal scale, 1 worst. Ratings
+    $\leq 2$ are treated as risk signals by the reranker.
+  \item[\texttt{channel}] Closed categorical domain, enumerated by
+    \texttt{FeedbackChannel}.
+  \item[\texttt{created\_at}] ISO 8601 timestamp. The sample dataset is naive
+    (no offset); stream fixtures carry \texttt{Z}. Metadata filtering
+    normalises aware timestamps to UTC and drops the offset before comparison,
+    so naive and aware values compare consistently.
+  \item[\texttt{text}] At least three characters; repeated whitespace is
+    collapsed on validation. Missing values are not representable: the contract
+    validator rejects empty text rather than imputing it.
+\end{description}
+
+\input{generated/schemas}
+
+\chapter{Command-Line Interface}
+\label{ch:cli}
+
+The console script \texttt{feedback-agent} is a Typer application with four
+sub-command groups (\texttt{experiment}, \texttt{prompts}, \texttt{reports},
+\texttt{answer-feedback}) alongside the top-level commands. Options and their
+help text are extracted from the \texttt{Annotated[..., typer.Option(...)]}
+declarations in \srcfile{src/feedback\_intelligence\_agent/cli.py}, so this
+reference cannot drift from the parser.
+
+Flag names follow Typer's convention: a parameter named \texttt{index\_path}
+becomes \texttt{-{}-index-path}. Boolean parameters additionally accept the
+negated form Typer derives for them.
+
+\section{Exit codes and failure behaviour}
+
+The CLI does not define custom exit codes. It relies on Typer's defaults: a
+command returns \texttt{0} on success, and Typer exits with a non-zero status
+when a command raises \texttt{typer.Exit} with a non-zero code or when an
+unhandled exception propagates. Commands that detect a domain failure --- an
+invalid dataset, an unknown prompt version, a missing report --- print a
+message and raise \texttt{typer.Exit}.
+
+\input{generated/cli}
+
+\chapter{HTTP API}
+\label{ch:http}
+
+The FastAPI application is built by the factory
+\texttt{feedback\_intelligence\_agent.api.create\_app}, which constructs the
+agent, the conversation store, the job store, the report store, the human
+feedback store, and the active-learning state store once at startup and closes
+over them. Uvicorn is pointed at the factory rather than at a module-level
+application object, which keeps construction explicit and testable.
+
+\section{Cross-cutting behaviour}
+
+\begin{description}[nosep]
+  \item[Authorization] Optional and disabled by default. When
+    \envvar{FEEDBACK\_AGENT\_API\_AUTH\_ENABLED} is set, every route carries a
+    role dependency (\texttt{reader}, \texttt{writer}, or \texttt{admin})
+    checked against the \texttt{X-Feedback-Agent-Key} header. The role required
+    by each route is listed in the endpoint table. \texttt{/health} and
+    \texttt{/ready} carry no dependency and stay open.
+  \item[Rate limiting] Optional and disabled by default. When enabled, an
+    in-process fixed-window limiter runs as HTTP middleware over every route
+    except \texttt{/health} and \texttt{/ready}, keyed by API key when present
+    and by client address otherwise. Responses carry
+    \texttt{X-RateLimit-Limit}, \texttt{X-RateLimit-Remaining}, and
+    \texttt{X-RateLimit-Reset}; rejections return \texttt{429} with
+    \texttt{Retry-After}.
+  \item[CORS] Configured from a comma-separated origin list. A single
+    \texttt{*} allows any origin and disables credentialed requests; an empty
+    value installs no CORS middleware at all.
+  \item[Error mapping] Handlers convert domain failures into HTTP status
+    codes: \texttt{400} for invalid input, \texttt{404} for unknown
+    identifiers, \texttt{401}/\texttt{403} for authorization failures, and
+    \texttt{500} only for an incoherent authorization configuration.
+\end{description}
+
+\input{generated/http-api}
+
+\chapter{Configuration}
+\label{ch:configuration}
+
+Configuration is a single Pydantic \texttt{BaseSettings} model,
+\texttt{feedback\_intelligence\_agent.config.Settings}. It is constructed once
+per process --- in \texttt{create\_app} for the API, and per command for the
+CLI.
+
+\section{Sources and precedence}
+
+Values are resolved by \texttt{pydantic-settings} in this order, highest
+precedence first:
+
+\begin{enumerate}[nosep]
+  \item explicit keyword arguments passed to \texttt{Settings(...)} (used by
+    tests and by CLI options that override a setting for one invocation);
+  \item process environment variables;
+  \item the \texttt{.env} file in the working directory;
+  \item the default declared on the field.
+\end{enumerate}
+
+Unknown environment variables are ignored rather than rejected
+(\texttt{extra="ignore"}).
+
+Most settings use the prefix \envvar{FEEDBACK\_AGENT\_} derived from the field
+name. Provider credentials deliberately do not: they declare a
+\texttt{validation\_alias} so they read the conventional vendor names
+(\envvar{OPENAI\_API\_KEY}, \envvar{ANTHROPIC\_API\_KEY},
+\envvar{AWS\_REGION}, \envvar{OLLAMA\_BASE\_URL}), which lets the process
+inherit credentials already present in a normal development or deployment
+environment. The generated table below shows the exact variable name for every
+field.
+
+\section{Validation}
+
+Bounds are enforced by the field declarations themselves rather than by
+imperative checks, so a misconfigured process fails at construction with a
+Pydantic error naming the offending variable. Examples visible in the table:
+the embedding dimension is constrained to $[64, 8192]$, retriever weights must
+be non-negative, timeouts must be strictly positive, and the SMTP port must lie
+in $[1, 65535]$.
+
+\input{generated/configuration}
+
+\input{reference/mathematics}

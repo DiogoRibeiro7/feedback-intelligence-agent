@@ -1,0 +1,115 @@
+% Authored: architecture of the documentation system itself.
+% validate-docs: allow-placeholder-words
+% (this chapter names the placeholder markers the validator searches for)
+
+\chapter{Documentation System}
+\label{ch:documentation-system}
+
+The manual you are reading is itself a build artifact of this repository. This
+chapter documents how it is produced, because a documentation system that
+cannot be regenerated on demand stops matching the code within weeks.
+
+\section{Architecture}
+
+\input{diagrams/engineering/documentation-pipeline}
+
+Extraction and rendering are separate layers and never mix. Extractors read
+source and configuration and emit JSON; renderers read that JSON and emit
+LaTeX. A renderer never parses Python and an extractor never emits markup,
+which means an incorrect signature is an extractor bug and a broken table is a
+renderer bug --- the two are independently testable, and both are tested.
+
+\begin{description}
+  \item[\srcfile{docs/tools/inspect\_repository.py}] Files, languages,
+    directory roles, dependencies, tool configuration, Make targets, CI
+    workflows, containers, deployments, tests, datasets, the environment
+    template, and quality gates $\rightarrow$
+    \srcfile{repository-inventory.json}.
+  \item[\srcfile{docs/tools/extract\_api.py}] Modules, classes, functions,
+    methods, attributes, constants, type aliases, CLI commands, HTTP routes,
+    and settings fields $\rightarrow$ \srcfile{api-index.json}.
+  \item[\srcfile{docs/tools/extract\_dependencies.py}] The internal import
+    graph with per-edge context, layer assignment, coupling metrics, and cycle
+    analysis $\rightarrow$ \srcfile{module-dependencies.json}.
+  \item[\srcfile{docs/tools/latex\_utils.py}] Pure rendering primitives:
+    escaping, labels, long tables, description lists, listings, index entries.
+  \item[\srcfile{docs/tools/render\_reference.py},
+    \srcfile{render\_architecture.py}, \srcfile{render\_engineering.py}]
+    Model $\rightarrow$ LaTeX fragments under
+    \srcfile{docs/latex/generated/}.
+  \item[\srcfile{docs/tools/generate\_docs.py}] Orchestration and the
+    manifest.
+  \item[\srcfile{docs/tools/validate\_docs.py}] The checks in
+    \cref{sec:doc-validation}.
+\end{description}
+
+\section{Safety properties}
+
+\begin{description}
+  \item[No application import.] Extraction uses \texttt{ast} only. Generating
+    documentation cannot open a network connection, contact an LLM provider,
+    load a model, build an index, or write outside the documentation tree. The
+    only subprocess invoked is \texttt{git}, for revision facts.
+  \item[Deterministic output.] Objects are emitted in fully-qualified-name
+    order; timestamps come from the HEAD commit date rather than the wall
+    clock. Two runs over one revision are byte-identical, which is what makes
+    the manifest digests meaningful.
+  \item[Total escaping.] Every string that reaches LaTeX passes through
+    \texttt{escape\_latex}, which handles the ten special characters plus
+    angle brackets and the vertical bar. Docstrings and source text cannot
+    break the build.
+  \item[Generated files are disposable.] \texttt{make docs} deletes and
+    rewrites everything under \srcfile{docs/latex/generated/}, so an object
+    removed from the source disappears from the manual rather than lingering.
+    Authored files are never touched.
+\end{description}
+
+\section{Validation}
+\label{sec:doc-validation}
+
+\texttt{make docs} runs the validator automatically. It checks:
+
+\begin{enumerate}[nosep]
+  \item every public class and function in the model has a rendered fragment;
+  \item every rendered signature matches the extracted signature;
+  \item every LaTeX label is unique across the whole tree;
+  \item every \texttt{\textbackslash cref} and \texttt{\textbackslash ref}
+    target is defined somewhere;
+  \item every \texttt{\textbackslash input} target exists on disk;
+  \item generated files contain no unescaped LaTeX special characters outside
+    verbatim contexts;
+  \item every required authored file exists;
+  \item no placeholder text (\texttt{TODO}, \texttt{FIXME}, \texttt{TBD},
+    \texttt{lorem ipsum}, \texttt{XXX}) remains;
+  \item no credential-shaped literal appears in any generated file;
+  \item the manifest digests match the files on disk, and the manifest revision
+    matches the current \texttt{HEAD}.
+\end{enumerate}
+
+Failures are reported per check with a count and a sample, and the exit status
+is non-zero, so the validator is usable as a CI gate.
+
+\section{Regeneration and CI}
+
+\begin{lstlisting}[language=bash]
+make docs        # regenerate and validate
+make docs-check  # validate only, no regeneration
+make docs-pdf    # regenerate, validate, then latexmk -pdf
+\end{lstlisting}
+
+The CI workflow gained a \texttt{documentation} job that runs
+\texttt{make docs} and then fails if regeneration changed any tracked file.
+That single check enforces the invariant that matters: the committed
+documentation corresponds to the committed source. It does not compile the PDF,
+because no LaTeX toolchain is installed in CI and the canonical deliverable is
+the LaTeX source.
+
+\section{Tests}
+
+\srcfile{tests/test\_docs\_tools.py} covers the documentation system with the
+same discipline as the rest of the repository: escaping of every special
+character, idempotence properties of the escaper, table rendering, label
+sanitisation, docstring section parsing, signature rendering including
+keyword-only markers and defaults, exception collection, CLI and endpoint
+extraction against the real source, cycle detection on synthetic graphs, and an
+end-to-end assertion that the extracted model covers the actual public surface.

@@ -1,0 +1,33 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{run\_ingestion\_job}}
+\label{func:feedback_intelligence_agent.jobs.run_ingestion_job}\index{Functions!run\_ingestion\_job}
+
+Execute one ingestion job and record its terminal status.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+run_ingestion_job(job_id: str, store: JobStore, *, embedding_dim: int, default_index_path: str | Path, telemetry: Telemetry | None = None) -> JobResult
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{job\_\allowbreak{}id}] \texttt{str}, required. Identifier of a job already created in \texttt{store}.
+  \item[\texttt{store}] \texttt{JobStore}, required. Job store holding the job; updated in place as the job runs.
+  \item[\texttt{embedding\_\allowbreak{}dim}] \texttt{int}, required, keyword-only. Dimension for the hashing embedding model.
+  \item[\texttt{default\_\allowbreak{}index\_\allowbreak{}path}] \texttt{str \textbar{} Path}, required, keyword-only. Index path used when the request omits one.
+  \item[\texttt{telemetry}] \texttt{Telemetry \textbar{} None}, default \texttt{None}, keyword-only. Optional telemetry emitter passed through to ingestion.
+\end{arglist}
+\apifield{Value}\texttt{JobResult}. The terminal \texttt{JobResult}.
+\apifield{Raises}
+\begin{arglist}
+  \item[\texttt{JobNotFoundError}] If \texttt{job\_\allowbreak{}id} is unknown to the store.
+\end{arglist}
+\apifield{Details}The pipeline mirrors the synchronous ingestion path: load + validate the CSV (reusing \texttt{load\_\allowbreak{}feedback\_\allowbreak{}csv} and the data contract), chunk the records, embed them, and persist the resulting JSON vector store. The job status transitions \texttt{pending} -\textgreater{} \texttt{running} -\textgreater{} \texttt{succeeded}/\texttt{failed}.
+
+On failure a clean, non-leaky message is stored on the job; the full exception is logged server-side via the package logger but never surfaced to the client (no secrets, stack traces, or filesystem internals leak).
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}jobs.\allowbreak{}py:215}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/jobs.py#L215}{online}), module \cref{module:feedback_intelligence_agent.jobs}

@@ -1,0 +1,24 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{Citation}}
+\label{class:feedback_intelligence_agent.schemas.Citation}\label{schema:Citation}\index{Classes!Citation}
+
+Evidence citation exposed to agent and API consumers.
+\apifield{Inherits}\texttt{BaseModel}
+\apifield{Fields}
+\begin{arglist}
+  \item[\texttt{citation\_\allowbreak{}id}] \texttt{int}, required, \texttt{ge=1}
+  \item[\texttt{document\_\allowbreak{}id}] \texttt{str}, required
+  \item[\texttt{chunk\_\allowbreak{}id}] \texttt{str}, required
+  \item[\texttt{source}] \texttt{str}, required
+  \item[\texttt{quote}] \texttt{str}, required
+  \item[\texttt{score}] \texttt{float}, required
+\end{arglist}
+\apifield{Details}\texttt{citation\_\allowbreak{}id} matches the bracketed markers (\texttt{[1]\allowbreak{}}, \texttt{[2]\allowbreak{}}) embedded in the generated answer text, so every claim can be traced back to the exact retrieved document and chunk that supports it.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}schemas.\allowbreak{}py:118}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/schemas.py#L118}{online}), pydantic model, module \cref{module:feedback_intelligence_agent.schemas}

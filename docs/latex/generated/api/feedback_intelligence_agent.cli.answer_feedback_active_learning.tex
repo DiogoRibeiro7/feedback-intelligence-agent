@@ -1,0 +1,26 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{answer\_feedback\_active\_learning}}
+\label{func:feedback_intelligence_agent.cli.answer_feedback_active_learning}\index{Functions!answer\_feedback\_active\_learning}
+
+Rank reviewed answers for active-learning follow-up.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+answer_feedback_active_learning(tenant_id: Annotated[str | None, typer.Option(help='Only queue feedback for this tenant id.')] = None, max_items: Annotated[int, typer.Option(help='Maximum queue items to return.')] = 20, low_confidence_threshold: Annotated[float, typer.Option(help='Queue useful answers at or below this confidence.')] = 0.65, store_path: Annotated[Path, typer.Option(help='Directory holding answer feedback JSON files.')] = Path('.artifacts/human_feedback'), state_store_path: Annotated[Path, typer.Option(help='Directory holding active-learning state JSON files.')] = Path('.artifacts/active_learning')) -> None
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{tenant\_\allowbreak{}id}] \texttt{Annotated[str \textbar{} None,\allowbreak{} typer.\allowbreak{}Option(help='Only queue feedback for this tenant id.\allowbreak{}')\allowbreak{}]\allowbreak{}}, default \texttt{None}.
+  \item[\texttt{max\_\allowbreak{}items}] \texttt{Annotated[int,\allowbreak{} typer.\allowbreak{}Option(help='Maximum queue items to return.\allowbreak{}')\allowbreak{}]\allowbreak{}}, default \texttt{20}.
+  \item[\texttt{low\_\allowbreak{}confidence\_\allowbreak{}threshold}] \texttt{Annotated[float,\allowbreak{} typer.\allowbreak{}Option(help='Queue useful answers at or below this confidence.\allowbreak{}')\allowbreak{}]\allowbreak{}}, default \texttt{0.\allowbreak{}65}.
+  \item[\texttt{store\_\allowbreak{}path}] \texttt{Annotated[Path,\allowbreak{} typer.\allowbreak{}Option(help='Directory holding answer feedback JSON files.\allowbreak{}')\allowbreak{}]\allowbreak{}}, default \texttt{Path('.\allowbreak{}artifacts/\allowbreak{}human\_\allowbreak{}feedback')\allowbreak{}}.
+  \item[\texttt{state\_\allowbreak{}store\_\allowbreak{}path}] \texttt{Annotated[Path,\allowbreak{} typer.\allowbreak{}Option(help='Directory holding active-\allowbreak{}learning state JSON files.\allowbreak{}')\allowbreak{}]\allowbreak{}}, default \texttt{Path('.\allowbreak{}artifacts/\allowbreak{}active\_\allowbreak{}learning')\allowbreak{}}.
+\end{arglist}
+\apifield{Raises}\texttt{Exit}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}cli.\allowbreak{}py:758}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/cli.py#L758}{online}), module \cref{module:feedback_intelligence_agent.cli}

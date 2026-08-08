@@ -1,0 +1,104 @@
+% Authored: system context.
+
+\chapter{System Context}
+\label{ch:system-context}
+
+\section{Actors and external systems}
+
+The system has four classes of caller and five classes of external dependency.
+Every external dependency is optional: the system runs, is tested, and is
+demonstrated with all of them absent.
+
+\begin{description}[nosep]
+  \item[Library consumer] Imports \texttt{FeedbackInsightAgent} and
+    \texttt{Settings} from the package root.
+  \item[Operator / analyst] Runs the \texttt{feedback-agent} console script.
+  \item[HTTP client] Calls the FastAPI service; the repository ships a
+    TypeScript/Vite browser client under \srcfile{frontend/} that consumes
+    \texttt{/query}, \texttt{/query/stream}, and \texttt{/chat}.
+  \item[CI runner] Executes the same commands as the operator, with the
+    deterministic defaults.
+\end{description}
+
+\input{diagrams/architecture/system-context}
+
+\section{Entry points}
+
+\begin{description}
+  \item[Python API] \texttt{feedback\_intelligence\_agent.\_\_init\_\_}
+    re-exports \cref{class:feedback_intelligence_agent.agent.FeedbackInsightAgent}
+    and \cref{class:feedback_intelligence_agent.config.Settings}. Construction
+    of a fully wired agent goes through
+    \cref{func:feedback_intelligence_agent.factory.build_agent}.
+  \item[CLI] \srcfile{src/feedback\_intelligence\_agent/cli.py} defines a Typer
+    application registered as the console script \texttt{feedback-agent} in
+    \srcfile{pyproject.toml}. See \cref{ch:cli}.
+  \item[HTTP API] \cref{func:feedback_intelligence_agent.api.create_app} builds
+    the FastAPI application; Uvicorn is pointed at the factory. See
+    \cref{ch:http}.
+\end{description}
+
+\section{External systems and how they are reached}
+
+Each external system is reached through exactly one adapter module, and each is
+guarded by an optional dependency or a configuration switch. The table below
+states, for each, what turns it on and what happens when it is off.
+
+\begin{longtable}{p{0.17\textwidth} p{0.20\textwidth} p{0.28\textwidth} p{0.27\textwidth}}
+\toprule
+External system & Adapter & Activated by & Behaviour when absent \\
+\midrule
+\endfirsthead
+\toprule
+External system & Adapter & Activated by & Behaviour when absent \\
+\midrule
+\endhead
+\bottomrule
+\endlastfoot
+OpenAI (Chat Completions or Responses) & \texttt{llm.OpenAIChatLLM},
+  \texttt{llm.OpenAIResponsesLLM} &
+  \envvar{FEEDBACK\_AGENT\_LLM\_PROVIDER} plus \envvar{OPENAI\_API\_KEY} &
+  Deterministic local provider is used; missing key raises at construction. \\
+Anthropic & \texttt{llm.AnthropicLLM} &
+  Provider setting plus \envvar{ANTHROPIC\_API\_KEY}; \texttt{anthropic} extra &
+  SDK imported lazily; never required by the default install. \\
+AWS Bedrock & \texttt{llm.BedrockConverseLLM} &
+  Provider setting; \texttt{bedrock} extra; AWS credential chain &
+  boto3 imported lazily. \\
+Ollama & \texttt{llm.OllamaLLM} &
+  Provider setting plus \envvar{OLLAMA\_BASE\_URL} &
+  Plain HTTP; no extra required. \\
+Qdrant & \texttt{qdrant\_store.QdrantVectorStore} &
+  \envvar{FEEDBACK\_AGENT\_VECTOR\_STORE}\texttt{=qdrant}; \texttt{qdrant} extra &
+  JSON vector store on the local filesystem. \\
+Kafka / Kinesis & \texttt{streaming\_ingestion} &
+  Explicit stream selection; \texttt{streaming} extra &
+  JSONL and in-memory streams cover the same protocol. \\
+OpenTelemetry collector & \texttt{telemetry.OpenTelemetryTraceSink} &
+  Telemetry enabled with backend \texttt{opentelemetry}; \texttt{otel} extra &
+  JSONL sink, or a no-op emitter when telemetry is disabled. \\
+MLflow tracking server & \texttt{experiments} &
+  \texttt{tracking\_provider} in the experiment config; \texttt{mlflow} extra &
+  Experiment results are written to the local artifact directory only. \\
+SMTP server & \texttt{email\_summaries} &
+  \envvar{FEEDBACK\_AGENT\_EMAIL\_SMTP\_HOST} and \texttt{send=true} &
+  The digest is rendered and returned without being sent. \\
+\end{longtable}
+
+\section{Trust boundaries}
+
+Three boundaries matter for the architecture:
+
+\begin{enumerate}
+  \item \textbf{Untrusted question text} enters at every entry point and is
+    checked by the deterministic input guardrail before retrieval
+    (\cref{sec:runtime-stages}).
+  \item \textbf{Untrusted retrieved content} --- feedback text is user-authored
+    and reaches the prompt --- is checked by a second, separate context
+    guardrail, which drops injection-shaped chunks after retrieval and before
+    generation. Treating retrieved evidence as untrusted input is the
+    structural reason the guardrail is split into two gates rather than one.
+  \item \textbf{Credentials} never enter the domain layer. They are read into
+    \texttt{Settings} and consumed only by the infrastructure adapters that
+    need them.
+\end{enumerate}

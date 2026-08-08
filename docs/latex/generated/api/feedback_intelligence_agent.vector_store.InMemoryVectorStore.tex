@@ -1,0 +1,127 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{InMemoryVectorStore}}
+\label{class:feedback_intelligence_agent.vector_store.InMemoryVectorStore}\index{Classes!InMemoryVectorStore}
+
+Cosine-similarity vector store.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+InMemoryVectorStore(self, dim: int) -> None
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{dim}] \texttt{int}, required.
+\end{arglist}
+\apifield{Raises}\texttt{ValueError}
+\apifield{Properties}
+\begin{arglist}
+  \item[\texttt{size}] Number of indexed chunks.
+  \item[\texttt{chunks}] Return indexed chunks.
+\end{arglist}
+\apifield{Details}Vectors are assumed to be L2-normalised. The embedding model in this project returns normalised vectors, so search can use a simple dot product.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}vector\_\allowbreak{}store.\allowbreak{}py:53}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/vector_store.py#L53}{online}), class, module \cref{module:feedback_intelligence_agent.vector_store}
+
+\subsection{\texttt{add}}
+\label{method:feedback_intelligence_agent.vector_store.InMemoryVectorStore.add}\index{Methods!add}
+Add chunks and their vectors to the store.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+add(self, chunks: list[DocumentChunk], vectors: npt.NDArray[np.float64]) -> None
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{chunks}] \texttt{list[DocumentChunk]\allowbreak{}}, required.
+  \item[\texttt{vectors}] \texttt{npt.\allowbreak{}NDArray[np.\allowbreak{}float64]\allowbreak{}}, required.
+\end{arglist}
+\apifield{Raises}\texttt{ValueError}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}vector\_\allowbreak{}store.\allowbreak{}py:77}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/vector_store.py#L77}{online})
+
+\subsection{\texttt{remove\_source\_ids}}
+\label{method:feedback_intelligence_agent.vector_store.InMemoryVectorStore.remove_source_ids}\index{Methods!remove\_source\_ids}
+Remove all chunks whose source document ID is in \texttt{source\_\allowbreak{}ids}.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+remove_source_ids(self, source_ids: set[str]) -> int
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{source\_\allowbreak{}ids}] \texttt{set[str]\allowbreak{}}, required.
+\end{arglist}
+\apifield{Value}\texttt{int}
+\apifield{Details}Returns the number of chunks removed. This supports incremental updates: a refreshed feedback record can replace every old chunk for the same \texttt{feedback\_\allowbreak{}id} before the new chunks are appended.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}vector\_\allowbreak{}store.\allowbreak{}py:91}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/vector_store.py#L91}{online})
+
+\subsection{\texttt{upsert\_sources}}
+\label{method:feedback_intelligence_agent.vector_store.InMemoryVectorStore.upsert_sources}\index{Methods!upsert\_sources}
+Replace existing source documents and append the new chunks.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+upsert_sources(self, chunks: list[DocumentChunk], vectors: npt.NDArray[np.float64]) -> int
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{chunks}] \texttt{list[DocumentChunk]\allowbreak{}}, required.
+  \item[\texttt{vectors}] \texttt{npt.\allowbreak{}NDArray[np.\allowbreak{}float64]\allowbreak{}}, required.
+\end{arglist}
+\apifield{Value}\texttt{int}. Number of chunks removed before adding the new chunks.
+\apifield{Details}The replacement key is \texttt{DocumentChunk.\allowbreak{}source\_\allowbreak{}id}. All old chunks for any incoming source are removed first, which handles changed text that produces a different number of chunks.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}vector\_\allowbreak{}store.\allowbreak{}py:110}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/vector_store.py#L110}{online})
+
+\subsection{\texttt{search}}
+\label{method:feedback_intelligence_agent.vector_store.InMemoryVectorStore.search}\index{Methods!search}
+Return the most similar chunks for a query vector.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+search(self, query_vector: npt.NDArray[np.float64], *, top_k: int = 4) -> list[SearchResult]
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{query\_\allowbreak{}vector}] \texttt{npt.\allowbreak{}NDArray[np.\allowbreak{}float64]\allowbreak{}}, required.
+  \item[\texttt{top\_\allowbreak{}k}] \texttt{int}, default \texttt{4}, keyword-only.
+\end{arglist}
+\apifield{Value}\texttt{list[SearchResult]\allowbreak{}}
+\apifield{Raises}\texttt{ValueError}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}vector\_\allowbreak{}store.\allowbreak{}py:128}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/vector_store.py#L128}{online})
+
+\subsection{\texttt{save}}
+\label{method:feedback_intelligence_agent.vector_store.InMemoryVectorStore.save}\index{Methods!save}
+Persist the vector store as JSON.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+save(self, path: str | Path) -> None
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{path}] \texttt{str \textbar{} Path}, required.
+\end{arglist}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}vector\_\allowbreak{}store.\allowbreak{}py:153}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/vector_store.py#L153}{online})
+
+\subsection{\texttt{load}}
+\label{method:feedback_intelligence_agent.vector_store.InMemoryVectorStore.load}\index{Methods!load}
+Load a vector store from JSON.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+load(cls, path: str | Path) -> InMemoryVectorStore
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{path}] \texttt{str \textbar{} Path}, required.
+\end{arglist}
+\apifield{Value}\texttt{InMemoryVectorStore}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}vector\_\allowbreak{}store.\allowbreak{}py:165}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/vector_store.py#L165}{online})
+
+\subsection{\texttt{to\_json}}
+\label{method:feedback_intelligence_agent.vector_store.InMemoryVectorStore.to_json}\index{Methods!to\_json}
+Return a compact JSON representation for debugging.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+to_json(self) -> str
+\end{lstlisting}
+\apifield{Value}\texttt{str}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}vector\_\allowbreak{}store.\allowbreak{}py:175}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/vector_store.py#L175}{online})

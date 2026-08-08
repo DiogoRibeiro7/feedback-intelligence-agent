@@ -1,0 +1,53 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{MetadataFilters}}
+\label{class:feedback_intelligence_agent.schemas.MetadataFilters}\label{schema:MetadataFilters}\index{Classes!MetadataFilters}
+
+Optional filters applied to chunk metadata before final ranking.
+\apifield{Inherits}\texttt{BaseModel}
+\apifield{Fields}
+\begin{arglist}
+  \item[\texttt{tenant\_\allowbreak{}id}] \texttt{str \textbar{} None}, default \texttt{None}, \texttt{min\_\allowbreak{}length=1}
+  \item[\texttt{customer\_\allowbreak{}segment}] \texttt{str \textbar{} None}, default \texttt{None}, \texttt{min\_\allowbreak{}length=1}
+  \item[\texttt{channel}] \texttt{FeedbackChannel \textbar{} None}, default \texttt{None}
+  \item[\texttt{min\_\allowbreak{}rating}] \texttt{int \textbar{} None}, default \texttt{None}, \texttt{ge=1,\allowbreak{} le=5}
+  \item[\texttt{max\_\allowbreak{}rating}] \texttt{int \textbar{} None}, default \texttt{None}, \texttt{ge=1,\allowbreak{} le=5}
+  \item[\texttt{created\_\allowbreak{}after}] \texttt{datetime \textbar{} None}, default \texttt{None}
+  \item[\texttt{created\_\allowbreak{}before}] \texttt{datetime \textbar{} None}, default \texttt{None}
+\end{arglist}
+\apifield{Properties}
+\begin{arglist}
+  \item[\texttt{is\_\allowbreak{}empty}] Return True when no filter field was provided.
+\end{arglist}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}schemas.\allowbreak{}py:66}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/schemas.py#L66}{online}), pydantic model, module \cref{module:feedback_intelligence_agent.schemas}
+
+\subsection{\texttt{normalise\_tenant\_id}}
+\label{method:feedback_intelligence_agent.schemas.MetadataFilters.normalise_tenant_id}\index{Methods!normalise\_tenant\_id}
+Normalize tenant identifiers for deterministic filtering.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+normalise_tenant_id(cls, value: str | None) -> str | None
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{value}] \texttt{str \textbar{} None}, required.
+\end{arglist}
+\apifield{Value}\texttt{str \textbar{} None}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}schemas.\allowbreak{}py:79}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/schemas.py#L79}{online})
+
+\subsection{\texttt{validate\_ranges}}
+\label{method:feedback_intelligence_agent.schemas.MetadataFilters.validate_ranges}\index{Methods!validate\_ranges}
+Reject impossible numeric and date ranges.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+validate_ranges(self) -> MetadataFilters
+\end{lstlisting}
+\apifield{Value}\texttt{MetadataFilters}
+\apifield{Raises}\texttt{ValueError}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}schemas.\allowbreak{}py:86}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/schemas.py#L86}{online})

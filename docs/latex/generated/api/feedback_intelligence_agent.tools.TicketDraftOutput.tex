@@ -1,0 +1,32 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{TicketDraftOutput}}
+\label{class:feedback_intelligence_agent.tools.TicketDraftOutput}\label{schema:TicketDraftOutput}\index{Classes!TicketDraftOutput}
+
+A drafted support ticket grounded in retrieved feedback.
+\apifield{Inherits}\texttt{ToolOutput}
+\apifield{Fields}
+\begin{arglist}
+  \item[\texttt{title}] \texttt{str}, required
+  \item[\texttt{body}] \texttt{str}, required
+  \item[\texttt{priority}] \texttt{Literal['low',\allowbreak{} 'medium',\allowbreak{} 'high']\allowbreak{}}, required
+  \item[\texttt{references}] \texttt{list[str]\allowbreak{}}, required
+  \item[\texttt{tags}] \texttt{list[str]\allowbreak{}}, required
+\end{arglist}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}tools.\allowbreak{}py:318}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/tools.py#L318}{online}), pydantic model, module \cref{module:feedback_intelligence_agent.tools}
+
+\subsection{\texttt{render}}
+\label{method:feedback_intelligence_agent.tools.TicketDraftOutput.render}\index{Methods!render}
+Summarise the drafted ticket in one sentence.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+render(self) -> str
+\end{lstlisting}
+\apifield{Value}\texttt{str}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}tools.\allowbreak{}py:327}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/tools.py#L327}{online})

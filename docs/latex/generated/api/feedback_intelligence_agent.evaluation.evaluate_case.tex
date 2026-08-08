@@ -1,0 +1,25 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{evaluate\_case}}
+\label{func:feedback_intelligence_agent.evaluation.evaluate_case}\index{Functions!evaluate\_case}
+
+Run one evaluation case through retrieval and the agent.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+evaluate_case(query_engine: Retriever, agent: FeedbackInsightAgent, case: EvaluationCase, *, top_k: int = 4) -> CaseResult
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{query\_\allowbreak{}engine}] \texttt{Retriever}, required.
+  \item[\texttt{agent}] \texttt{FeedbackInsightAgent}, required.
+  \item[\texttt{case}] \texttt{EvaluationCase}, required.
+  \item[\texttt{top\_\allowbreak{}k}] \texttt{int}, default \texttt{4}, keyword-only.
+\end{arglist}
+\apifield{Value}\texttt{CaseResult}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}evaluation.\allowbreak{}py:301}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/evaluation.py#L301}{online}), module \cref{module:feedback_intelligence_agent.evaluation}

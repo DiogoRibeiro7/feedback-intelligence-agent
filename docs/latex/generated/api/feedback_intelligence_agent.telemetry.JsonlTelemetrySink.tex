@@ -1,0 +1,34 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{JsonlTelemetrySink}}
+\label{class:feedback_intelligence_agent.telemetry.JsonlTelemetrySink}\index{Classes!JsonlTelemetrySink}
+
+Sink that appends one JSON object per line to a local JSONL file.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+JsonlTelemetrySink(self, path: str | Path) -> None
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{path}] \texttt{str \textbar{} Path}, required.
+\end{arglist}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}telemetry.\allowbreak{}py:136}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/telemetry.py#L136}{online}), class, module \cref{module:feedback_intelligence_agent.telemetry}
+
+\subsection{\texttt{emit}}
+\label{method:feedback_intelligence_agent.telemetry.JsonlTelemetrySink.emit}\index{Methods!emit}
+Append the event as a single JSON line.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+emit(self, event: TelemetryEvent) -> None
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{event}] \texttt{TelemetryEvent}, required.
+\end{arglist}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}telemetry.\allowbreak{}py:144}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/telemetry.py#L144}{online})

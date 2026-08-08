@@ -1,0 +1,37 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{LLMQueryRewriter}}
+\label{class:feedback_intelligence_agent.memory.LLMQueryRewriter}\index{Classes!LLMQueryRewriter}
+
+Optional rewriter that delegates follow-up rewriting to an LLM provider.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+LLMQueryRewriter(self, llm: LLMProvider) -> None
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{llm}] \texttt{LLMProvider}, required.
+\end{arglist}
+\apifield{Details}Intended for real LLM providers (e.g. the OpenAI provider); the deterministic local provider is not suitable here because it answers from retrieval results. The deterministic rewriter remains the project default.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}memory.\allowbreak{}py:311}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/memory.py#L311}{online}), class, module \cref{module:feedback_intelligence_agent.memory}
+
+\subsection{\texttt{rewrite}}
+\label{method:feedback_intelligence_agent.memory.LLMQueryRewriter.rewrite}\index{Methods!rewrite}
+Ask the LLM to produce a standalone version of a follow-up question.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+rewrite(self, question: str, previous_turn: ConversationTurn | None) -> QueryRewrite
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{question}] \texttt{str}, required.
+  \item[\texttt{previous\_\allowbreak{}turn}] \texttt{ConversationTurn \textbar{} None}, required.
+\end{arglist}
+\apifield{Value}\texttt{QueryRewrite}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}memory.\allowbreak{}py:323}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/memory.py#L323}{online})

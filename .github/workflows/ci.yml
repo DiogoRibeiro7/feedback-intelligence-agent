@@ -56,3 +56,49 @@ jobs:
 
       - name: Build package
         run: poetry build
+
+  documentation:
+    name: Documentation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Poetry
+        run: pipx install poetry==2.2.1
+
+      # The documentation toolchain reads pyproject.toml with tomllib, which
+      # needs Python 3.11+; the package itself still supports 3.10.
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: poetry
+
+      - name: Install dependencies
+        run: poetry install --with dev
+
+      - name: Type check documentation toolchain
+        run: poetry run mypy --python-version 3.11 docs/tools
+
+      - name: Test documentation toolchain
+        run: poetry run pytest tests/test_docs_tools.py
+
+      # Regenerate as of the revision the committed documentation records,
+      # not HEAD. Documentation committed with a change necessarily records
+      # its parent -- a commit cannot contain its own hash -- so regenerating
+      # at HEAD would always differ. Pinning the revision makes any remaining
+      # difference genuine content drift.
+      - name: Regenerate and validate documentation
+        run: |
+          revision=$(python -c "import json;print(json.load(open('docs/metadata/documentation-manifest.json'))['revision'])")
+          echo "Regenerating as of the documented revision ${revision}"
+          make docs REVISION="${revision}"
+
+      - name: Fail if regeneration changed tracked files
+        run: |
+          if ! git diff --quiet -- docs/; then
+            echo "Generated documentation is out of date. Run 'make docs' and commit the result."
+            git diff --stat -- docs/
+            exit 1
+          fi

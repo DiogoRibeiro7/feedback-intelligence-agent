@@ -1,0 +1,25 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{build\_active\_learning\_queue}}
+\label{func:feedback_intelligence_agent.human_feedback.build_active_learning_queue}\index{Functions!build\_active\_learning\_queue}
+
+Rank reviewed answers for prompt, retrieval, or data improvement work.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+build_active_learning_queue(summaries: Iterable[HumanFeedbackSummary], *, max_items: int = 20, low_confidence_threshold: float = 0.65) -> ActiveLearningQueue
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{summaries}] \texttt{Iterable[HumanFeedbackSummary]\allowbreak{}}, required.
+  \item[\texttt{max\_\allowbreak{}items}] \texttt{int}, default \texttt{20}, keyword-only.
+  \item[\texttt{low\_\allowbreak{}confidence\_\allowbreak{}threshold}] \texttt{float}, default \texttt{0.\allowbreak{}65}, keyword-only.
+\end{arglist}
+\apifield{Value}\texttt{ActiveLearningQueue}
+\apifield{Raises}\texttt{ValueError}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}human\_\allowbreak{}feedback.\allowbreak{}py:297}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/human_feedback.py#L297}{online}), module \cref{module:feedback_intelligence_agent.human_feedback}

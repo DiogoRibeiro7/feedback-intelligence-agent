@@ -1,0 +1,53 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{FeedbackRecord}}
+\label{class:feedback_intelligence_agent.schemas.FeedbackRecord}\label{schema:FeedbackRecord}\index{Classes!FeedbackRecord}
+
+Single raw customer feedback record.
+\apifield{Inherits}\texttt{BaseModel}
+\apifield{Fields}
+\begin{arglist}
+  \item[\texttt{model\_\allowbreak{}config}] default \texttt{ConfigDict(str\_\allowbreak{}strip\_\allowbreak{}whitespace=True)\allowbreak{}}
+  \item[\texttt{tenant\_\allowbreak{}id}] \texttt{str}, default \texttt{'default'}, \texttt{min\_\allowbreak{}length=1}
+  \item[\texttt{feedback\_\allowbreak{}id}] \texttt{str}, required, \texttt{min\_\allowbreak{}length=1}
+  \item[\texttt{customer\_\allowbreak{}segment}] \texttt{str}, required, \texttt{min\_\allowbreak{}length=1}
+  \item[\texttt{channel}] \texttt{FeedbackChannel}, required
+  \item[\texttt{rating}] \texttt{int}, required, \texttt{ge=1,\allowbreak{} le=5}
+  \item[\texttt{text}] \texttt{str}, required, \texttt{min\_\allowbreak{}length=3}
+  \item[\texttt{created\_\allowbreak{}at}] \texttt{datetime}, required
+\end{arglist}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}schemas.\allowbreak{}py:24}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/schemas.py#L24}{online}), pydantic model, module \cref{module:feedback_intelligence_agent.schemas}
+
+\subsection{\texttt{normalise\_text}}
+\label{method:feedback_intelligence_agent.schemas.FeedbackRecord.normalise_text}\index{Methods!normalise\_text}
+Collapse repeated whitespace in feedback text.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+normalise_text(cls, value: str) -> str
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{value}] \texttt{str}, required.
+\end{arglist}
+\apifield{Value}\texttt{str}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}schemas.\allowbreak{}py:39}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/schemas.py#L39}{online})
+
+\subsection{\texttt{normalise\_tenant\_id}}
+\label{method:feedback_intelligence_agent.schemas.FeedbackRecord.normalise_tenant_id}\index{Methods!normalise\_tenant\_id}
+Normalize tenant identifiers for deterministic filtering.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+normalise_tenant_id(cls, value: str) -> str
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{value}] \texttt{str}, required.
+\end{arglist}
+\apifield{Value}\texttt{str}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}schemas.\allowbreak{}py:45}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/schemas.py#L45}{online})

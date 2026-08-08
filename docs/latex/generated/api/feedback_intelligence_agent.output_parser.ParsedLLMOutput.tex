@@ -1,0 +1,21 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{ParsedLLMOutput}}
+\label{class:feedback_intelligence_agent.output_parser.ParsedLLMOutput}\label{schema:ParsedLLMOutput}\index{Classes!ParsedLLMOutput}
+
+Parsed answer plus diagnostics about validation and repair.
+\apifield{Inherits}\texttt{BaseModel}
+\apifield{Fields}
+\begin{arglist}
+  \item[\texttt{payload}] \texttt{GeneratedAnswerPayload}, required
+  \item[\texttt{output\_\allowbreak{}format}] \texttt{OutputFormat}, required
+  \item[\texttt{repair\_\allowbreak{}applied}] \texttt{bool}, default \texttt{False}
+  \item[\texttt{validation\_\allowbreak{}error}] \texttt{str \textbar{} None}, default \texttt{None}
+\end{arglist}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}output\_\allowbreak{}parser.\allowbreak{}py:56}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/output_parser.py#L56}{online}), pydantic model, module \cref{module:feedback_intelligence_agent.output_parser}

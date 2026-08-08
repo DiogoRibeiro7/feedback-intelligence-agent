@@ -1,0 +1,88 @@
+% Authored: testing architecture, with the generated inventory.
+
+\chapter{Testing Architecture}
+\label{ch:testing}
+
+\section{Shape of the suite}
+
+The suite is a single pytest run over \srcfile{tests/}, with no markers, no
+split by speed, and no external service. Test modules mirror package modules
+one-for-one, which is what makes the traceability table in
+\cref{app:traceability} derivable rather than hand-maintained.
+
+Categories are not declared by markers; they are distinguishable by what a
+module exercises. The generated inventory below assigns each module a category
+on that basis.
+
+\begin{description}
+  \item[Unit] The majority. A module is exercised directly with explicit
+    collaborators --- never through the factory --- so a failure localises to
+    one module.
+  \item[Integration (HTTP)] \srcfile{tests/test\_api.py} and two others drive
+    the real application through Starlette's \texttt{TestClient}: routing,
+    validation, authorization, rate limiting, streaming, and background jobs
+    against the real handlers.
+  \item[Integration (CLI)] \srcfile{tests/test\_cli.py} invokes commands
+    through Typer's runner, covering argument parsing, exit behaviour, and
+    output rendering.
+  \item[Data validation] \srcfile{tests/test\_data\_contracts.py} covers the
+    contract: missing columns, empty text, invalid ratings, unparseable
+    timestamps, duplicate identifiers within a tenant, unknown sentiment
+    values, and strict versus non-strict behaviour.
+  \item[Numerical] \srcfile{tests/test\_evaluation.py},
+    \srcfile{test\_hallucination.py}, \srcfile{test\_lexical\_and\_hybrid.py},
+    \srcfile{test\_embeddings\_and\_store.py}, and
+    \srcfile{test\_synthetic\_data.py} assert on computed values, using
+    \texttt{pytest.approx} where floating-point comparison requires a
+    tolerance.
+  \item[Regression] \srcfile{tests/test\_retrieval\_regressions.py} pins
+    retrieval behaviour, and \srcfile{test\_metadata\_filters.py} pins filter
+    semantics field by field.
+  \item[Snapshot] \srcfile{tests/test\_prompt\_snapshot.py} pins the exact
+    bytes of the rendered RAG prompt against
+    \srcfile{tests/snapshots/}, normalising line endings so git EOL
+    configuration cannot cause a false failure. The module states the intended
+    workflow: an intentional prompt change must register a new prompt version
+    and refresh the snapshot deliberately.
+  \item[Performance] \srcfile{tests/test\_benchmarking.py} tests the benchmark
+    harness --- the percentile function, the summary statistics, the report
+    rendering --- rather than asserting a latency budget. There is no
+    performance gate in the repository.
+\end{description}
+
+\section{What makes the suite deterministic}
+
+Four properties, each traceable to a design decision:
+
+\begin{enumerate}[nosep]
+  \item The default LLM provider is deterministic, so answer text is a pure
+    function of the evidence and the prompt (\cref{adr:001}).
+  \item Embeddings are hash-derived, so vectors are stable across runs and
+    machines.
+  \item Synthetic data generation uses a locally seeded
+    \texttt{random.Random}, never the global or NumPy generator, so the same
+    seed yields byte-identical output.
+  \item Filesystem state is confined to pytest's \texttt{tmp\_path} fixture,
+    used by the great majority of test modules, so tests never depend on the
+    developer's \srcfile{.artifacts/} directory or on each other's leftovers.
+\end{enumerate}
+
+Optional integrations are covered with injected fakes: a stub Anthropic client,
+a stub Bedrock client, a fake Qdrant client, and in-memory streams. This means
+the adapter logic is tested without the SDK, and it also means an upstream SDK
+change would not be caught by any gate --- see \cref{ch:improvements}.
+
+\section{Coverage}
+
+Coverage is measured with \texttt{pytest-cov} over the
+\texttt{feedback\_intelligence\_agent} package and enforced with
+\texttt{-{}-cov-fail-under=63} in the Makefile, in CI, and in the two
+contributor instruction files. The Makefile records the threshold once, in the
+\texttt{COVERAGE\_THRESHOLD} variable.
+
+The threshold is a floor, not a target: the repository provides no rationale
+for the specific value.
+
+\noevidence
+
+\input{generated/engineering/testing}

@@ -1,0 +1,61 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\begin{longtable}{>{\raggedright\arraybackslash\small}p{0.24\textwidth} >{\raggedright\arraybackslash\small}p{0.16\textwidth} >{\raggedright\arraybackslash\small}p{0.52\textwidth}}
+\caption{Public module-level constants.}\label{tab:constants}\\
+\toprule
+Constant & Module & Value \\
+\midrule
+\endfirsthead
+\toprule
+Constant & Module & Value \\
+\midrule
+\endhead
+\midrule
+\multicolumn{3}{r}{\footnotesize continued on next page}\\
+\endfoot
+\bottomrule
+\endlastfoot
+\texttt{ROUTE\_\allowbreak{}RULES} & \texttt{agent} & \texttt{(RouteRule('onboarding',\allowbreak{} ('onboarding',\allowbreak{} 'setup',\allowbreak{} 'implementation',\allowbreak{} 'checklist')\allowbreak{})\allowbreak{},\allowbreak{} RouteRule('product\_\allowbreak{}feedback',\allowbreak{} ('feature',\allowbreak{} 'integration',\allowbreak{} 'dashboard',\allowbreak{} 'expo.\allowbreak{}.\allowbreak{}.\allowbreak{}} \\
+\texttt{PHASE\_\allowbreak{}AGENT\_\allowbreak{}RESPONSE} & \texttt{benchmarking} & \texttt{'agent\_\allowbreak{}response'} \\
+\texttt{PHASE\_\allowbreak{}EMBEDDING} & \texttt{benchmarking} & \texttt{'embedding'} \\
+\texttt{PHASE\_\allowbreak{}INDEXING} & \texttt{benchmarking} & \texttt{'indexing'} \\
+\texttt{PHASE\_\allowbreak{}RETRIEVAL} & \texttt{benchmarking} & \texttt{'retrieval'} \\
+\texttt{RESULTS\_\allowbreak{}JSON\_\allowbreak{}FILENAME} & \texttt{benchmarking} & \texttt{'benchmark\_\allowbreak{}results.\allowbreak{}json'} \\
+\texttt{RESULTS\_\allowbreak{}MARKDOWN\_\allowbreak{}FILENAME} & \texttt{benchmarking} & \texttt{'benchmark\_\allowbreak{}results.\allowbreak{}md'} \\
+\texttt{KNOWN\_\allowbreak{}SENTIMENTS} & \texttt{data\_\allowbreak{}contracts} & \texttt{frozenset(\{'positive',\allowbreak{} 'negative',\allowbreak{} 'neutral',\allowbreak{} 'mixed'\})\allowbreak{}} \\
+\texttt{OPTIONAL\_\allowbreak{}COLUMNS} & \texttt{data\_\allowbreak{}contracts} & \texttt{('tenant\_\allowbreak{}id',\allowbreak{} 'sentiment',\allowbreak{} 'label')\allowbreak{}} \\
+\texttt{REQUIRED\_\allowbreak{}COLUMNS} & \texttt{data\_\allowbreak{}contracts} & \texttt{('feedback\_\allowbreak{}id',\allowbreak{} 'customer\_\allowbreak{}segment',\allowbreak{} 'channel',\allowbreak{} 'rating',\allowbreak{} 'text',\allowbreak{} 'created\_\allowbreak{}at')\allowbreak{}} \\
+\texttt{TOKEN\_\allowbreak{}PATTERN} & \texttt{embeddings} & \texttt{re.\allowbreak{}compile('[a-\allowbreak{}zA-\allowbreak{}Z0-\allowbreak{}9\_\allowbreak{}]\allowbreak{}+')\allowbreak{}} \\
+\texttt{REFUSAL\_\allowbreak{}MARKERS} & \texttt{evaluation} & \texttt{('could not find enough evidence',\allowbreak{} 'cannot answer',\allowbreak{} "can't answer",\allowbreak{} 'not enough evidence',\allowbreak{} 'no relevant evidence',\allowbreak{} 'unable to answer')\allowbreak{}} \\
+\texttt{METADATA\_\allowbreak{}FILENAME} & \texttt{experiments} & \texttt{'run\_\allowbreak{}metadata.\allowbreak{}json'} \\
+\texttt{METRICS\_\allowbreak{}FILENAME} & \texttt{experiments} & \texttt{'metrics.\allowbreak{}json'} \\
+\texttt{RESULTS\_\allowbreak{}FILENAME} & \texttt{experiments} & \texttt{'results.\allowbreak{}json'} \\
+\texttt{INPUT\_\allowbreak{}RULES} & \texttt{guardrails} & \texttt{(\_\allowbreak{}PROMPT\_\allowbreak{}INJECTION,\allowbreak{} \_\allowbreak{}SYSTEM\_\allowbreak{}PROMPT\_\allowbreak{}DISCLOSURE,\allowbreak{} \_\allowbreak{}CONTEXT\_\allowbreak{}OVERRIDE,\allowbreak{} \_\allowbreak{}DATA\_\allowbreak{}ACCESS)\allowbreak{}} \\
+\texttt{SAFE\_\allowbreak{}REFUSAL} & \texttt{guardrails} & \texttt{'I can only answer questions grounded in the indexed customer feedback.\allowbreak{} Please ask a question about customer feedback themes,\allowbreak{} segments,\allowbreak{} or channels.\allowbreak{}'} \\
+\texttt{ALLOWED\_\allowbreak{}PARTITION\_\allowbreak{}COLUMNS} & \texttt{lakehouse} & \texttt{('tenant\_\allowbreak{}id',\allowbreak{} 'created\_\allowbreak{}date',\allowbreak{} 'created\_\allowbreak{}month',\allowbreak{} 'channel',\allowbreak{} 'customer\_\allowbreak{}segment',\allowbreak{} 'rating')\allowbreak{}} \\
+\texttt{DEFAULT\_\allowbreak{}PARTITION\_\allowbreak{}COLUMNS} & \texttt{lakehouse} & \texttt{('created\_\allowbreak{}date',\allowbreak{} 'channel')\allowbreak{}} \\
+\texttt{TOKEN\_\allowbreak{}PATTERN} & \texttt{lexical\_\allowbreak{}search} & \texttt{re.\allowbreak{}compile('[a-\allowbreak{}zA-\allowbreak{}Z0-\allowbreak{}9\_\allowbreak{}]\allowbreak{}+')\allowbreak{}} \\
+\texttt{EMAIL\_\allowbreak{}PLACEHOLDER} & \texttt{privacy} & \texttt{'[REDACTED\_\allowbreak{}EMAIL]\allowbreak{}'} \\
+\texttt{PHONE\_\allowbreak{}PLACEHOLDER} & \texttt{privacy} & \texttt{'[REDACTED\_\allowbreak{}PHONE]\allowbreak{}'} \\
+\texttt{TOKEN\_\allowbreak{}PLACEHOLDER} & \texttt{privacy} & \texttt{'[REDACTED\_\allowbreak{}TOKEN]\allowbreak{}'} \\
+\texttt{LATEST\_\allowbreak{}VERSION} & \texttt{prompt\_\allowbreak{}registry} & \texttt{'latest'} \\
+\texttt{PROMPT\_\allowbreak{}REGISTRY} & \texttt{prompts} & \texttt{PromptRegistry()\allowbreak{}} \\
+\texttt{RAG\_\allowbreak{}ANSWER\_\allowbreak{}V1} & \texttt{prompts} & \texttt{PROMPT\_\allowbreak{}REGISTRY.\allowbreak{}register(PromptTemplate(name='rag\_\allowbreak{}answer',\allowbreak{} version='v1',\allowbreak{} template=SYSTEM\_\allowbreak{}PROMPT + '\textbackslash{}n' + \_\allowbreak{}RAG\_\allowbreak{}ANSWER\_\allowbreak{}BODY,\allowbreak{} required\_\allowbreak{}variables=('question',\allowbreak{})\allowbreak{},\allowbreak{} .\allowbreak{}.\allowbreak{}.\allowbreak{}} \\
+\texttt{RAG\_\allowbreak{}SYSTEM\_\allowbreak{}V1} & \texttt{prompts} & \texttt{PROMPT\_\allowbreak{}REGISTRY.\allowbreak{}register(PromptTemplate(name='rag\_\allowbreak{}system',\allowbreak{} version='v1',\allowbreak{} template=SYSTEM\_\allowbreak{}PROMPT,\allowbreak{} required\_\allowbreak{}variables=()\allowbreak{},\allowbreak{} changelog='Initial citation-\allowbreak{}aware sys.\allowbreak{}.\allowbreak{}.\allowbreak{}} \\
+\texttt{SYSTEM\_\allowbreak{}PROMPT} & \texttt{prompts} & \texttt{'You are a careful AI product analyst.\allowbreak{}\textbackslash{}nUse only the evidence provided in the context.\allowbreak{}\textbackslash{}nReturn a concise answer,\allowbreak{} recommended actions,\allowbreak{} and cite the source IDs.\allowbreak{}.\allowbreak{}.\allowbreak{}} \\
+\texttt{PRODUCT\_\allowbreak{}TERMINOLOGY} & \texttt{query\_\allowbreak{}expansion} & \texttt{\{'crm': ('salesforce',\allowbreak{} 'hubspot',\allowbreak{} 'integration',\allowbreak{} 'sync')\allowbreak{},\allowbreak{} 'integration': ('salesforce',\allowbreak{} 'hubspot',\allowbreak{} 'crm',\allowbreak{} 'sync')\allowbreak{},\allowbreak{} 'integrations': ('integration',\allowbreak{} 'salesforc.\allowbreak{}.\allowbreak{}.\allowbreak{}} \\
+\texttt{TOKEN\_\allowbreak{}PATTERN} & \texttt{query\_\allowbreak{}expansion} & \texttt{re.\allowbreak{}compile('[a-\allowbreak{}zA-\allowbreak{}Z0-\allowbreak{}9\_\allowbreak{}]\allowbreak{}+')\allowbreak{}} \\
+\texttt{DEFAULT\_\allowbreak{}CUSTOMER\_\allowbreak{}SEGMENTS} & \texttt{synthetic\_\allowbreak{}data} & \texttt{('enterprise',\allowbreak{} 'mid\_\allowbreak{}market',\allowbreak{} 'startup')\allowbreak{}} \\
+\texttt{DEFAULT\_\allowbreak{}ISSUE\_\allowbreak{}CATEGORIES} & \texttt{synthetic\_\allowbreak{}data} & \texttt{('setup\_\allowbreak{}friction',\allowbreak{} 'missing\_\allowbreak{}feature',\allowbreak{} 'reliability',\allowbreak{} 'value\_\allowbreak{}for\_\allowbreak{}money',\allowbreak{} 'ease\_\allowbreak{}of\_\allowbreak{}use',\allowbreak{} 'responsiveness')\allowbreak{}} \\
+\texttt{DEFAULT\_\allowbreak{}PRODUCT\_\allowbreak{}AREAS} & \texttt{synthetic\_\allowbreak{}data} & \texttt{('onboarding',\allowbreak{} 'dashboard',\allowbreak{} 'integrations',\allowbreak{} 'reporting',\allowbreak{} 'pricing',\allowbreak{} 'support',\allowbreak{} 'performance',\allowbreak{} 'documentation')\allowbreak{}} \\
+\texttt{DEFAULT\_\allowbreak{}SENTIMENT\_\allowbreak{}DISTRIBUTION} & \texttt{synthetic\_\allowbreak{}data} & \texttt{\{'positive': 0.\allowbreak{}4,\allowbreak{} 'neutral': 0.\allowbreak{}25,\allowbreak{} 'negative': 0.\allowbreak{}35\}} \\
+\texttt{DEFAULT\_\allowbreak{}TENANT\_\allowbreak{}IDS} & \texttt{synthetic\_\allowbreak{}data} & \texttt{('default',\allowbreak{})\allowbreak{}} \\
+\texttt{LOGGER\_\allowbreak{}NAME} & \texttt{telemetry} & \texttt{'feedback\_\allowbreak{}intelligence\_\allowbreak{}agent'} \\
+\texttt{ISSUE\_\allowbreak{}TERM\_\allowbreak{}GROUPS} & \texttt{tools} & \texttt{(('onboarding',\allowbreak{} ('onboarding',\allowbreak{} 'checklist',\allowbreak{} 'setup',\allowbreak{} 'implementation')\allowbreak{})\allowbreak{},\allowbreak{} ('integrations',\allowbreak{} ('integration',\allowbreak{} 'salesforce',\allowbreak{} 'hubspot',\allowbreak{} 'api')\allowbreak{})\allowbreak{},\allowbreak{} ('reporting\_\allowbreak{}and\_\allowbreak{}e.\allowbreak{}.\allowbreak{}.\allowbreak{}} \\
+\texttt{TOOL\_\allowbreak{}ROUTES} & \texttt{tools} & \texttt{(ToolRoute('ticket\_\allowbreak{}draft',\allowbreak{} \_\allowbreak{}compile\_\allowbreak{}patterns('\textbackslash{}\textbackslash{}b(?:draft\textbar{}create\textbar{}open\textbar{}file\textbar{}write\textbar{}prepare)\allowbreak{}\textbackslash{}\textbackslash{}b[\textasciicircum{}.\allowbreak{}?!]\allowbreak{}\{0,\allowbreak{}60\}?\textbackslash{}\textbackslash{}btickets?\textbackslash{}\textbackslash{}b',\allowbreak{} '\textbackslash{}\textbackslash{}bsupport\textbackslash{}\textbackslash{}s+ticket\textbackslash{}\textbackslash{}b',\allowbreak{} '\textbackslash{}\textbackslash{}bjira.\allowbreak{}.\allowbreak{}.\allowbreak{}} \\
+\end{longtable}

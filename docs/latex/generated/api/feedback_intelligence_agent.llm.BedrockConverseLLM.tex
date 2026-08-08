@@ -1,0 +1,50 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{BedrockConverseLLM}}
+\label{class:feedback_intelligence_agent.llm.BedrockConverseLLM}\index{Classes!BedrockConverseLLM}
+
+Optional AWS Bedrock provider backed by the Converse API.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+BedrockConverseLLM(self, *, model: str = DEFAULT_MODEL, region_name: str | None = None, max_tokens: int = 1024, temperature: float = 0.2, client: BedrockRuntimeClient | None = None, exceptions_module: BedrockExceptionTypes | None = None) -> None
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{model}] \texttt{str}, default \texttt{DEFAULT\_\allowbreak{}MODEL}, keyword-only.
+  \item[\texttt{region\_\allowbreak{}name}] \texttt{str \textbar{} None}, default \texttt{None}, keyword-only.
+  \item[\texttt{max\_\allowbreak{}tokens}] \texttt{int}, default \texttt{1024}, keyword-only.
+  \item[\texttt{temperature}] \texttt{float}, default \texttt{0.\allowbreak{}2}, keyword-only.
+  \item[\texttt{client}] \texttt{BedrockRuntimeClient \textbar{} None}, default \texttt{None}, keyword-only.
+  \item[\texttt{exceptions\_\allowbreak{}module}] \texttt{BedrockExceptionTypes \textbar{} None}, default \texttt{None}, keyword-only.
+\end{arglist}
+\apifield{Raises}\texttt{ValueError}
+\apifield{Attributes}
+\begin{arglist}
+  \item[\texttt{DEFAULT\_\allowbreak{}MODEL}] default \texttt{'anthropic.\allowbreak{}claude-\allowbreak{}3-\allowbreak{}haiku-\allowbreak{}20240307-\allowbreak{}v1:0'}
+  \item[\texttt{capabilities}] default \texttt{ProviderCapabilities(supports\_\allowbreak{}streaming=True,\allowbreak{} supports\_\allowbreak{}tool\_\allowbreak{}calling=True,\allowbreak{} supports\_\allowbreak{}json\_\allowbreak{}mode=False,\allowbreak{} max\_\allowbreak{}context\_\allowbreak{}tokens=None)\allowbreak{}}
+\end{arglist}
+\apifield{Details}Credentials are resolved by the standard AWS SDK chain: environment variables, shared profiles, SSO, IAM roles, or workload identity. The provider imports \texttt{boto3} lazily, so local tests and demos do not need AWS dependencies installed.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}llm.\allowbreak{}py:501}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/llm.py#L501}{online}), class, module \cref{module:feedback_intelligence_agent.llm}
+
+\subsection{\texttt{generate}}
+\label{method:feedback_intelligence_agent.llm.BedrockConverseLLM.generate}\index{Methods!generate}
+Generate text using AWS Bedrock Runtime's Converse API.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+generate(self, prompt: str, *, question: str, results: list[SearchResult]) -> str
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{prompt}] \texttt{str}, required.
+  \item[\texttt{question}] \texttt{str}, required, keyword-only.
+  \item[\texttt{results}] \texttt{list[SearchResult]\allowbreak{}}, required, keyword-only.
+\end{arglist}
+\apifield{Value}\texttt{str}
+\apifield{Raises}\texttt{LLMProviderError}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}llm.\allowbreak{}py:550}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/llm.py#L550}{online})

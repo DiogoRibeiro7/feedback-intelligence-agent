@@ -1,0 +1,132 @@
+% Authored: runtime execution flow.
+
+\chapter{Runtime Execution Flow}
+\label{ch:runtime}
+
+\section{Startup}
+
+Startup differs by entry point but converges on the same composition root.
+
+\begin{description}
+  \item[HTTP] \cref{func:feedback_intelligence_agent.api.create_app} configures
+    logging, constructs \texttt{Settings}, then builds the agent and the four
+    JSON-backed stores \emph{once}, closing over them for the process
+    lifetime. Route dependencies for the three roles and the rate limiter are
+    created at the same time. Consequently the vector index is loaded --- or
+    built and persisted --- during application construction, not on the first
+    request, and \texttt{/ready} can report readiness without probing anything.
+  \item[CLI] Each command constructs \texttt{Settings} itself and builds only
+    what it needs, so \texttt{feedback-agent validate-data} never loads an
+    index and \texttt{feedback-agent prompts list} never builds an agent.
+  \item[Library] The consumer either constructs
+    \texttt{FeedbackInsightAgent} directly with its own collaborators, or calls
+    \texttt{build\_agent(settings)}.
+\end{description}
+
+\section{Index resolution}
+
+\cref{func:feedback_intelligence_agent.factory.load_or_build_index} decides
+between three outcomes, in this order:
+
+\begin{enumerate}[nosep]
+  \item If the vector store is \texttt{qdrant}, connect to the configured
+    collection and populate it only when it is empty.
+  \item Otherwise, if the configured index path exists, load it.
+  \item Otherwise, build the index from the configured CSV and persist it.
+\end{enumerate}
+
+The build path is itself a pipeline: load and validate the CSV, chunk with
+redaction, construct the embedding text (metadata prefix plus chunk text),
+embed, add to the store, save.
+
+\section{Answering a question}
+\label{sec:runtime-stages}
+
+\input{diagrams/architecture/runtime}
+
+The stages, with the code that implements each:
+
+\begin{enumerate}
+  \item \textbf{Correlation identifier.} A fresh identifier is minted so every
+    telemetry span emitted for this request can be joined.
+  \item \textbf{Input guardrail.}
+    \texttt{guardrails.check\_input} inspects the question. A blocked question
+    returns immediately with a safe refusal, confidence $0$, no citations, and
+    route \texttt{guardrail\_refusal}. \emph{Nothing is retrieved.}
+  \item \textbf{Query rewriting} (only when conversation history is supplied).
+    \texttt{memory.DeterministicQueryRewriter} turns a follow-up into a
+    standalone question using the previous turn. The rewritten question drives
+    routing, retrieval, and generation; the full history is never sent to
+    retrieval.
+  \item \textbf{Routing.} \texttt{FeedbackInsightAgent.route} matches the
+    question against the four keyword rules and falls back to
+    \texttt{general\_insight}. The route is used for prompting, for reranking
+    signals, and as a telemetry dimension.
+  \item \textbf{Retrieval.} An enlarged candidate pool of
+    $\max(4k, k)$ is fetched from the configured retriever.
+  \item \textbf{Metadata filtering.} When filters are supplied, candidates are
+    filtered on tenant, segment, channel, rating range, and creation-date range
+    before ranking. The number filtered out is recorded on the span.
+  \item \textbf{Reranking.} The pool is scored by the deterministic judge
+    (\cref{sec:math-reranking}) and truncated to $k$.
+  \item \textbf{Context guardrail.} \texttt{guardrails.check\_context}
+    inspects the retrieved chunk texts. Injection-shaped chunks are dropped and
+    the drop count is recorded; the request continues with the survivors.
+  \item \textbf{Tool routing.} If a tool registry is configured, the router
+    selects at most one tool. An unknown explicit request yields a
+    \texttt{refused} record; a tool exception yields an \texttt{error} record.
+    Neither aborts the answer.
+  \item \textbf{Prompt construction.} \texttt{prompts.build\_grounded\_prompt}
+    renders the route-specific template with the surviving evidence.
+  \item \textbf{Generation.} The configured provider produces text inside its
+    own telemetry span, which records the provider name, prompt size, and
+    response size.
+  \item \textbf{Output parsing.} \texttt{output\_parser.parse\_llm\_output}
+    parses the response, repairing it deterministically when malformed, and
+    records the detected format, whether a repair was applied, and any
+    validation error.
+  \item \textbf{Citation construction.} \texttt{citations.build\_citations}
+    maps the surviving results to numbered citations matching the bracketed
+    markers in the answer text.
+  \item \textbf{Hallucination check.} Evidence overlap (and optionally an LLM
+    judge) produces a risk level; see \cref{sec:math-hallucination}.
+  \item \textbf{Confidence.} Computed from top retrieval score and citation
+    count; see \cref{sec:math-confidence}.
+  \item \textbf{Assembly.} A typed \texttt{AgentAnswer} is returned carrying
+    the answer, recommended actions, citations, route, confidence, the
+    guardrail decision, the tool record, and a diagnostics mapping.
+\end{enumerate}
+
+\section{Streaming}
+
+\texttt{POST /query/stream} does not stream tokens from the provider. It
+computes the complete answer first, measures the elapsed time, then replays the
+answer text as Server-Sent \texttt{content} events split on whitespace
+boundaries, followed by a single \texttt{metadata} event carrying citations,
+sources, retrieval scores, provider name, and latency. The split preserves
+every separator, so concatenating the chunks reproduces the answer byte for
+byte. This is what makes the streaming endpoint work identically with the
+deterministic local provider, at the cost of not reducing time to first token.
+
+\section{Asynchronous ingestion}
+
+\texttt{POST /ingestion/jobs} creates a \texttt{pending} job record, schedules
+\texttt{jobs.run\_ingestion\_job} through FastAPI's \texttt{BackgroundTasks},
+and returns \texttt{202} with the job identifier immediately. The background
+task runs the full ingestion pipeline and writes the terminal status back to
+the JSON job store, which the client polls at
+\texttt{GET /ingestion/jobs/\{job\_id\}}.
+
+Because \texttt{BackgroundTasks} runs in the serving process, a restart between
+submission and completion leaves the job in its last persisted state; the store
+is a file, so the record survives, but no supervisor resumes the work.
+
+\section{Concurrency and state}
+
+The agent, the retriever, and the vector store are constructed once per process
+and shared across requests. The in-memory vector store is read-only during
+serving; the JSON stores read and write whole files per operation. The rate
+limiter keeps per-caller counters in process memory, so with more than one
+worker each worker enforces its own window --- the limit is per worker, not per
+service. \texttt{deploy/docker-compose.prod.yml} runs multiple Gunicorn
+workers, which makes this observable in that configuration.

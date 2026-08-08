@@ -1,0 +1,56 @@
+% Authored: CI/CD, with the generated workflow reference.
+
+\chapter{Continuous Integration and Delivery}
+\label{ch:ci-cd}
+
+\section{Structure}
+
+Six workflows exist and none declares a \texttt{needs} dependency on another,
+so there is no cross-workflow job graph: they are independent pipelines
+selected by their triggers and their path filters.
+
+\begin{description}
+  \item[CI] The blocking quality pipeline. One job, \texttt{quality}, over a
+    three-version Python matrix (3.10, 3.11, 3.12), running the six checks in
+    a fixed order. Concurrency is grouped per ref with
+    \texttt{cancel-in-progress}, so a new push supersedes an in-flight run.
+  \item[Security] CodeQL for \texttt{python} and
+    \texttt{javascript-typescript} in a \texttt{fail-fast: false} matrix, on
+    \texttt{main} pushes, \texttt{main} pull requests, and a weekly schedule.
+    It is the only workflow requesting \texttt{security-events: write}.
+  \item[Dependency Review] Pull requests only; fails on high severity and
+    always posts a summary comment. The only workflow requesting
+    \texttt{pull-requests: write}.
+  \item[Docker] Path-filtered to the Dockerfile, Compose file, dependency
+    files, \srcfile{src/}, \srcfile{scripts/}, and the sample dataset. Builds
+    the image and runs an import smoke test inside it.
+  \item[Frontend] Path-filtered to \srcfile{frontend/}. Runs \texttt{npm ci},
+    \texttt{npm audit}, and \texttt{npm run build} on Node~24 with npm caching.
+  \item[Release] Triggered by a \texttt{v*} tag or manual dispatch. Validates
+    citation metadata, runs the demo, builds both the Python distribution and
+    the frontend, and uploads both as artifacts.
+\end{description}
+
+\section{Permissions and secrets}
+
+Every workflow declares an explicit \texttt{permissions} block, and each is
+minimal for its purpose: \texttt{contents: read} by default, with
+\texttt{security-events: write} only for CodeQL and
+\texttt{pull-requests: write} only for dependency review.
+
+No workflow references a repository secret. There is no
+\texttt{secrets.} expression anywhere in \srcfile{.github/workflows/}, no
+publishing step to PyPI or a container registry, and no deployment step. This
+is consistent with the release workflow's scope: it validates and builds
+artifacts, and uploading them to the run is where it stops.
+
+\section{Caching and reproducibility of runs}
+
+\texttt{actions/setup-python} caches the Poetry environment and
+\texttt{actions/setup-node} caches npm keyed on
+\srcfile{frontend/package-lock.json}. Poetry itself is pinned to
+\texttt{2.2.1} in every workflow that installs it. Together with the two lock
+files, this makes a CI run resolve to a fixed dependency set for a given
+revision.
+
+\input{generated/engineering/ci-cd}

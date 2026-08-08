@@ -1,0 +1,27 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{evaluate\_system}}
+\label{func:feedback_intelligence_agent.evaluation.evaluate_system}\index{Functions!evaluate\_system}
+
+Evaluate retrieval and answer quality and aggregate a typed report.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+evaluate_system(query_engine: Retriever, agent: FeedbackInsightAgent, cases: list[EvaluationCase], *, top_k: int = 4, telemetry: Telemetry | None = None) -> EvaluationReport
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{query\_\allowbreak{}engine}] \texttt{Retriever}, required.
+  \item[\texttt{agent}] \texttt{FeedbackInsightAgent}, required.
+  \item[\texttt{cases}] \texttt{list[EvaluationCase]\allowbreak{}}, required.
+  \item[\texttt{top\_\allowbreak{}k}] \texttt{int}, default \texttt{4}, keyword-only.
+  \item[\texttt{telemetry}] \texttt{Telemetry \textbar{} None}, default \texttt{None}, keyword-only.
+\end{arglist}
+\apifield{Value}\texttt{EvaluationReport}
+\apifield{Details}Retrieval metrics are averaged over answerable cases only, because unanswerable cases have no relevant documents to retrieve. Answer metrics are averaged over all cases. When a telemetry emitter is provided, an \texttt{evaluation\_\allowbreak{}finished} event with aggregate metrics is emitted.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}evaluation.\allowbreak{}py:313}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/evaluation.py#L313}{online}), module \cref{module:feedback_intelligence_agent.evaluation}

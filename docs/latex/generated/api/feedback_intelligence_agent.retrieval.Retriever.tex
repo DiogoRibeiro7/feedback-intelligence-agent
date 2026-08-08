@@ -1,0 +1,29 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{Retriever}}
+\label{class:feedback_intelligence_agent.retrieval.Retriever}\index{Classes!Retriever}
+
+Protocol implemented by all retrievers (dense, lexical, hybrid).
+\apifield{Inherits}\texttt{Protocol}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}retrieval.\allowbreak{}py:14}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/retrieval.py#L14}{online}), protocol, module \cref{module:feedback_intelligence_agent.retrieval}
+
+\subsection{\texttt{search}}
+\label{method:feedback_intelligence_agent.retrieval.Retriever.search}\index{Methods!search}
+Return the most relevant chunks for a natural-language question.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+search(self, question: str, *, top_k: int = 4) -> list[SearchResult]
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{question}] \texttt{str}, required.
+  \item[\texttt{top\_\allowbreak{}k}] \texttt{int}, default \texttt{4}, keyword-only.
+\end{arglist}
+\apifield{Value}\texttt{list[SearchResult]\allowbreak{}}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}retrieval.\allowbreak{}py:17}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/retrieval.py#L17}{online})

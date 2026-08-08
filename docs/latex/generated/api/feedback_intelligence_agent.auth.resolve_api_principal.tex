@@ -1,0 +1,28 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{resolve\_api\_principal}}
+\label{func:feedback_intelligence_agent.auth.resolve_api_principal}\index{Functions!resolve\_api\_principal}
+
+Resolve an optional API key into a principal.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+resolve_api_principal(api_key: str | None, *, auth_enabled: bool, reader_key: str | None, writer_key: str | None, admin_key: str | None) -> ApiPrincipal
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{api\_\allowbreak{}key}] \texttt{str \textbar{} None}, required.
+  \item[\texttt{auth\_\allowbreak{}enabled}] \texttt{bool}, required, keyword-only.
+  \item[\texttt{reader\_\allowbreak{}key}] \texttt{str \textbar{} None}, required, keyword-only.
+  \item[\texttt{writer\_\allowbreak{}key}] \texttt{str \textbar{} None}, required, keyword-only.
+  \item[\texttt{admin\_\allowbreak{}key}] \texttt{str \textbar{} None}, required, keyword-only.
+\end{arglist}
+\apifield{Value}\texttt{ApiPrincipal}
+\apifield{Raises}\texttt{ApiAuthConfigurationError}, \texttt{ApiAuthenticationError}
+\apifield{Details}When auth is disabled, local callers receive an unauthenticated admin principal so route-level dependencies become no-ops.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}auth.\allowbreak{}py:48}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/auth.py#L48}{online}), module \cref{module:feedback_intelligence_agent.auth}

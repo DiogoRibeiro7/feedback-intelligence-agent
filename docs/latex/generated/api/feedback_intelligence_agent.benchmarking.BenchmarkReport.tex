@@ -1,0 +1,25 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{BenchmarkReport}}
+\label{class:feedback_intelligence_agent.benchmarking.BenchmarkReport}\label{schema:BenchmarkReport}\index{Classes!BenchmarkReport}
+
+Full benchmark report: configuration plus per-phase statistics.
+\apifield{Inherits}\texttt{BaseModel}
+\apifield{Fields}
+\begin{arglist}
+  \item[\texttt{repetitions}] \texttt{int}, required, \texttt{ge=1}
+  \item[\texttt{warmup}] \texttt{int}, required, \texttt{ge=0}
+  \item[\texttt{top\_\allowbreak{}k}] \texttt{int}, required, \texttt{ge=1}
+  \item[\texttt{dataset\_\allowbreak{}path}] \texttt{str}, required
+  \item[\texttt{queries\_\allowbreak{}path}] \texttt{str}, required
+  \item[\texttt{num\_\allowbreak{}chunks}] \texttt{int}, required, \texttt{ge=0}
+  \item[\texttt{num\_\allowbreak{}queries}] \texttt{int}, required, \texttt{ge=0}
+  \item[\texttt{phases}] \texttt{list[PhaseStats]\allowbreak{}}, default \texttt{list()\allowbreak{}}
+\end{arglist}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}benchmarking.\allowbreak{}py:122}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/benchmarking.py#L122}{online}), pydantic model, module \cref{module:feedback_intelligence_agent.benchmarking}

@@ -1,0 +1,40 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{InMemoryTelemetrySink}}
+\label{class:feedback_intelligence_agent.telemetry.InMemoryTelemetrySink}\index{Classes!InMemoryTelemetrySink}
+
+Sink that keeps events in a list. Intended for tests and inspection.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+InMemoryTelemetrySink(self) -> None
+\end{lstlisting}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}telemetry.\allowbreak{}py:120}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/telemetry.py#L120}{online}), class, module \cref{module:feedback_intelligence_agent.telemetry}
+
+\subsection{\texttt{emit}}
+\label{method:feedback_intelligence_agent.telemetry.InMemoryTelemetrySink.emit}\index{Methods!emit}
+Append the event to the in-memory buffer.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+emit(self, event: TelemetryEvent) -> None
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{event}] \texttt{TelemetryEvent}, required.
+\end{arglist}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}telemetry.\allowbreak{}py:127}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/telemetry.py#L127}{online})
+
+\subsection{\texttt{event\_names}}
+\label{method:feedback_intelligence_agent.telemetry.InMemoryTelemetrySink.event_names}\index{Methods!event\_names}
+Return the names of captured events in emission order.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+event_names(self) -> list[str]
+\end{lstlisting}
+\apifield{Value}\texttt{list[str]\allowbreak{}}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}telemetry.\allowbreak{}py:131}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/telemetry.py#L131}{online})

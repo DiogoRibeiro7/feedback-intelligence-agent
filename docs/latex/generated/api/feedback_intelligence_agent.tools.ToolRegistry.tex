@@ -1,0 +1,59 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{ToolRegistry}}
+\label{class:feedback_intelligence_agent.tools.ToolRegistry}\index{Classes!ToolRegistry}
+
+Registry of available tools keyed by their stable names.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+ToolRegistry(self, tools: Sequence[Tool] = ()) -> None
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{tools}] \texttt{Sequence[Tool]\allowbreak{}}, default \texttt{()\allowbreak{}}.
+\end{arglist}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}tools.\allowbreak{}py:420}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/tools.py#L420}{online}), class, module \cref{module:feedback_intelligence_agent.tools}
+
+\subsection{\texttt{register}}
+\label{method:feedback_intelligence_agent.tools.ToolRegistry.register}\index{Methods!register}
+Add a tool to the registry; duplicate names raise \texttt{ValueError}.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+register(self, tool: Tool) -> None
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{tool}] \texttt{Tool}, required.
+\end{arglist}
+\apifield{Raises}\texttt{ValueError}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}tools.\allowbreak{}py:429}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/tools.py#L429}{online})
+
+\subsection{\texttt{get}}
+\label{method:feedback_intelligence_agent.tools.ToolRegistry.get}\index{Methods!get}
+Return the tool registered under \texttt{name}, or \texttt{None} if unknown.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+get(self, name: str) -> Tool | None
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{name}] \texttt{str}, required.
+\end{arglist}
+\apifield{Value}\texttt{Tool \textbar{} None}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}tools.\allowbreak{}py:435}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/tools.py#L435}{online})
+
+\subsection{\texttt{names}}
+\label{method:feedback_intelligence_agent.tools.ToolRegistry.names}\index{Methods!names}
+Return the sorted names of all registered tools.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+names(self) -> list[str]
+\end{lstlisting}
+\apifield{Value}\texttt{list[str]\allowbreak{}}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}tools.\allowbreak{}py:439}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/tools.py#L439}{online})

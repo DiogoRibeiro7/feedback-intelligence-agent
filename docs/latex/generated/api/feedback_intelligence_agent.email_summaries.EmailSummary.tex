@@ -1,0 +1,23 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{EmailSummary}}
+\label{class:feedback_intelligence_agent.email_summaries.EmailSummary}\label{schema:EmailSummary}\index{Classes!EmailSummary}
+
+Rendered email digest for saved insight reports.
+\apifield{Inherits}\texttt{BaseModel}
+\apifield{Fields}
+\begin{arglist}
+  \item[\texttt{subject}] \texttt{str}, required
+  \item[\texttt{body\_\allowbreak{}text}] \texttt{str}, required
+  \item[\texttt{recipients}] \texttt{list[str]\allowbreak{}}, required
+  \item[\texttt{report\_\allowbreak{}ids}] \texttt{list[str]\allowbreak{}}, required
+  \item[\texttt{report\_\allowbreak{}count}] \texttt{int}, required, \texttt{ge=0}
+  \item[\texttt{generated\_\allowbreak{}at}] \texttt{datetime}, default \texttt{lambda: datetime.\allowbreak{}now(timezone.\allowbreak{}utc)\allowbreak{}()\allowbreak{}}
+\end{arglist}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}email\_\allowbreak{}summaries.\allowbreak{}py:47}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/email_summaries.py#L47}{online}), pydantic model, module \cref{module:feedback_intelligence_agent.email_summaries}

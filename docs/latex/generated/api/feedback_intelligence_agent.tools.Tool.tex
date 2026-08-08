@@ -1,0 +1,52 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{Tool}}
+\label{class:feedback_intelligence_agent.tools.Tool}\index{Classes!Tool}
+
+Typed interface implemented by all local tools.
+\apifield{Inherits}\texttt{ABC}
+\apifield{Attributes}
+\begin{arglist}
+  \item[\texttt{name}] \texttt{ClassVar[str]\allowbreak{}}, required
+  \item[\texttt{description}] \texttt{ClassVar[str]\allowbreak{}}, required
+  \item[\texttt{input\_\allowbreak{}schema}] \texttt{ClassVar[type[BaseModel]\allowbreak{}]\allowbreak{}}, required
+  \item[\texttt{output\_\allowbreak{}schema}] \texttt{ClassVar[type[ToolOutput]\allowbreak{}]\allowbreak{}}, required
+\end{arglist}
+\apifield{Details}Every tool declares a stable \texttt{name}, a human-readable \texttt{description}, and Pydantic \texttt{input\_\allowbreak{}schema}/\texttt{output\_\allowbreak{}schema} models. \texttt{execute} validates the payload before running, so malformed inputs surface as a \texttt{ToolError} instead of an unhandled exception.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}tools.\allowbreak{}py:44}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/tools.py#L44}{online}), abstract base class, module \cref{module:feedback_intelligence_agent.tools}
+
+\subsection{\texttt{build\_payload}}
+\label{method:feedback_intelligence_agent.tools.Tool.build_payload}\index{Methods!build\_payload}
+Build the tool input payload from the question and retrieved context.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+build_payload(self, question: str, results: Sequence[SearchResult]) -> dict[str, Any]
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{question}] \texttt{str}, required.
+  \item[\texttt{results}] \texttt{Sequence[SearchResult]\allowbreak{}}, required.
+\end{arglist}
+\apifield{Value}\texttt{dict[str,\allowbreak{} Any]\allowbreak{}}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}tools.\allowbreak{}py:58}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/tools.py#L58}{online})
+
+\subsection{\texttt{execute}}
+\label{method:feedback_intelligence_agent.tools.Tool.execute}\index{Methods!execute}
+Validate the payload against the input schema and run the tool.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+execute(self, payload: Mapping[str, Any]) -> ToolOutput
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{payload}] \texttt{Mapping[str,\allowbreak{} Any]\allowbreak{}}, required.
+\end{arglist}
+\apifield{Value}\texttt{ToolOutput}
+\apifield{Raises}\texttt{ToolError}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}tools.\allowbreak{}py:63}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/tools.py#L63}{online})

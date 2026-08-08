@@ -1,0 +1,23 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{validate\_data}}
+\label{func:feedback_intelligence_agent.cli.validate_data}\index{Functions!validate\_data}
+
+Validate a feedback CSV against the data contract and print a report.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+validate_data(input: Annotated[Path, typer.Argument(help='Path to feedback CSV to validate.')], strict: Annotated[bool, typer.Option(help='Fail with a non-zero exit code on any validation error.')] = False) -> None
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{input}] \texttt{Annotated[Path,\allowbreak{} typer.\allowbreak{}Argument(help='Path to feedback CSV to validate.\allowbreak{}')\allowbreak{}]\allowbreak{}}, required.
+  \item[\texttt{strict}] \texttt{Annotated[bool,\allowbreak{} typer.\allowbreak{}Option(help='Fail with a non-\allowbreak{}zero exit code on any validation error.\allowbreak{}')\allowbreak{}]\allowbreak{}}, default \texttt{False}.
+\end{arglist}
+\apifield{Raises}\texttt{Exit}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}cli.\allowbreak{}py:297}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/cli.py#L297}{online}), module \cref{module:feedback_intelligence_agent.cli}

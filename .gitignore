@@ -64,3 +64,22 @@ AGENTS.md
 
 # Generated synthetic datasets (sample_feedback.csv stays tracked)
 data/synthetic_feedback.csv
+
+# LaTeX build artifacts. The .tex sources under docs/latex/ are the canonical
+# deliverable and stay tracked; the compiled PDF and every auxiliary file the
+# engine produces are rebuilt by `make docs-pdf`.
+docs/latex/*.pdf
+docs/latex/*.aux
+docs/latex/*.bbl
+docs/latex/*.blg
+docs/latex/*.fdb_latexmk
+docs/latex/*.fls
+docs/latex/*.idx
+docs/latex/*.ilg
+docs/latex/*.ind
+docs/latex/*.lof
+docs/latex/*.lot
+docs/latex/*.out
+docs/latex/*.synctex.gz
+docs/latex/*.toc
+docs/latex/*.xdv

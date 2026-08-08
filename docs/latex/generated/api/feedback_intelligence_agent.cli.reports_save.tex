@@ -1,0 +1,28 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{reports\_save}}
+\label{func:feedback_intelligence_agent.cli.reports_save}\index{Functions!reports\_save}
+
+Answer a question and save the resulting insight report.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+reports_save(question: Annotated[str, typer.Argument(help='Question to answer and save.')], title: Annotated[str | None, typer.Option(help='Report title.')] = None, tag: Annotated[list[str] | None, typer.Option('--tag', help='Report tag. Repeat for multiple tags.')] = None, notes: Annotated[str | None, typer.Option(help='Optional report notes.')] = None, tenant_id: Annotated[str, typer.Option(help='Tenant id for retrieval and saved report scoping.')] = 'default', store_path: Annotated[Path, typer.Option(help='Directory holding saved report JSON files.')] = Path('.artifacts/reports'), index_path: Annotated[Path, typer.Option(help='Path to vector index.')] = Path('.artifacts/vector_store.json'), top_k: Annotated[int, typer.Option(help='Number of chunks to retrieve.')] = 4) -> None
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{question}] \texttt{Annotated[str,\allowbreak{} typer.\allowbreak{}Argument(help='Question to answer and save.\allowbreak{}')\allowbreak{}]\allowbreak{}}, required.
+  \item[\texttt{title}] \texttt{Annotated[str \textbar{} None,\allowbreak{} typer.\allowbreak{}Option(help='Report title.\allowbreak{}')\allowbreak{}]\allowbreak{}}, default \texttt{None}.
+  \item[\texttt{tag}] \texttt{Annotated[list[str]\allowbreak{} \textbar{} None,\allowbreak{} typer.\allowbreak{}Option('-\allowbreak{}-\allowbreak{}tag',\allowbreak{} help='Report tag.\allowbreak{} Repeat for multiple tags.\allowbreak{}')\allowbreak{}]\allowbreak{}}, default \texttt{None}.
+  \item[\texttt{notes}] \texttt{Annotated[str \textbar{} None,\allowbreak{} typer.\allowbreak{}Option(help='Optional report notes.\allowbreak{}')\allowbreak{}]\allowbreak{}}, default \texttt{None}.
+  \item[\texttt{tenant\_\allowbreak{}id}] \texttt{Annotated[str,\allowbreak{} typer.\allowbreak{}Option(help='Tenant id for retrieval and saved report scoping.\allowbreak{}')\allowbreak{}]\allowbreak{}}, default \texttt{'default'}.
+  \item[\texttt{store\_\allowbreak{}path}] \texttt{Annotated[Path,\allowbreak{} typer.\allowbreak{}Option(help='Directory holding saved report JSON files.\allowbreak{}')\allowbreak{}]\allowbreak{}}, default \texttt{Path('.\allowbreak{}artifacts/\allowbreak{}reports')\allowbreak{}}.
+  \item[\texttt{index\_\allowbreak{}path}] \texttt{Annotated[Path,\allowbreak{} typer.\allowbreak{}Option(help='Path to vector index.\allowbreak{}')\allowbreak{}]\allowbreak{}}, default \texttt{Path('.\allowbreak{}artifacts/\allowbreak{}vector\_\allowbreak{}store.\allowbreak{}json')\allowbreak{}}.
+  \item[\texttt{top\_\allowbreak{}k}] \texttt{Annotated[int,\allowbreak{} typer.\allowbreak{}Option(help='Number of chunks to retrieve.\allowbreak{}')\allowbreak{}]\allowbreak{}}, default \texttt{4}.
+\end{arglist}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}cli.\allowbreak{}py:487}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/cli.py#L487}{online}), module \cref{module:feedback_intelligence_agent.cli}

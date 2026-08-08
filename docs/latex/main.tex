@@ -1,0 +1,101 @@
+% ---------------------------------------------------------------------------
+% Technical reference manual for the feedback intelligence agent repository.
+%
+% Build:
+%   latexmk -pdf docs/latex/main.tex      (from the repository root)
+%   make docs-pdf
+%
+% Regenerate the derived sources first:
+%   make docs
+%
+% Authored file - safe to edit. The generator writes only metadata.tex and
+% everything under generated/.
+% ---------------------------------------------------------------------------
+% 10pt matches the density CRAN reference manuals are typeset at.
+\documentclass[10pt,a4paper,oneside]{report}
+
+\input{preamble}
+\input{metadata}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\noindent
+This manual documents the \projectname{} repository at revision
+\texttt{\projectrevision}. It is organised as three independent references.
+The \emph{Reference Manual} enumerates what the repository exposes: every
+public module, class, function, data contract, command-line command, HTTP
+endpoint, and configuration variable, with signatures taken directly from the
+source. The \emph{Software Architecture} part explains how those objects are
+arranged into components, how they depend on one another, and how a request
+flows through them. The \emph{Engineering} part explains how the software is
+developed, verified, built, reproduced, packaged, and released.
+
+Every derived statement in this manual is extracted from the repository by the
+generator in \srcfile{docs/tools/}; authored commentary is confined to the
+chapter introductions, the mathematical exposition, and the architecture
+decision records. Where a rationale could not be established from repository
+evidence, this manual says so rather than inventing one.
+\end{abstract}
+
+% The contents, figure, and table lists are set in two dense columns. With one
+% entry per documented object a single-column contents alone runs to a dozen
+% pages, which is exactly the bulk this manual is meant to avoid.
+\cleardoublepage
+\pdfbookmark[0]{Contents}{toc}
+\chapter*{Contents}
+\markboth{Contents}{Contents}
+\begin{multicols}{2}\small
+\makeatletter\@starttoc{toc}\makeatother
+\end{multicols}
+
+\chapter*{List of Figures}
+\markboth{List of Figures}{List of Figures}
+\addcontentsline{toc}{chapter}{List of Figures}
+\begin{multicols}{2}\small
+\makeatletter\@starttoc{lof}\makeatother
+\end{multicols}
+
+\chapter*{List of Tables}
+\markboth{List of Tables}{List of Tables}
+\addcontentsline{toc}{chapter}{List of Tables}
+\begin{multicols}{2}\small
+\makeatletter\@starttoc{lot}\makeatother
+\end{multicols}
+
+\chapter*{About This Manual}
+\addcontentsline{toc}{chapter}{About This Manual}
+\markboth{About This Manual}{About This Manual}
+\input{about}
+
+\part{Reference Manual}
+\input{reference/reference-manual}
+
+\part{Software Architecture}
+\input{architecture/architecture}
+
+\part{Engineering}
+\input{engineering/engineering}
+
+\appendix
+\part{Appendices}
+
+\chapter{Object Indexes}
+\label{app:indexes}
+\input{reference/indexes}
+
+\chapter{Traceability}
+\label{app:traceability}
+\input{engineering/traceability}
+
+\bibliographystyle{plain}
+\bibliography{references}
+\addcontentsline{toc}{chapter}{Bibliography}
+
+\cleardoublepage
+\addcontentsline{toc}{chapter}{Index}
+\printindex
+
+\end{document}

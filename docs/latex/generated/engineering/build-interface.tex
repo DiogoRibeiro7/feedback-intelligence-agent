@@ -1,0 +1,45 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_engineering.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\begin{longtable}{>{\raggedright\arraybackslash\small}p{0.18\textwidth} >{\raggedright\arraybackslash\small}p{0.24\textwidth} >{\raggedright\arraybackslash\small}p{0.50\textwidth}}
+\caption{Makefile targets: the documented build interface.}\label{tab:make-targets}\\
+\toprule
+Target & Prerequisites & Recipe \\
+\midrule
+\endfirsthead
+\toprule
+Target & Prerequisites & Recipe \\
+\midrule
+\endhead
+\midrule
+\multicolumn{3}{r}{\footnotesize continued on next page}\\
+\endfoot
+\bottomrule
+\endlastfoot
+\texttt{install} & -- & \texttt{poetry install} \\
+\texttt{test} & -- & \texttt{poetry run pytest} \\
+\texttt{lint} & -- & \texttt{poetry run ruff check .\allowbreak{}} \\
+\texttt{format-\allowbreak{}check} & -- & \texttt{poetry run ruff format -\allowbreak{}-\allowbreak{}check .\allowbreak{}} \\
+\texttt{typecheck} & -- & \texttt{poetry run mypy src} \\
+\texttt{typecheck-\allowbreak{}docs} & -- & \texttt{poetry run mypy -\allowbreak{}-\allowbreak{}python-\allowbreak{}version \$(DOCS\_\allowbreak{}PYTHON\_\allowbreak{}VERSION)\allowbreak{} docs/\allowbreak{}tools} \\
+\texttt{coverage} & -- & \texttt{poetry run pytest -\allowbreak{}-\allowbreak{}cov=feedback\_\allowbreak{}intelligence\_\allowbreak{}agent -\allowbreak{}-\allowbreak{}cov-\allowbreak{}report=term-\allowbreak{}missing -\allowbreak{}-\allowbreak{}cov-\allowbreak{}fail-\allowbreak{}under=\$(COVERAGE\_\allowbreak{}THRESHOLD)\allowbreak{}} \\
+\texttt{build} & -- & \texttt{poetry build} \\
+\texttt{quality} & \texttt{lint}, \texttt{typecheck}, \texttt{typecheck-\allowbreak{}docs}, \texttt{test} & -- \\
+\texttt{ci} & \texttt{lint}, \texttt{format-\allowbreak{}check}, \texttt{typecheck}, \texttt{typecheck-\allowbreak{}docs}, \texttt{coverage}, \texttt{build} & -- \\
+\texttt{docs} & -- & \texttt{\$(DOCS\_\allowbreak{}ENV)\allowbreak{} poetry run python -\allowbreak{}m tools.\allowbreak{}generate\_\allowbreak{}docs -\allowbreak{}-\allowbreak{}repo-\allowbreak{}root .\allowbreak{} \textbackslash{} \&\& \$(if \$(REVISION)\allowbreak{},\allowbreak{}-\allowbreak{}-\allowbreak{}revision \$(REVISION)\allowbreak{},\allowbreak{})\allowbreak{}} \\
+\texttt{docs-\allowbreak{}check} & -- & \texttt{\$(DOCS\_\allowbreak{}ENV)\allowbreak{} poetry run python -\allowbreak{}m tools.\allowbreak{}validate\_\allowbreak{}docs -\allowbreak{}-\allowbreak{}repo-\allowbreak{}root .\allowbreak{}} \\
+\texttt{docs-\allowbreak{}pdf} & \texttt{docs} & \texttt{cd \$(LATEX\_\allowbreak{}DIR)\allowbreak{} \&\& \$(LATEXMK)\allowbreak{} main.\allowbreak{}tex \textbar{}\textbar{} true \&\& cd \$(LATEX\_\allowbreak{}DIR)\allowbreak{} \&\& \$(LATEXMK)\allowbreak{} main.\allowbreak{}tex \textbar{}\textbar{} true \&\& \$(DOCS\_\allowbreak{}ENV)\allowbreak{} poetry run python -\allowbreak{}m tools.\allowbreak{}check\_\allowbreak{}latex\_\allowbreak{}log \$(LATEX\_\allowbreak{}DIR)\allowbreak{}/\allowbreak{}main.\allowbreak{}log} \\
+\texttt{docs-\allowbreak{}pdf-\allowbreak{}reference} & \texttt{docs} & \texttt{cd \$(LATEX\_\allowbreak{}DIR)\allowbreak{} \&\& \$(LATEXMK)\allowbreak{} reference.\allowbreak{}tex \textbar{}\textbar{} true \&\& cd \$(LATEX\_\allowbreak{}DIR)\allowbreak{} \&\& \$(LATEXMK)\allowbreak{} reference.\allowbreak{}tex \textbar{}\textbar{} true \&\& \$(DOCS\_\allowbreak{}ENV)\allowbreak{} poetry run python -\allowbreak{}m tools.\allowbreak{}check\_\allowbreak{}latex\_\allowbreak{}log \$(LATEX\_\allowbreak{}DIR)\allowbreak{}/\allowbreak{}reference.\allowbreak{}log} \\
+\texttt{docs-\allowbreak{}clean} & -- & \texttt{cd \$(LATEX\_\allowbreak{}DIR)\allowbreak{} \&\& latexmk -\allowbreak{}C main.\allowbreak{}tex reference.\allowbreak{}tex} \\
+\texttt{demo} & -- & \texttt{poetry run python scripts/\allowbreak{}run\_\allowbreak{}demo.\allowbreak{}py} \\
+\texttt{api} & -- & \texttt{poetry run uvicorn feedback\_\allowbreak{}intelligence\_\allowbreak{}agent.\allowbreak{}api:create\_\allowbreak{}app -\allowbreak{}-\allowbreak{}factory -\allowbreak{}-\allowbreak{}reload} \\
+\texttt{docker-\allowbreak{}build} & -- & \texttt{docker build -\allowbreak{}t feedback-\allowbreak{}intelligence-\allowbreak{}agent .\allowbreak{}} \\
+\texttt{docker-\allowbreak{}run} & -- & \texttt{docker run -\allowbreak{}-\allowbreak{}rm -\allowbreak{}p 8000:8000 feedback-\allowbreak{}intelligence-\allowbreak{}agent} \\
+\texttt{compose-\allowbreak{}prod-\allowbreak{}up} & -- & \texttt{docker compose -\allowbreak{}f deploy/\allowbreak{}docker-\allowbreak{}compose.\allowbreak{}prod.\allowbreak{}yml up -\allowbreak{}d} \\
+\texttt{compose-\allowbreak{}prod-\allowbreak{}down} & -- & \texttt{docker compose -\allowbreak{}f deploy/\allowbreak{}docker-\allowbreak{}compose.\allowbreak{}prod.\allowbreak{}yml down} \\
+\texttt{clean} & -- & \texttt{rm -\allowbreak{}rf .\allowbreak{}artifacts .\allowbreak{}pytest\_\allowbreak{}cache .\allowbreak{}mypy\_\allowbreak{}cache .\allowbreak{}ruff\_\allowbreak{}cache htmlcov .\allowbreak{}coverage dist build} \\
+\end{longtable}

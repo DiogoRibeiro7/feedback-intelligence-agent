@@ -1,0 +1,24 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{export\_lakehouse}}
+\label{func:feedback_intelligence_agent.cli.export_lakehouse}\index{Functions!export\_lakehouse}
+
+Export validated feedback to a local lakehouse-style table.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+export_lakehouse(input: Annotated[Path, typer.Option(help='Feedback CSV to export.')], output: Annotated[Path, typer.Option(help='Output table directory.')] = Path('.artifacts/lakehouse/feedback'), table_format: Annotated[LakehouseTableFormat, typer.Option(help='Lakehouse metadata layout to write.')] = LakehouseTableFormat.delta, partition_column: Annotated[list[str] | None, typer.Option('--partition-column', help='Partition column. Repeat to override the default created_date/channel layout.')] = None) -> None
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{input}] \texttt{Annotated[Path,\allowbreak{} typer.\allowbreak{}Option(help='Feedback CSV to export.\allowbreak{}')\allowbreak{}]\allowbreak{}}, required.
+  \item[\texttt{output}] \texttt{Annotated[Path,\allowbreak{} typer.\allowbreak{}Option(help='Output table directory.\allowbreak{}')\allowbreak{}]\allowbreak{}}, default \texttt{Path('.\allowbreak{}artifacts/\allowbreak{}lakehouse/\allowbreak{}feedback')\allowbreak{}}.
+  \item[\texttt{table\_\allowbreak{}format}] \texttt{Annotated[LakehouseTableFormat,\allowbreak{} typer.\allowbreak{}Option(help='Lakehouse metadata layout to write.\allowbreak{}')\allowbreak{}]\allowbreak{}}, default \texttt{LakehouseTableFormat.\allowbreak{}delta}.
+  \item[\texttt{partition\_\allowbreak{}column}] \texttt{Annotated[list[str]\allowbreak{} \textbar{} None,\allowbreak{} typer.\allowbreak{}Option('-\allowbreak{}-\allowbreak{}partition-\allowbreak{}column',\allowbreak{} help='Partition column.\allowbreak{} Repeat to override the default created\_\allowbreak{}date/\allowbreak{}channel layout.\allowbreak{}')\allowbreak{}]\allowbreak{}}, default \texttt{None}.
+\end{arglist}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}cli.\allowbreak{}py:265}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/cli.py#L265}{online}), module \cref{module:feedback_intelligence_agent.cli}

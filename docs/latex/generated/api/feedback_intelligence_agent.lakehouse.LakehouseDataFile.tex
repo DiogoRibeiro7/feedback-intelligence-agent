@@ -1,0 +1,22 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{LakehouseDataFile}}
+\label{class:feedback_intelligence_agent.lakehouse.LakehouseDataFile}\label{schema:LakehouseDataFile}\index{Classes!LakehouseDataFile}
+
+One data file produced by a lakehouse export.
+\apifield{Inherits}\texttt{BaseModel}
+\apifield{Fields}
+\begin{arglist}
+  \item[\texttt{path}] \texttt{str}, required
+  \item[\texttt{records}] \texttt{int}, required, \texttt{ge=0}
+  \item[\texttt{partition\_\allowbreak{}values}] \texttt{dict[str,\allowbreak{} str]\allowbreak{}}, required
+  \item[\texttt{min\_\allowbreak{}created\_\allowbreak{}at}] \texttt{datetime \textbar{} None}, default \texttt{None}
+  \item[\texttt{max\_\allowbreak{}created\_\allowbreak{}at}] \texttt{datetime \textbar{} None}, default \texttt{None}
+\end{arglist}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}lakehouse.\allowbreak{}py:49}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/lakehouse.py#L49}{online}), pydantic model, module \cref{module:feedback_intelligence_agent.lakehouse}

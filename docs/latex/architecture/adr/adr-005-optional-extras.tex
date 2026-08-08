@@ -1,0 +1,54 @@
+\section{ADR-005: Optional integrations behind extras and deferred imports}
+\label{adr:005}
+
+\subsection*{Status}
+
+Accepted; in force at revision \texttt{\projectrevisionshort}.
+
+\subsection*{Context}
+
+Six integrations --- Anthropic, AWS Bedrock, Kafka/Kinesis, MLflow,
+OpenTelemetry, Qdrant --- bring large dependency trees. Requiring them would
+make the default install heavy and would couple the package's supported Python
+range to theirs.
+
+\subsection*{Decision}
+
+Each is declared as an optional Poetry dependency exposed through a named
+extra (\texttt{anthropic}, \texttt{bedrock}, \texttt{streaming},
+\texttt{mlflow}, \texttt{otel}, \texttt{qdrant}), imported inside the function
+that needs it rather than at module level, and selected by a configuration
+value. \texttt{mypy} carries a per-module \texttt{ignore\_missing\_imports}
+override for each, so the type gate passes whether or not the extra is
+installed.
+
+\subsection*{Consequences}
+
+\begin{itemize}
+  \item \texttt{poetry install} without extras produces a working system, and
+    CI does exactly that.
+  \item A missing extra surfaces as an \texttt{ImportError} at the moment the
+    feature is first used, not at import time --- later than a module-level
+    import would fail, and only on the path that needs it.
+  \item The optional code paths are not exercised against the real SDKs in CI.
+    The suite covers them through injected fakes, so an upstream SDK change can
+    break an adapter without any gate noticing.
+  \item Each override in \srcfile{pyproject.toml} carries a comment explaining
+    why it exists, which keeps the exception list auditable.
+\end{itemize}
+
+\subsection*{Alternatives}
+
+Hard dependencies on everything; or separate distribution packages per
+integration. The first inflates the install; the second is disproportionate for
+six thin adapters.
+
+\subsection*{Evidence}
+
+\srcfile{pyproject.toml} (\texttt{[tool.poetry.extras]} and the six commented
+\texttt{[[tool.mypy.overrides]]} blocks);
+\srcfile{src/feedback\_intelligence\_agent/llm.py},
+\srcfile{qdrant\_store.py}, \srcfile{streaming\_ingestion.py},
+\srcfile{telemetry.py}, \srcfile{experiments.py} (function-local imports);
+\srcfile{.github/workflows/ci.yml} (\texttt{poetry install -{}-with dev}, no
+extras).

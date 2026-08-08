@@ -1,0 +1,27 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{benchmark}}
+\label{func:feedback_intelligence_agent.cli.benchmark}\index{Functions!benchmark}
+
+Benchmark indexing, embedding, retrieval, and agent latency.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+benchmark(queries: Annotated[Path, typer.Option(help='Path to JSONL benchmark queries.')] = Path('examples/queries.jsonl'), output: Annotated[Path, typer.Option(help='Directory for benchmark_results.json and .md.')] = Path('.artifacts/benchmark_results'), dataset: Annotated[Path, typer.Option(help='Feedback CSV used to build the index.')] = Path('data/sample_feedback.csv'), repetitions: Annotated[int, typer.Option(help='Measured repetitions per phase.')] = 5, warmup: Annotated[int, typer.Option(help='Discarded warmup repetitions per phase.')] = 1, top_k: Annotated[int, typer.Option(help='Number of chunks to retrieve.')] = 4) -> None
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{queries}] \texttt{Annotated[Path,\allowbreak{} typer.\allowbreak{}Option(help='Path to JSONL benchmark queries.\allowbreak{}')\allowbreak{}]\allowbreak{}}, default \texttt{Path('examples/\allowbreak{}queries.\allowbreak{}jsonl')\allowbreak{}}.
+  \item[\texttt{output}] \texttt{Annotated[Path,\allowbreak{} typer.\allowbreak{}Option(help='Directory for benchmark\_\allowbreak{}results.\allowbreak{}json and .\allowbreak{}md.\allowbreak{}')\allowbreak{}]\allowbreak{}}, default \texttt{Path('.\allowbreak{}artifacts/\allowbreak{}benchmark\_\allowbreak{}results')\allowbreak{}}.
+  \item[\texttt{dataset}] \texttt{Annotated[Path,\allowbreak{} typer.\allowbreak{}Option(help='Feedback CSV used to build the index.\allowbreak{}')\allowbreak{}]\allowbreak{}}, default \texttt{Path('data/\allowbreak{}sample\_\allowbreak{}feedback.\allowbreak{}csv')\allowbreak{}}.
+  \item[\texttt{repetitions}] \texttt{Annotated[int,\allowbreak{} typer.\allowbreak{}Option(help='Measured repetitions per phase.\allowbreak{}')\allowbreak{}]\allowbreak{}}, default \texttt{5}.
+  \item[\texttt{warmup}] \texttt{Annotated[int,\allowbreak{} typer.\allowbreak{}Option(help='Discarded warmup repetitions per phase.\allowbreak{}')\allowbreak{}]\allowbreak{}}, default \texttt{1}.
+  \item[\texttt{top\_\allowbreak{}k}] \texttt{Annotated[int,\allowbreak{} typer.\allowbreak{}Option(help='Number of chunks to retrieve.\allowbreak{}')\allowbreak{}]\allowbreak{}}, default \texttt{4}.
+\end{arglist}
+\apifield{Details}Runs fully locally with the deterministic provider and writes a JSON report plus a Markdown results table into the output directory.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}cli.\allowbreak{}py:903}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/cli.py#L903}{online}), module \cref{module:feedback_intelligence_agent.cli}

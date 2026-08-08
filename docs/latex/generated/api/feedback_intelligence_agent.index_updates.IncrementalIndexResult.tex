@@ -1,0 +1,26 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{IncrementalIndexResult}}
+\label{class:feedback_intelligence_agent.index_updates.IncrementalIndexResult}\label{schema:IncrementalIndexResult}\index{Classes!IncrementalIndexResult}
+
+Summary of an incremental JSON index update.
+\apifield{Inherits}\texttt{BaseModel}
+\apifield{Fields}
+\begin{arglist}
+  \item[\texttt{index\_\allowbreak{}path}] \texttt{str}, required
+  \item[\texttt{created}] \texttt{bool}, required
+  \item[\texttt{input\_\allowbreak{}records}] \texttt{int}, required, \texttt{ge=0}
+  \item[\texttt{inserted\_\allowbreak{}records}] \texttt{int}, required, \texttt{ge=0}
+  \item[\texttt{updated\_\allowbreak{}records}] \texttt{int}, required, \texttt{ge=0}
+  \item[\texttt{skipped\_\allowbreak{}records}] \texttt{int}, required, \texttt{ge=0}
+  \item[\texttt{added\_\allowbreak{}chunks}] \texttt{int}, required, \texttt{ge=0}
+  \item[\texttt{removed\_\allowbreak{}chunks}] \texttt{int}, required, \texttt{ge=0}
+  \item[\texttt{total\_\allowbreak{}chunks}] \texttt{int}, required, \texttt{ge=0}
+\end{arglist}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}index\_\allowbreak{}updates.\allowbreak{}py:23}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/index_updates.py#L23}{online}), pydantic model, module \cref{module:feedback_intelligence_agent.index_updates}

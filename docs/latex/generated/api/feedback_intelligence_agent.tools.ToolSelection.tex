@@ -1,0 +1,21 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{ToolSelection}}
+\label{class:feedback_intelligence_agent.tools.ToolSelection}\label{schema:ToolSelection}\index{Classes!ToolSelection}
+
+Outcome of routing one user query to a tool.
+\apifield{Inherits}\texttt{BaseModel}
+\apifield{Fields}
+\begin{arglist}
+  \item[\texttt{status}] \texttt{Literal['selected',\allowbreak{} 'no\_\allowbreak{}tool',\allowbreak{} 'unknown\_\allowbreak{}tool']\allowbreak{}}, required
+  \item[\texttt{tool\_\allowbreak{}name}] \texttt{str \textbar{} None}, default \texttt{None}
+  \item[\texttt{reason}] \texttt{str}, required
+\end{arglist}
+\apifield{Details}\texttt{status} is \texttt{selected} when a registered tool matched, \texttt{no\_\allowbreak{}tool} when the query should be answered by plain RAG, and \texttt{unknown\_\allowbreak{}tool} when the user explicitly requested a tool that is not available.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}tools.\allowbreak{}py:444}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/tools.py#L444}{online}), pydantic model, module \cref{module:feedback_intelligence_agent.tools}

@@ -1,0 +1,26 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{select\_reports\_for\_summary}}
+\label{func:feedback_intelligence_agent.email_summaries.select_reports_for_summary}\index{Functions!select\_reports\_for\_summary}
+
+Resolve explicit report IDs or the latest saved reports for a summary.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+select_reports_for_summary(store: InsightReportStore, *, report_ids: list[str], max_reports: int, tenant_id: str | None = None) -> list[SavedInsightReport]
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{store}] \texttt{InsightReportStore}, required.
+  \item[\texttt{report\_\allowbreak{}ids}] \texttt{list[str]\allowbreak{}}, required, keyword-only.
+  \item[\texttt{max\_\allowbreak{}reports}] \texttt{int}, required, keyword-only.
+  \item[\texttt{tenant\_\allowbreak{}id}] \texttt{str \textbar{} None}, default \texttt{None}, keyword-only.
+\end{arglist}
+\apifield{Value}\texttt{list[SavedInsightReport]\allowbreak{}}
+\apifield{Raises}\texttt{LookupError}, \texttt{ValueError}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}email\_\allowbreak{}summaries.\allowbreak{}py:96}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/email_summaries.py#L96}{online}), module \cref{module:feedback_intelligence_agent.email_summaries}

@@ -1,0 +1,98 @@
+% Authored: release process.
+
+\chapter{Releases}
+\label{ch:releases}
+
+\section{Versioning}
+
+The project version at this revision is \texttt{\projectversion}. Version
+numbers follow a \texttt{MAJOR.MINOR.PATCH} form and the changelog history
+shows minor increments carrying new features, which is consistent with
+semantic versioning~\cite{semver}. The repository states no versioning policy
+document, so the scheme is inferred from the artifacts rather than quoted from
+a rule.
+
+\noevidence
+
+The version is declared in four places that must agree:
+
+\begin{longtable}{p{0.34\textwidth} p{0.30\textwidth} p{0.28\textwidth}}
+\toprule
+File & Field & Purpose \\
+\midrule
+\endfirsthead
+\toprule
+File & Field & Purpose \\
+\midrule
+\endhead
+\bottomrule
+\endlastfoot
+\texttt{pyproject.toml} & \texttt{[tool.poetry] version} & Distribution metadata \\
+\texttt{src/.../\_\_init\_\_.py} & \texttt{\_\_version\_\_} & Reported by the API and CLI \\
+\texttt{CITATION.cff} & \texttt{version}, \texttt{date-released} & Software citation \\
+\texttt{.zenodo.json} & \texttt{version} & Archive deposit metadata \\
+\end{longtable}
+
+Nothing enforces the agreement automatically; the release workflow validates
+that the two metadata files \emph{parse}, not that their versions match
+\srcfile{pyproject.toml}. See \cref{ch:improvements}.
+
+\section{Changelog}
+
+\srcfile{CHANGELOG.md} is maintained by hand in a Keep a
+Changelog~\cite{keepachangelog} style: an \texttt{Unreleased} section at the
+top, then one section per version with a release date and \texttt{Added},
+\texttt{Changed}, and \texttt{Fixed} subsections. Entries are written in terms
+of user-visible capability rather than commits.
+
+Separately, \srcfile{.github/release.yml} configures GitHub's automatic release
+notes: six categories (Features, Fixes, Documentation, Dependencies,
+Maintenance, Other), with \texttt{dependabot[bot]} and anything labelled
+\texttt{ignore-for-release} excluded. The two mechanisms coexist --- the
+hand-written changelog is the narrative, the generated notes are the pull
+request digest.
+
+\section{Release workflow}
+
+Triggered by pushing a tag matching \texttt{v*} or by manual dispatch, on
+Python 3.12 and Node 24:
+
+\begin{enumerate}[nosep]
+  \item check out the repository;
+  \item install Poetry (pinned) and the Python dev dependencies;
+  \item install frontend dependencies with \texttt{npm ci};
+  \item validate \srcfile{.zenodo.json} parses as JSON;
+  \item validate \srcfile{CITATION.cff} parses as YAML;
+  \item run the deterministic demo;
+  \item build the Python distribution;
+  \item build the frontend;
+  \item upload \srcfile{dist/*} as the \texttt{python-dist} artifact;
+  \item upload \srcfile{frontend/dist} as the \texttt{frontend-dist} artifact.
+\end{enumerate}
+
+The workflow requests \texttt{contents: read} and references no secret. It
+therefore \emph{validates and builds} a release; it does not publish one. There
+is no PyPI upload, no container registry push, no GitHub Release creation, and
+no deployment step anywhere in \srcfile{.github/workflows/}. Distribution
+beyond the workflow artifacts is a manual step, and the repository does not
+document it.
+
+\noevidence
+
+\section{Archival and citation}
+
+The project is archived on Zenodo with the concept DOI
+\texttt{\projectdoi}. \srcfile{CITATION.cff} follows the Citation File
+Format~\cite{citationcff} and carries author, ORCID, affiliation, licence,
+version, release date, and repository URL; \srcfile{.zenodo.json} carries the
+deposit metadata including the related-identifier link back to the repository.
+Both are validated on every release run, which is what keeps the archive
+deposit from failing on malformed metadata.
+
+\section{Licence}
+
+The project is licensed under \projectlicense, declared in \srcfile{LICENSE}
+and repeated in \srcfile{CITATION.cff} and \srcfile{.zenodo.json}.
+\srcfile{pyproject.toml} does not declare a \texttt{license} field, so the
+built distribution's metadata does not carry it; the licence file itself is the
+authoritative statement.

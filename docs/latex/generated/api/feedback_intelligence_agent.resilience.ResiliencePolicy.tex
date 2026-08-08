@@ -1,0 +1,21 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{ResiliencePolicy}}
+\label{class:feedback_intelligence_agent.resilience.ResiliencePolicy}\index{Classes!ResiliencePolicy}
+
+Runtime policy for remote LLM calls.
+\apifield{Attributes}
+\begin{arglist}
+  \item[\texttt{max\_\allowbreak{}attempts}] \texttt{int}, default \texttt{3}
+  \item[\texttt{timeout\_\allowbreak{}seconds}] \texttt{float}, default \texttt{30.\allowbreak{}0}
+  \item[\texttt{backoff\_\allowbreak{}seconds}] \texttt{float}, default \texttt{0.\allowbreak{}25}
+  \item[\texttt{circuit\_\allowbreak{}failure\_\allowbreak{}threshold}] \texttt{int}, default \texttt{3}
+  \item[\texttt{circuit\_\allowbreak{}recovery\_\allowbreak{}seconds}] \texttt{float}, default \texttt{30.\allowbreak{}0}
+\end{arglist}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}resilience.\allowbreak{}py:19}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/resilience.py#L19}{online}), dataclass, module \cref{module:feedback_intelligence_agent.resilience}

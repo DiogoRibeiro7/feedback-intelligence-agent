@@ -1,0 +1,34 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{GuardrailRule}}
+\label{class:feedback_intelligence_agent.guardrails.GuardrailRule}\index{Classes!GuardrailRule}
+
+One deterministic guardrail rule built from compiled regex patterns.
+\apifield{Attributes}
+\begin{arglist}
+  \item[\texttt{name}] \texttt{str}, required
+  \item[\texttt{severity}] \texttt{Severity}, required
+  \item[\texttt{patterns}] \texttt{tuple[re.\allowbreak{}Pattern[str]\allowbreak{},\allowbreak{} .\allowbreak{}.\allowbreak{}.\allowbreak{}]\allowbreak{}}, required
+  \item[\texttt{suggested\_\allowbreak{}response}] \texttt{str}, required
+\end{arglist}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}guardrails.\allowbreak{}py:55}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/guardrails.py#L55}{online}), dataclass, module \cref{module:feedback_intelligence_agent.guardrails}
+
+\subsection{\texttt{first\_match}}
+\label{method:feedback_intelligence_agent.guardrails.GuardrailRule.first_match}\index{Methods!first\_match}
+Return the first pattern that matches \texttt{text}, if any.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+first_match(self, text: str) -> re.Pattern[str] | None
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{text}] \texttt{str}, required.
+\end{arglist}
+\apifield{Value}\texttt{re.\allowbreak{}Pattern[str]\allowbreak{} \textbar{} None}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}guardrails.\allowbreak{}py:63}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/guardrails.py#L63}{online})

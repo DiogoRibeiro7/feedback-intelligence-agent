@@ -1,0 +1,54 @@
+% Authored: dependency engineering, with generated tables.
+
+\chapter{Dependency Engineering}
+\label{ch:dependency-engineering}
+
+\section{Declaration model}
+
+Dependencies are declared in \srcfile{pyproject.toml} under Poetry and resolved
+into \srcfile{poetry.lock}, which is version controlled. Three groups exist:
+
+\begin{description}[nosep]
+  \item[Required runtime] installed by \texttt{poetry install}.
+  \item[Optional runtime] declared \texttt{optional = true} and exposed through
+    a named extra; never installed unless requested.
+  \item[Development] the \texttt{dev} group: mypy, pytest, pytest-cov, ruff,
+    and the two stub packages.
+\end{description}
+
+\section{Direction and coupling}
+
+Dependency direction runs strictly outward: the package depends on
+distributions, and no distribution depends on the package. Within the required
+set, coupling is concentrated in two places and this is worth stating plainly
+because it determines the cost of change:
+
+\begin{itemize}
+  \item \textbf{Pydantic} is used by the foundation layer and therefore by
+    everything. It is the single hardest dependency to replace.
+  \item \textbf{FastAPI, Starlette, Uvicorn, and Typer} are confined to the
+    interface layer: no domain, data, or infrastructure module imports them.
+    The HTTP and CLI frameworks could be replaced without touching the
+    computation.
+\end{itemize}
+
+\texttt{numpy} is confined to embeddings and the vector store; \texttt{pandas}
+to CSV contract validation; \texttt{httpx} to the HTTP-based LLM adapters;
+\texttt{pyyaml} to experiment configuration.
+
+Two version constraints are pins rather than ranges and are worth noting:
+\texttt{click} is held below \texttt{8.2} (Typer's CLI parser) and
+\texttt{starlette} is constrained separately from FastAPI. Both narrow the
+resolvable set deliberately.
+
+\section{Operating-system and external-tool dependencies}
+
+The package requires no system libraries beyond CPython itself. The container
+image installs \texttt{curl} and \texttt{build-essential} at build time only.
+The documented toolchain outside Python is Poetry (pinned to \texttt{2.2.1} in
+every workflow that installs it), Node.js~24 for the frontend, Docker for the
+container targets, and --- for building this manual as a PDF --- a LaTeX
+distribution providing \texttt{latexmk}. No workflow requires the LaTeX
+toolchain; PDF compilation is a local, optional step.
+
+\input{generated/engineering/dependencies}

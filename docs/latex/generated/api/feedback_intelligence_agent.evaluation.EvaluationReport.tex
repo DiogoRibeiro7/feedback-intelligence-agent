@@ -1,0 +1,22 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{EvaluationReport}}
+\label{class:feedback_intelligence_agent.evaluation.EvaluationReport}\label{schema:EvaluationReport}\index{Classes!EvaluationReport}
+
+Full evaluation report: aggregates plus per-case breakdown.
+\apifield{Inherits}\texttt{BaseModel}
+\apifield{Fields}
+\begin{arglist}
+  \item[\texttt{top\_\allowbreak{}k}] \texttt{int}, required, \texttt{ge=1}
+  \item[\texttt{total\_\allowbreak{}cases}] \texttt{int}, required, \texttt{ge=0}
+  \item[\texttt{retrieval}] \texttt{RetrievalMetrics}, required
+  \item[\texttt{answers}] \texttt{AnswerMetrics}, required
+  \item[\texttt{cases}] \texttt{list[CaseResult]\allowbreak{}}, default \texttt{list()\allowbreak{}}
+\end{arglist}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}evaluation.\allowbreak{}py:235}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/evaluation.py#L235}{online}), pydantic model, module \cref{module:feedback_intelligence_agent.evaluation}

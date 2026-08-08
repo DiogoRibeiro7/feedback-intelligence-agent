@@ -1,0 +1,21 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{JudgeVerdict}}
+\label{class:feedback_intelligence_agent.hallucination.JudgeVerdict}\label{schema:JudgeVerdict}\index{Classes!JudgeVerdict}
+
+Optional LLM-as-judge verdict for answer support.
+\apifield{Inherits}\texttt{BaseModel}
+\apifield{Fields}
+\begin{arglist}
+  \item[\texttt{label}] \texttt{JudgeLabel}, required
+  \item[\texttt{confidence}] \texttt{float}, required, \texttt{ge=0.\allowbreak{}0,\allowbreak{} le=1.\allowbreak{}0}
+  \item[\texttt{reason}] \texttt{str}, required
+  \item[\texttt{provider}] \texttt{str}, required
+\end{arglist}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}hallucination.\allowbreak{}py:69}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/hallucination.py#L69}{online}), pydantic model, module \cref{module:feedback_intelligence_agent.hallucination}

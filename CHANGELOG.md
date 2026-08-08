@@ -4,6 +4,38 @@ All notable changes to this project are documented here.
 
 ## Unreleased
 
+## 0.5.0 - 2026-08-08
+
+### Added
+
+- LaTeX technical documentation system under `docs/`, generated from the
+  repository by an AST-based toolchain that performs no application imports and
+  no network access.
+- Two compiled documents sharing one source tree: `docs/latex/reference.tex`,
+  a CRAN-style reference covering every public object, and
+  `docs/latex/main.tex`, which adds the software architecture and engineering
+  parts and the traceability appendix.
+- Machine-readable documentation model in `docs/metadata/`: repository
+  inventory, API index, module dependency graph with cycle analysis, and a
+  manifest recording a SHA-256 digest of every generated artifact.
+- Documentation validator covering API coverage, signature agreement, label
+  uniqueness, cross-reference resolution, LaTeX escaping, placeholder text,
+  and credential-shaped literals.
+- Make targets `docs`, `docs-check`, `docs-pdf`, `docs-pdf-reference`,
+  `docs-clean`, and `typecheck-docs`.
+- Documentation job in CI that regenerates as of the documented revision and
+  fails when the committed manual has drifted from the source.
+- `tests/test_docs_tools.py`, covering LaTeX escaping and rendering, docstring
+  and signature extraction, CLI and endpoint extraction, dependency and cycle
+  analysis, and LaTeX log validation.
+
+### Changed
+
+- Maintainer contact in package metadata now uses the institutional address
+  recorded in `CITATION.cff`.
+- Ruff's `src` setting includes `docs`, so the documentation toolchain is
+  treated as first-party for import sorting.
+
 ## 0.4.0 - 2026-08-06
 
 ### Added

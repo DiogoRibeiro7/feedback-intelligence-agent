@@ -1,0 +1,26 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{recall\_at\_k}}
+\label{func:feedback_intelligence_agent.evaluation.recall_at_k}\index{Functions!recall\_at\_k}
+
+Fraction of the relevant documents found in the top-k results.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+recall_at_k(retrieved_ids: list[str], relevant_ids: list[str], k: int) -> float
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{retrieved\_\allowbreak{}ids}] \texttt{list[str]\allowbreak{}}, required.
+  \item[\texttt{relevant\_\allowbreak{}ids}] \texttt{list[str]\allowbreak{}}, required.
+  \item[\texttt{k}] \texttt{int}, required.
+\end{arglist}
+\apifield{Value}\texttt{float}
+\apifield{Raises}\texttt{ValueError}
+\apifield{Details}Returns 0.0 when there are no relevant documents, so unanswerable cases do not artificially inflate recall.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}evaluation.\allowbreak{}py:98}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/evaluation.py#L98}{online}), module \cref{module:feedback_intelligence_agent.evaluation}

@@ -1,0 +1,27 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{summarize}}
+\label{func:feedback_intelligence_agent.benchmarking.summarize}\index{Functions!summarize}
+
+Compute summary statistics for one phase from its per-repetition durations.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+summarize(phase: str, durations_ms: list[float]) -> PhaseStats
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{phase}] \texttt{str}, required. Phase name used as a label in the report.
+  \item[\texttt{durations\_\allowbreak{}ms}] \texttt{list[float]\allowbreak{}}, required. Per-repetition durations in milliseconds (non-empty).
+\end{arglist}
+\apifield{Value}\texttt{PhaseStats}. A \texttt{PhaseStats} with mean, median, p95, min, and max, each rounded to four decimal places.
+\apifield{Raises}
+\begin{arglist}
+  \item[\texttt{ValueError}] If \texttt{durations\_\allowbreak{}ms} is empty.
+\end{arglist}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}benchmarking.\allowbreak{}py:95}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/benchmarking.py#L95}{online}), module \cref{module:feedback_intelligence_agent.benchmarking}

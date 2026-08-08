@@ -1,0 +1,47 @@
+\section{ADR-010: Nearest-rank percentiles for latency reporting}
+\label{adr:010}
+
+\subsection*{Status}
+
+Accepted; in force at revision \texttt{\projectrevisionshort}.
+
+\subsection*{Context}
+
+The benchmark harness reports a 95th-percentile latency per pipeline phase.
+Percentile definitions differ, and interpolating definitions can return a value
+that was never observed.
+
+\subsection*{Decision}
+
+\texttt{benchmarking.percentile} implements the nearest-rank method:
+$\rho = \lceil p n \rceil$ clamped to $[1, n]$, returning $y_{(\rho)}$ from the
+sorted samples. The source gives the rationale directly: nearest-rank ``always
+returns an actually-observed sample, which is easy to reason about for latency
+SLOs and avoids fabricating values between measurements''.
+
+\subsection*{Consequences}
+
+\begin{itemize}
+  \item Every reported percentile corresponds to a real measurement.
+  \item The function is exact and has no floating-point interpolation, so it is
+    trivially testable and reproducible.
+  \item For small sample counts the estimate is coarse: with ten repetitions,
+    $\operatorname{P}_{0.95}$ is the maximum. The report carries the sample
+    count for every statistic, so the coarseness is visible rather than
+    implied.
+  \item Numbers are not directly comparable with tools that interpolate, such
+    as NumPy's default \texttt{linear} method.
+\end{itemize}
+
+\subsection*{Alternatives}
+
+Linear interpolation between order statistics (NumPy's default), or a
+streaming estimator such as t-digest. The first fabricates unobserved values;
+the second is disproportionate for a local benchmark harness.
+
+\subsection*{Evidence}
+
+\srcfile{src/feedback\_intelligence\_agent/benchmarking.py}
+(\texttt{percentile} and its docstring; \texttt{summarize} reporting mean,
+median, p95, min, max, and sample count);
+\srcfile{tests/test\_benchmarking.py}.

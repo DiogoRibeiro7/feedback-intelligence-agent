@@ -1,0 +1,22 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{QueryRewrite}}
+\label{class:feedback_intelligence_agent.memory.QueryRewrite}\label{schema:QueryRewrite}\index{Classes!QueryRewrite}
+
+Result of rewriting a follow-up question into a standalone question.
+\apifield{Inherits}\texttt{BaseModel}
+\apifield{Fields}
+\begin{arglist}
+  \item[\texttt{original}] \texttt{str}, required
+  \item[\texttt{rewritten}] \texttt{str}, required
+  \item[\texttt{was\_\allowbreak{}rewritten}] \texttt{bool}, required
+  \item[\texttt{strategy}] \texttt{str}, default \texttt{'none'}
+\end{arglist}
+\apifield{Details}\texttt{strategy} documents which deterministic rule fired (\texttt{none}, \texttt{pronoun\_\allowbreak{}resolution}, \texttt{ellipsis\_\allowbreak{}expansion}, or \texttt{llm}), keeping the rewriting step fully transparent and auditable.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}memory.\allowbreak{}py:218}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/memory.py#L218}{online}), pydantic model, module \cref{module:feedback_intelligence_agent.memory}

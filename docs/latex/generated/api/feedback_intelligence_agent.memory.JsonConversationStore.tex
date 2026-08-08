@@ -1,0 +1,59 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{JsonConversationStore}}
+\label{class:feedback_intelligence_agent.memory.JsonConversationStore}\index{Classes!JsonConversationStore}
+
+Conversation store that persists one JSON file per conversation.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+JsonConversationStore(self, root: str | Path) -> None
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{root}] \texttt{str \textbar{} Path}, required.
+\end{arglist}
+\apifield{Details}Files are written as \texttt{\{root\}/\allowbreak{}\{conversation\_\allowbreak{}id\}.\allowbreak{}json} with indented JSON, so conversations are easy to inspect, diff, and replay locally.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}memory.\allowbreak{}py:185}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/memory.py#L185}{online}), class, module \cref{module:feedback_intelligence_agent.memory}
+
+\subsection{\texttt{get}}
+\label{method:feedback_intelligence_agent.memory.JsonConversationStore.get}\index{Methods!get}
+Load a conversation from its JSON file, or \texttt{None} when missing.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+get(self, conversation_id: str) -> ConversationMemory | None
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{conversation\_\allowbreak{}id}] \texttt{str}, required.
+\end{arglist}
+\apifield{Value}\texttt{ConversationMemory \textbar{} None}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}memory.\allowbreak{}py:201}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/memory.py#L201}{online})
+
+\subsection{\texttt{save}}
+\label{method:feedback_intelligence_agent.memory.JsonConversationStore.save}\index{Methods!save}
+Write the conversation as an indented JSON file.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+save(self, memory: ConversationMemory) -> None
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{memory}] \texttt{ConversationMemory}, required.
+\end{arglist}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}memory.\allowbreak{}py:208}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/memory.py#L208}{online})
+
+\subsection{\texttt{conversation\_ids}}
+\label{method:feedback_intelligence_agent.memory.JsonConversationStore.conversation_ids}\index{Methods!conversation\_ids}
+Return the identifiers of all persisted conversations, sorted.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+conversation_ids(self) -> list[str]
+\end{lstlisting}
+\apifield{Value}\texttt{list[str]\allowbreak{}}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}memory.\allowbreak{}py:213}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/memory.py#L213}{online})

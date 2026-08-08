@@ -1,0 +1,30 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{SentimentSummaryTool}}
+\label{class:feedback_intelligence_agent.tools.SentimentSummaryTool}\index{Classes!SentimentSummaryTool}
+
+Summarise the sentiment and rating distribution of the indexed feedback.
+\apifield{Inherits}\texttt{Tool}
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+SentimentSummaryTool(self, chunks: Sequence[DocumentChunk]) -> None
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{chunks}] \texttt{Sequence[DocumentChunk]\allowbreak{}}, required.
+\end{arglist}
+\apifield{Attributes}
+\begin{arglist}
+  \item[\texttt{name}] default \texttt{'sentiment\_\allowbreak{}summary'}
+  \item[\texttt{description}] default \texttt{'Summarise sentiment and rating distribution across the feedback dataset.\allowbreak{}'}
+  \item[\texttt{input\_\allowbreak{}schema}] default \texttt{SentimentSummaryInput}
+  \item[\texttt{output\_\allowbreak{}schema}] default \texttt{SentimentSummaryOutput}
+\end{arglist}
+\apifield{Details}Ratings of 4-5 count as positive, 3 as neutral, and 1-2 as negative, so the summary is fully deterministic and needs no model call.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}tools.\allowbreak{}py:146}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/tools.py#L146}{online}), class, module \cref{module:feedback_intelligence_agent.tools}

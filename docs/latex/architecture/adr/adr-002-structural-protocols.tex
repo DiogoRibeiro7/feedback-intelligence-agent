@@ -1,0 +1,56 @@
+\section{ADR-002: Substitution through structural protocols, not inheritance}
+\label{adr:002}
+
+\subsection*{Status}
+
+Accepted; in force at revision \texttt{\projectrevisionshort}.
+
+\subsection*{Context}
+
+Every swappable capability --- retrieval, generation, embedding, reranking,
+query rewriting, answer judging, vector storage, stream consumption --- needs a
+stable interface, and the local and remote implementations of each have nothing
+useful to share by inheritance.
+
+\subsection*{Decision}
+
+Interfaces are declared as \texttt{typing.Protocol} classes and implementations
+do not inherit from them. The protocols are \texttt{Retriever},
+\texttt{LLMProvider}, \texttt{EmbeddingModel}, \texttt{Reranker},
+\texttt{QueryRewriter}, \texttt{HallucinationJudge}, \texttt{VectorStore}, and
+\texttt{FeedbackStream}. Only \texttt{tools.Tool} uses an abstract base class,
+because tools share concrete payload-building behaviour.
+
+\subsection*{Consequences}
+
+\begin{itemize}
+  \item A test double satisfies an interface by having the right methods; the
+    suite uses plain local classes rather than mocking frameworks.
+  \item \texttt{mypy} in strict mode checks conformance structurally, so an
+    implementation that drifts from the protocol fails the type gate rather
+    than failing at run time.
+  \item Optional SDK objects can satisfy an interface without the package
+    importing the SDK at module level.
+  \item Protocols carry no shared implementation, so genuinely common
+    behaviour --- the resilience policy, for example --- has to be added by
+    composition (\texttt{ResilientLLMProvider} wraps a provider) rather than
+    inherited.
+  \item \texttt{VectorStore} is additionally \texttt{@runtime\_checkable}, so
+    it supports \texttt{isinstance} checks, which the other protocols do not.
+\end{itemize}
+
+\subsection*{Alternatives}
+
+Abstract base classes for every interface, which would force optional adapters
+to import the package to subclass it, and would make third-party objects
+non-conforming even when they have the right shape.
+
+\subsection*{Evidence}
+
+\srcfile{src/feedback\_intelligence\_agent/retrieval.py},
+\srcfile{embeddings.py}, \srcfile{llm.py}, \srcfile{reranking.py},
+\srcfile{memory.py}, \srcfile{hallucination.py}, \srcfile{vector\_store.py},
+\srcfile{streaming\_ingestion.py} (protocol definitions);
+\srcfile{src/feedback\_intelligence\_agent/tools.py} (the one ABC);
+\srcfile{pyproject.toml} (\texttt{[tool.mypy] strict = true});
+\srcfile{AGENTS.md} (``Prefer explicit interfaces over hidden global state'').

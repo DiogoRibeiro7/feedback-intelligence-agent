@@ -1,0 +1,32 @@
+% Authored: wrapper around the generated traceability tables.
+
+Traceability is the property that lets a reader move in both directions between
+this manual, the implementation, and the tests that constrain it:
+
+\begin{center}
+Documentation $\longleftrightarrow$ Public API $\longleftrightarrow$
+Implementation $\longleftrightarrow$ Tests
+\end{center}
+
+Three mechanisms make this hold without hand-maintained mappings.
+
+\begin{enumerate}
+  \item \textbf{Documentation to implementation.} Every entry in
+    \cref{ch:classes} and \cref{ch:functions} carries its source path and line
+    number, and --- when the repository has a remote --- a URL pinned to the
+    documented revision. The entries are generated from that source, so the
+    link cannot be stale while the manual is current.
+  \item \textbf{Implementation to tests.} Test modules mirror package modules
+    one-for-one (\cref{ch:repository-structure}), so the mapping is derived
+    from the file names rather than declared. Modules with no eponymous test
+    module are listed explicitly below rather than omitted.
+  \item \textbf{Interface to handler.} CLI commands carry their handler
+    function and source location; HTTP routes carry their operation function
+    and source location. Both are extracted from the decorators themselves.
+\end{enumerate}
+
+For the data side, the artifact lineage table in \cref{ch:reproducibility}
+gives, for each transformation, its source artifact, producer, transformation,
+validation, and destination artifact.
+
+\input{generated/engineering/traceability}

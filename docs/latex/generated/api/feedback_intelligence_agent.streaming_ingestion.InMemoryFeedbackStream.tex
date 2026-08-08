@@ -1,0 +1,53 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{InMemoryFeedbackStream}}
+\label{class:feedback_intelligence_agent.streaming_ingestion.InMemoryFeedbackStream}\index{Classes!InMemoryFeedbackStream}
+
+Deterministic stream backed by an iterable of payload dictionaries.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+InMemoryFeedbackStream(self, payloads: Iterable[dict[str, Any]]) -> None
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{payloads}] \texttt{Iterable[dict[str,\allowbreak{} Any]\allowbreak{}]\allowbreak{}}, required.
+\end{arglist}
+\apifield{Attributes}
+\begin{arglist}
+  \item[\texttt{source}] default \texttt{'memory'}
+\end{arglist}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}streaming\_\allowbreak{}ingestion.\allowbreak{}py:96}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/streaming_ingestion.py#L96}{online}), class, module \cref{module:feedback_intelligence_agent.streaming_ingestion}
+
+\subsection{\texttt{poll}}
+\label{method:feedback_intelligence_agent.streaming_ingestion.InMemoryFeedbackStream.poll}\index{Methods!poll}
+Return the next bounded batch of in-memory events.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+poll(self, max_messages: int) -> list[StreamEnvelope]
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{max\_\allowbreak{}messages}] \texttt{int}, required.
+\end{arglist}
+\apifield{Value}\texttt{list[StreamEnvelope]\allowbreak{}}
+\apifield{Raises}\texttt{ValueError}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}streaming\_\allowbreak{}ingestion.\allowbreak{}py:107}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/streaming_ingestion.py#L107}{online})
+
+\subsection{\texttt{ack}}
+\label{method:feedback_intelligence_agent.streaming_ingestion.InMemoryFeedbackStream.ack}\index{Methods!ack}
+Record the acknowledged offset for test and local inspection.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+ack(self, envelope: StreamEnvelope) -> None
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{envelope}] \texttt{StreamEnvelope}, required.
+\end{arglist}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}streaming\_\allowbreak{}ingestion.\allowbreak{}py:123}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/streaming_ingestion.py#L123}{online})

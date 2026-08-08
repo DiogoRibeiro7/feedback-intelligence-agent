@@ -1,0 +1,24 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{build\_citations}}
+\label{func:feedback_intelligence_agent.citations.build_citations}\index{Functions!build\_citations}
+
+Build stable, ordered citations from retrieved chunks.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+build_citations(results: list[SearchResult], *, max_quote_chars: int = 180) -> list[Citation]
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{results}] \texttt{list[SearchResult]\allowbreak{}}, required.
+  \item[\texttt{max\_\allowbreak{}quote\_\allowbreak{}chars}] \texttt{int}, default \texttt{180}, keyword-only.
+\end{arglist}
+\apifield{Value}\texttt{list[Citation]\allowbreak{}}
+\apifield{Details}Documents are deduplicated in retrieval order and assigned sequential 1-based \texttt{citation\_\allowbreak{}id} values, so the same retrieval always produces the same citation list. Only the first (highest-ranked) chunk of each document is quoted.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}citations.\allowbreak{}py:13}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/citations.py#L13}{online}), module \cref{module:feedback_intelligence_agent.citations}

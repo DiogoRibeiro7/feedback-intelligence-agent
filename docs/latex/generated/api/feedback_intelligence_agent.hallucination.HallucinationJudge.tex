@@ -1,0 +1,30 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{HallucinationJudge}}
+\label{class:feedback_intelligence_agent.hallucination.HallucinationJudge}\index{Classes!HallucinationJudge}
+
+Protocol for semantic answer-support judges.
+\apifield{Inherits}\texttt{Protocol}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}hallucination.\allowbreak{}py:87}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/hallucination.py#L87}{online}), protocol, module \cref{module:feedback_intelligence_agent.hallucination}
+
+\subsection{\texttt{judge}}
+\label{method:feedback_intelligence_agent.hallucination.HallucinationJudge.judge}\index{Methods!judge}
+Return a semantic support verdict for an answer.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+judge(self, answer: str, *, question: str, results: list[SearchResult]) -> JudgeVerdict
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{answer}] \texttt{str}, required.
+  \item[\texttt{question}] \texttt{str}, required, keyword-only.
+  \item[\texttt{results}] \texttt{list[SearchResult]\allowbreak{}}, required, keyword-only.
+\end{arglist}
+\apifield{Value}\texttt{JudgeVerdict}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}hallucination.\allowbreak{}py:90}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/hallucination.py#L90}{online})

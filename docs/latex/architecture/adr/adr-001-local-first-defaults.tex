@@ -1,0 +1,66 @@
+\section{ADR-001: Every default is local and deterministic}
+\label{adr:001}
+
+\subsection*{Status}
+
+Accepted; in force at revision \texttt{\projectrevisionshort}.
+
+\subsection*{Context}
+
+The system's purpose requires a language model, an embedding model, and a
+vector store. Each of those is normally a remote or heavyweight dependency,
+which would make the repository impossible to test, demonstrate, or run in CI
+without credentials and network access.
+
+\subsection*{Decision}
+
+Every component that would normally require external infrastructure has a
+local deterministic default, and the default configuration selects it:
+
+\begin{itemize}[nosep]
+  \item \texttt{FEEDBACK\_AGENT\_LLM\_PROVIDER=local} selects
+    \texttt{DeterministicLLM};
+  \item embeddings default to \texttt{HashingEmbeddingModel};
+  \item \texttt{FEEDBACK\_AGENT\_VECTOR\_STORE=json} selects
+    \texttt{InMemoryVectorStore} with JSON persistence;
+  \item reranking, query rewriting, and hallucination checking all default to
+    deterministic local implementations;
+  \item telemetry defaults to a no-op emitter.
+\end{itemize}
+
+\subsection*{Consequences}
+
+\begin{itemize}
+  \item The full pipeline --- ingest, chunk, embed, index, retrieve, rerank,
+    generate, parse, cite, check --- runs offline. CI executes
+    \srcfile{scripts/run\_demo.py} on every push as a blocking step, so
+    breaking the offline path breaks the build.
+  \item Test assertions can be exact rather than fuzzy, because generation is
+    deterministic. The prompt snapshot test compares rendered output byte for
+    byte.
+  \item Evaluation metrics are reproducible across runs, which is what makes
+    them usable as a regression gate.
+  \item The deterministic provider is not a language model. Answer quality
+    under the default configuration reflects the retrieval and templating
+    pipeline only, and evaluation numbers obtained with it do not transfer to a
+    remote provider.
+  \item A second code path exists for every capability, and both must be kept
+    working.
+\end{itemize}
+
+\subsection*{Alternatives}
+
+Requiring an API key for any use; recording and replaying provider fixtures;
+mocking at the test boundary only. The first two would leave CI unable to
+exercise the real pipeline; the third would leave the demo and the CLI
+unusable without credentials.
+
+\subsection*{Evidence}
+
+\srcfile{src/feedback\_intelligence\_agent/config.py} (default field values);
+\srcfile{src/feedback\_intelligence\_agent/factory.py} (\texttt{build\_llm},
+\texttt{build\_retriever}, \texttt{load\_or\_build\_index});
+\srcfile{.github/workflows/ci.yml} (``Run deterministic demo'' step);
+\srcfile{AGENTS.md} (``Keep the local deterministic path working without
+external APIs'' and ``The demo must continue to work without an API key'');
+\srcfile{tests/test\_prompt\_snapshot.py}.

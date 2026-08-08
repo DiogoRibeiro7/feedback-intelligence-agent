@@ -1,0 +1,25 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{chunk\_text}}
+\label{func:feedback_intelligence_agent.chunking.chunk_text}\index{Functions!chunk\_text}
+
+Split text into overlapping word chunks.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+chunk_text(text: str, *, max_words: int = 80, overlap_words: int = 16) -> list[str]
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{text}] \texttt{str}, required. Input text to split.
+  \item[\texttt{max\_\allowbreak{}words}] \texttt{int}, default \texttt{80}, keyword-only. Maximum words per chunk.
+  \item[\texttt{overlap\_\allowbreak{}words}] \texttt{int}, default \texttt{16}, keyword-only. Number of words to reuse between adjacent chunks.
+\end{arglist}
+\apifield{Value}\texttt{list[str]\allowbreak{}}. Non-empty chunks.
+\apifield{Raises}\texttt{ValueError}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}chunking.\allowbreak{}py:18}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/chunking.py#L18}{online}), module \cref{module:feedback_intelligence_agent.chunking}

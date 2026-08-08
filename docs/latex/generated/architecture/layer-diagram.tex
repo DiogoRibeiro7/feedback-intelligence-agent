@@ -1,0 +1,36 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_architecture.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[
+  layerbox/.style={rectangle, draw=black, rounded corners=2pt, align=center,
+    text width=0.72\textwidth, inner sep=5pt, font=\small},
+  down/.style={-{Latex[length=2mm]}, thick},
+  side/.style={-{Latex[length=2mm]}, thick, dashed},
+  node distance=8mm
+]
+  \node[layerbox] (L0) {\textbf{Interface}\\[2pt]\texttt{\scriptsize \_\_init\_\_, api, cli}};
+  \node[layerbox, below=of L0] (L1) {\textbf{Application}\\[2pt]\texttt{\scriptsize active\_learning, agent, benchmarking, email\_summaries, evaluation, experiments, factory, human\_feedback, jobs, reports}};
+  \node[layerbox, below=of L1] (L2) {\textbf{Domain}\\[2pt]\texttt{\scriptsize chunking, citations, embeddings, guardrails, hallucination, lexical\_search, memory, output\_parser, privacy, prompt\_registry, prompts, query\_expansion, reranking, retrieval, synthetic\_data, tools}};
+  \node[layerbox, below=of L2] (L3) {\textbf{Data}\\[2pt]\texttt{\scriptsize data\_contracts, index\_updates, ingestion, lakehouse, qdrant\_store, streaming\_ingestion, vector\_store}};
+  \node[layerbox, below=of L3] (L4) {\textbf{Infrastructure}\\[2pt]\texttt{\scriptsize auth, llm, rate\_limit, resilience, telemetry}};
+  \node[layerbox, below=of L4] (L5) {\textbf{Foundation}\\[2pt]\texttt{\scriptsize config, schemas}};
+  \draw[down] (L0) -- (L1);
+  \draw[down] (L1) -- (L2);
+  \draw[down] (L2) -- (L3);
+  \draw[down] (L3) -- (L4);
+  \draw[down] (L4) -- (L5);
+  \draw[side] (L1.east) to[out=20, in=-20] (L0.east);
+  \draw[side] (L3.east) to[out=20, in=-20] (L1.east);
+  \draw[side] (L3.east) to[out=20, in=-20] (L2.east);
+  \draw[side] (L5.east) to[out=20, in=-20] (L2.east);
+  \draw[side] (L4.east) to[out=20, in=-20] (L2.east);
+\end{tikzpicture}
+\caption{Architectural layers of the package. Solid arrows show the dominant downward dependency direction; dashed arrows on the right show the upward edges that exist in the source.}
+\label{fig:architecture-layers}
+\end{figure}

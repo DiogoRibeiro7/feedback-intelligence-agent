@@ -1,0 +1,28 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{reports\_email\_summary}}
+\label{func:feedback_intelligence_agent.cli.reports_email_summary}\index{Functions!reports\_email\_summary}
+
+Render or send an email digest for saved insight reports.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+reports_email_summary(recipient: Annotated[list[str] | None, typer.Option('--recipient', help='Email recipient. Repeat for multiple recipients.')] = None, report_id: Annotated[list[str] | None, typer.Option('--report-id', help='Report id to include. Repeat for multiple reports.')] = None, subject: Annotated[str | None, typer.Option(help='Email subject override.')] = None, tenant_id: Annotated[str | None, typer.Option(help='Only include reports for this tenant id.')] = None, max_reports: Annotated[int, typer.Option(help='Maximum latest reports to include when --report-id is omitted.')] = 5, send: Annotated[bool, typer.Option(help='Send through configured SMTP instead of dry-run.')] = False, store_path: Annotated[Path, typer.Option(help='Directory holding saved report JSON files.')] = Path('.artifacts/reports')) -> None
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{recipient}] \texttt{Annotated[list[str]\allowbreak{} \textbar{} None,\allowbreak{} typer.\allowbreak{}Option('-\allowbreak{}-\allowbreak{}recipient',\allowbreak{} help='Email recipient.\allowbreak{} Repeat for multiple recipients.\allowbreak{}')\allowbreak{}]\allowbreak{}}, default \texttt{None}.
+  \item[\texttt{report\_\allowbreak{}id}] \texttt{Annotated[list[str]\allowbreak{} \textbar{} None,\allowbreak{} typer.\allowbreak{}Option('-\allowbreak{}-\allowbreak{}report-\allowbreak{}id',\allowbreak{} help='Report id to include.\allowbreak{} Repeat for multiple reports.\allowbreak{}')\allowbreak{}]\allowbreak{}}, default \texttt{None}.
+  \item[\texttt{subject}] \texttt{Annotated[str \textbar{} None,\allowbreak{} typer.\allowbreak{}Option(help='Email subject override.\allowbreak{}')\allowbreak{}]\allowbreak{}}, default \texttt{None}.
+  \item[\texttt{tenant\_\allowbreak{}id}] \texttt{Annotated[str \textbar{} None,\allowbreak{} typer.\allowbreak{}Option(help='Only include reports for this tenant id.\allowbreak{}')\allowbreak{}]\allowbreak{}}, default \texttt{None}.
+  \item[\texttt{max\_\allowbreak{}reports}] \texttt{Annotated[int,\allowbreak{} typer.\allowbreak{}Option(help='Maximum latest reports to include when -\allowbreak{}-\allowbreak{}report-\allowbreak{}id is omitted.\allowbreak{}')\allowbreak{}]\allowbreak{}}, default \texttt{5}.
+  \item[\texttt{send}] \texttt{Annotated[bool,\allowbreak{} typer.\allowbreak{}Option(help='Send through configured SMTP instead of dry-\allowbreak{}run.\allowbreak{}')\allowbreak{}]\allowbreak{}}, default \texttt{False}.
+  \item[\texttt{store\_\allowbreak{}path}] \texttt{Annotated[Path,\allowbreak{} typer.\allowbreak{}Option(help='Directory holding saved report JSON files.\allowbreak{}')\allowbreak{}]\allowbreak{}}, default \texttt{Path('.\allowbreak{}artifacts/\allowbreak{}reports')\allowbreak{}}.
+\end{arglist}
+\apifield{Raises}\texttt{Exit}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}cli.\allowbreak{}py:598}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/cli.py#L598}{online}), module \cref{module:feedback_intelligence_agent.cli}

@@ -1,0 +1,24 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{build\_grounded\_prompt}}
+\label{func:feedback_intelligence_agent.prompts.build_grounded_prompt}\index{Functions!build\_grounded\_prompt}
+
+Build a grounded prompt for an LLM provider.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+build_grounded_prompt(question: str, results: list[SearchResult], *, route: str) -> str
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{question}] \texttt{str}, required.
+  \item[\texttt{results}] \texttt{list[SearchResult]\allowbreak{}}, required.
+  \item[\texttt{route}] \texttt{str}, required, keyword-only.
+\end{arglist}
+\apifield{Value}\texttt{str}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}prompts.\allowbreak{}py:67}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/prompts.py#L67}{online}), module \cref{module:feedback_intelligence_agent.prompts}

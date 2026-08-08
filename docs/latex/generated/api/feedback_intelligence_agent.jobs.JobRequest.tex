@@ -1,0 +1,19 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{JobRequest}}
+\label{class:feedback_intelligence_agent.jobs.JobRequest}\label{schema:JobRequest}\index{Classes!JobRequest}
+
+Request describing an ingestion job to run.
+\apifield{Inherits}\texttt{BaseModel}
+\apifield{Fields}
+\begin{arglist}
+  \item[\texttt{input\_\allowbreak{}path}] \texttt{str}, required, \texttt{min\_\allowbreak{}length=1}. Path to the feedback CSV to ingest.
+  \item[\texttt{index\_\allowbreak{}path}] \texttt{str \textbar{} None}, default \texttt{None}. Optional output path for the JSON vector store. When omitted the caller's configured default index path is used.
+\end{arglist}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}jobs.\allowbreak{}py:81}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/jobs.py#L81}{online}), pydantic model, module \cref{module:feedback_intelligence_agent.jobs}

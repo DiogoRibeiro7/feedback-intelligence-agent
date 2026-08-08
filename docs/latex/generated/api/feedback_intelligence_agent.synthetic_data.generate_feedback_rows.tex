@@ -1,0 +1,23 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{generate\_feedback\_rows}}
+\label{func:feedback_intelligence_agent.synthetic_data.generate_feedback_rows}\index{Functions!generate\_feedback\_rows}
+
+Generate synthetic feedback rows compatible with the data contract.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+generate_feedback_rows(config: SyntheticDataConfig) -> list[dict[str, str]]
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{config}] \texttt{SyntheticDataConfig}, required. Generation parameters.
+\end{arglist}
+\apifield{Value}\texttt{list[dict[str,\allowbreak{} str]\allowbreak{}]\allowbreak{}}. A list of \texttt{config.\allowbreak{}rows} feedback row mappings.
+\apifield{Details}Each returned mapping uses the columns in \texttt{CSV\_\allowbreak{}COLUMNS} (string values, as a CSV would carry them). Generation is fully deterministic for a given configuration.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}synthetic\_\allowbreak{}data.\allowbreak{}py:229}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/synthetic_data.py#L229}{online}), module \cref{module:feedback_intelligence_agent.synthetic_data}

@@ -1,0 +1,45 @@
+% Authored TikZ: component collaboration diagram for a single answer.
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[
+  comp/.style={rectangle, draw=black, rounded corners=2pt, align=center,
+    font=\scriptsize, minimum width=27mm, minimum height=8mm},
+  proto/.style={rectangle, draw=rulegrey, dashed, align=center,
+    font=\scriptsize, minimum width=27mm, minimum height=8mm},
+  flow/.style={-{Latex[length=1.8mm]}, thick},
+  weak/.style={-{Latex[length=1.8mm]}, rulegrey}
+]
+  \node[comp] (agent) {\texttt{agent}\\ FeedbackInsightAgent};
+
+  \node[proto, above left=9mm and 16mm of agent] (guard) {\texttt{guardrails}\\ input + context gates};
+  \node[proto, left=16mm of agent] (rewrite) {\texttt{memory}\\ QueryRewriter};
+  \node[proto, below left=9mm and 16mm of agent] (retr) {\texttt{retrieval}\\ Retriever};
+  \node[proto, below=9mm of agent] (rerank) {\texttt{reranking}\\ Reranker};
+  \node[proto, below right=9mm and 16mm of agent] (tools) {\texttt{tools}\\ ToolRegistry};
+  \node[proto, right=16mm of agent] (llm) {\texttt{llm}\\ LLMProvider};
+  \node[proto, above right=9mm and 16mm of agent] (parse) {\texttt{output\_parser}\\ parse + repair};
+  \node[proto, above=9mm of agent] (halluc) {\texttt{hallucination}\\ evidence overlap};
+
+  \node[comp, below=26mm of agent] (result) {\texttt{schemas}\\ AgentAnswer};
+  \node[proto, left=16mm of result] (cite) {\texttt{citations}\\ build citations};
+  \node[proto, right=16mm of result] (telem) {\texttt{telemetry}\\ spans + events};
+
+  \draw[flow] (agent) -- (guard);
+  \draw[flow] (agent) -- (rewrite);
+  \draw[flow] (agent) -- (retr);
+  \draw[flow] (agent) -- (rerank);
+  \draw[flow] (agent) -- (tools);
+  \draw[flow] (agent) -- (llm);
+  \draw[flow] (agent) -- (parse);
+  \draw[flow] (agent) -- (halluc);
+  \draw[flow] (agent) -- (result);
+  \draw[weak] (result) -- (cite);
+  \draw[weak] (agent.east) to[out=-50, in=90] (telem.north);
+\end{tikzpicture}
+\caption{Collaborators of the agent during one answer. Dashed borders mark
+collaborators reached through a \texttt{typing.Protocol} or an injected
+registry, so each can be replaced without changing the agent. The concrete
+choice for each is made in \texttt{factory}.}
+\label{fig:component-collaboration}
+\end{figure}

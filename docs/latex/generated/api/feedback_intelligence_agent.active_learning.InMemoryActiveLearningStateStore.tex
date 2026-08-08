@@ -1,0 +1,60 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{InMemoryActiveLearningStateStore}}
+\label{class:feedback_intelligence_agent.active_learning.InMemoryActiveLearningStateStore}\index{Classes!InMemoryActiveLearningStateStore}
+
+Dict-backed active-learning state store for tests.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+InMemoryActiveLearningStateStore(self) -> None
+\end{lstlisting}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}active\_\allowbreak{}learning.\allowbreak{}py:81}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/active_learning.py#L81}{online}), class, module \cref{module:feedback_intelligence_agent.active_learning}
+
+\subsection{\texttt{get}}
+\label{method:feedback_intelligence_agent.active_learning.InMemoryActiveLearningStateStore.get}\index{Methods!get}
+Return a deep copy of a state record, or None.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+get(self, feedback_id: str) -> ActiveLearningState | None
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{feedback\_\allowbreak{}id}] \texttt{str}, required.
+\end{arglist}
+\apifield{Value}\texttt{ActiveLearningState \textbar{} None}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}active\_\allowbreak{}learning.\allowbreak{}py:88}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/active_learning.py#L88}{online})
+
+\subsection{\texttt{update}}
+\label{method:feedback_intelligence_agent.active_learning.InMemoryActiveLearningStateStore.update}\index{Methods!update}
+Create or update workflow state in memory.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+update(self, feedback_id: str, request: UpdateActiveLearningStateRequest) -> ActiveLearningState
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{feedback\_\allowbreak{}id}] \texttt{str}, required.
+  \item[\texttt{request}] \texttt{UpdateActiveLearningStateRequest}, required.
+\end{arglist}
+\apifield{Value}\texttt{ActiveLearningState}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}active\_\allowbreak{}learning.\allowbreak{}py:94}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/active_learning.py#L94}{online})
+
+\subsection{\texttt{list}}
+\label{method:feedback_intelligence_agent.active_learning.InMemoryActiveLearningStateStore.list}\index{Methods!list}
+Return state records sorted by most recently updated first.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+list(self, *, status: ActiveLearningStatus | None = None) -> list[ActiveLearningState]
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{status}] \texttt{ActiveLearningStatus \textbar{} None}, default \texttt{None}, keyword-only.
+\end{arglist}
+\apifield{Value}\texttt{list[ActiveLearningState]\allowbreak{}}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}active\_\allowbreak{}learning.\allowbreak{}py:102}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/active_learning.py#L102}{online})

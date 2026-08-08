@@ -1,0 +1,78 @@
+% Authored: driver and overview for the engineering part.
+
+\chapter{Engineering Overview}
+\label{ch:engineering-overview}
+
+This part answers a single question: \emph{how is this software developed,
+verified, built, reproduced, packaged, and released?} It documents controls
+that exist in the repository. Anything that would be advisable but is absent is
+confined to \cref{ch:improvements} and is never presented as an existing
+capability.
+
+\section{The lifecycle as implemented}
+
+\input{diagrams/engineering/lifecycle}
+
+Six checks run on every push and pull request to \texttt{main} or
+\texttt{develop}, in this order, inside a single \texttt{quality} job repeated
+across three Python versions: lint, format check, type check, tests with a
+coverage floor, the deterministic demo, and the package build. The job fails at
+the first failing step, so the order is also a triage order --- style problems
+surface before type problems, which surface before test failures.
+
+Four further workflows run independently, on their own triggers: CodeQL
+analysis, dependency review on pull requests, a container build with a smoke
+test, and a frontend build with an npm audit. A fifth runs on release tags.
+
+\section{Interfaces a contributor uses}
+
+\begin{description}[nosep]
+  \item[\texttt{make quality}] lint, type check, tests --- the fast local loop.
+  \item[\texttt{make ci}] lint, format check, type check, coverage, build ---
+    the closest local equivalent of the CI job.
+  \item[\texttt{make docs}] regenerate this manual's LaTeX sources and validate
+    them.
+  \item[\texttt{make demo}] the offline end-to-end demonstration that CI also
+    runs.
+\end{description}
+
+The full generated target list is in \cref{ch:build}.
+
+\section{Chapters in this part}
+
+\begin{description}[nosep]
+  \item[\cref{ch:repository-structure}] What lives where, and whether it is
+    authored or generated.
+  \item[\cref{ch:development-workflow}] Branches, contribution, and the local
+    loop.
+  \item[\cref{ch:dependency-engineering}] Dependency declaration, extras, and
+    locking.
+  \item[\cref{ch:testing}] Test categories, execution, and what is covered.
+  \item[\cref{ch:quality-assurance}] The gates and their configuration.
+  \item[\cref{ch:build}] Build interface, packaging, and containers.
+  \item[\cref{ch:ci-cd}] Every workflow, job, and step.
+  \item[\cref{ch:configuration-management}] Configuration and secret handling.
+  \item[\cref{ch:reproducibility}] What makes a result reproducible, and where
+    it stops.
+  \item[\cref{ch:observability}] Telemetry and logging.
+  \item[\cref{ch:security}] Implemented security controls.
+  \item[\cref{ch:releases}] Versioning, changelog, citation metadata, release.
+  \item[\cref{ch:documentation-system}] How this manual is produced.
+  \item[\cref{ch:improvements}] Recommended improvements --- explicitly not
+    implemented.
+\end{description}
+
+\input{engineering/repository-structure}
+\input{engineering/development-workflow}
+\input{engineering/dependencies}
+\input{engineering/testing}
+\input{engineering/quality-assurance}
+\input{engineering/build}
+\input{engineering/ci-cd}
+\input{engineering/configuration}
+\input{engineering/reproducibility}
+\input{engineering/observability}
+\input{engineering/security}
+\input{engineering/releases}
+\input{engineering/documentation-system}
+\input{engineering/improvements}

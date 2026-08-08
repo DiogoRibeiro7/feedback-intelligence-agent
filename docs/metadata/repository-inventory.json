@@ -1,0 +1,3352 @@
+{
+  "project": {
+    "name": "feedback-intelligence-agent",
+    "version": "0.5.0",
+    "description": "A production-style AI engineering project with RAG, evaluation, FastAPI, and local deterministic LLM fallback.",
+    "authors": [
+      "Diogo Ribeiro <dfr@esmad.ipp.pt>"
+    ],
+    "maintainers": [
+      {
+        "name": "Diogo Ribeiro",
+        "email": "dfr@esmad.ipp.pt",
+        "orcid": "https://orcid.org/0009-0001-2022-7072",
+        "affiliation": "ESMAD - School of Media Arts and Design, Polytechnic of Porto"
+      }
+    ],
+    "readme": "README.md",
+    "license": "MIT",
+    "doi": "10.5281/zenodo.21804219",
+    "repository_url": "https://github.com/DiogoRibeiro7/feedback-intelligence-agent",
+    "orcid": "https://orcid.org/0009-0001-2022-7072",
+    "affiliation": "ESMAD - School of Media Arts and Design, Polytechnic of Porto",
+    "keywords": [
+      "artificial intelligence",
+      "retrieval-augmented generation",
+      "customer feedback",
+      "evaluation",
+      "FastAPI"
+    ],
+    "date_released": "2026-08-08",
+    "python_requires": ">=3.10,<3.13",
+    "revision": "b6cbc710ffdfa5f26f700c999d594c67588c1e16",
+    "revision_short": "b6cbc710ffdf",
+    "revision_date": "2026-08-06T15:17:03+01:00",
+    "packages": [
+      {
+        "include": "feedback_intelligence_agent",
+        "from": "src"
+      }
+    ],
+    "console_scripts": {
+      "feedback-agent": "feedback_intelligence_agent.cli:app"
+    }
+  },
+  "files": {
+    "total": 206,
+    "excluded_generated_documentation": 314,
+    "by_category": {
+      "build-configuration": 1,
+      "build-interface": 1,
+      "ci-workflow": 6,
+      "citation-metadata": 2,
+      "configuration-template": 1,
+      "container": 2,
+      "dataset": 1,
+      "dependency-lock": 1,
+      "deployment": 3,
+      "documentation": 13,
+      "documentation-latex": 48,
+      "documentation-tool": 11,
+      "editor-configuration": 1,
+      "example-data": 4,
+      "frontend": 13,
+      "license": 1,
+      "python-script": 2,
+      "python-source": 43,
+      "python-test": 40,
+      "repository-configuration": 2,
+      "repository-governance": 8,
+      "test-fixture": 2
+    },
+    "by_language": {
+      "CSS": {
+        "files": 1,
+        "lines": 430
+      },
+      "CSV": {
+        "files": 1,
+        "lines": 13
+      },
+      "HTML": {
+        "files": 1,
+        "lines": 110
+      },
+      "JSON": {
+        "files": 5,
+        "lines": 1018
+      },
+      "JSON Lines": {
+        "files": 3,
+        "lines": 16
+      },
+      "LaTeX": {
+        "files": 47,
+        "lines": 4144
+      },
+      "Markdown": {
+        "files": 15,
+        "lines": 2606
+      },
+      "Python": {
+        "files": 96,
+        "lines": 26215
+      },
+      "TOML": {
+        "files": 2,
+        "lines": 161
+      },
+      "TypeScript": {
+        "files": 4,
+        "lines": 815
+      },
+      "YAML": {
+        "files": 16,
+        "lines": 680
+      }
+    },
+    "entries": [
+      {
+        "path": ".editorconfig",
+        "category": "editor-configuration",
+        "language": null,
+        "lines": null,
+        "bytes": 278
+      },
+      {
+        "path": ".env.example",
+        "category": "configuration-template",
+        "language": null,
+        "lines": null,
+        "bytes": 2913
+      },
+      {
+        "path": ".gitattributes",
+        "category": "repository-configuration",
+        "language": null,
+        "lines": null,
+        "bytes": 104
+      },
+      {
+        "path": ".github/CODEOWNERS",
+        "category": "repository-governance",
+        "language": null,
+        "lines": null,
+        "bytes": 17
+      },
+      {
+        "path": ".github/ISSUE_TEMPLATE/bug_report.yml",
+        "category": "repository-governance",
+        "language": "YAML",
+        "lines": 66,
+        "bytes": 1712
+      },
+      {
+        "path": ".github/ISSUE_TEMPLATE/config.yml",
+        "category": "repository-governance",
+        "language": "YAML",
+        "lines": 8,
+        "bytes": 451
+      },
+      {
+        "path": ".github/ISSUE_TEMPLATE/documentation.yml",
+        "category": "repository-governance",
+        "language": "YAML",
+        "lines": 22,
+        "bytes": 561
+      },
+      {
+        "path": ".github/ISSUE_TEMPLATE/feature_request.yml",
+        "category": "repository-governance",
+        "language": "YAML",
+        "lines": 46,
+        "bytes": 1218
+      },
+      {
+        "path": ".github/PULL_REQUEST_TEMPLATE.md",
+        "category": "repository-governance",
+        "language": "Markdown",
+        "lines": 25,
+        "bytes": 463
+      },
+      {
+        "path": ".github/dependabot.yml",
+        "category": "repository-governance",
+        "language": "YAML",
+        "lines": 38,
+        "bytes": 776
+      },
+      {
+        "path": ".github/release.yml",
+        "category": "repository-governance",
+        "language": "YAML",
+        "lines": 30,
+        "bytes": 534
+      },
+      {
+        "path": ".github/workflows/ci.yml",
+        "category": "ci-workflow",
+        "language": "YAML",
+        "lines": 104,
+        "bytes": 2962
+      },
+      {
+        "path": ".github/workflows/dependency-review.yml",
+        "category": "ci-workflow",
+        "language": "YAML",
+        "lines": 22,
+        "bytes": 430
+      },
+      {
+        "path": ".github/workflows/docker.yml",
+        "category": "ci-workflow",
+        "language": "YAML",
+        "lines": 49,
+        "bytes": 1083
+      },
+      {
+        "path": ".github/workflows/frontend.yml",
+        "category": "ci-workflow",
+        "language": "YAML",
+        "lines": 46,
+        "bytes": 901
+      },
+      {
+        "path": ".github/workflows/release.yml",
+        "category": "ci-workflow",
+        "language": "YAML",
+        "lines": 70,
+        "bytes": 1636
+      },
+      {
+        "path": ".github/workflows/security.yml",
+        "category": "ci-workflow",
+        "language": "YAML",
+        "lines": 40,
+        "bytes": 836
+      },
+      {
+        "path": ".gitignore",
+        "category": "repository-configuration",
+        "language": null,
+        "lines": null,
+        "bytes": 1356
+      },
+      {
+        "path": ".zenodo.json",
+        "category": "citation-metadata",
+        "language": "JSON",
+        "lines": 33,
+        "bytes": 1196
+      },
+      {
+        "path": "CHANGELOG.md",
+        "category": "documentation",
+        "language": "Markdown",
+        "lines": 110,
+        "bytes": 4708
+      },
+      {
+        "path": "CITATION.cff",
+        "category": "citation-metadata",
+        "language": "YAML",
+        "lines": 22,
+        "bytes": 718
+      },
+      {
+        "path": "CODE_OF_CONDUCT.md",
+        "category": "documentation",
+        "language": "Markdown",
+        "lines": 23,
+        "bytes": 792
+      },
+      {
+        "path": "CONTRIBUTING.md",
+        "category": "documentation",
+        "language": "Markdown",
+        "lines": 49,
+        "bytes": 1154
+      },
+      {
+        "path": "Dockerfile",
+        "category": "container",
+        "language": null,
+        "lines": null,
+        "bytes": 713
+      },
+      {
+        "path": "LICENSE",
+        "category": "license",
+        "language": null,
+        "lines": null,
+        "bytes": 1070
+      },
+      {
+        "path": "Makefile",
+        "category": "build-interface",
+        "language": null,
+        "lines": null,
+        "bytes": 3671
+      },
+      {
+        "path": "README.md",
+        "category": "documentation",
+        "language": "Markdown",
+        "lines": 1150,
+        "bytes": 52183
+      },
+      {
+        "path": "ROADMAP.md",
+        "category": "documentation",
+        "language": "Markdown",
+        "lines": 65,
+        "bytes": 2584
+      },
+      {
+        "path": "SECURITY.md",
+        "category": "documentation",
+        "language": "Markdown",
+        "lines": 27,
+        "bytes": 812
+      },
+      {
+        "path": "SUPPORT.md",
+        "category": "documentation",
+        "language": "Markdown",
+        "lines": 12,
+        "bytes": 511
+      },
+      {
+        "path": "data/sample_feedback.csv",
+        "category": "dataset",
+        "language": "CSV",
+        "lines": 13,
+        "bytes": 2292
+      },
+      {
+        "path": "deploy/docker-compose.prod.yml",
+        "category": "deployment",
+        "language": "YAML",
+        "lines": 56,
+        "bytes": 2127
+      },
+      {
+        "path": "deploy/ecs-fargate-task-definition.json",
+        "category": "deployment",
+        "language": "JSON",
+        "lines": 61,
+        "bytes": 2109
+      },
+      {
+        "path": "deploy/fly.toml",
+        "category": "deployment",
+        "language": "TOML",
+        "lines": 52,
+        "bytes": 1537
+      },
+      {
+        "path": "docker-compose.yml",
+        "category": "container",
+        "language": "YAML",
+        "lines": 40,
+        "bytes": 1312
+      },
+      {
+        "path": "docs/README.md",
+        "category": "documentation",
+        "language": "Markdown",
+        "lines": 172,
+        "bytes": 7792
+      },
+      {
+        "path": "docs/architecture.md",
+        "category": "documentation",
+        "language": "Markdown",
+        "lines": 164,
+        "bytes": 11623
+      },
+      {
+        "path": "docs/case_study.md",
+        "category": "documentation",
+        "language": "Markdown",
+        "lines": 388,
+        "bytes": 20184
+      },
+      {
+        "path": "docs/deployment.md",
+        "category": "documentation",
+        "language": "Markdown",
+        "lines": 163,
+        "bytes": 7338
+      },
+      {
+        "path": "docs/evaluation.md",
+        "category": "documentation",
+        "language": "Markdown",
+        "lines": 70,
+        "bytes": 4938
+      },
+      {
+        "path": "docs/latex/about.tex",
+        "category": "documentation-latex",
+        "language": "LaTeX",
+        "lines": 141,
+        "bytes": 6471
+      },
+      {
+        "path": "docs/latex/architecture/adr/adr-001-local-first-defaults.tex",
+        "category": "documentation-latex",
+        "language": "LaTeX",
+        "lines": 66,
+        "bytes": 2825
+      },
+      {
+        "path": "docs/latex/architecture/adr/adr-002-structural-protocols.tex",
+        "category": "documentation-latex",
+        "language": "LaTeX",
+        "lines": 56,
+        "bytes": 2543
+      },
+      {
+        "path": "docs/latex/architecture/adr/adr-003-single-composition-root.tex",
+        "category": "documentation-latex",
+        "language": "LaTeX",
+        "lines": 52,
+        "bytes": 2104
+      },
+      {
+        "path": "docs/latex/architecture/adr/adr-004-typed-boundaries.tex",
+        "category": "documentation-latex",
+        "language": "LaTeX",
+        "lines": 53,
+        "bytes": 2302
+      },
+      {
+        "path": "docs/latex/architecture/adr/adr-005-optional-extras.tex",
+        "category": "documentation-latex",
+        "language": "LaTeX",
+        "lines": 54,
+        "bytes": 2262
+      },
+      {
+        "path": "docs/latex/architecture/adr/adr-006-deferred-import-cycle.tex",
+        "category": "documentation-latex",
+        "language": "LaTeX",
+        "lines": 59,
+        "bytes": 2460
+      },
+      {
+        "path": "docs/latex/architecture/adr/adr-007-file-backed-stores.tex",
+        "category": "documentation-latex",
+        "language": "LaTeX",
+        "lines": 55,
+        "bytes": 2162
+      },
+      {
+        "path": "docs/latex/architecture/adr/adr-008-two-gate-guardrails.tex",
+        "category": "documentation-latex",
+        "language": "LaTeX",
+        "lines": 57,
+        "bytes": 2364
+      },
+      {
+        "path": "docs/latex/architecture/adr/adr-009-replayed-streaming.tex",
+        "category": "documentation-latex",
+        "language": "LaTeX",
+        "lines": 58,
+        "bytes": 2496
+      },
+      {
+        "path": "docs/latex/architecture/adr/adr-010-nearest-rank-percentile.tex",
+        "category": "documentation-latex",
+        "language": "LaTeX",
+        "lines": 47,
+        "bytes": 1857
+      },
+      {
+        "path": "docs/latex/architecture/architecture.tex",
+        "category": "documentation-latex",
+        "language": "LaTeX",
+        "lines": 87,
+        "bytes": 4235
+      },
+      {
+        "path": "docs/latex/architecture/components.tex",
+        "category": "documentation-latex",
+        "language": "LaTeX",
+        "lines": 93,
+        "bytes": 4473
+      },
+      {
+        "path": "docs/latex/architecture/data-flow.tex",
+        "category": "documentation-latex",
+        "language": "LaTeX",
+        "lines": 105,
+        "bytes": 5268
+      },
+      {
+        "path": "docs/latex/architecture/decisions.tex",
+        "category": "documentation-latex",
+        "language": "LaTeX",
+        "lines": 41,
+        "bytes": 1842
+      },
+      {
+        "path": "docs/latex/architecture/dependencies.tex",
+        "category": "documentation-latex",
+        "language": "LaTeX",
+        "lines": 87,
+        "bytes": 3868
+      },
+      {
+        "path": "docs/latex/architecture/runtime.tex",
+        "category": "documentation-latex",
+        "language": "LaTeX",
+        "lines": 132,
+        "bytes": 6975
+      },
+      {
+        "path": "docs/latex/architecture/system-context.tex",
+        "category": "documentation-latex",
+        "language": "LaTeX",
+        "lines": 104,
+        "bytes": 4764
+      },
+      {
+        "path": "docs/latex/diagrams/architecture/components.tex",
+        "category": "documentation-latex",
+        "language": "LaTeX",
+        "lines": 45,
+        "bytes": 2239
+      },
+      {
+        "path": "docs/latex/diagrams/architecture/data-flow.tex",
+        "category": "documentation-latex",
+        "language": "LaTeX",
+        "lines": 55,
+        "bytes": 3138
+      },
+      {
+        "path": "docs/latex/diagrams/architecture/runtime.tex",
+        "category": "documentation-latex",
+        "language": "LaTeX",
+        "lines": 55,
+        "bytes": 3379
+      },
+      {
+        "path": "docs/latex/diagrams/architecture/system-context.tex",
+        "category": "documentation-latex",
+        "language": "LaTeX",
+        "lines": 74,
+        "bytes": 3306
+      },
+      {
+        "path": "docs/latex/diagrams/engineering/documentation-pipeline.tex",
+        "category": "documentation-latex",
+        "language": "LaTeX",
+        "lines": 59,
+        "bytes": 3033
+      },
+      {
+        "path": "docs/latex/diagrams/engineering/lifecycle.tex",
+        "category": "documentation-latex",
+        "language": "LaTeX",
+        "lines": 54,
+        "bytes": 3161
+      },
+      {
+        "path": "docs/latex/engineering/build.tex",
+        "category": "documentation-latex",
+        "language": "LaTeX",
+        "lines": 63,
+        "bytes": 2686
+      },
+      {
+        "path": "docs/latex/engineering/ci-cd.tex",
+        "category": "documentation-latex",
+        "language": "LaTeX",
+        "lines": 56,
+        "bytes": 2743
+      },
+      {
+        "path": "docs/latex/engineering/configuration.tex",
+        "category": "documentation-latex",
+        "language": "LaTeX",
+        "lines": 64,
+        "bytes": 3101
+      },
+      {
+        "path": "docs/latex/engineering/dependencies.tex",
+        "category": "documentation-latex",
+        "language": "LaTeX",
+        "lines": 54,
+        "bytes": 2439
+      },
+      {
+        "path": "docs/latex/engineering/development-workflow.tex",
+        "category": "documentation-latex",
+        "language": "LaTeX",
+        "lines": 84,
+        "bytes": 3212
+      },
+      {
+        "path": "docs/latex/engineering/documentation-system.tex",
+        "category": "documentation-latex",
+        "language": "LaTeX",
+        "lines": 115,
+        "bytes": 5659
+      },
+      {
+        "path": "docs/latex/engineering/engineering.tex",
+        "category": "documentation-latex",
+        "language": "LaTeX",
+        "lines": 78,
+        "bytes": 3349
+      },
+      {
+        "path": "docs/latex/engineering/improvements.tex",
+        "category": "documentation-latex",
+        "language": "LaTeX",
+        "lines": 110,
+        "bytes": 4632
+      },
+      {
+        "path": "docs/latex/engineering/observability.tex",
+        "category": "documentation-latex",
+        "language": "LaTeX",
+        "lines": 94,
+        "bytes": 4049
+      },
+      {
+        "path": "docs/latex/engineering/quality-assurance.tex",
+        "category": "documentation-latex",
+        "language": "LaTeX",
+        "lines": 56,
+        "bytes": 2820
+      },
+      {
+        "path": "docs/latex/engineering/releases.tex",
+        "category": "documentation-latex",
+        "language": "LaTeX",
+        "lines": 98,
+        "bytes": 4013
+      },
+      {
+        "path": "docs/latex/engineering/repository-structure.tex",
+        "category": "documentation-latex",
+        "language": "LaTeX",
+        "lines": 37,
+        "bytes": 1703
+      },
+      {
+        "path": "docs/latex/engineering/reproducibility.tex",
+        "category": "documentation-latex",
+        "language": "LaTeX",
+        "lines": 105,
+        "bytes": 4658
+      },
+      {
+        "path": "docs/latex/engineering/security.tex",
+        "category": "documentation-latex",
+        "language": "LaTeX",
+        "lines": 87,
+        "bytes": 4351
+      },
+      {
+        "path": "docs/latex/engineering/testing.tex",
+        "category": "documentation-latex",
+        "language": "LaTeX",
+        "lines": 88,
+        "bytes": 4246
+      },
+      {
+        "path": "docs/latex/engineering/traceability.tex",
+        "category": "documentation-latex",
+        "language": "LaTeX",
+        "lines": 32,
+        "bytes": 1556
+      },
+      {
+        "path": "docs/latex/main.tex",
+        "category": "documentation-latex",
+        "language": "LaTeX",
+        "lines": 101,
+        "bytes": 3228
+      },
+      {
+        "path": "docs/latex/metadata.tex",
+        "category": "documentation-latex",
+        "language": "LaTeX",
+        "lines": 30,
+        "bytes": 1340
+      },
+      {
+        "path": "docs/latex/preamble.tex",
+        "category": "documentation-latex",
+        "language": "LaTeX",
+        "lines": 213,
+        "bytes": 7085
+      },
+      {
+        "path": "docs/latex/reference.tex",
+        "category": "documentation-latex",
+        "language": "LaTeX",
+        "lines": 77,
+        "bytes": 2451
+      },
+      {
+        "path": "docs/latex/reference/indexes.tex",
+        "category": "documentation-latex",
+        "language": "LaTeX",
+        "lines": 12,
+        "bytes": 544
+      },
+      {
+        "path": "docs/latex/reference/mathematics.tex",
+        "category": "documentation-latex",
+        "language": "LaTeX",
+        "lines": 526,
+        "bytes": 21207
+      },
+      {
+        "path": "docs/latex/reference/reference-manual.tex",
+        "category": "documentation-latex",
+        "language": "LaTeX",
+        "lines": 275,
+        "bytes": 11720
+      },
+      {
+        "path": "docs/latex/references.bib",
+        "category": "documentation-latex",
+        "language": null,
+        "lines": null,
+        "bytes": 3134
+      },
+      {
+        "path": "docs/prompts.md",
+        "category": "documentation",
+        "language": "Markdown",
+        "lines": 93,
+        "bytes": 4212
+      },
+      {
+        "path": "docs/tools/__init__.py",
+        "category": "documentation-tool",
+        "language": "Python",
+        "lines": 43,
+        "bytes": 1718
+      },
+      {
+        "path": "docs/tools/check_latex_log.py",
+        "category": "documentation-tool",
+        "language": "Python",
+        "lines": 151,
+        "bytes": 6249
+      },
+      {
+        "path": "docs/tools/extract_api.py",
+        "category": "documentation-tool",
+        "language": "Python",
+        "lines": 1062,
+        "bytes": 37737
+      },
+      {
+        "path": "docs/tools/extract_dependencies.py",
+        "category": "documentation-tool",
+        "language": "Python",
+        "lines": 372,
+        "bytes": 13067
+      },
+      {
+        "path": "docs/tools/generate_docs.py",
+        "category": "documentation-tool",
+        "language": "Python",
+        "lines": 256,
+        "bytes": 9665
+      },
+      {
+        "path": "docs/tools/inspect_repository.py",
+        "category": "documentation-tool",
+        "language": "Python",
+        "lines": 866,
+        "bytes": 31981
+      },
+      {
+        "path": "docs/tools/latex_utils.py",
+        "category": "documentation-tool",
+        "language": "Python",
+        "lines": 297,
+        "bytes": 11158
+      },
+      {
+        "path": "docs/tools/render_architecture.py",
+        "category": "documentation-tool",
+        "language": "Python",
+        "lines": 470,
+        "bytes": 19829
+      },
+      {
+        "path": "docs/tools/render_engineering.py",
+        "category": "documentation-tool",
+        "language": "Python",
+        "lines": 929,
+        "bytes": 37427
+      },
+      {
+        "path": "docs/tools/render_reference.py",
+        "category": "documentation-tool",
+        "language": "Python",
+        "lines": 1010,
+        "bytes": 39713
+      },
+      {
+        "path": "docs/tools/validate_docs.py",
+        "category": "documentation-tool",
+        "language": "Python",
+        "lines": 512,
+        "bytes": 19739
+      },
+      {
+        "path": "examples/experiment_config.yaml",
+        "category": "example-data",
+        "language": "YAML",
+        "lines": 21,
+        "bytes": 717
+      },
+      {
+        "path": "examples/queries.jsonl",
+        "category": "example-data",
+        "language": "JSON Lines",
+        "lines": 5,
+        "bytes": 906
+      },
+      {
+        "path": "examples/stream_feedback.jsonl",
+        "category": "example-data",
+        "language": "JSON Lines",
+        "lines": 2,
+        "bytes": 428
+      },
+      {
+        "path": "examples/tool_queries.jsonl",
+        "category": "example-data",
+        "language": "JSON Lines",
+        "lines": 9,
+        "bytes": 1612
+      },
+      {
+        "path": "frontend/.env.example",
+        "category": "frontend",
+        "language": null,
+        "lines": null,
+        "bytes": 141
+      },
+      {
+        "path": "frontend/.gitignore",
+        "category": "frontend",
+        "language": null,
+        "lines": null,
+        "bytes": 42
+      },
+      {
+        "path": "frontend/Dockerfile",
+        "category": "frontend",
+        "language": null,
+        "lines": null,
+        "bytes": 750
+      },
+      {
+        "path": "frontend/README.md",
+        "category": "frontend",
+        "language": "Markdown",
+        "lines": 95,
+        "bytes": 3786
+      },
+      {
+        "path": "frontend/index.html",
+        "category": "frontend",
+        "language": "HTML",
+        "lines": 110,
+        "bytes": 3744
+      },
+      {
+        "path": "frontend/package-lock.json",
+        "category": "frontend",
+        "language": "JSON",
+        "lines": 887,
+        "bytes": 29040
+      },
+      {
+        "path": "frontend/package.json",
+        "category": "frontend",
+        "language": "JSON",
+        "lines": 16,
+        "bytes": 433
+      },
+      {
+        "path": "frontend/src/api.ts",
+        "category": "frontend",
+        "language": "TypeScript",
+        "lines": 257,
+        "bytes": 6906
+      },
+      {
+        "path": "frontend/src/main.ts",
+        "category": "frontend",
+        "language": "TypeScript",
+        "lines": 535,
+        "bytes": 17589
+      },
+      {
+        "path": "frontend/src/styles.css",
+        "category": "frontend",
+        "language": "CSS",
+        "lines": 430,
+        "bytes": 7123
+      },
+      {
+        "path": "frontend/src/vite-env.d.ts",
+        "category": "frontend",
+        "language": "TypeScript",
+        "lines": 9,
+        "bytes": 163
+      },
+      {
+        "path": "frontend/tsconfig.json",
+        "category": "frontend",
+        "language": "JSON",
+        "lines": 21,
+        "bytes": 546
+      },
+      {
+        "path": "frontend/vite.config.ts",
+        "category": "frontend",
+        "language": "TypeScript",
+        "lines": 14,
+        "bytes": 313
+      },
+      {
+        "path": "poetry.lock",
+        "category": "dependency-lock",
+        "language": null,
+        "lines": null,
+        "bytes": 555079
+      },
+      {
+        "path": "pyproject.toml",
+        "category": "build-configuration",
+        "language": "TOML",
+        "lines": 109,
+        "bytes": 3558
+      },
+      {
+        "path": "scripts/benchmark.py",
+        "category": "python-script",
+        "language": "Python",
+        "lines": 30,
+        "bytes": 985
+      },
+      {
+        "path": "scripts/run_demo.py",
+        "category": "python-script",
+        "language": "Python",
+        "lines": 24,
+        "bytes": 756
+      },
+      {
+        "path": "src/feedback_intelligence_agent/__init__.py",
+        "category": "python-source",
+        "language": "Python",
+        "lines": 7,
+        "bytes": 244
+      },
+      {
+        "path": "src/feedback_intelligence_agent/active_learning.py",
+        "category": "python-source",
+        "language": "Python",
+        "lines": 214,
+        "bytes": 7697
+      },
+      {
+        "path": "src/feedback_intelligence_agent/agent.py",
+        "category": "python-source",
+        "language": "Python",
+        "lines": 564,
+        "bytes": 24185
+      },
+      {
+        "path": "src/feedback_intelligence_agent/api.py",
+        "category": "python-source",
+        "language": "Python",
+        "lines": 597,
+        "bytes": 23435
+      },
+      {
+        "path": "src/feedback_intelligence_agent/auth.py",
+        "category": "python-source",
+        "language": "Python",
+        "lines": 122,
+        "bytes": 3155
+      },
+      {
+        "path": "src/feedback_intelligence_agent/benchmarking.py",
+        "category": "python-source",
+        "language": "Python",
+        "lines": 286,
+        "bytes": 10706
+      },
+      {
+        "path": "src/feedback_intelligence_agent/chunking.py",
+        "category": "python-source",
+        "language": "Python",
+        "lines": 93,
+        "bytes": 2990
+      },
+      {
+        "path": "src/feedback_intelligence_agent/citations.py",
+        "category": "python-source",
+        "language": "Python",
+        "lines": 65,
+        "bytes": 2399
+      },
+      {
+        "path": "src/feedback_intelligence_agent/cli.py",
+        "category": "python-source",
+        "language": "Python",
+        "lines": 1007,
+        "bytes": 40009
+      },
+      {
+        "path": "src/feedback_intelligence_agent/config.py",
+        "category": "python-source",
+        "language": "Python",
+        "lines": 113,
+        "bytes": 5186
+      },
+      {
+        "path": "src/feedback_intelligence_agent/data_contracts.py",
+        "category": "python-source",
+        "language": "Python",
+        "lines": 237,
+        "bytes": 8684
+      },
+      {
+        "path": "src/feedback_intelligence_agent/email_summaries.py",
+        "category": "python-source",
+        "language": "Python",
+        "lines": 178,
+        "bytes": 5988
+      },
+      {
+        "path": "src/feedback_intelligence_agent/embeddings.py",
+        "category": "python-source",
+        "language": "Python",
+        "lines": 78,
+        "bytes": 2872
+      },
+      {
+        "path": "src/feedback_intelligence_agent/evaluation.py",
+        "category": "python-source",
+        "language": "Python",
+        "lines": 416,
+        "bytes": 14975
+      },
+      {
+        "path": "src/feedback_intelligence_agent/experiments.py",
+        "category": "python-source",
+        "language": "Python",
+        "lines": 346,
+        "bytes": 13202
+      },
+      {
+        "path": "src/feedback_intelligence_agent/factory.py",
+        "category": "python-source",
+        "language": "Python",
+        "lines": 349,
+        "bytes": 14466
+      },
+      {
+        "path": "src/feedback_intelligence_agent/guardrails.py",
+        "category": "python-source",
+        "language": "Python",
+        "lines": 220,
+        "bytes": 8526
+      },
+      {
+        "path": "src/feedback_intelligence_agent/hallucination.py",
+        "category": "python-source",
+        "language": "Python",
+        "lines": 285,
+        "bytes": 8829
+      },
+      {
+        "path": "src/feedback_intelligence_agent/human_feedback.py",
+        "category": "python-source",
+        "language": "Python",
+        "lines": 407,
+        "bytes": 13739
+      },
+      {
+        "path": "src/feedback_intelligence_agent/index_updates.py",
+        "category": "python-source",
+        "language": "Python",
+        "lines": 115,
+        "bytes": 4487
+      },
+      {
+        "path": "src/feedback_intelligence_agent/ingestion.py",
+        "category": "python-source",
+        "language": "Python",
+        "lines": 58,
+        "bytes": 1939
+      },
+      {
+        "path": "src/feedback_intelligence_agent/jobs.py",
+        "category": "python-source",
+        "language": "Python",
+        "lines": 281,
+        "bytes": 10369
+      },
+      {
+        "path": "src/feedback_intelligence_agent/lakehouse.py",
+        "category": "python-source",
+        "language": "Python",
+        "lines": 398,
+        "bytes": 13756
+      },
+      {
+        "path": "src/feedback_intelligence_agent/lexical_search.py",
+        "category": "python-source",
+        "language": "Python",
+        "lines": 113,
+        "bytes": 4468
+      },
+      {
+        "path": "src/feedback_intelligence_agent/llm.py",
+        "category": "python-source",
+        "language": "Python",
+        "lines": 658,
+        "bytes": 24998
+      },
+      {
+        "path": "src/feedback_intelligence_agent/memory.py",
+        "category": "python-source",
+        "language": "Python",
+        "lines": 344,
+        "bytes": 12830
+      },
+      {
+        "path": "src/feedback_intelligence_agent/output_parser.py",
+        "category": "python-source",
+        "language": "Python",
+        "lines": 181,
+        "bytes": 6270
+      },
+      {
+        "path": "src/feedback_intelligence_agent/privacy.py",
+        "category": "python-source",
+        "language": "Python",
+        "lines": 59,
+        "bytes": 1925
+      },
+      {
+        "path": "src/feedback_intelligence_agent/prompt_registry.py",
+        "category": "python-source",
+        "language": "Python",
+        "lines": 159,
+        "bytes": 6770
+      },
+      {
+        "path": "src/feedback_intelligence_agent/prompts.py",
+        "category": "python-source",
+        "language": "Python",
+        "lines": 91,
+        "bytes": 3224
+      },
+      {
+        "path": "src/feedback_intelligence_agent/qdrant_store.py",
+        "category": "python-source",
+        "language": "Python",
+        "lines": 196,
+        "bytes": 7517
+      },
+      {
+        "path": "src/feedback_intelligence_agent/query_expansion.py",
+        "category": "python-source",
+        "language": "Python",
+        "lines": 93,
+        "bytes": 3456
+      },
+      {
+        "path": "src/feedback_intelligence_agent/rate_limit.py",
+        "category": "python-source",
+        "language": "Python",
+        "lines": 76,
+        "bytes": 2359
+      },
+      {
+        "path": "src/feedback_intelligence_agent/reports.py",
+        "category": "python-source",
+        "language": "Python",
+        "lines": 278,
+        "bytes": 9315
+      },
+      {
+        "path": "src/feedback_intelligence_agent/reranking.py",
+        "category": "python-source",
+        "language": "Python",
+        "lines": 137,
+        "bytes": 4222
+      },
+      {
+        "path": "src/feedback_intelligence_agent/resilience.py",
+        "category": "python-source",
+        "language": "Python",
+        "lines": 149,
+        "bytes": 5522
+      },
+      {
+        "path": "src/feedback_intelligence_agent/retrieval.py",
+        "category": "python-source",
+        "language": "Python",
+        "lines": 113,
+        "bytes": 4473
+      },
+      {
+        "path": "src/feedback_intelligence_agent/schemas.py",
+        "category": "python-source",
+        "language": "Python",
+        "lines": 311,
+        "bytes": 10241
+      },
+      {
+        "path": "src/feedback_intelligence_agent/streaming_ingestion.py",
+        "category": "python-source",
+        "language": "Python",
+        "lines": 515,
+        "bytes": 18222
+      },
+      {
+        "path": "src/feedback_intelligence_agent/synthetic_data.py",
+        "category": "python-source",
+        "language": "Python",
+        "lines": 318,
+        "bytes": 13133
+      },
+      {
+        "path": "src/feedback_intelligence_agent/telemetry.py",
+        "category": "python-source",
+        "language": "Python",
+        "lines": 352,
+        "bytes": 12271
+      },
+      {
+        "path": "src/feedback_intelligence_agent/tools.py",
+        "category": "python-source",
+        "language": "Python",
+        "lines": 565,
+        "bytes": 21247
+      },
+      {
+        "path": "src/feedback_intelligence_agent/vector_store.py",
+        "category": "python-source",
+        "language": "Python",
+        "lines": 182,
+        "bytes": 6643
+      },
+      {
+        "path": "tests/conftest.py",
+        "category": "python-test",
+        "language": "Python",
+        "lines": 19,
+        "bytes": 590
+      },
+      {
+        "path": "tests/snapshots/rag_answer_v1_rendered.txt",
+        "category": "test-fixture",
+        "language": null,
+        "lines": null,
+        "bytes": 1006
+      },
+      {
+        "path": "tests/snapshots/rag_answer_v1_template.txt",
+        "category": "test-fixture",
+        "language": null,
+        "lines": null,
+        "bytes": 549
+      },
+      {
+        "path": "tests/test_active_learning.py",
+        "category": "python-test",
+        "language": "Python",
+        "lines": 98,
+        "bytes": 3080
+      },
+      {
+        "path": "tests/test_agent.py",
+        "category": "python-test",
+        "language": "Python",
+        "lines": 208,
+        "bytes": 8085
+      },
+      {
+        "path": "tests/test_api.py",
+        "category": "python-test",
+        "language": "Python",
+        "lines": 932,
+        "bytes": 35659
+      },
+      {
+        "path": "tests/test_auth.py",
+        "category": "python-test",
+        "language": "Python",
+        "lines": 94,
+        "bytes": 2493
+      },
+      {
+        "path": "tests/test_benchmarking.py",
+        "category": "python-test",
+        "language": "Python",
+        "lines": 234,
+        "bytes": 7258
+      },
+      {
+        "path": "tests/test_chunking.py",
+        "category": "python-test",
+        "language": "Python",
+        "lines": 80,
+        "bytes": 2735
+      },
+      {
+        "path": "tests/test_citations.py",
+        "category": "python-test",
+        "language": "Python",
+        "lines": 228,
+        "bytes": 9101
+      },
+      {
+        "path": "tests/test_cli.py",
+        "category": "python-test",
+        "language": "Python",
+        "lines": 698,
+        "bytes": 21734
+      },
+      {
+        "path": "tests/test_data_contracts.py",
+        "category": "python-test",
+        "language": "Python",
+        "lines": 215,
+        "bytes": 7773
+      },
+      {
+        "path": "tests/test_docs_tools.py",
+        "category": "python-test",
+        "language": "Python",
+        "lines": 607,
+        "bytes": 25632
+      },
+      {
+        "path": "tests/test_email_summaries.py",
+        "category": "python-test",
+        "language": "Python",
+        "lines": 158,
+        "bytes": 4925
+      },
+      {
+        "path": "tests/test_embeddings_and_store.py",
+        "category": "python-test",
+        "language": "Python",
+        "lines": 64,
+        "bytes": 2245
+      },
+      {
+        "path": "tests/test_evaluation.py",
+        "category": "python-test",
+        "language": "Python",
+        "lines": 278,
+        "bytes": 10212
+      },
+      {
+        "path": "tests/test_experiments.py",
+        "category": "python-test",
+        "language": "Python",
+        "lines": 380,
+        "bytes": 14612
+      },
+      {
+        "path": "tests/test_guardrails.py",
+        "category": "python-test",
+        "language": "Python",
+        "lines": 293,
+        "bytes": 10825
+      },
+      {
+        "path": "tests/test_hallucination.py",
+        "category": "python-test",
+        "language": "Python",
+        "lines": 92,
+        "bytes": 2814
+      },
+      {
+        "path": "tests/test_human_feedback.py",
+        "category": "python-test",
+        "language": "Python",
+        "lines": 189,
+        "bytes": 6360
+      },
+      {
+        "path": "tests/test_index_updates.py",
+        "category": "python-test",
+        "language": "Python",
+        "lines": 133,
+        "bytes": 4456
+      },
+      {
+        "path": "tests/test_jobs.py",
+        "category": "python-test",
+        "language": "Python",
+        "lines": 167,
+        "bytes": 5339
+      },
+      {
+        "path": "tests/test_lakehouse.py",
+        "category": "python-test",
+        "language": "Python",
+        "lines": 123,
+        "bytes": 4295
+      },
+      {
+        "path": "tests/test_lexical_and_hybrid.py",
+        "category": "python-test",
+        "language": "Python",
+        "lines": 194,
+        "bytes": 7452
+      },
+      {
+        "path": "tests/test_llm_providers.py",
+        "category": "python-test",
+        "language": "Python",
+        "lines": 669,
+        "bytes": 24667
+      },
+      {
+        "path": "tests/test_memory.py",
+        "category": "python-test",
+        "language": "Python",
+        "lines": 166,
+        "bytes": 6260
+      },
+      {
+        "path": "tests/test_metadata_filters.py",
+        "category": "python-test",
+        "language": "Python",
+        "lines": 217,
+        "bytes": 7427
+      },
+      {
+        "path": "tests/test_output_parser.py",
+        "category": "python-test",
+        "language": "Python",
+        "lines": 60,
+        "bytes": 2182
+      },
+      {
+        "path": "tests/test_privacy.py",
+        "category": "python-test",
+        "language": "Python",
+        "lines": 45,
+        "bytes": 1515
+      },
+      {
+        "path": "tests/test_prompt_registry.py",
+        "category": "python-test",
+        "language": "Python",
+        "lines": 141,
+        "bytes": 4943
+      },
+      {
+        "path": "tests/test_prompt_snapshot.py",
+        "category": "python-test",
+        "language": "Python",
+        "lines": 82,
+        "bytes": 2835
+      },
+      {
+        "path": "tests/test_qdrant_store.py",
+        "category": "python-test",
+        "language": "Python",
+        "lines": 287,
+        "bytes": 11028
+      },
+      {
+        "path": "tests/test_query_expansion.py",
+        "category": "python-test",
+        "language": "Python",
+        "lines": 58,
+        "bytes": 2441
+      },
+      {
+        "path": "tests/test_rate_limit.py",
+        "category": "python-test",
+        "language": "Python",
+        "lines": 52,
+        "bytes": 1639
+      },
+      {
+        "path": "tests/test_reports.py",
+        "category": "python-test",
+        "language": "Python",
+        "lines": 104,
+        "bytes": 3540
+      },
+      {
+        "path": "tests/test_reranking.py",
+        "category": "python-test",
+        "language": "Python",
+        "lines": 78,
+        "bytes": 2271
+      },
+      {
+        "path": "tests/test_resilience.py",
+        "category": "python-test",
+        "language": "Python",
+        "lines": 150,
+        "bytes": 4757
+      },
+      {
+        "path": "tests/test_retrieval_regressions.py",
+        "category": "python-test",
+        "language": "Python",
+        "lines": 136,
+        "bytes": 4459
+      },
+      {
+        "path": "tests/test_streaming_ingestion.py",
+        "category": "python-test",
+        "language": "Python",
+        "lines": 293,
+        "bytes": 9240
+      },
+      {
+        "path": "tests/test_synthetic_data.py",
+        "category": "python-test",
+        "language": "Python",
+        "lines": 154,
+        "bytes": 5677
+      },
+      {
+        "path": "tests/test_telemetry.py",
+        "category": "python-test",
+        "language": "Python",
+        "lines": 374,
+        "bytes": 14788
+      },
+      {
+        "path": "tests/test_tools.py",
+        "category": "python-test",
+        "language": "Python",
+        "lines": 317,
+        "bytes": 12963
+      }
+    ]
+  },
+  "directories": [
+    {
+      "path": "src/feedback_intelligence_agent",
+      "responsibility": "Python package: the entire importable API.",
+      "contents": "Modules, no subpackages.",
+      "provenance": "authored",
+      "version_controlled": "yes"
+    },
+    {
+      "path": "tests",
+      "responsibility": "Pytest suite mirroring the package module-for-module.",
+      "contents": "test_*.py plus prompt snapshots.",
+      "provenance": "authored",
+      "version_controlled": "yes"
+    },
+    {
+      "path": "scripts",
+      "responsibility": "Executable entry points that are not part of the package.",
+      "contents": "Deterministic demo and benchmark drivers.",
+      "provenance": "authored",
+      "version_controlled": "yes"
+    },
+    {
+      "path": "data",
+      "responsibility": "Version-controlled sample dataset used by demos, tests, and CI.",
+      "contents": "sample_feedback.csv.",
+      "provenance": "authored",
+      "version_controlled": "yes"
+    },
+    {
+      "path": "examples",
+      "responsibility": "Input fixtures for evaluation, streaming, tools, and experiments.",
+      "contents": "JSONL and YAML.",
+      "provenance": "authored",
+      "version_controlled": "yes"
+    },
+    {
+      "path": "docs",
+      "responsibility": "Documentation sources: Markdown notes, the LaTeX manual, and its generator.",
+      "contents": "Markdown, LaTeX, JSON metadata, Python tools.",
+      "provenance": "mixed",
+      "version_controlled": "yes"
+    },
+    {
+      "path": "docs/latex/generated",
+      "responsibility": "LaTeX fragments produced by the documentation generator.",
+      "contents": "One fragment per documented object.",
+      "provenance": "generated",
+      "version_controlled": "yes"
+    },
+    {
+      "path": "docs/metadata",
+      "responsibility": "Normalized documentation model in JSON.",
+      "contents": "Repository inventory, API index, dependency graph, manifest.",
+      "provenance": "generated",
+      "version_controlled": "yes"
+    },
+    {
+      "path": "docs/tools",
+      "responsibility": "Extraction and LaTeX rendering layers of the documentation system.",
+      "contents": "Python modules.",
+      "provenance": "authored",
+      "version_controlled": "yes"
+    },
+    {
+      "path": "frontend",
+      "responsibility": "Vite/TypeScript demo client for the HTTP API.",
+      "contents": "Source, build config, Dockerfile.",
+      "provenance": "authored",
+      "version_controlled": "yes"
+    },
+    {
+      "path": "deploy",
+      "responsibility": "Deployment descriptors for production-like targets.",
+      "contents": "Compose, ECS task definition, Fly.io config.",
+      "provenance": "authored",
+      "version_controlled": "yes"
+    },
+    {
+      "path": ".github",
+      "responsibility": "Repository governance and CI/CD definitions.",
+      "contents": "Workflows, issue templates, Dependabot.",
+      "provenance": "authored",
+      "version_controlled": "yes"
+    },
+    {
+      "path": ".artifacts",
+      "responsibility": "Local run outputs: index, telemetry, jobs, reports, experiments.",
+      "contents": "JSON and JSONL.",
+      "provenance": "generated",
+      "version_controlled": "no"
+    },
+    {
+      "path": "dist",
+      "responsibility": "Built Python distributions.",
+      "contents": "sdist and wheel.",
+      "provenance": "generated",
+      "version_controlled": "no"
+    }
+  ],
+  "dependencies": {
+    "python_constraint": ">=3.10,<3.13",
+    "runtime": [
+      {
+        "name": "click",
+        "constraint": ">=8.1.7,<8.2",
+        "optional": false,
+        "extras": []
+      },
+      {
+        "name": "fastapi",
+        "constraint": "^0.137.0",
+        "optional": false,
+        "extras": []
+      },
+      {
+        "name": "httpx",
+        "constraint": "^0.27.0",
+        "optional": false,
+        "extras": []
+      },
+      {
+        "name": "numpy",
+        "constraint": "^1.26.0",
+        "optional": false,
+        "extras": []
+      },
+      {
+        "name": "pandas",
+        "constraint": "^2.2.0",
+        "optional": false,
+        "extras": []
+      },
+      {
+        "name": "pydantic",
+        "constraint": "^2.7.0",
+        "optional": false,
+        "extras": []
+      },
+      {
+        "name": "pydantic-settings",
+        "constraint": "^2.3.0",
+        "optional": false,
+        "extras": []
+      },
+      {
+        "name": "python-dotenv",
+        "constraint": "^1.0.1",
+        "optional": false,
+        "extras": []
+      },
+      {
+        "name": "pyyaml",
+        "constraint": "^6.0.3",
+        "optional": false,
+        "extras": []
+      },
+      {
+        "name": "starlette",
+        "constraint": ">=1.3.1,<2.0",
+        "optional": false,
+        "extras": []
+      },
+      {
+        "name": "typer",
+        "constraint": "^0.12.3",
+        "optional": false,
+        "extras": [
+          "all"
+        ]
+      },
+      {
+        "name": "uvicorn",
+        "constraint": "^0.30.0",
+        "optional": false,
+        "extras": [
+          "standard"
+        ]
+      }
+    ],
+    "optional": [
+      {
+        "name": "anthropic",
+        "constraint": ">=0.40,<2.0",
+        "optional": true,
+        "extras": []
+      },
+      {
+        "name": "boto3",
+        "constraint": ">=1.34,<2.0",
+        "optional": true,
+        "extras": []
+      },
+      {
+        "name": "confluent-kafka",
+        "constraint": ">=2.3,<3.0",
+        "optional": true,
+        "extras": []
+      },
+      {
+        "name": "mlflow",
+        "constraint": ">=3.0,<4.0",
+        "optional": true,
+        "extras": []
+      },
+      {
+        "name": "opentelemetry-api",
+        "constraint": ">=1.27,<2.0",
+        "optional": true,
+        "extras": []
+      },
+      {
+        "name": "opentelemetry-sdk",
+        "constraint": ">=1.27,<2.0",
+        "optional": true,
+        "extras": []
+      },
+      {
+        "name": "qdrant-client",
+        "constraint": ">=1.7,<2.0",
+        "optional": true,
+        "extras": []
+      }
+    ],
+    "development": [
+      {
+        "name": "mypy",
+        "constraint": "^1.10.0",
+        "optional": false,
+        "extras": []
+      },
+      {
+        "name": "pandas-stubs",
+        "constraint": "^2.2.2",
+        "optional": false,
+        "extras": []
+      },
+      {
+        "name": "pytest",
+        "constraint": "^9.1.0",
+        "optional": false,
+        "extras": []
+      },
+      {
+        "name": "pytest-cov",
+        "constraint": "^7.0.0",
+        "optional": false,
+        "extras": []
+      },
+      {
+        "name": "ruff",
+        "constraint": "^0.5.0",
+        "optional": false,
+        "extras": []
+      },
+      {
+        "name": "types-pyyaml",
+        "constraint": "^6.0.12.20260518",
+        "optional": false,
+        "extras": []
+      }
+    ],
+    "extras": {
+      "anthropic": [
+        "anthropic"
+      ],
+      "bedrock": [
+        "boto3"
+      ],
+      "mlflow": [
+        "mlflow"
+      ],
+      "otel": [
+        "opentelemetry-api",
+        "opentelemetry-sdk"
+      ],
+      "qdrant": [
+        "qdrant-client"
+      ],
+      "streaming": [
+        "boto3",
+        "confluent-kafka"
+      ]
+    },
+    "lock_file": {
+      "path": "poetry.lock",
+      "present": true,
+      "locked_packages": 142
+    },
+    "frontend": {
+      "name": "feedback-intelligence-agent-frontend",
+      "scripts": {
+        "dev": "vite",
+        "build": "tsc --noEmit && vite build",
+        "preview": "vite preview --host --port 4173"
+      },
+      "dependencies": {},
+      "dev_dependencies": {
+        "typescript": "^5.4.5",
+        "vite": "^8.0.16"
+      }
+    }
+  },
+  "tooling": {
+    "ruff": {
+      "line_length": 100,
+      "target_version": "py310",
+      "src": [
+        "src",
+        "tests",
+        "docs"
+      ],
+      "select": [
+        "E",
+        "F",
+        "I",
+        "B",
+        "UP",
+        "N",
+        "ANN",
+        "C4",
+        "SIM"
+      ],
+      "ignore": [
+        "ANN101",
+        "ANN102"
+      ]
+    },
+    "mypy": {
+      "python_version": "3.10",
+      "strict": true,
+      "plugins": [
+        "pydantic.mypy"
+      ],
+      "overrides": [
+        {
+          "module": [
+            "anthropic",
+            "anthropic.*"
+          ],
+          "ignore_missing_imports": true
+        },
+        {
+          "module": [
+            "boto3",
+            "boto3.*",
+            "botocore",
+            "botocore.*"
+          ],
+          "ignore_missing_imports": true
+        },
+        {
+          "module": [
+            "confluent_kafka",
+            "confluent_kafka.*"
+          ],
+          "ignore_missing_imports": true
+        },
+        {
+          "module": [
+            "mlflow",
+            "mlflow.*"
+          ],
+          "ignore_missing_imports": true
+        },
+        {
+          "module": [
+            "opentelemetry",
+            "opentelemetry.*"
+          ],
+          "ignore_missing_imports": true
+        },
+        {
+          "module": [
+            "qdrant_client",
+            "qdrant_client.*"
+          ],
+          "ignore_missing_imports": true
+        }
+      ]
+    },
+    "pytest": {
+      "testpaths": [
+        "tests"
+      ],
+      "addopts": "-q"
+    },
+    "build_system": {
+      "requires": [
+        "poetry-core>=1.8.0"
+      ],
+      "build-backend": "poetry.core.masonry.api"
+    }
+  },
+  "make_targets": [
+    {
+      "name": "install",
+      "prerequisites": [],
+      "recipe": [
+        "poetry install"
+      ]
+    },
+    {
+      "name": "test",
+      "prerequisites": [],
+      "recipe": [
+        "poetry run pytest"
+      ]
+    },
+    {
+      "name": "lint",
+      "prerequisites": [],
+      "recipe": [
+        "poetry run ruff check ."
+      ]
+    },
+    {
+      "name": "format-check",
+      "prerequisites": [],
+      "recipe": [
+        "poetry run ruff format --check ."
+      ]
+    },
+    {
+      "name": "typecheck",
+      "prerequisites": [],
+      "recipe": [
+        "poetry run mypy src"
+      ]
+    },
+    {
+      "name": "typecheck-docs",
+      "prerequisites": [],
+      "recipe": [
+        "poetry run mypy --python-version $(DOCS_PYTHON_VERSION) docs/tools"
+      ]
+    },
+    {
+      "name": "coverage",
+      "prerequisites": [],
+      "recipe": [
+        "poetry run pytest --cov=feedback_intelligence_agent --cov-report=term-missing --cov-fail-under=$(COVERAGE_THRESHOLD)"
+      ]
+    },
+    {
+      "name": "build",
+      "prerequisites": [],
+      "recipe": [
+        "poetry build"
+      ]
+    },
+    {
+      "name": "quality",
+      "prerequisites": [
+        "lint",
+        "typecheck",
+        "typecheck-docs",
+        "test"
+      ],
+      "recipe": []
+    },
+    {
+      "name": "ci",
+      "prerequisites": [
+        "lint",
+        "format-check",
+        "typecheck",
+        "typecheck-docs",
+        "coverage",
+        "build"
+      ],
+      "recipe": []
+    },
+    {
+      "name": "docs",
+      "prerequisites": [],
+      "recipe": [
+        "$(DOCS_ENV) poetry run python -m tools.generate_docs --repo-root . \\",
+        "$(if $(REVISION),--revision $(REVISION),)"
+      ]
+    },
+    {
+      "name": "docs-check",
+      "prerequisites": [],
+      "recipe": [
+        "$(DOCS_ENV) poetry run python -m tools.validate_docs --repo-root ."
+      ]
+    },
+    {
+      "name": "docs-pdf",
+      "prerequisites": [
+        "docs"
+      ],
+      "recipe": [
+        "cd $(LATEX_DIR) && $(LATEXMK) main.tex || true",
+        "cd $(LATEX_DIR) && $(LATEXMK) main.tex || true",
+        "$(DOCS_ENV) poetry run python -m tools.check_latex_log $(LATEX_DIR)/main.log"
+      ]
+    },
+    {
+      "name": "docs-pdf-reference",
+      "prerequisites": [
+        "docs"
+      ],
+      "recipe": [
+        "cd $(LATEX_DIR) && $(LATEXMK) reference.tex || true",
+        "cd $(LATEX_DIR) && $(LATEXMK) reference.tex || true",
+        "$(DOCS_ENV) poetry run python -m tools.check_latex_log $(LATEX_DIR)/reference.log"
+      ]
+    },
+    {
+      "name": "docs-clean",
+      "prerequisites": [],
+      "recipe": [
+        "cd $(LATEX_DIR) && latexmk -C main.tex reference.tex"
+      ]
+    },
+    {
+      "name": "demo",
+      "prerequisites": [],
+      "recipe": [
+        "poetry run python scripts/run_demo.py"
+      ]
+    },
+    {
+      "name": "api",
+      "prerequisites": [],
+      "recipe": [
+        "poetry run uvicorn feedback_intelligence_agent.api:create_app --factory --reload"
+      ]
+    },
+    {
+      "name": "docker-build",
+      "prerequisites": [],
+      "recipe": [
+        "docker build -t feedback-intelligence-agent ."
+      ]
+    },
+    {
+      "name": "docker-run",
+      "prerequisites": [],
+      "recipe": [
+        "docker run --rm -p 8000:8000 feedback-intelligence-agent"
+      ]
+    },
+    {
+      "name": "compose-prod-up",
+      "prerequisites": [],
+      "recipe": [
+        "docker compose -f deploy/docker-compose.prod.yml up -d"
+      ]
+    },
+    {
+      "name": "compose-prod-down",
+      "prerequisites": [],
+      "recipe": [
+        "docker compose -f deploy/docker-compose.prod.yml down"
+      ]
+    },
+    {
+      "name": "clean",
+      "prerequisites": [],
+      "recipe": [
+        "rm -rf .artifacts .pytest_cache .mypy_cache .ruff_cache htmlcov .coverage dist build"
+      ]
+    }
+  ],
+  "ci_workflows": [
+    {
+      "file": ".github/workflows/ci.yml",
+      "name": "CI",
+      "triggers": {
+        "push": {
+          "branches": [
+            "main",
+            "develop"
+          ]
+        },
+        "pull_request": {
+          "branches": [
+            "main",
+            "develop"
+          ]
+        }
+      },
+      "permissions": {
+        "contents": "read"
+      },
+      "concurrency": {
+        "group": "ci-${{ github.workflow }}-${{ github.ref }}",
+        "cancel-in-progress": true
+      },
+      "jobs": [
+        {
+          "id": "quality",
+          "name": "quality",
+          "runs_on": "ubuntu-latest",
+          "needs": [],
+          "matrix": {
+            "python-version": [
+              "3.10",
+              "3.11",
+              "3.12"
+            ]
+          },
+          "steps": [
+            {
+              "name": "Checkout",
+              "uses": "actions/checkout@v4",
+              "run": "",
+              "working_directory": ""
+            },
+            {
+              "name": "Install Poetry",
+              "uses": "",
+              "run": "pipx install poetry==2.2.1",
+              "working_directory": ""
+            },
+            {
+              "name": "Set up Python",
+              "uses": "actions/setup-python@v5",
+              "run": "",
+              "working_directory": ""
+            },
+            {
+              "name": "Install dependencies",
+              "uses": "",
+              "run": "poetry install --with dev",
+              "working_directory": ""
+            },
+            {
+              "name": "Lint",
+              "uses": "",
+              "run": "poetry run ruff check .",
+              "working_directory": ""
+            },
+            {
+              "name": "Format check",
+              "uses": "",
+              "run": "poetry run ruff format --check .",
+              "working_directory": ""
+            },
+            {
+              "name": "Type check",
+              "uses": "",
+              "run": "poetry run mypy src",
+              "working_directory": ""
+            },
+            {
+              "name": "Test with coverage",
+              "uses": "",
+              "run": "poetry run pytest --cov=feedback_intelligence_agent --cov-report=term-missing --cov-fail-under=63",
+              "working_directory": ""
+            },
+            {
+              "name": "Run deterministic demo",
+              "uses": "",
+              "run": "poetry run python scripts/run_demo.py",
+              "working_directory": ""
+            },
+            {
+              "name": "Build package",
+              "uses": "",
+              "run": "poetry build",
+              "working_directory": ""
+            }
+          ]
+        },
+        {
+          "id": "documentation",
+          "name": "Documentation",
+          "runs_on": "ubuntu-latest",
+          "needs": [],
+          "matrix": {},
+          "steps": [
+            {
+              "name": "Checkout",
+              "uses": "actions/checkout@v4",
+              "run": "",
+              "working_directory": ""
+            },
+            {
+              "name": "Install Poetry",
+              "uses": "",
+              "run": "pipx install poetry==2.2.1",
+              "working_directory": ""
+            },
+            {
+              "name": "Set up Python",
+              "uses": "actions/setup-python@v5",
+              "run": "",
+              "working_directory": ""
+            },
+            {
+              "name": "Install dependencies",
+              "uses": "",
+              "run": "poetry install --with dev",
+              "working_directory": ""
+            },
+            {
+              "name": "Type check documentation toolchain",
+              "uses": "",
+              "run": "poetry run mypy --python-version 3.11 docs/tools",
+              "working_directory": ""
+            },
+            {
+              "name": "Test documentation toolchain",
+              "uses": "",
+              "run": "poetry run pytest tests/test_docs_tools.py",
+              "working_directory": ""
+            },
+            {
+              "name": "Regenerate and validate documentation",
+              "uses": "",
+              "run": "revision=$(python -c \"import json;print(json.load(open('docs/metadata/documentation-manifest.json'))['revision'])\") echo \"Regenerating as of the documented revision ${revision}\" make docs REVISION=\"${revision}\"",
+              "working_directory": ""
+            },
+            {
+              "name": "Fail if regeneration changed tracked files",
+              "uses": "",
+              "run": "if ! git diff --quiet -- docs/; then echo \"Generated documentation is out of date. Run 'make docs' and commit the result.\" git diff --stat -- docs/ exit 1 fi",
+              "working_directory": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "file": ".github/workflows/dependency-review.yml",
+      "name": "Dependency Review",
+      "triggers": {
+        "pull_request": {
+          "branches": [
+            "main",
+            "develop"
+          ]
+        }
+      },
+      "permissions": {
+        "contents": "read",
+        "pull-requests": "write"
+      },
+      "concurrency": {},
+      "jobs": [
+        {
+          "id": "dependency-review",
+          "name": "dependency-review",
+          "runs_on": "ubuntu-latest",
+          "needs": [],
+          "matrix": {},
+          "steps": [
+            {
+              "name": "Checkout",
+              "uses": "actions/checkout@v4",
+              "run": "",
+              "working_directory": ""
+            },
+            {
+              "name": "Review dependency changes",
+              "uses": "actions/dependency-review-action@v4",
+              "run": "",
+              "working_directory": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "file": ".github/workflows/docker.yml",
+      "name": "Docker",
+      "triggers": {
+        "push": {
+          "branches": [
+            "main",
+            "develop"
+          ],
+          "paths": [
+            "Dockerfile",
+            "docker-compose.yml",
+            "pyproject.toml",
+            "poetry.lock",
+            "src/**",
+            "scripts/**",
+            "data/sample_feedback.csv",
+            ".github/workflows/docker.yml"
+          ]
+        },
+        "pull_request": {
+          "branches": [
+            "main",
+            "develop"
+          ],
+          "paths": [
+            "Dockerfile",
+            "docker-compose.yml",
+            "pyproject.toml",
+            "poetry.lock",
+            "src/**",
+            "scripts/**",
+            "data/sample_feedback.csv",
+            ".github/workflows/docker.yml"
+          ]
+        }
+      },
+      "permissions": {
+        "contents": "read"
+      },
+      "concurrency": {
+        "group": "docker-${{ github.workflow }}-${{ github.ref }}",
+        "cancel-in-progress": true
+      },
+      "jobs": [
+        {
+          "id": "build",
+          "name": "build",
+          "runs_on": "ubuntu-latest",
+          "needs": [],
+          "matrix": {},
+          "steps": [
+            {
+              "name": "Checkout",
+              "uses": "actions/checkout@v4",
+              "run": "",
+              "working_directory": ""
+            },
+            {
+              "name": "Build image",
+              "uses": "",
+              "run": "docker build -t feedback-intelligence-agent:ci .",
+              "working_directory": ""
+            },
+            {
+              "name": "Smoke test container",
+              "uses": "",
+              "run": "docker run --rm --entrypoint python feedback-intelligence-agent:ci -c \"import feedback_intelligence_agent; print(feedback_intelligence_agent.__name__)\"",
+              "working_directory": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "file": ".github/workflows/frontend.yml",
+      "name": "Frontend CI",
+      "triggers": {
+        "push": {
+          "branches": [
+            "main",
+            "develop"
+          ],
+          "paths": [
+            "frontend/**",
+            ".github/workflows/frontend.yml"
+          ]
+        },
+        "pull_request": {
+          "branches": [
+            "main",
+            "develop"
+          ],
+          "paths": [
+            "frontend/**",
+            ".github/workflows/frontend.yml"
+          ]
+        }
+      },
+      "permissions": {
+        "contents": "read"
+      },
+      "concurrency": {
+        "group": "frontend-${{ github.workflow }}-${{ github.ref }}",
+        "cancel-in-progress": true
+      },
+      "jobs": [
+        {
+          "id": "frontend",
+          "name": "frontend",
+          "runs_on": "ubuntu-latest",
+          "needs": [],
+          "matrix": {},
+          "steps": [
+            {
+              "name": "Checkout",
+              "uses": "actions/checkout@v4",
+              "run": "",
+              "working_directory": ""
+            },
+            {
+              "name": "Set up Node",
+              "uses": "actions/setup-node@v4",
+              "run": "",
+              "working_directory": ""
+            },
+            {
+              "name": "Install dependencies",
+              "uses": "",
+              "run": "npm ci",
+              "working_directory": ""
+            },
+            {
+              "name": "Audit dependencies",
+              "uses": "",
+              "run": "npm audit",
+              "working_directory": ""
+            },
+            {
+              "name": "Build",
+              "uses": "",
+              "run": "npm run build",
+              "working_directory": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "file": ".github/workflows/release.yml",
+      "name": "Release",
+      "triggers": {
+        "push": {
+          "tags": [
+            "v*"
+          ]
+        },
+        "workflow_dispatch": null
+      },
+      "permissions": {
+        "contents": "read"
+      },
+      "concurrency": {},
+      "jobs": [
+        {
+          "id": "validate-release",
+          "name": "validate-release",
+          "runs_on": "ubuntu-latest",
+          "needs": [],
+          "matrix": {},
+          "steps": [
+            {
+              "name": "Checkout",
+              "uses": "actions/checkout@v4",
+              "run": "",
+              "working_directory": ""
+            },
+            {
+              "name": "Install Poetry",
+              "uses": "",
+              "run": "pipx install poetry==2.2.1",
+              "working_directory": ""
+            },
+            {
+              "name": "Set up Python",
+              "uses": "actions/setup-python@v5",
+              "run": "",
+              "working_directory": ""
+            },
+            {
+              "name": "Set up Node",
+              "uses": "actions/setup-node@v4",
+              "run": "",
+              "working_directory": ""
+            },
+            {
+              "name": "Install Python dependencies",
+              "uses": "",
+              "run": "poetry install --with dev",
+              "working_directory": ""
+            },
+            {
+              "name": "Install frontend dependencies",
+              "uses": "",
+              "run": "npm ci",
+              "working_directory": "frontend"
+            },
+            {
+              "name": "Validate Zenodo metadata",
+              "uses": "",
+              "run": "python -m json.tool .zenodo.json",
+              "working_directory": ""
+            },
+            {
+              "name": "Validate citation metadata",
+              "uses": "",
+              "run": "poetry run python -c \"from pathlib import Path; import yaml; yaml.safe_load(Path('CITATION.cff').read_text(encoding='utf-8'))\"",
+              "working_directory": ""
+            },
+            {
+              "name": "Run deterministic demo",
+              "uses": "",
+              "run": "poetry run python scripts/run_demo.py",
+              "working_directory": ""
+            },
+            {
+              "name": "Build Python package",
+              "uses": "",
+              "run": "poetry build",
+              "working_directory": ""
+            },
+            {
+              "name": "Build frontend",
+              "uses": "",
+              "run": "npm run build",
+              "working_directory": "frontend"
+            },
+            {
+              "name": "Upload Python distributions",
+              "uses": "actions/upload-artifact@v4",
+              "run": "",
+              "working_directory": ""
+            },
+            {
+              "name": "Upload frontend build",
+              "uses": "actions/upload-artifact@v4",
+              "run": "",
+              "working_directory": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "file": ".github/workflows/security.yml",
+      "name": "Security",
+      "triggers": {
+        "push": {
+          "branches": [
+            "main"
+          ]
+        },
+        "pull_request": {
+          "branches": [
+            "main"
+          ]
+        },
+        "schedule": [
+          {
+            "cron": "24 6 * * 1"
+          }
+        ]
+      },
+      "permissions": {
+        "actions": "read",
+        "contents": "read",
+        "security-events": "write"
+      },
+      "concurrency": {
+        "group": "security-${{ github.workflow }}-${{ github.ref }}",
+        "cancel-in-progress": true
+      },
+      "jobs": [
+        {
+          "id": "codeql",
+          "name": "CodeQL (${{ matrix.language }})",
+          "runs_on": "ubuntu-latest",
+          "needs": [],
+          "matrix": {
+            "language": [
+              "python",
+              "javascript-typescript"
+            ]
+          },
+          "steps": [
+            {
+              "name": "Checkout",
+              "uses": "actions/checkout@v4",
+              "run": "",
+              "working_directory": ""
+            },
+            {
+              "name": "Initialize CodeQL",
+              "uses": "github/codeql-action/init@v3",
+              "run": "",
+              "working_directory": ""
+            },
+            {
+              "name": "Perform CodeQL analysis",
+              "uses": "github/codeql-action/analyze@v3",
+              "run": "",
+              "working_directory": ""
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "containers": {
+    "dockerfiles": [
+      {
+        "path": "Dockerfile",
+        "base_images": [
+          "python:3.11-slim"
+        ],
+        "exposed_ports": [
+          "8000"
+        ],
+        "entrypoint": "[\"uvicorn\", \"feedback_intelligence_agent.api:create_app\", \"--factory\", \"--host\", \"0.0.0.0\", \"--port\", \"8000\"]",
+        "user": ""
+      },
+      {
+        "path": "frontend/Dockerfile",
+        "base_images": [
+          "node:22-alpine",
+          "node:22-alpine"
+        ],
+        "exposed_ports": [
+          "4173"
+        ],
+        "entrypoint": "[\"npm\", \"run\", \"preview\"]",
+        "user": ""
+      }
+    ],
+    "compose": [
+      {
+        "path": "docker-compose.yml",
+        "services": [
+          {
+            "name": "feedback-agent",
+            "image": "",
+            "build": true,
+            "ports": [
+              "8000:8000"
+            ],
+            "command": "",
+            "healthcheck": false
+          },
+          {
+            "name": "frontend",
+            "image": "",
+            "build": true,
+            "ports": [
+              "4173:4173"
+            ],
+            "command": "",
+            "healthcheck": false
+          },
+          {
+            "name": "qdrant",
+            "image": "qdrant/qdrant:latest",
+            "build": false,
+            "ports": [
+              "6333:6333",
+              "6334:6334"
+            ],
+            "command": "",
+            "healthcheck": false
+          }
+        ]
+      },
+      {
+        "path": "deploy/docker-compose.prod.yml",
+        "services": [
+          {
+            "name": "api",
+            "image": "feedback-intelligence-agent:latest",
+            "build": false,
+            "ports": [
+              "8000:8000"
+            ],
+            "command": [
+              "sh",
+              "-c",
+              "pip install --no-cache-dir 'gunicorn>=22,<24' && gunicorn 'feedback_intelligence_agent.api:create_app()' --worker-class uvicorn.workers.UvicornWorker --workers ${WEB_CONCURRENCY:-2} --bind 0.0.0.0:8000 --timeout 60\n"
+            ],
+            "healthcheck": true
+          }
+        ]
+      }
+    ]
+  },
+  "deployments": [
+    {
+      "path": "deploy/docker-compose.prod.yml",
+      "purpose": "Production-like Docker Compose stack."
+    },
+    {
+      "path": "deploy/ecs-fargate-task-definition.json",
+      "purpose": "AWS ECS Fargate task definition."
+    },
+    {
+      "path": "deploy/fly.toml",
+      "purpose": "Fly.io application configuration."
+    }
+  ],
+  "tests": [
+    {
+      "path": "tests/test_active_learning.py",
+      "module_under_test": "active_learning",
+      "category": "unit",
+      "test_functions": 4,
+      "parametrized_cases": 0
+    },
+    {
+      "path": "tests/test_agent.py",
+      "module_under_test": "agent",
+      "category": "unit",
+      "test_functions": 9,
+      "parametrized_cases": 0
+    },
+    {
+      "path": "tests/test_api.py",
+      "module_under_test": "api",
+      "category": "integration (HTTP)",
+      "test_functions": 47,
+      "parametrized_cases": 0
+    },
+    {
+      "path": "tests/test_auth.py",
+      "module_under_test": "auth",
+      "category": "unit",
+      "test_functions": 6,
+      "parametrized_cases": 0
+    },
+    {
+      "path": "tests/test_benchmarking.py",
+      "module_under_test": "benchmarking",
+      "category": "performance measurement",
+      "test_functions": 16,
+      "parametrized_cases": 0
+    },
+    {
+      "path": "tests/test_chunking.py",
+      "module_under_test": "chunking",
+      "category": "unit",
+      "test_functions": 6,
+      "parametrized_cases": 0
+    },
+    {
+      "path": "tests/test_citations.py",
+      "module_under_test": "citations",
+      "category": "unit",
+      "test_functions": 13,
+      "parametrized_cases": 0
+    },
+    {
+      "path": "tests/test_cli.py",
+      "module_under_test": "cli",
+      "category": "integration (CLI)",
+      "test_functions": 23,
+      "parametrized_cases": 0
+    },
+    {
+      "path": "tests/test_data_contracts.py",
+      "module_under_test": "data_contracts",
+      "category": "data validation",
+      "test_functions": 18,
+      "parametrized_cases": 0
+    },
+    {
+      "path": "tests/test_docs_tools.py",
+      "module_under_test": "docs_tools",
+      "category": "unit",
+      "test_functions": 50,
+      "parametrized_cases": 2
+    },
+    {
+      "path": "tests/test_email_summaries.py",
+      "module_under_test": "email_summaries",
+      "category": "unit",
+      "test_functions": 6,
+      "parametrized_cases": 0
+    },
+    {
+      "path": "tests/test_embeddings_and_store.py",
+      "module_under_test": "embeddings, vector_store",
+      "category": "numerical / retrieval",
+      "test_functions": 3,
+      "parametrized_cases": 0
+    },
+    {
+      "path": "tests/test_evaluation.py",
+      "module_under_test": "evaluation",
+      "category": "numerical / metric",
+      "test_functions": 26,
+      "parametrized_cases": 0
+    },
+    {
+      "path": "tests/test_experiments.py",
+      "module_under_test": "experiments",
+      "category": "unit",
+      "test_functions": 14,
+      "parametrized_cases": 0
+    },
+    {
+      "path": "tests/test_guardrails.py",
+      "module_under_test": "guardrails",
+      "category": "unit",
+      "test_functions": 16,
+      "parametrized_cases": 5
+    },
+    {
+      "path": "tests/test_hallucination.py",
+      "module_under_test": "hallucination",
+      "category": "unit",
+      "test_functions": 4,
+      "parametrized_cases": 0
+    },
+    {
+      "path": "tests/test_human_feedback.py",
+      "module_under_test": "human_feedback",
+      "category": "unit",
+      "test_functions": 7,
+      "parametrized_cases": 0
+    },
+    {
+      "path": "tests/test_index_updates.py",
+      "module_under_test": "index_updates",
+      "category": "unit",
+      "test_functions": 6,
+      "parametrized_cases": 0
+    },
+    {
+      "path": "tests/test_jobs.py",
+      "module_under_test": "jobs",
+      "category": "unit",
+      "test_functions": 9,
+      "parametrized_cases": 0
+    },
+    {
+      "path": "tests/test_lakehouse.py",
+      "module_under_test": "lakehouse",
+      "category": "unit",
+      "test_functions": 5,
+      "parametrized_cases": 0
+    },
+    {
+      "path": "tests/test_lexical_and_hybrid.py",
+      "module_under_test": "lexical_search, retrieval",
+      "category": "numerical / retrieval",
+      "test_functions": 13,
+      "parametrized_cases": 0
+    },
+    {
+      "path": "tests/test_llm_providers.py",
+      "module_under_test": "llm",
+      "category": "unit",
+      "test_functions": 40,
+      "parametrized_cases": 0
+    },
+    {
+      "path": "tests/test_memory.py",
+      "module_under_test": "memory",
+      "category": "unit",
+      "test_functions": 14,
+      "parametrized_cases": 0
+    },
+    {
+      "path": "tests/test_metadata_filters.py",
+      "module_under_test": "agent, schemas",
+      "category": "behavioural regression",
+      "test_functions": 8,
+      "parametrized_cases": 0
+    },
+    {
+      "path": "tests/test_output_parser.py",
+      "module_under_test": "output_parser",
+      "category": "unit",
+      "test_functions": 4,
+      "parametrized_cases": 0
+    },
+    {
+      "path": "tests/test_privacy.py",
+      "module_under_test": "privacy",
+      "category": "unit",
+      "test_functions": 4,
+      "parametrized_cases": 0
+    },
+    {
+      "path": "tests/test_prompt_registry.py",
+      "module_under_test": "prompt_registry",
+      "category": "unit",
+      "test_functions": 14,
+      "parametrized_cases": 0
+    },
+    {
+      "path": "tests/test_prompt_snapshot.py",
+      "module_under_test": "prompts, prompt_registry",
+      "category": "snapshot regression",
+      "test_functions": 3,
+      "parametrized_cases": 0
+    },
+    {
+      "path": "tests/test_qdrant_store.py",
+      "module_under_test": "qdrant_store",
+      "category": "unit",
+      "test_functions": 9,
+      "parametrized_cases": 0
+    },
+    {
+      "path": "tests/test_query_expansion.py",
+      "module_under_test": "query_expansion",
+      "category": "unit",
+      "test_functions": 4,
+      "parametrized_cases": 0
+    },
+    {
+      "path": "tests/test_rate_limit.py",
+      "module_under_test": "rate_limit",
+      "category": "unit",
+      "test_functions": 4,
+      "parametrized_cases": 0
+    },
+    {
+      "path": "tests/test_reports.py",
+      "module_under_test": "reports",
+      "category": "unit",
+      "test_functions": 4,
+      "parametrized_cases": 0
+    },
+    {
+      "path": "tests/test_reranking.py",
+      "module_under_test": "reranking",
+      "category": "unit",
+      "test_functions": 3,
+      "parametrized_cases": 0
+    },
+    {
+      "path": "tests/test_resilience.py",
+      "module_under_test": "resilience",
+      "category": "unit",
+      "test_functions": 5,
+      "parametrized_cases": 0
+    },
+    {
+      "path": "tests/test_retrieval_regressions.py",
+      "module_under_test": "retrieval, reranking",
+      "category": "retrieval regression",
+      "test_functions": 5,
+      "parametrized_cases": 2
+    },
+    {
+      "path": "tests/test_streaming_ingestion.py",
+      "module_under_test": "streaming_ingestion",
+      "category": "unit",
+      "test_functions": 11,
+      "parametrized_cases": 0
+    },
+    {
+      "path": "tests/test_synthetic_data.py",
+      "module_under_test": "synthetic_data",
+      "category": "unit",
+      "test_functions": 13,
+      "parametrized_cases": 0
+    },
+    {
+      "path": "tests/test_telemetry.py",
+      "module_under_test": "telemetry",
+      "category": "unit",
+      "test_functions": 17,
+      "parametrized_cases": 0
+    },
+    {
+      "path": "tests/test_tools.py",
+      "module_under_test": "tools",
+      "category": "unit",
+      "test_functions": 23,
+      "parametrized_cases": 1
+    }
+  ],
+  "datasets": [
+    {
+      "path": "data/sample_feedback.csv",
+      "format": "csv",
+      "bytes": 2292,
+      "records": 12,
+      "columns": [
+        "feedback_id",
+        "customer_segment",
+        "channel",
+        "rating",
+        "text",
+        "created_at"
+      ]
+    },
+    {
+      "path": "examples/experiment_config.yaml",
+      "format": "yaml",
+      "bytes": 717,
+      "records": null,
+      "columns": []
+    },
+    {
+      "path": "examples/queries.jsonl",
+      "format": "jsonl",
+      "bytes": 906,
+      "records": 5,
+      "columns": [
+        "expected_keywords",
+        "is_answerable",
+        "question",
+        "relevant_document_ids"
+      ]
+    },
+    {
+      "path": "examples/stream_feedback.jsonl",
+      "format": "jsonl",
+      "bytes": 428,
+      "records": 2,
+      "columns": [
+        "channel",
+        "created_at",
+        "customer_segment",
+        "feedback_id",
+        "rating",
+        "text"
+      ]
+    },
+    {
+      "path": "examples/tool_queries.jsonl",
+      "format": "jsonl",
+      "bytes": 1612,
+      "records": 9,
+      "columns": [
+        "expected_tool",
+        "note",
+        "question"
+      ]
+    }
+  ],
+  "environment_template": [
+    {
+      "name": "FEEDBACK_AGENT_DATA_PATH",
+      "example": "data/sample_feedback.csv",
+      "comment": ""
+    },
+    {
+      "name": "FEEDBACK_AGENT_INDEX_PATH",
+      "example": ".artifacts/vector_store.json",
+      "comment": ""
+    },
+    {
+      "name": "FEEDBACK_AGENT_EMBEDDING_DIM",
+      "example": "512",
+      "comment": ""
+    },
+    {
+      "name": "FEEDBACK_AGENT_LLM_PROVIDER",
+      "example": "local",
+      "comment": "LLM provider: local (default, no API key), openai, openai_responses, anthropic, bedrock, or ollama."
+    },
+    {
+      "name": "OPENAI_API_KEY",
+      "example": "",
+      "comment": "OpenAI-compatible provider (FEEDBACK_AGENT_LLM_PROVIDER=openai)."
+    },
+    {
+      "name": "OPENAI_MODEL",
+      "example": "gpt-4o-mini",
+      "comment": ""
+    },
+    {
+      "name": "OPENAI_BASE_URL",
+      "example": "https://api.openai.com",
+      "comment": ""
+    },
+    {
+      "name": "ANTHROPIC_API_KEY",
+      "example": "",
+      "comment": "Anthropic provider (FEEDBACK_AGENT_LLM_PROVIDER=anthropic, requires the 'anthropic' extra)."
+    },
+    {
+      "name": "ANTHROPIC_MODEL",
+      "example": "claude-opus-4-8",
+      "comment": ""
+    },
+    {
+      "name": "AWS_REGION",
+      "example": "",
+      "comment": "AWS Bedrock provider (FEEDBACK_AGENT_LLM_PROVIDER=bedrock, requires the 'bedrock' extra). Credentials are resolved by the AWS SDK chain (env, profile, SSO, IAM role)."
+    },
+    {
+      "name": "AWS_BEDROCK_MODEL",
+      "example": "anthropic.claude-3-haiku-20240307-v1:0",
+      "comment": ""
+    },
+    {
+      "name": "AWS_BEDROCK_MAX_TOKENS",
+      "example": "1024",
+      "comment": ""
+    },
+    {
+      "name": "AWS_BEDROCK_TEMPERATURE",
+      "example": "0.2",
+      "comment": ""
+    },
+    {
+      "name": "FEEDBACK_AGENT_LLM_RESILIENCE_ENABLED",
+      "example": "true",
+      "comment": "Remote LLM resilience wrapper (not applied to FEEDBACK_AGENT_LLM_PROVIDER=local)."
+    },
+    {
+      "name": "FEEDBACK_AGENT_LLM_TIMEOUT_SECONDS",
+      "example": "30",
+      "comment": ""
+    },
+    {
+      "name": "FEEDBACK_AGENT_LLM_RETRY_MAX_ATTEMPTS",
+      "example": "3",
+      "comment": ""
+    },
+    {
+      "name": "FEEDBACK_AGENT_LLM_RETRY_BACKOFF_SECONDS",
+      "example": "0.25",
+      "comment": ""
+    },
+    {
+      "name": "FEEDBACK_AGENT_LLM_CIRCUIT_FAILURE_THRESHOLD",
+      "example": "3",
+      "comment": ""
+    },
+    {
+      "name": "FEEDBACK_AGENT_LLM_CIRCUIT_RECOVERY_SECONDS",
+      "example": "30",
+      "comment": ""
+    },
+    {
+      "name": "FEEDBACK_AGENT_HALLUCINATION_JUDGE_ENABLED",
+      "example": "false",
+      "comment": "Optional semantic hallucination review. When true, the configured LLM provider is also used as a judge after deterministic evidence-overlap checks."
+    },
+    {
+      "name": "OLLAMA_BASE_URL",
+      "example": "http://localhost:11434",
+      "comment": "Ollama provider (FEEDBACK_AGENT_LLM_PROVIDER=ollama, local server, no API key)."
+    },
+    {
+      "name": "OLLAMA_MODEL",
+      "example": "llama3.2",
+      "comment": ""
+    },
+    {
+      "name": "FEEDBACK_AGENT_CONVERSATION_STORE_PATH",
+      "example": ".artifacts/conversations",
+      "comment": ""
+    },
+    {
+      "name": "FEEDBACK_AGENT_JOB_STORE_PATH",
+      "example": ".artifacts/jobs",
+      "comment": ""
+    },
+    {
+      "name": "FEEDBACK_AGENT_REPORT_STORE_PATH",
+      "example": ".artifacts/reports",
+      "comment": ""
+    },
+    {
+      "name": "FEEDBACK_AGENT_HUMAN_FEEDBACK_STORE_PATH",
+      "example": ".artifacts/human_feedback",
+      "comment": ""
+    },
+    {
+      "name": "FEEDBACK_AGENT_ACTIVE_LEARNING_STATE_STORE_PATH",
+      "example": ".artifacts/active_learning",
+      "comment": ""
+    },
+    {
+      "name": "FEEDBACK_AGENT_API_AUTH_ENABLED",
+      "example": "false",
+      "comment": "Optional API-key authorization. Health and readiness remain open."
+    },
+    {
+      "name": "FEEDBACK_AGENT_API_READER_KEY",
+      "example": "",
+      "comment": ""
+    },
+    {
+      "name": "FEEDBACK_AGENT_API_WRITER_KEY",
+      "example": "",
+      "comment": ""
+    },
+    {
+      "name": "FEEDBACK_AGENT_API_ADMIN_KEY",
+      "example": "",
+      "comment": ""
+    },
+    {
+      "name": "FEEDBACK_AGENT_API_RATE_LIMIT_ENABLED",
+      "example": "false",
+      "comment": "Optional in-process fixed-window rate limiting for deployed API instances."
+    },
+    {
+      "name": "FEEDBACK_AGENT_API_RATE_LIMIT_MAX_REQUESTS",
+      "example": "120",
+      "comment": ""
+    },
+    {
+      "name": "FEEDBACK_AGENT_API_RATE_LIMIT_WINDOW_SECONDS",
+      "example": "60",
+      "comment": ""
+    },
+    {
+      "name": "FEEDBACK_AGENT_TELEMETRY_ENABLED",
+      "example": "false",
+      "comment": "Telemetry is disabled by default. Use backend=jsonl for local event logs or backend=opentelemetry with the optional 'otel' extra and a configured OTel SDK/exporter."
+    },
+    {
+      "name": "FEEDBACK_AGENT_TELEMETRY_BACKEND",
+      "example": "jsonl",
+      "comment": ""
+    },
+    {
+      "name": "FEEDBACK_AGENT_TELEMETRY_PATH",
+      "example": ".artifacts/telemetry.jsonl",
+      "comment": ""
+    },
+    {
+      "name": "FEEDBACK_AGENT_TELEMETRY_SERVICE_NAME",
+      "example": "feedback-intelligence-agent",
+      "comment": ""
+    },
+    {
+      "name": "FEEDBACK_AGENT_CORS_ALLOW_ORIGINS",
+      "example": "http://localhost:5173,http://localhost:4173,http://127.0.0.1:5173,http://127.0.0.1:4173",
+      "comment": "Comma-separated browser origins allowed to call the API (CORS). Use \"*\" to allow any origin for local demos, or leave empty to disable CORS."
+    }
+  ],
+  "quality_gates": [
+    {
+      "gate": "Formatting",
+      "tool": "ruff format",
+      "make_target": "format-check",
+      "local_command": "poetry run ruff format --check .",
+      "ci_step": "Format check",
+      "ci_workflow": "CI",
+      "blocking": true
+    },
+    {
+      "gate": "Linting",
+      "tool": "ruff check",
+      "make_target": "lint",
+      "local_command": "poetry run ruff check .",
+      "ci_step": "Lint",
+      "ci_workflow": "CI",
+      "blocking": true
+    },
+    {
+      "gate": "Type checking",
+      "tool": "mypy (strict)",
+      "make_target": "typecheck",
+      "local_command": "poetry run mypy src",
+      "ci_step": "Type check",
+      "ci_workflow": "CI",
+      "blocking": true
+    },
+    {
+      "gate": "Tests and coverage",
+      "tool": "pytest, pytest-cov",
+      "make_target": "coverage",
+      "local_command": "poetry run pytest --cov=feedback_intelligence_agent --cov-report=term-missing --cov-fail-under=$(COVERAGE_THRESHOLD)",
+      "ci_step": "Test with coverage",
+      "ci_workflow": "CI",
+      "blocking": true
+    },
+    {
+      "gate": "Deterministic demo",
+      "tool": "scripts/run_demo.py",
+      "make_target": "demo",
+      "local_command": "poetry run python scripts/run_demo.py",
+      "ci_step": "Run deterministic demo",
+      "ci_workflow": "Release",
+      "blocking": true
+    },
+    {
+      "gate": "Package build",
+      "tool": "poetry build",
+      "make_target": "build",
+      "local_command": "poetry build",
+      "ci_step": "Build package",
+      "ci_workflow": "CI",
+      "blocking": true
+    },
+    {
+      "gate": "Security static analysis",
+      "tool": "CodeQL",
+      "make_target": "",
+      "local_command": "",
+      "ci_step": "Perform CodeQL analysis",
+      "ci_workflow": "Security",
+      "blocking": true
+    },
+    {
+      "gate": "Dependency review",
+      "tool": "actions/dependency-review-action",
+      "make_target": "",
+      "local_command": "",
+      "ci_step": "Review dependency changes",
+      "ci_workflow": "Dependency Review",
+      "blocking": true
+    }
+  ]
+}

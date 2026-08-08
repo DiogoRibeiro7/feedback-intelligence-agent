@@ -1,0 +1,23 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{generate\_data}}
+\label{func:feedback_intelligence_agent.cli.generate_data}\index{Functions!generate\_data}
+
+Generate a synthetic feedback CSV compatible with the data contract.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+generate_data(rows: Annotated[int, typer.Option(help='Number of feedback records to generate.')] = 1000, output: Annotated[Path, typer.Option(help='Destination CSV path.')] = Path('data/synthetic_feedback.csv'), seed: Annotated[int, typer.Option(help='Random seed; same seed and options give identical output.')] = 42) -> None
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{rows}] \texttt{Annotated[int,\allowbreak{} typer.\allowbreak{}Option(help='Number of feedback records to generate.\allowbreak{}')\allowbreak{}]\allowbreak{}}, default \texttt{1000}.
+  \item[\texttt{output}] \texttt{Annotated[Path,\allowbreak{} typer.\allowbreak{}Option(help='Destination CSV path.\allowbreak{}')\allowbreak{}]\allowbreak{}}, default \texttt{Path('data/\allowbreak{}synthetic\_\allowbreak{}feedback.\allowbreak{}csv')\allowbreak{}}.
+  \item[\texttt{seed}] \texttt{Annotated[int,\allowbreak{} typer.\allowbreak{}Option(help='Random seed; same seed and options give identical output.\allowbreak{}')\allowbreak{}]\allowbreak{}}, default \texttt{42}.
+\end{arglist}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}cli.\allowbreak{}py:316}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/cli.py#L316}{online}), module \cref{module:feedback_intelligence_agent.cli}

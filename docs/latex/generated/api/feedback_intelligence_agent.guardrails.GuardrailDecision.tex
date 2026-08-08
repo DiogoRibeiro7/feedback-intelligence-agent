@@ -1,0 +1,21 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{GuardrailDecision}}
+\label{class:feedback_intelligence_agent.guardrails.GuardrailDecision}\label{schema:GuardrailDecision}\index{Classes!GuardrailDecision}
+
+Outcome of one guardrail evaluation.
+\apifield{Inherits}\texttt{BaseModel}
+\apifield{Fields}
+\begin{arglist}
+  \item[\texttt{allowed}] \texttt{bool}, required. Whether the request may proceed.
+  \item[\texttt{reason}] \texttt{str}, required. Human-readable explanation, including the rule that fired.
+  \item[\texttt{severity}] \texttt{Severity}, default \texttt{'low'}. \texttt{low} (benign or malformed), \texttt{medium} (policy bypass attempts), or \texttt{high} (injection or data exfiltration attempts).
+  \item[\texttt{suggested\_\allowbreak{}response}] \texttt{str \textbar{} None}, default \texttt{None}. Safe text the caller can return verbatim when the request is blocked.
+\end{arglist}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}guardrails.\allowbreak{}py:36}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/guardrails.py#L36}{online}), pydantic model, module \cref{module:feedback_intelligence_agent.guardrails}

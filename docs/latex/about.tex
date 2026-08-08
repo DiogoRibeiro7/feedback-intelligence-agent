@@ -1,0 +1,141 @@
+% Authored: how the manual is organised and how it is produced.
+
+\section*{The three questions}
+
+Technical documentation of a repository has to answer three distinct
+questions, and mixing them produces a document that answers none of them well.
+This manual keeps them apart:
+
+\begin{description}
+  \item[Reference Manual] \emph{What does the repository expose?} An
+    enumeration of every public object with its exact signature, its
+    parameters, its failure modes, and the source file that defines it.
+  \item[Software Architecture] \emph{How is the system structured, and how do
+    its parts interact?} Components, dependency direction, runtime flow, and
+    data lineage.
+  \item[Engineering] \emph{How is the system developed, tested, built,
+    reproduced, packaged, and released?} Structure, workflow, quality gates,
+    CI/CD, reproducibility, and releases.
+\end{description}
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[
+  every node/.style={font=\small},
+  box/.style={rectangle, draw=black, rounded corners=2pt, align=center,
+    minimum width=30mm, minimum height=8mm},
+  leaf/.style={rectangle, draw=rulegrey, align=center, font=\scriptsize,
+    minimum width=24mm, minimum height=6mm},
+  link/.style={-{Latex[length=2mm]}, thick},
+  thin link/.style={-{Latex[length=1.6mm]}, rulegrey}
+]
+  \node[box] (root) {Project documentation};
+  \node[box, below=16mm of root] (arch) {Architecture};
+  \node[box, left=14mm of arch] (ref) {Reference manual};
+  \node[box, right=14mm of arch] (eng) {Engineering};
+
+  \node[leaf, below=8mm of ref] (r1) {Modules, classes,\\ functions};
+  \node[leaf, below=5mm of r1] (r2) {Schemas, CLI, HTTP,\\ configuration};
+  \node[leaf, below=8mm of arch] (a1) {Components,\\ dependencies};
+  \node[leaf, below=5mm of a1] (a2) {Runtime flow,\\ data lineage};
+  \node[leaf, below=8mm of eng] (e1) {Tests, quality gates,\\ CI/CD};
+  \node[leaf, below=5mm of e1] (e2) {Reproducibility,\\ releases};
+
+  \node[box, below=12mm of a2, minimum width=46mm] (src) {Source repository\\
+    \scriptsize (single source of truth)};
+
+  \draw[link] (root) -- (ref);
+  \draw[link] (root) -- (arch);
+  \draw[link] (root) -- (eng);
+  \draw[thin link] (ref) -- (r1);
+  \draw[thin link] (r1) -- (r2);
+  \draw[thin link] (arch) -- (a1);
+  \draw[thin link] (a1) -- (a2);
+  \draw[thin link] (eng) -- (e1);
+  \draw[thin link] (e1) -- (e2);
+  \draw[link] (src) -- (a2);
+  \draw[link] (src.west) to[out=170, in=-90] (r2.south);
+  \draw[link] (src.east) to[out=10, in=-90] (e2.south);
+\end{tikzpicture}
+\caption{Information architecture of this manual. All three references derive
+from the same source repository; none of them is maintained by hand where the
+information can be extracted.}
+\label{fig:information-architecture}
+\end{figure}
+
+\section*{Authored and generated content}
+
+Two kinds of content appear in this manual and they are never mixed in the same
+file.
+
+\emph{Generated} content is derived from the repository by the tools in
+\srcfile{docs/tools/} and written under \srcfile{docs/latex/generated/}. Every
+generated file carries a header marking it as machine-produced. Signatures,
+parameter tables, field tables, CLI options, endpoint tables, environment
+variables, dependency lists, the module graph, the file census, and all indexes
+are generated. Editing them by hand is pointless: the next \texttt{make docs}
+overwrites them.
+
+\emph{Authored} content is the prose you are reading: chapter introductions,
+the mathematical exposition in \cref{ch:mathematics}, the architecture
+narrative, the architecture decision records, and the engineering commentary.
+Authored files live directly under \srcfile{docs/latex/reference/},
+\srcfile{docs/latex/architecture/}, \srcfile{docs/latex/engineering/}, and
+\srcfile{docs/latex/diagrams/}, and the generator never writes to them.
+
+\section*{Two documents}
+
+The documentation is compiled into two PDFs from one source tree. They share
+this preamble, the generated metadata, and every chapter file, so they cannot
+describe different revisions and nothing is written twice.
+
+\begin{description}[nosep]
+  \item[\srcfile{docs/latex/reference.tex}] The documented objects only: the
+    CRAN-style reference, for a reader who wants to look an object up.
+  \item[\srcfile{docs/latex/main.tex}] This document: the same reference, plus
+    the software architecture and engineering parts and the traceability
+    appendix.
+\end{description}
+
+Entries use the layout CRAN reference manuals use: the object name as the
+heading, its summary immediately below, then run-in field labels
+(\textbf{Usage}, \textbf{Arguments}, \textbf{Value}, \textbf{Raises},
+\textbf{Details}, \textbf{Source}). Arguments are hanging-indent lists rather
+than full-width tables, which is what keeps a reference of this size readable
+at a sane page count.
+
+\section*{Regenerating this manual}
+
+From the repository root:
+
+\begin{lstlisting}[language=bash]
+make docs                # inspect, extract, render, validate
+make docs-pdf            # the above, then build the complete manual
+make docs-pdf-reference  # build the reference-only document
+\end{lstlisting}
+
+\texttt{make docs} performs no application imports. It reads the source with
+Python's \texttt{ast} module, so generating documentation cannot open a network
+connection, contact an LLM provider, build a vector index, or write to any
+external system.
+
+\section*{Determinism and revision correspondence}
+
+Two runs of the generator over the same repository revision produce
+byte-identical output. Timestamps come from the HEAD commit date rather than
+the wall clock, object order is by fully-qualified name, and every table row
+order is derived from the model rather than from dictionary iteration.
+
+The manual therefore describes exactly one revision, recorded on the title page
+and in \srcfile{docs/metadata/documentation-manifest.json} together with a
+SHA-256 digest of every generated file. If the source has moved on, the digests
+no longer match and \texttt{python -m tools.validate\_docs} reports the drift.
+
+\section*{Secrets}
+
+No secret value appears in this manual. The configuration reference documents
+the \emph{names}, types, defaults, and sensitivity of credential settings; the
+declared default of every credential field in source is \texttt{None}, and the
+generator reads source text rather than the process environment, so no
+environment value can reach the output. The validator additionally scans every
+generated file for credential-shaped literals.

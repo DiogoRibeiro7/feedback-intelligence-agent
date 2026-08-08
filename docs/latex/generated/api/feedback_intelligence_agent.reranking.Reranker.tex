@@ -1,0 +1,31 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{Reranker}}
+\label{class:feedback_intelligence_agent.reranking.Reranker}\index{Classes!Reranker}
+
+Protocol for candidate rerankers.
+\apifield{Inherits}\texttt{Protocol}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}reranking.\allowbreak{}py:11}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/reranking.py#L11}{online}), protocol, module \cref{module:feedback_intelligence_agent.reranking}
+
+\subsection{\texttt{rerank}}
+\label{method:feedback_intelligence_agent.reranking.Reranker.rerank}\index{Methods!rerank}
+Return candidates ordered by judged relevance.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+rerank(self, question: str, results: list[SearchResult], *, top_k: int, route_keywords: tuple[str, ...] = ()) -> list[SearchResult]
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{question}] \texttt{str}, required.
+  \item[\texttt{results}] \texttt{list[SearchResult]\allowbreak{}}, required.
+  \item[\texttt{top\_\allowbreak{}k}] \texttt{int}, required, keyword-only.
+  \item[\texttt{route\_\allowbreak{}keywords}] \texttt{tuple[str,\allowbreak{} .\allowbreak{}.\allowbreak{}.\allowbreak{}]\allowbreak{}}, default \texttt{()\allowbreak{}}, keyword-only.
+\end{arglist}
+\apifield{Value}\texttt{list[SearchResult]\allowbreak{}}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}reranking.\allowbreak{}py:14}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/reranking.py#L14}{online})

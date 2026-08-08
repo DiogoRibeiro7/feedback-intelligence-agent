@@ -1,0 +1,213 @@
+% Shared preamble for the technical reference manual.
+% Authored file - safe to edit. Regenerating the documentation never touches it.
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+
+\usepackage[
+  a4paper,
+  top=24mm,
+  bottom=24mm,
+  left=23mm,
+  right=23mm,
+  headheight=14pt
+]{geometry}
+
+% The contents lists sections (one per documented object) but not the method
+% subsections nested inside class entries; those are reachable through the
+% class entry, the object indexes, and the PDF bookmarks.
+\setcounter{tocdepth}{1}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{fancyhdr}
+\usepackage[bottom]{footmisc}
+\usepackage{makeidx}
+
+\usepackage{multicol}
+
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, positioning, fit, calc, shapes.geometric, backgrounds}
+
+\usepackage[
+  colorlinks=true,
+  linkcolor=black,
+  citecolor=black,
+  urlcolor=black,
+  bookmarksnumbered=true,
+  bookmarksopen=true,
+  pdfborder={0 0 0}
+]{hyperref}
+\usepackage[nameinlink]{cleveref}
+
+% ---------------------------------------------------------------------------
+% Monochrome-friendly palette. Every figure and listing must remain legible
+% when printed in greyscale, so only neutral tones are defined.
+% ---------------------------------------------------------------------------
+\definecolor{rulegrey}{gray}{0.45}
+\definecolor{shadegrey}{gray}{0.94}
+\definecolor{codegrey}{gray}{0.30}
+
+% ---------------------------------------------------------------------------
+% Compact sectioning.
+%
+% The reference part contains one section per documented object. The class
+% defaults put roughly a centimetre of vertical space around each heading,
+% which at that density costs well over a hundred pages on its own. These are
+% the standard \@startsection parameters with the skips tightened; no
+% additional package is required.
+% ---------------------------------------------------------------------------
+\makeatletter
+\renewcommand\section{\@startsection{section}{1}{\z@}%
+  {-2.2ex \@plus -0.6ex \@minus -.2ex}%
+  {0.7ex \@plus .2ex}%
+  {\normalfont\large\bfseries\raggedright}}
+\renewcommand\subsection{\@startsection{subsection}{2}{\z@}%
+  {-1.6ex \@plus -0.5ex \@minus -.2ex}%
+  {0.4ex \@plus .2ex}%
+  {\normalfont\normalsize\bfseries\raggedright}}
+\renewcommand\subsubsection{\@startsection{subsubsection}{3}{\z@}%
+  {-1.2ex \@plus -0.4ex \@minus -.2ex}%
+  {0.2ex \@plus .1ex}%
+  {\normalfont\normalsize\itshape\raggedright}}
+\makeatother
+
+% ---------------------------------------------------------------------------
+% Reference-entry layout, modelled on the reference manuals CRAN generates for
+% R packages: a run-in bold field label followed immediately by its content,
+% rather than a numbered subsection per field.
+% ---------------------------------------------------------------------------
+
+% Run-in field label: "Usage:", "Arguments:", "Value:", ...
+\newcommand{\apifield}[1]{%
+  \par\addvspace{2.5pt}\noindent\textbf{#1:}\enspace\ignorespaces}
+
+% Hanging-indent list used for arguments, fields, and enumeration members.
+\newenvironment{arglist}%
+  {\begin{description}[
+      style=sameline,
+      leftmargin=2.2em,
+      labelindent=0pt,
+      labelsep=0.5em,
+      topsep=2pt,
+      itemsep=1pt,
+      parsep=0pt,
+      font=\normalfont]}%
+  {\end{description}}
+
+% Keeps a short entry from being split across a page break at its heading.
+\newcommand{\apibreak}{\filbreak}
+
+% ---------------------------------------------------------------------------
+% Source listings.
+% ---------------------------------------------------------------------------
+\lstset{
+  basicstyle=\ttfamily\small,
+  keywordstyle=\ttfamily\bfseries,
+  commentstyle=\ttfamily\itshape\color{codegrey},
+  stringstyle=\ttfamily,
+  showstringspaces=false,
+  breaklines=true,
+  breakatwhitespace=false,
+  columns=fullflexible,
+  keepspaces=true,
+  frame=single,
+  rulecolor=\color{rulegrey},
+  framesep=4pt,
+  backgroundcolor=\color{shadegrey},
+  xleftmargin=6pt,
+  xrightmargin=2pt,
+  aboveskip=8pt,
+  belowskip=8pt,
+  literate={-}{{-}}1 {_}{{\_}}1
+}
+
+% Signature blocks in the reference entries: unframed, indented, and tight,
+% so a one-line signature costs one line of output.
+\lstdefinestyle{usage}{
+  basicstyle=\ttfamily\small,
+  frame=none,
+  backgroundcolor=\color{white},
+  xleftmargin=1.6em,
+  xrightmargin=0pt,
+  aboveskip=1.5pt,
+  belowskip=2.5pt,
+  breaklines=true,
+  breakindent=2em,
+  postbreak={},
+  columns=fullflexible
+}
+
+% ---------------------------------------------------------------------------
+% Table defaults. Generated tables use longtable + booktabs throughout.
+% ---------------------------------------------------------------------------
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.05}
+\setlength{\LTcapwidth}{\textwidth}
+\raggedbottom
+
+% Generated tables carry long typewriter identifiers. TeX does not hyphenate
+% typewriter text, so give the paragraph builder room to stretch rather than
+% overflowing the column; the generator additionally inserts \allowbreak
+% opportunities inside qualified names.
+\setlength{\emergencystretch}{3em}
+\tolerance=2000
+\hbadness=4000
+\hfuzz=2pt
+
+% ---------------------------------------------------------------------------
+% Page style.
+% ---------------------------------------------------------------------------
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\nouppercase{\leftmark}}
+\fancyhead[R]{\small\thepage}
+\fancyfoot[L]{\small\projectname\ \projectversion}
+\fancyfoot[R]{\small rev.\ \texttt{\projectrevisionshort}}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+
+\fancypagestyle{plain}{%
+  \fancyhf{}%
+  \fancyfoot[L]{\small\projectname\ \projectversion}%
+  \fancyfoot[R]{\small rev.\ \texttt{\projectrevisionshort}}%
+  \renewcommand{\headrulewidth}{0pt}%
+  \renewcommand{\footrulewidth}{0.4pt}%
+}
+
+% ---------------------------------------------------------------------------
+% Cross-reference naming for the object kinds this manual defines.
+% ---------------------------------------------------------------------------
+\crefname{section}{section}{sections}
+\Crefname{section}{Section}{Sections}
+\crefname{chapter}{chapter}{chapters}
+\Crefname{chapter}{Chapter}{Chapters}
+\crefname{figure}{figure}{figures}
+\Crefname{figure}{Figure}{Figures}
+\crefname{table}{table}{tables}
+\Crefname{table}{Table}{Tables}
+
+% ---------------------------------------------------------------------------
+% Shared semantic macros.
+% ---------------------------------------------------------------------------
+\newcommand{\pkg}[1]{\texttt{#1}}
+\newcommand{\srcfile}[1]{\texttt{#1}}
+\newcommand{\envvar}[1]{\texttt{#1}}
+
+% Marks a statement that could not be established from repository evidence.
+\newcommand{\noevidence}{%
+  \par\medskip\noindent\fbox{\parbox{0.96\linewidth}{%
+    \small\textbf{No repository evidence.} Rationale cannot be determined from
+    repository evidence.}}\par\medskip%
+}
+
+\makeindex

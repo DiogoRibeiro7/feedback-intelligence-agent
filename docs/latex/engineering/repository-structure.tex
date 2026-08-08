@@ -1,0 +1,37 @@
+% Authored: repository structure, with the generated tree and tables.
+
+\chapter{Repository Structure}
+\label{ch:repository-structure}
+
+\section{Organising principle}
+
+The repository is a \texttt{src}-layout Python package with four satellite
+concerns: a test suite mirroring the package, version-controlled sample data
+and fixtures, a browser client, and deployment descriptors. Nothing at the top
+level is generated; every generated artifact lives under \srcfile{.artifacts/},
+\srcfile{dist/}, \srcfile{docs/latex/generated/}, or
+\srcfile{docs/metadata/}.
+
+The \texttt{src} layout matters for one concrete reason: tests import the
+installed package rather than a directory that happens to be on
+\texttt{sys.path}, so a missing entry in \texttt{packages} or a module that was
+never added to the distribution fails the test run instead of passing locally
+and breaking on install.
+
+\section{Naming conventions}
+
+\begin{description}[nosep]
+  \item[Modules] one concern per module, named after it, no subpackages. The
+    flat namespace is what makes the module list in \cref{ch:modules} a usable
+    table of contents.
+  \item[Tests] \texttt{tests/test\_<module>.py}, mirroring package modules
+    one-for-one. The traceability table in \cref{app:traceability} is derived
+    from this convention.
+  \item[Stores] \texttt{Json<Entity>Store} for every file-backed store.
+  \item[Factories] \texttt{build\_<thing>} for every factory function.
+  \item[Protocols] the bare capability noun (\texttt{Retriever},
+    \texttt{LLMProvider}), with implementations named after their mechanism
+    (\texttt{BM25Retriever}, \texttt{OpenAIChatLLM}).
+\end{description}
+
+\input{generated/engineering/repository-structure}

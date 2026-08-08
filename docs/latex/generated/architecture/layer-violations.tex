@@ -1,0 +1,33 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_architecture.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+The layering in this chapter is a classification applied to the observed modules, not a constraint enforced by any tool in the repository. The table below lists every import that runs from an inner layer towards an outer one. These are reported as facts about the current source; the repository contains no evidence about why each was introduced.
+
+\begin{longtable}{>{\raggedright\arraybackslash\small}p{0.20\textwidth} >{\raggedright\arraybackslash\small}p{0.15\textwidth} >{\raggedright\arraybackslash\small}p{0.20\textwidth} >{\raggedright\arraybackslash\small}p{0.15\textwidth} >{\raggedright\arraybackslash\small}p{0.14\textwidth}}
+\caption{Imports directed from an inner layer towards an outer layer.}\label{tab:layer-inversions}\\
+\toprule
+Source & Source layer & Target & Target layer & Context \\
+\midrule
+\endfirsthead
+\toprule
+Source & Source layer & Target & Target layer & Context \\
+\midrule
+\endhead
+\midrule
+\multicolumn{5}{r}{\footnotesize continued on next page}\\
+\endfoot
+\bottomrule
+\endlastfoot
+\texttt{experiments} & application & \texttt{\_\allowbreak{}\_\allowbreak{}init\_\allowbreak{}\_\allowbreak{}} & interface & eager \\
+\texttt{index\_\allowbreak{}updates} & data & \texttt{chunking} & domain & eager \\
+\texttt{index\_\allowbreak{}updates} & data & \texttt{embeddings} & domain & eager \\
+\texttt{index\_\allowbreak{}updates} & data & \texttt{factory} & application & eager \\
+\texttt{lakehouse} & data & \texttt{privacy} & domain & eager \\
+\texttt{llm} & infrastructure & \texttt{citations} & domain & eager \\
+\texttt{schemas} & foundation & \texttt{guardrails} & domain & eager \\
+\texttt{streaming\_\allowbreak{}ingestion} & data & \texttt{privacy} & domain & eager \\
+\end{longtable}

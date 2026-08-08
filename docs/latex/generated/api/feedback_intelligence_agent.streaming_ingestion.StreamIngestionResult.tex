@@ -1,0 +1,24 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{StreamIngestionResult}}
+\label{class:feedback_intelligence_agent.streaming_ingestion.StreamIngestionResult}\label{schema:StreamIngestionResult}\index{Classes!StreamIngestionResult}
+
+Summary of consuming a bounded stream batch.
+\apifield{Inherits}\texttt{BaseModel}
+\apifield{Fields}
+\begin{arglist}
+  \item[\texttt{source}] \texttt{str}, required
+  \item[\texttt{total\_\allowbreak{}messages}] \texttt{int}, required, \texttt{ge=0}
+  \item[\texttt{accepted\_\allowbreak{}records}] \texttt{int}, required, \texttt{ge=0}
+  \item[\texttt{rejected\_\allowbreak{}messages}] \texttt{int}, required, \texttt{ge=0}
+  \item[\texttt{checkpoints}] \texttt{list[StreamOffset]\allowbreak{}}, default \texttt{list()\allowbreak{}}
+  \item[\texttt{issues}] \texttt{list[StreamIngestionIssue]\allowbreak{}}, default \texttt{list()\allowbreak{}}
+  \item[\texttt{records}] \texttt{list[FeedbackRecord]\allowbreak{}}, default \texttt{list()\allowbreak{}}
+\end{arglist}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}streaming\_\allowbreak{}ingestion.\allowbreak{}py:70}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/streaming_ingestion.py#L70}{online}), pydantic model, module \cref{module:feedback_intelligence_agent.streaming_ingestion}

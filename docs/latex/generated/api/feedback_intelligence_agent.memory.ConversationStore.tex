@@ -1,0 +1,51 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{ConversationStore}}
+\label{class:feedback_intelligence_agent.memory.ConversationStore}\index{Classes!ConversationStore}
+
+Protocol implemented by conversation persistence backends.
+\apifield{Inherits}\texttt{Protocol}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}memory.\allowbreak{}py:132}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/memory.py#L132}{online}), protocol, module \cref{module:feedback_intelligence_agent.memory}
+
+\subsection{\texttt{get}}
+\label{method:feedback_intelligence_agent.memory.ConversationStore.get}\index{Methods!get}
+Return the stored conversation, or \texttt{None} when unknown.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+get(self, conversation_id: str) -> ConversationMemory | None
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{conversation\_\allowbreak{}id}] \texttt{str}, required.
+\end{arglist}
+\apifield{Value}\texttt{ConversationMemory \textbar{} None}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}memory.\allowbreak{}py:135}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/memory.py#L135}{online})
+
+\subsection{\texttt{save}}
+\label{method:feedback_intelligence_agent.memory.ConversationStore.save}\index{Methods!save}
+Persist the full conversation state.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+save(self, memory: ConversationMemory) -> None
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{memory}] \texttt{ConversationMemory}, required.
+\end{arglist}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}memory.\allowbreak{}py:139}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/memory.py#L139}{online})
+
+\subsection{\texttt{conversation\_ids}}
+\label{method:feedback_intelligence_agent.memory.ConversationStore.conversation_ids}\index{Methods!conversation\_ids}
+Return the identifiers of all stored conversations, sorted.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+conversation_ids(self) -> list[str]
+\end{lstlisting}
+\apifield{Value}\texttt{list[str]\allowbreak{}}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}memory.\allowbreak{}py:143}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/memory.py#L143}{online})

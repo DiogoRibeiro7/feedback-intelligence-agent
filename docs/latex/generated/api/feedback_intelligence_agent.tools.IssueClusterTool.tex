@@ -1,0 +1,29 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{IssueClusterTool}}
+\label{class:feedback_intelligence_agent.tools.IssueClusterTool}\index{Classes!IssueClusterTool}
+
+Group recurring customer issues with deterministic keyword clustering.
+\apifield{Inherits}\texttt{Tool}
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+IssueClusterTool(self, chunks: Sequence[DocumentChunk]) -> None
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{chunks}] \texttt{Sequence[DocumentChunk]\allowbreak{}}, required.
+\end{arglist}
+\apifield{Attributes}
+\begin{arglist}
+  \item[\texttt{name}] default \texttt{'issue\_\allowbreak{}cluster'}
+  \item[\texttt{description}] default \texttt{'Group recurring customer issues into deterministic keyword clusters.\allowbreak{}'}
+  \item[\texttt{input\_\allowbreak{}schema}] default \texttt{IssueClusterInput}
+  \item[\texttt{output\_\allowbreak{}schema}] default \texttt{IssueClusterOutput}
+\end{arglist}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}tools.\allowbreak{}py:253}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/tools.py#L253}{online}), class, module \cref{module:feedback_intelligence_agent.tools}

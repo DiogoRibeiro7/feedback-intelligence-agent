@@ -1,0 +1,23 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{write\_stream\_records\_csv}}
+\label{func:feedback_intelligence_agent.streaming_ingestion.write_stream_records_csv}\index{Functions!write\_stream\_records\_csv}
+
+Write validated stream records to a CSV compatible with batch ingestion.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+write_stream_records_csv(records: list[FeedbackRecord], path: str | Path) -> Path
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{records}] \texttt{list[FeedbackRecord]\allowbreak{}}, required.
+  \item[\texttt{path}] \texttt{str \textbar{} Path}, required.
+\end{arglist}
+\apifield{Value}\texttt{Path}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}streaming\_\allowbreak{}ingestion.\allowbreak{}py:346}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/streaming_ingestion.py#L346}{online}), module \cref{module:feedback_intelligence_agent.streaming_ingestion}

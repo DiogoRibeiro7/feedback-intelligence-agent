@@ -1,0 +1,87 @@
+% Authored: driver and overview for the architecture part.
+
+\chapter{Architecture Overview}
+\label{ch:architecture-overview}
+
+This part explains how the repository is organised and how its parts interact.
+It deliberately says nothing about individual signatures --- those belong to
+\cref{ch:reference-overview} --- and nothing about how the system is built or
+released, which belongs to \cref{ch:engineering-overview}.
+
+\section{What the system is}
+
+The repository implements an evidence-grounded question-answering system over
+customer feedback. A question arrives through one of three entry points (the
+Python API, the CLI, or the HTTP API); the system retrieves feedback chunks as
+evidence, optionally runs a local analytical tool, asks a language-model
+provider to write an answer constrained to that evidence, parses and repairs
+the model's output, attaches citations, checks the answer against the evidence,
+and returns a typed result.
+
+Two properties shape every structural decision visible in the source:
+
+\begin{description}
+  \item[The default path is fully local and deterministic.] The default LLM
+    provider is a deterministic local implementation, the default embedding
+    model is a hash function, and the default vector store is a JSON file.
+    Nothing in the default configuration requires an API key, a network
+    connection, or a database. Every remote capability --- OpenAI, Anthropic,
+    Bedrock, Ollama, Qdrant, Kafka, Kinesis, MLflow, OpenTelemetry --- is an
+    optional Poetry extra reached through a structural protocol.
+  \item[Substitution happens at protocol boundaries.] The orchestration code
+    depends on \texttt{Retriever}, \texttt{LLMProvider}, \texttt{VectorStore},
+    \texttt{Reranker}, \texttt{QueryRewriter}, \texttt{HallucinationJudge},
+    \texttt{EmbeddingModel}, and \texttt{FeedbackStream} --- all
+    \texttt{typing.Protocol} definitions --- never on concrete classes. The
+    concrete choice is made in exactly one place, the factory module.
+\end{description}
+
+\section{Layer model}
+
+The classification below is applied by the documentation generator and is
+recorded in \srcfile{docs/tools/extract\_dependencies.py} as an explicit
+module-to-layer mapping. It is a description of the observed code, not a
+constraint enforced by any tool in the repository; \cref{sec:layer-violations}
+reports every import that runs against it.
+
+\begin{description}[nosep]
+  \item[Interface] The importable package surface, the Typer CLI, and the
+    FastAPI application.
+  \item[Application] Orchestration: the agent loop, the composition root,
+    background jobs, experiments, evaluation, and the product workflows
+    (reports, human feedback, active learning, email summaries).
+  \item[Domain] Computation: retrieval scoring, reranking, embeddings,
+    chunking, prompting, output parsing, guardrails, answer-support checks,
+    conversation memory, tools, and redaction.
+  \item[Data] Reading, validating, persisting, and exporting feedback and
+    vector indexes.
+  \item[Infrastructure] Adapters to things outside the process: LLM providers,
+    telemetry sinks, resilience wrappers, authorization, rate limiting.
+  \item[Foundation] Configuration and the shared typed vocabulary.
+\end{description}
+
+\input{generated/architecture/layer-diagram}
+
+\section{Chapters in this part}
+
+\begin{description}[nosep]
+  \item[\cref{ch:system-context}] The system in its environment: actors,
+    entry points, and external systems.
+  \item[\cref{ch:components}] Every component, its responsibility, and its
+    dependencies in both directions.
+  \item[\cref{ch:dependencies}] The internal import graph, coupling metrics,
+    deferred imports, and cycle analysis.
+  \item[\cref{ch:runtime}] Execution flow through a request, stage by stage,
+    named against real modules and functions.
+  \item[\cref{ch:data-flow}] Data lineage from the raw CSV to published
+    artifacts.
+  \item[\cref{ch:adr}] Architecture decision records, restricted to decisions
+    the repository provides evidence for.
+\end{description}
+
+\input{architecture/system-context}
+\input{architecture/components}
+\input{architecture/dependencies}
+\input{architecture/runtime}
+\input{architecture/data-flow}
+\input{architecture/decisions}

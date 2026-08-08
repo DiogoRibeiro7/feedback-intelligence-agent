@@ -1,0 +1,575 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\begin{longtable}{>{\raggedright\arraybackslash\small}p{0.30\textwidth} >{\raggedright\arraybackslash\small}p{0.12\textwidth} >{\raggedright\arraybackslash\small}p{0.46\textwidth}}
+\caption{Commands exposed by the console script.}\label{tab:cli-commands}\\
+\toprule
+Command & Group & Purpose \\
+\midrule
+\endfirsthead
+\toprule
+Command & Group & Purpose \\
+\midrule
+\endhead
+\midrule
+\multicolumn{3}{r}{\footnotesize continued on next page}\\
+\endfoot
+\bottomrule
+\endlastfoot
+\texttt{feedback-\allowbreak{}agent answer-\allowbreak{}feedback active-\allowbreak{}learning} & \texttt{answer-\allowbreak{}feedback} & Rank reviewed answers for active-learning follow-up. \\
+\texttt{feedback-\allowbreak{}agent answer-\allowbreak{}feedback active-\allowbreak{}learning-\allowbreak{}states} & \texttt{answer-\allowbreak{}feedback} & List active-learning assignment and workflow states. \\
+\texttt{feedback-\allowbreak{}agent answer-\allowbreak{}feedback active-\allowbreak{}learning-\allowbreak{}update} & \texttt{answer-\allowbreak{}feedback} & Assign or transition one active-learning queue item. \\
+\texttt{feedback-\allowbreak{}agent answer-\allowbreak{}feedback analytics} & \texttt{answer-\allowbreak{}feedback} & Summarise useful/not-useful human feedback. \\
+\texttt{feedback-\allowbreak{}agent answer-\allowbreak{}feedback get} & \texttt{answer-\allowbreak{}feedback} & Print one human feedback record. \\
+\texttt{feedback-\allowbreak{}agent answer-\allowbreak{}feedback list} & \texttt{answer-\allowbreak{}feedback} & List human feedback summaries. \\
+\texttt{feedback-\allowbreak{}agent answer-\allowbreak{}feedback submit} & \texttt{answer-\allowbreak{}feedback} & Answer a question and save the human judgement for that answer. \\
+\texttt{feedback-\allowbreak{}agent benchmark} & -- & Benchmark indexing, embedding, retrieval, and agent latency. \\
+\texttt{feedback-\allowbreak{}agent chat} & -- & Chat with the agent using persistent conversation memory. \\
+\texttt{feedback-\allowbreak{}agent evaluate} & -- & Run offline retrieval and answer-quality evaluation and write a JSON report. \\
+\texttt{feedback-\allowbreak{}agent experiment run} & \texttt{experiment} & Run a configured experiment and write results, metrics, and metadata. \\
+\texttt{feedback-\allowbreak{}agent export-\allowbreak{}lakehouse} & -- & Export validated feedback to a local lakehouse-style table. \\
+\texttt{feedback-\allowbreak{}agent generate-\allowbreak{}data} & -- & Generate a synthetic feedback CSV compatible with the data contract. \\
+\texttt{feedback-\allowbreak{}agent index} & -- & Build a local vector index. \\
+\texttt{feedback-\allowbreak{}agent ingest-\allowbreak{}job} & -- & Run an ingestion job locally and print its JobResult. \\
+\texttt{feedback-\allowbreak{}agent prompts list} & \texttt{prompts} & List registered prompts with versions, variables, and changelog notes. \\
+\texttt{feedback-\allowbreak{}agent prompts render} & \texttt{prompts} & Render a registered prompt template with the given variables. \\
+\texttt{feedback-\allowbreak{}agent query} & -- & Ask a question against the indexed feedback. \\
+\texttt{feedback-\allowbreak{}agent reports email-\allowbreak{}summary} & \texttt{reports} & Render or send an email digest for saved insight reports. \\
+\texttt{feedback-\allowbreak{}agent reports export} & \texttt{reports} & Export one saved insight report for stakeholder handoff. \\
+\texttt{feedback-\allowbreak{}agent reports get} & \texttt{reports} & Print one saved insight report. \\
+\texttt{feedback-\allowbreak{}agent reports list} & \texttt{reports} & List saved insight report summaries. \\
+\texttt{feedback-\allowbreak{}agent reports save} & \texttt{reports} & Answer a question and save the resulting insight report. \\
+\texttt{feedback-\allowbreak{}agent serve} & -- & Serve the FastAPI app with Uvicorn. \\
+\texttt{feedback-\allowbreak{}agent stream-\allowbreak{}ingest} & -- & Consume a bounded local stream batch and write validated feedback records. \\
+\texttt{feedback-\allowbreak{}agent update-\allowbreak{}index} & -- & Incrementally merge a validated feedback CSV batch into a JSON index. \\
+\texttt{feedback-\allowbreak{}agent validate-\allowbreak{}data} & -- & Validate a feedback CSV against the data contract and print a report. \\
+\end{longtable}
+
+\apibreak
+\section{\texttt{answer-feedback active-learning}}
+\label{cli:answer-feedback-active-learning}\index{CLI commands!answer-feedback active-learning}
+
+Rank reviewed answers for active-learning follow-up.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=bash]
+feedback-agent answer-feedback active-learning [OPTIONS]
+\end{lstlisting}
+\apifield{Options}
+\begin{arglist}
+  \item[\texttt{-\allowbreak{}-\allowbreak{}tenant-\allowbreak{}id}] \texttt{str \textbar{} None}, default \texttt{None}. Only queue feedback for this tenant id.
+  \item[\texttt{-\allowbreak{}-\allowbreak{}max-\allowbreak{}items}] \texttt{int}, default \texttt{20}. Maximum queue items to return.
+  \item[\texttt{-\allowbreak{}-\allowbreak{}low-\allowbreak{}confidence-\allowbreak{}threshold}] \texttt{float}, default \texttt{0.\allowbreak{}65}. Queue useful answers at or below this confidence.
+  \item[\texttt{-\allowbreak{}-\allowbreak{}store-\allowbreak{}path}] \texttt{Path}, default \texttt{Path('.\allowbreak{}artifacts/\allowbreak{}human\_\allowbreak{}feedback')\allowbreak{}}. Directory holding answer feedback JSON files.
+  \item[\texttt{-\allowbreak{}-\allowbreak{}state-\allowbreak{}store-\allowbreak{}path}] \texttt{Path}, default \texttt{Path('.\allowbreak{}artifacts/\allowbreak{}active\_\allowbreak{}learning')\allowbreak{}}. Directory holding active-learning state JSON files.
+\end{arglist}
+\apifield{Source}\texttt{feedback\_\allowbreak{}intelligence\_\allowbreak{}agent.\allowbreak{}cli.\allowbreak{}answer\_\allowbreak{}feedback\_\allowbreak{}active\_\allowbreak{}learning}, \texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}cli.\allowbreak{}py:758}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/cli.py#L758}{online})
+
+\apibreak
+\section{\texttt{answer-feedback active-learning-states}}
+\label{cli:answer-feedback-active-learning-states}\index{CLI commands!answer-feedback active-learning-states}
+
+List active-learning assignment and workflow states.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=bash]
+feedback-agent answer-feedback active-learning-states [OPTIONS]
+\end{lstlisting}
+\apifield{Options}
+\begin{arglist}
+  \item[\texttt{-\allowbreak{}-\allowbreak{}status}] \texttt{ActiveLearningStatus \textbar{} None}, default \texttt{None}. Only list this workflow status.
+  \item[\texttt{-\allowbreak{}-\allowbreak{}state-\allowbreak{}store-\allowbreak{}path}] \texttt{Path}, default \texttt{Path('.\allowbreak{}artifacts/\allowbreak{}active\_\allowbreak{}learning')\allowbreak{}}. Directory holding active-learning state JSON files.
+\end{arglist}
+\apifield{Source}\texttt{feedback\_\allowbreak{}intelligence\_\allowbreak{}agent.\allowbreak{}cli.\allowbreak{}answer\_\allowbreak{}feedback\_\allowbreak{}active\_\allowbreak{}learning\_\allowbreak{}states}, \texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}cli.\allowbreak{}py:793}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/cli.py#L793}{online})
+
+\apibreak
+\section{\texttt{answer-feedback active-learning-update}}
+\label{cli:answer-feedback-active-learning-update}\index{CLI commands!answer-feedback active-learning-update}
+
+Assign or transition one active-learning queue item.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=bash]
+feedback-agent answer-feedback active-learning-update FEEDBACK_ID [OPTIONS]
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{FEEDBACK\_\allowbreak{}ID}] \texttt{str}. Answer feedback identifier.
+\end{arglist}
+\apifield{Options}
+\begin{arglist}
+  \item[\texttt{-\allowbreak{}-\allowbreak{}status}] \texttt{ActiveLearningStatus \textbar{} None}, default \texttt{None}. Workflow status to set.
+  \item[\texttt{-\allowbreak{}-\allowbreak{}assignee}] \texttt{str \textbar{} None}, default \texttt{None}. Reviewer or owner to assign.
+  \item[\texttt{-\allowbreak{}-\allowbreak{}notes}] \texttt{str \textbar{} None}, default \texttt{None}. Optional workflow notes.
+  \item[\texttt{-\allowbreak{}-\allowbreak{}state-\allowbreak{}store-\allowbreak{}path}] \texttt{Path}, default \texttt{Path('.\allowbreak{}artifacts/\allowbreak{}active\_\allowbreak{}learning')\allowbreak{}}. Directory holding active-learning state JSON files.
+\end{arglist}
+\apifield{Source}\texttt{feedback\_\allowbreak{}intelligence\_\allowbreak{}agent.\allowbreak{}cli.\allowbreak{}answer\_\allowbreak{}feedback\_\allowbreak{}active\_\allowbreak{}learning\_\allowbreak{}update}, \texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}cli.\allowbreak{}py:808}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/cli.py#L808}{online})
+
+\apibreak
+\section{\texttt{answer-feedback analytics}}
+\label{cli:answer-feedback-analytics}\index{CLI commands!answer-feedback analytics}
+
+Summarise useful/not-useful human feedback.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=bash]
+feedback-agent answer-feedback analytics [OPTIONS]
+\end{lstlisting}
+\apifield{Options}
+\begin{arglist}
+  \item[\texttt{-\allowbreak{}-\allowbreak{}tenant-\allowbreak{}id}] \texttt{str \textbar{} None}, default \texttt{None}. Only summarise feedback for this tenant id.
+  \item[\texttt{-\allowbreak{}-\allowbreak{}store-\allowbreak{}path}] \texttt{Path}, default \texttt{Path('.\allowbreak{}artifacts/\allowbreak{}human\_\allowbreak{}feedback')\allowbreak{}}. Directory holding answer feedback JSON files.
+\end{arglist}
+\apifield{Source}\texttt{feedback\_\allowbreak{}intelligence\_\allowbreak{}agent.\allowbreak{}cli.\allowbreak{}answer\_\allowbreak{}feedback\_\allowbreak{}analytics}, \texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}cli.\allowbreak{}py:742}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/cli.py#L742}{online})
+
+\apibreak
+\section{\texttt{answer-feedback get}}
+\label{cli:answer-feedback-get}\index{CLI commands!answer-feedback get}
+
+Print one human feedback record.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=bash]
+feedback-agent answer-feedback get FEEDBACK_ID [OPTIONS]
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{FEEDBACK\_\allowbreak{}ID}] \texttt{str}. Answer feedback identifier.
+\end{arglist}
+\apifield{Options}
+\begin{arglist}
+  \item[\texttt{-\allowbreak{}-\allowbreak{}store-\allowbreak{}path}] \texttt{Path}, default \texttt{Path('.\allowbreak{}artifacts/\allowbreak{}human\_\allowbreak{}feedback')\allowbreak{}}. Directory holding answer feedback JSON files.
+\end{arglist}
+\apifield{Source}\texttt{feedback\_\allowbreak{}intelligence\_\allowbreak{}agent.\allowbreak{}cli.\allowbreak{}answer\_\allowbreak{}feedback\_\allowbreak{}get}, \texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}cli.\allowbreak{}py:841}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/cli.py#L841}{online})
+
+\apibreak
+\section{\texttt{answer-feedback list}}
+\label{cli:answer-feedback-list}\index{CLI commands!answer-feedback list}
+
+List human feedback summaries.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=bash]
+feedback-agent answer-feedback list [OPTIONS]
+\end{lstlisting}
+\apifield{Options}
+\begin{arglist}
+  \item[\texttt{-\allowbreak{}-\allowbreak{}tenant-\allowbreak{}id}] \texttt{str \textbar{} None}, default \texttt{None}. Only list feedback for this tenant id.
+  \item[\texttt{-\allowbreak{}-\allowbreak{}store-\allowbreak{}path}] \texttt{Path}, default \texttt{Path('.\allowbreak{}artifacts/\allowbreak{}human\_\allowbreak{}feedback')\allowbreak{}}. Directory holding answer feedback JSON files.
+\end{arglist}
+\apifield{Source}\texttt{feedback\_\allowbreak{}intelligence\_\allowbreak{}agent.\allowbreak{}cli.\allowbreak{}answer\_\allowbreak{}feedback\_\allowbreak{}list}, \texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}cli.\allowbreak{}py:727}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/cli.py#L727}{online})
+
+\apibreak
+\section{\texttt{answer-feedback submit}}
+\label{cli:answer-feedback-submit}\index{CLI commands!answer-feedback submit}
+
+Answer a question and save the human judgement for that answer.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=bash]
+feedback-agent answer-feedback submit QUESTION [OPTIONS]
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{QUESTION}] \texttt{str}. Question to answer and review.
+\end{arglist}
+\apifield{Options}
+\begin{arglist}
+  \item[\texttt{-\allowbreak{}-\allowbreak{}rating}] \texttt{HumanFeedbackRating}, required. Human rating for the generated answer.
+  \item[\texttt{-\allowbreak{}-\allowbreak{}comment}] \texttt{str \textbar{} None}, default \texttt{None}. Optional human review comment.
+  \item[\texttt{-\allowbreak{}-\allowbreak{}report-\allowbreak{}id}] \texttt{str \textbar{} None}, default \texttt{None}. Optional saved report id linked to this feedback.
+  \item[\texttt{-\allowbreak{}-\allowbreak{}tenant-\allowbreak{}id}] \texttt{str}, default \texttt{'default'}. Tenant id for retrieval and feedback scoping.
+  \item[\texttt{-\allowbreak{}-\allowbreak{}tag}] \texttt{list[str]\allowbreak{} \textbar{} None}, default \texttt{None}. Feedback tag. Repeat for multiple tags.
+  \item[\texttt{-\allowbreak{}-\allowbreak{}store-\allowbreak{}path}] \texttt{Path}, default \texttt{Path('.\allowbreak{}artifacts/\allowbreak{}human\_\allowbreak{}feedback')\allowbreak{}}. Directory holding answer feedback JSON files.
+  \item[\texttt{-\allowbreak{}-\allowbreak{}index-\allowbreak{}path}] \texttt{Path}, default \texttt{Path('.\allowbreak{}artifacts/\allowbreak{}vector\_\allowbreak{}store.\allowbreak{}json')\allowbreak{}}. Path to vector index.
+  \item[\texttt{-\allowbreak{}-\allowbreak{}top-\allowbreak{}k}] \texttt{int}, default \texttt{4}. Number of chunks to retrieve.
+\end{arglist}
+\apifield{Source}\texttt{feedback\_\allowbreak{}intelligence\_\allowbreak{}agent.\allowbreak{}cli.\allowbreak{}answer\_\allowbreak{}feedback\_\allowbreak{}submit}, \texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}cli.\allowbreak{}py:676}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/cli.py#L676}{online})
+
+\apibreak
+\section{\texttt{benchmark}}
+\label{cli:benchmark}\index{CLI commands!benchmark}
+
+Benchmark indexing, embedding, retrieval, and agent latency.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=bash]
+feedback-agent benchmark [OPTIONS]
+\end{lstlisting}
+\apifield{Options}
+\begin{arglist}
+  \item[\texttt{-\allowbreak{}-\allowbreak{}queries}] \texttt{Path}, default \texttt{Path('examples/\allowbreak{}queries.\allowbreak{}jsonl')\allowbreak{}}. Path to JSONL benchmark queries.
+  \item[\texttt{-\allowbreak{}-\allowbreak{}output}] \texttt{Path}, default \texttt{Path('.\allowbreak{}artifacts/\allowbreak{}benchmark\_\allowbreak{}results')\allowbreak{}}. Directory for benchmark\_results.json and .md.
+  \item[\texttt{-\allowbreak{}-\allowbreak{}dataset}] \texttt{Path}, default \texttt{Path('data/\allowbreak{}sample\_\allowbreak{}feedback.\allowbreak{}csv')\allowbreak{}}. Feedback CSV used to build the index.
+  \item[\texttt{-\allowbreak{}-\allowbreak{}repetitions}] \texttt{int}, default \texttt{5}. Measured repetitions per phase.
+  \item[\texttt{-\allowbreak{}-\allowbreak{}warmup}] \texttt{int}, default \texttt{1}. Discarded warmup repetitions per phase.
+  \item[\texttt{-\allowbreak{}-\allowbreak{}top-\allowbreak{}k}] \texttt{int}, default \texttt{4}. Number of chunks to retrieve.
+\end{arglist}
+\apifield{Details}Runs fully locally with the deterministic provider and writes a JSON report plus a Markdown results table into the output directory.
+\apifield{Source}\texttt{feedback\_\allowbreak{}intelligence\_\allowbreak{}agent.\allowbreak{}cli.\allowbreak{}benchmark}, \texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}cli.\allowbreak{}py:903}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/cli.py#L903}{online})
+
+\apibreak
+\section{\texttt{chat}}
+\label{cli:chat}\index{CLI commands!chat}
+
+Chat with the agent using persistent conversation memory.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=bash]
+feedback-agent chat [OPTIONS]
+\end{lstlisting}
+\apifield{Options}
+\begin{arglist}
+  \item[\texttt{-\allowbreak{}-\allowbreak{}message}] \texttt{str \textbar{} None}, default \texttt{None}. Single message for non-interactive mode; omit to start a REPL.
+  \item[\texttt{-\allowbreak{}-\allowbreak{}conversation-\allowbreak{}id}] \texttt{str \textbar{} None}, default \texttt{None}. Conversation to continue; omit to start a new one.
+  \item[\texttt{-\allowbreak{}-\allowbreak{}index-\allowbreak{}path}] \texttt{Path}, default \texttt{Path('.\allowbreak{}artifacts/\allowbreak{}vector\_\allowbreak{}store.\allowbreak{}json')\allowbreak{}}. Path to vector index.
+  \item[\texttt{-\allowbreak{}-\allowbreak{}store-\allowbreak{}path}] \texttt{Path}, default \texttt{Path('.\allowbreak{}artifacts/\allowbreak{}conversations')\allowbreak{}}. Directory holding conversation JSON files.
+  \item[\texttt{-\allowbreak{}-\allowbreak{}top-\allowbreak{}k}] \texttt{int}, default \texttt{4}. Number of chunks to retrieve.
+  \item[\texttt{-\allowbreak{}-\allowbreak{}customer-\allowbreak{}segment}] \texttt{str \textbar{} None}, default \texttt{None}. Filter retrieved feedback by customer segment.
+  \item[\texttt{-\allowbreak{}-\allowbreak{}tenant-\allowbreak{}id}] \texttt{str \textbar{} None}, default \texttt{None}. Filter retrieved feedback by tenant id.
+  \item[\texttt{-\allowbreak{}-\allowbreak{}channel}] \texttt{FeedbackChannel \textbar{} None}, default \texttt{None}. Filter retrieved feedback by channel.
+  \item[\texttt{-\allowbreak{}-\allowbreak{}min-\allowbreak{}rating}] \texttt{int \textbar{} None}, default \texttt{None}. Minimum feedback rating to retrieve.
+  \item[\texttt{-\allowbreak{}-\allowbreak{}max-\allowbreak{}rating}] \texttt{int \textbar{} None}, default \texttt{None}. Maximum feedback rating to retrieve.
+  \item[\texttt{-\allowbreak{}-\allowbreak{}created-\allowbreak{}after}] \texttt{datetime \textbar{} None}, default \texttt{None}. Only retrieve feedback created at or after this time.
+  \item[\texttt{-\allowbreak{}-\allowbreak{}created-\allowbreak{}before}] \texttt{datetime \textbar{} None}, default \texttt{None}. Only retrieve feedback created at or before this time.
+\end{arglist}
+\apifield{Details}With \texttt{-\allowbreak{}-\allowbreak{}message} the command answers one message and prints a JSON response containing the answer and the \texttt{conversation\_\allowbreak{}id} to reuse. Without \texttt{-\allowbreak{}-\allowbreak{}message} it starts an interactive REPL reading from stdin (finish with \texttt{exit}, \texttt{quit}, or end-of-input).
+\apifield{Source}\texttt{feedback\_\allowbreak{}intelligence\_\allowbreak{}agent.\allowbreak{}cli.\allowbreak{}chat}, \texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}cli.\allowbreak{}py:394}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/cli.py#L394}{online})
+
+\apibreak
+\section{\texttt{evaluate}}
+\label{cli:evaluate}\index{CLI commands!evaluate}
+
+Run offline retrieval and answer-quality evaluation and write a JSON report.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=bash]
+feedback-agent evaluate [OPTIONS]
+\end{lstlisting}
+\apifield{Options}
+\begin{arglist}
+  \item[\texttt{-\allowbreak{}-\allowbreak{}queries}] \texttt{Path}, default \texttt{Path('examples/\allowbreak{}queries.\allowbreak{}jsonl')\allowbreak{}}. Path to JSONL evaluation cases.
+  \item[\texttt{-\allowbreak{}-\allowbreak{}output}] \texttt{Path}, default \texttt{Path('.\allowbreak{}artifacts/\allowbreak{}evaluation\_\allowbreak{}report.\allowbreak{}json')\allowbreak{}}. Path for the JSON evaluation report.
+  \item[\texttt{-\allowbreak{}-\allowbreak{}index-\allowbreak{}path}] \texttt{Path}, default \texttt{Path('.\allowbreak{}artifacts/\allowbreak{}vector\_\allowbreak{}store.\allowbreak{}json')\allowbreak{}}. Path to vector index.
+  \item[\texttt{-\allowbreak{}-\allowbreak{}top-\allowbreak{}k}] \texttt{int}, default \texttt{4}. Number of chunks to retrieve.
+  \item[\texttt{-\allowbreak{}-\allowbreak{}retriever}] \texttt{RetrieverChoice}, default \texttt{RetrieverChoice.\allowbreak{}dense}. Retrieval strategy: dense, lexical, or hybrid.
+  \item[\texttt{-\allowbreak{}-\allowbreak{}dense-\allowbreak{}weight}] \texttt{float}, default \texttt{0.\allowbreak{}6}. Dense score weight for hybrid retrieval.
+  \item[\texttt{-\allowbreak{}-\allowbreak{}lexical-\allowbreak{}weight}] \texttt{float}, default \texttt{0.\allowbreak{}4}. Lexical score weight for hybrid retrieval.
+\end{arglist}
+\apifield{Source}\texttt{feedback\_\allowbreak{}intelligence\_\allowbreak{}agent.\allowbreak{}cli.\allowbreak{}evaluate}, \texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}cli.\allowbreak{}py:861}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/cli.py#L861}{online})
+
+\apibreak
+\section{\texttt{experiment run}}
+\label{cli:experiment-run}\index{CLI commands!experiment run}
+
+Run a configured experiment and write results, metrics, and metadata.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=bash]
+feedback-agent experiment run [OPTIONS]
+\end{lstlisting}
+\apifield{Options}
+\begin{arglist}
+  \item[\texttt{-\allowbreak{}-\allowbreak{}config}] \texttt{Path}, required. Path to a YAML experiment configuration.
+\end{arglist}
+\apifield{Source}\texttt{feedback\_\allowbreak{}intelligence\_\allowbreak{}agent.\allowbreak{}cli.\allowbreak{}experiment\_\allowbreak{}run}, \texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}cli.\allowbreak{}py:937}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/cli.py#L937}{online})
+
+\apibreak
+\section{\texttt{export-lakehouse}}
+\label{cli:export-lakehouse}\index{CLI commands!export-lakehouse}
+
+Export validated feedback to a local lakehouse-style table.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=bash]
+feedback-agent export-lakehouse [OPTIONS]
+\end{lstlisting}
+\apifield{Options}
+\begin{arglist}
+  \item[\texttt{-\allowbreak{}-\allowbreak{}input}] \texttt{Path}, required. Feedback CSV to export.
+  \item[\texttt{-\allowbreak{}-\allowbreak{}output}] \texttt{Path}, default \texttt{Path('.\allowbreak{}artifacts/\allowbreak{}lakehouse/\allowbreak{}feedback')\allowbreak{}}. Output table directory.
+  \item[\texttt{-\allowbreak{}-\allowbreak{}table-\allowbreak{}format}] \texttt{LakehouseTableFormat}, default \texttt{LakehouseTableFormat.\allowbreak{}delta}. Lakehouse metadata layout to write.
+  \item[\texttt{-\allowbreak{}-\allowbreak{}partition-\allowbreak{}column}] \texttt{list[str]\allowbreak{} \textbar{} None}, default \texttt{None}. Partition column. Repeat to override the default created\_date/channel layout.
+\end{arglist}
+\apifield{Source}\texttt{feedback\_\allowbreak{}intelligence\_\allowbreak{}agent.\allowbreak{}cli.\allowbreak{}export\_\allowbreak{}lakehouse}, \texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}cli.\allowbreak{}py:265}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/cli.py#L265}{online})
+
+\apibreak
+\section{\texttt{generate-data}}
+\label{cli:generate-data}\index{CLI commands!generate-data}
+
+Generate a synthetic feedback CSV compatible with the data contract.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=bash]
+feedback-agent generate-data [OPTIONS]
+\end{lstlisting}
+\apifield{Options}
+\begin{arglist}
+  \item[\texttt{-\allowbreak{}-\allowbreak{}rows}] \texttt{int}, default \texttt{1000}. Number of feedback records to generate.
+  \item[\texttt{-\allowbreak{}-\allowbreak{}output}] \texttt{Path}, default \texttt{Path('data/\allowbreak{}synthetic\_\allowbreak{}feedback.\allowbreak{}csv')\allowbreak{}}. Destination CSV path.
+  \item[\texttt{-\allowbreak{}-\allowbreak{}seed}] \texttt{int}, default \texttt{42}. Random seed; same seed and options give identical output.
+\end{arglist}
+\apifield{Source}\texttt{feedback\_\allowbreak{}intelligence\_\allowbreak{}agent.\allowbreak{}cli.\allowbreak{}generate\_\allowbreak{}data}, \texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}cli.\allowbreak{}py:316}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/cli.py#L316}{online})
+
+\apibreak
+\section{\texttt{index}}
+\label{cli:index}\index{CLI commands!index}
+
+Build a local vector index.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=bash]
+feedback-agent index [OPTIONS]
+\end{lstlisting}
+\apifield{Options}
+\begin{arglist}
+  \item[\texttt{-\allowbreak{}-\allowbreak{}input}] \texttt{Path}, default \texttt{Path('data/\allowbreak{}sample\_\allowbreak{}feedback.\allowbreak{}csv')\allowbreak{}}. Path to feedback CSV.
+  \item[\texttt{-\allowbreak{}-\allowbreak{}index-\allowbreak{}path}] \texttt{Path}, default \texttt{Path('.\allowbreak{}artifacts/\allowbreak{}vector\_\allowbreak{}store.\allowbreak{}json')\allowbreak{}}. Output path for vector index.
+  \item[\texttt{-\allowbreak{}-\allowbreak{}embedding-\allowbreak{}dim}] \texttt{int}, default \texttt{512}. Hashing embedding dimension.
+\end{arglist}
+\apifield{Source}\texttt{feedback\_\allowbreak{}intelligence\_\allowbreak{}agent.\allowbreak{}cli.\allowbreak{}index}, \texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}cli.\allowbreak{}py:137}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/cli.py#L137}{online})
+
+\apibreak
+\section{\texttt{ingest-job}}
+\label{cli:ingest-job}\index{CLI commands!ingest-job}
+
+Run an ingestion job locally and print its JobResult.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=bash]
+feedback-agent ingest-job [OPTIONS]
+\end{lstlisting}
+\apifield{Options}
+\begin{arglist}
+  \item[\texttt{-\allowbreak{}-\allowbreak{}input}] \texttt{Path}, default \texttt{Path('data/\allowbreak{}sample\_\allowbreak{}feedback.\allowbreak{}csv')\allowbreak{}}. Path to feedback CSV to ingest.
+  \item[\texttt{-\allowbreak{}-\allowbreak{}index-\allowbreak{}path}] \texttt{Path}, default \texttt{Path('.\allowbreak{}artifacts/\allowbreak{}vector\_\allowbreak{}store.\allowbreak{}json')\allowbreak{}}. Output path for vector index.
+  \item[\texttt{-\allowbreak{}-\allowbreak{}embedding-\allowbreak{}dim}] \texttt{int}, default \texttt{512}. Hashing embedding dimension.
+  \item[\texttt{-\allowbreak{}-\allowbreak{}store-\allowbreak{}path}] \texttt{Path}, default \texttt{Path('.\allowbreak{}artifacts/\allowbreak{}jobs')\allowbreak{}}. Directory holding ingestion job JSON files.
+\end{arglist}
+\apifield{Details}Uses the same job pipeline the API schedules in the background, but runs it synchronously so the terminal status (succeeded/failed) and the resulting JobResult are printed immediately. Exits non-zero on a failed job.
+\apifield{Source}\texttt{feedback\_\allowbreak{}intelligence\_\allowbreak{}agent.\allowbreak{}cli.\allowbreak{}ingest\_\allowbreak{}job}, \texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}cli.\allowbreak{}py:154}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/cli.py#L154}{online})
+
+\apibreak
+\section{\texttt{prompts list}}
+\label{cli:prompts-list}\index{CLI commands!prompts list}
+
+List registered prompts with versions, variables, and changelog notes.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=bash]
+feedback-agent prompts list
+\end{lstlisting}
+\apifield{Source}\texttt{feedback\_\allowbreak{}intelligence\_\allowbreak{}agent.\allowbreak{}cli.\allowbreak{}prompts\_\allowbreak{}list}, \texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}cli.\allowbreak{}py:958}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/cli.py#L958}{online})
+
+\apibreak
+\section{\texttt{prompts render}}
+\label{cli:prompts-render}\index{CLI commands!prompts render}
+
+Render a registered prompt template with the given variables.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=bash]
+feedback-agent prompts render [OPTIONS]
+\end{lstlisting}
+\apifield{Options}
+\begin{arglist}
+  \item[\texttt{-\allowbreak{}-\allowbreak{}name}] \texttt{str}, required. Prompt name, e.g. rag\_answer.
+  \item[\texttt{-\allowbreak{}-\allowbreak{}version}] \texttt{str}, default \texttt{LATEST\_\allowbreak{}VERSION}. Prompt version, e.g. v1 or latest.
+  \item[\texttt{-\allowbreak{}-\allowbreak{}var}] \texttt{list[str]\allowbreak{} \textbar{} None}, default \texttt{None}. Template variable as key=value. Repeat for multiple.
+\end{arglist}
+\apifield{Source}\texttt{feedback\_\allowbreak{}intelligence\_\allowbreak{}agent.\allowbreak{}cli.\allowbreak{}prompts\_\allowbreak{}render}, \texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}cli.\allowbreak{}py:973}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/cli.py#L973}{online})
+
+\apibreak
+\section{\texttt{query}}
+\label{cli:query}\index{CLI commands!query}
+
+Ask a question against the indexed feedback.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=bash]
+feedback-agent query QUESTION [OPTIONS]
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{QUESTION}] \texttt{str}. Question to ask over feedback data.
+\end{arglist}
+\apifield{Options}
+\begin{arglist}
+  \item[\texttt{-\allowbreak{}-\allowbreak{}index-\allowbreak{}path}] \texttt{Path}, default \texttt{Path('.\allowbreak{}artifacts/\allowbreak{}vector\_\allowbreak{}store.\allowbreak{}json')\allowbreak{}}. Path to vector index.
+  \item[\texttt{-\allowbreak{}-\allowbreak{}top-\allowbreak{}k}] \texttt{int}, default \texttt{4}. Number of chunks to retrieve.
+  \item[\texttt{-\allowbreak{}-\allowbreak{}retriever}] \texttt{RetrieverChoice}, default \texttt{RetrieverChoice.\allowbreak{}dense}. Retrieval strategy: dense, lexical, or hybrid.
+  \item[\texttt{-\allowbreak{}-\allowbreak{}dense-\allowbreak{}weight}] \texttt{float}, default \texttt{0.\allowbreak{}6}. Dense score weight for hybrid retrieval.
+  \item[\texttt{-\allowbreak{}-\allowbreak{}lexical-\allowbreak{}weight}] \texttt{float}, default \texttt{0.\allowbreak{}4}. Lexical score weight for hybrid retrieval.
+  \item[\texttt{-\allowbreak{}-\allowbreak{}customer-\allowbreak{}segment}] \texttt{str \textbar{} None}, default \texttt{None}. Filter retrieved feedback by customer segment.
+  \item[\texttt{-\allowbreak{}-\allowbreak{}tenant-\allowbreak{}id}] \texttt{str \textbar{} None}, default \texttt{None}. Filter retrieved feedback by tenant id.
+  \item[\texttt{-\allowbreak{}-\allowbreak{}channel}] \texttt{FeedbackChannel \textbar{} None}, default \texttt{None}. Filter retrieved feedback by channel.
+  \item[\texttt{-\allowbreak{}-\allowbreak{}min-\allowbreak{}rating}] \texttt{int \textbar{} None}, default \texttt{None}. Minimum feedback rating to retrieve.
+  \item[\texttt{-\allowbreak{}-\allowbreak{}max-\allowbreak{}rating}] \texttt{int \textbar{} None}, default \texttt{None}. Maximum feedback rating to retrieve.
+  \item[\texttt{-\allowbreak{}-\allowbreak{}created-\allowbreak{}after}] \texttt{datetime \textbar{} None}, default \texttt{None}. Only retrieve feedback created at or after this time.
+  \item[\texttt{-\allowbreak{}-\allowbreak{}created-\allowbreak{}before}] \texttt{datetime \textbar{} None}, default \texttt{None}. Only retrieve feedback created at or before this time.
+\end{arglist}
+\apifield{Source}\texttt{feedback\_\allowbreak{}intelligence\_\allowbreak{}agent.\allowbreak{}cli.\allowbreak{}query}, \texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}cli.\allowbreak{}py:333}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/cli.py#L333}{online})
+
+\apibreak
+\section{\texttt{reports email-summary}}
+\label{cli:reports-email-summary}\index{CLI commands!reports email-summary}
+
+Render or send an email digest for saved insight reports.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=bash]
+feedback-agent reports email-summary [OPTIONS]
+\end{lstlisting}
+\apifield{Options}
+\begin{arglist}
+  \item[\texttt{-\allowbreak{}-\allowbreak{}recipient}] \texttt{list[str]\allowbreak{} \textbar{} None}, default \texttt{None}. Email recipient. Repeat for multiple recipients.
+  \item[\texttt{-\allowbreak{}-\allowbreak{}report-\allowbreak{}id}] \texttt{list[str]\allowbreak{} \textbar{} None}, default \texttt{None}. Report id to include. Repeat for multiple reports.
+  \item[\texttt{-\allowbreak{}-\allowbreak{}subject}] \texttt{str \textbar{} None}, default \texttt{None}. Email subject override.
+  \item[\texttt{-\allowbreak{}-\allowbreak{}tenant-\allowbreak{}id}] \texttt{str \textbar{} None}, default \texttt{None}. Only include reports for this tenant id.
+  \item[\texttt{-\allowbreak{}-\allowbreak{}max-\allowbreak{}reports}] \texttt{int}, default \texttt{5}. Maximum latest reports to include when --report-id is omitted.
+  \item[\texttt{-\allowbreak{}-\allowbreak{}send}] \texttt{bool}, default \texttt{False}. Send through configured SMTP instead of dry-run.
+  \item[\texttt{-\allowbreak{}-\allowbreak{}store-\allowbreak{}path}] \texttt{Path}, default \texttt{Path('.\allowbreak{}artifacts/\allowbreak{}reports')\allowbreak{}}. Directory holding saved report JSON files.
+\end{arglist}
+\apifield{Source}\texttt{feedback\_\allowbreak{}intelligence\_\allowbreak{}agent.\allowbreak{}cli.\allowbreak{}reports\_\allowbreak{}email\_\allowbreak{}summary}, \texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}cli.\allowbreak{}py:598}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/cli.py#L598}{online})
+
+\apibreak
+\section{\texttt{reports export}}
+\label{cli:reports-export}\index{CLI commands!reports export}
+
+Export one saved insight report for stakeholder handoff.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=bash]
+feedback-agent reports export REPORT_ID [OPTIONS]
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{REPORT\_\allowbreak{}ID}] \texttt{str}. Report identifier.
+\end{arglist}
+\apifield{Options}
+\begin{arglist}
+  \item[\texttt{-\allowbreak{}-\allowbreak{}format}] \texttt{ReportExportFormat}, default \texttt{ReportExportFormat.\allowbreak{}markdown}. Export format.
+  \item[\texttt{-\allowbreak{}-\allowbreak{}output}] \texttt{Path \textbar{} None}, default \texttt{None}. Optional file path to write.
+  \item[\texttt{-\allowbreak{}-\allowbreak{}store-\allowbreak{}path}] \texttt{Path}, default \texttt{Path('.\allowbreak{}artifacts/\allowbreak{}reports')\allowbreak{}}. Directory holding saved report JSON files.
+\end{arglist}
+\apifield{Source}\texttt{feedback\_\allowbreak{}intelligence\_\allowbreak{}agent.\allowbreak{}cli.\allowbreak{}reports\_\allowbreak{}export}, \texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}cli.\allowbreak{}py:562}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/cli.py#L562}{online})
+
+\apibreak
+\section{\texttt{reports get}}
+\label{cli:reports-get}\index{CLI commands!reports get}
+
+Print one saved insight report.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=bash]
+feedback-agent reports get REPORT_ID [OPTIONS]
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{REPORT\_\allowbreak{}ID}] \texttt{str}. Report identifier.
+\end{arglist}
+\apifield{Options}
+\begin{arglist}
+  \item[\texttt{-\allowbreak{}-\allowbreak{}store-\allowbreak{}path}] \texttt{Path}, default \texttt{Path('.\allowbreak{}artifacts/\allowbreak{}reports')\allowbreak{}}. Directory holding saved report JSON files.
+\end{arglist}
+\apifield{Source}\texttt{feedback\_\allowbreak{}intelligence\_\allowbreak{}agent.\allowbreak{}cli.\allowbreak{}reports\_\allowbreak{}get}, \texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}cli.\allowbreak{}py:542}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/cli.py#L542}{online})
+
+\apibreak
+\section{\texttt{reports list}}
+\label{cli:reports-list}\index{CLI commands!reports list}
+
+List saved insight report summaries.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=bash]
+feedback-agent reports list [OPTIONS]
+\end{lstlisting}
+\apifield{Options}
+\begin{arglist}
+  \item[\texttt{-\allowbreak{}-\allowbreak{}tenant-\allowbreak{}id}] \texttt{str \textbar{} None}, default \texttt{None}. Only list reports for this tenant id.
+  \item[\texttt{-\allowbreak{}-\allowbreak{}store-\allowbreak{}path}] \texttt{Path}, default \texttt{Path('.\allowbreak{}artifacts/\allowbreak{}reports')\allowbreak{}}. Directory holding saved report JSON files.
+\end{arglist}
+\apifield{Source}\texttt{feedback\_\allowbreak{}intelligence\_\allowbreak{}agent.\allowbreak{}cli.\allowbreak{}reports\_\allowbreak{}list}, \texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}cli.\allowbreak{}py:527}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/cli.py#L527}{online})
+
+\apibreak
+\section{\texttt{reports save}}
+\label{cli:reports-save}\index{CLI commands!reports save}
+
+Answer a question and save the resulting insight report.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=bash]
+feedback-agent reports save QUESTION [OPTIONS]
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{QUESTION}] \texttt{str}. Question to answer and save.
+\end{arglist}
+\apifield{Options}
+\begin{arglist}
+  \item[\texttt{-\allowbreak{}-\allowbreak{}title}] \texttt{str \textbar{} None}, default \texttt{None}. Report title.
+  \item[\texttt{-\allowbreak{}-\allowbreak{}tag}] \texttt{list[str]\allowbreak{} \textbar{} None}, default \texttt{None}. Report tag. Repeat for multiple tags.
+  \item[\texttt{-\allowbreak{}-\allowbreak{}notes}] \texttt{str \textbar{} None}, default \texttt{None}. Optional report notes.
+  \item[\texttt{-\allowbreak{}-\allowbreak{}tenant-\allowbreak{}id}] \texttt{str}, default \texttt{'default'}. Tenant id for retrieval and saved report scoping.
+  \item[\texttt{-\allowbreak{}-\allowbreak{}store-\allowbreak{}path}] \texttt{Path}, default \texttt{Path('.\allowbreak{}artifacts/\allowbreak{}reports')\allowbreak{}}. Directory holding saved report JSON files.
+  \item[\texttt{-\allowbreak{}-\allowbreak{}index-\allowbreak{}path}] \texttt{Path}, default \texttt{Path('.\allowbreak{}artifacts/\allowbreak{}vector\_\allowbreak{}store.\allowbreak{}json')\allowbreak{}}. Path to vector index.
+  \item[\texttt{-\allowbreak{}-\allowbreak{}top-\allowbreak{}k}] \texttt{int}, default \texttt{4}. Number of chunks to retrieve.
+\end{arglist}
+\apifield{Source}\texttt{feedback\_\allowbreak{}intelligence\_\allowbreak{}agent.\allowbreak{}cli.\allowbreak{}reports\_\allowbreak{}save}, \texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}cli.\allowbreak{}py:487}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/cli.py#L487}{online})
+
+\apibreak
+\section{\texttt{serve}}
+\label{cli:serve}\index{CLI commands!serve}
+
+Serve the FastAPI app with Uvicorn.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=bash]
+feedback-agent serve [OPTIONS]
+\end{lstlisting}
+\apifield{Options}
+\begin{arglist}
+  \item[\texttt{-\allowbreak{}-\allowbreak{}host}] \texttt{str}, default \texttt{'127.\allowbreak{}0.\allowbreak{}0.\allowbreak{}1'}. Host interface.
+  \item[\texttt{-\allowbreak{}-\allowbreak{}port}] \texttt{int}, default \texttt{8000}. Port number.
+\end{arglist}
+\apifield{Source}\texttt{feedback\_\allowbreak{}intelligence\_\allowbreak{}agent.\allowbreak{}cli.\allowbreak{}serve}, \texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}cli.\allowbreak{}py:1000}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/cli.py#L1000}{online})
+
+\apibreak
+\section{\texttt{stream-ingest}}
+\label{cli:stream-ingest}\index{CLI commands!stream-ingest}
+
+Consume a bounded local stream batch and write validated feedback records.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=bash]
+feedback-agent stream-ingest [OPTIONS]
+\end{lstlisting}
+\apifield{Options}
+\begin{arglist}
+  \item[\texttt{-\allowbreak{}-\allowbreak{}input}] \texttt{Path}, required. JSONL stream file of feedback events.
+  \item[\texttt{-\allowbreak{}-\allowbreak{}output}] \texttt{Path}, default \texttt{Path('.\allowbreak{}artifacts/\allowbreak{}stream\_\allowbreak{}feedback.\allowbreak{}csv')\allowbreak{}}. CSV path for accepted feedback records.
+  \item[\texttt{-\allowbreak{}-\allowbreak{}dead-\allowbreak{}letter}] \texttt{Path \textbar{} None}, default \texttt{Path('.\allowbreak{}artifacts/\allowbreak{}stream\_\allowbreak{}dead\_\allowbreak{}letters.\allowbreak{}jsonl')\allowbreak{}}. Optional JSONL path for rejected stream messages.
+  \item[\texttt{-\allowbreak{}-\allowbreak{}max-\allowbreak{}messages}] \texttt{int}, default \texttt{100}. Maximum stream messages to consume in this batch.
+  \item[\texttt{-\allowbreak{}-\allowbreak{}update-\allowbreak{}index}] \texttt{bool}, default \texttt{False}. Merge accepted stream records into a JSON vector index.
+  \item[\texttt{-\allowbreak{}-\allowbreak{}index-\allowbreak{}path}] \texttt{Path}, default \texttt{Path('.\allowbreak{}artifacts/\allowbreak{}vector\_\allowbreak{}store.\allowbreak{}json')\allowbreak{}}. JSON vector index path to update.
+  \item[\texttt{-\allowbreak{}-\allowbreak{}embedding-\allowbreak{}dim}] \texttt{int}, default \texttt{512}. Hashing embedding dimension.
+\end{arglist}
+\apifield{Details}This command uses the same streaming validation path as Kafka/Kinesis adapters, but reads from a JSONL file so local demos and CI remain deterministic.
+\apifield{Source}\texttt{feedback\_\allowbreak{}intelligence\_\allowbreak{}agent.\allowbreak{}cli.\allowbreak{}stream\_\allowbreak{}ingest}, \texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}cli.\allowbreak{}py:191}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/cli.py#L191}{online})
+
+\apibreak
+\section{\texttt{update-index}}
+\label{cli:update-index}\index{CLI commands!update-index}
+
+Incrementally merge a validated feedback CSV batch into a JSON index.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=bash]
+feedback-agent update-index [OPTIONS]
+\end{lstlisting}
+\apifield{Options}
+\begin{arglist}
+  \item[\texttt{-\allowbreak{}-\allowbreak{}input}] \texttt{Path}, required. Feedback CSV batch to merge into the index.
+  \item[\texttt{-\allowbreak{}-\allowbreak{}index-\allowbreak{}path}] \texttt{Path}, default \texttt{Path('.\allowbreak{}artifacts/\allowbreak{}vector\_\allowbreak{}store.\allowbreak{}json')\allowbreak{}}. JSON vector index path to update.
+  \item[\texttt{-\allowbreak{}-\allowbreak{}embedding-\allowbreak{}dim}] \texttt{int}, default \texttt{512}. Hashing embedding dimension.
+  \item[\texttt{-\allowbreak{}-\allowbreak{}chunk-\allowbreak{}size}] \texttt{int}, default \texttt{80}. Maximum words per chunk.
+  \item[\texttt{-\allowbreak{}-\allowbreak{}chunk-\allowbreak{}overlap}] \texttt{int}, default \texttt{16}. Words shared between adjacent chunks.
+\end{arglist}
+\apifield{Source}\texttt{feedback\_\allowbreak{}intelligence\_\allowbreak{}agent.\allowbreak{}cli.\allowbreak{}update\_\allowbreak{}index}, \texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}cli.\allowbreak{}py:240}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/cli.py#L240}{online})
+
+\apibreak
+\section{\texttt{validate-data}}
+\label{cli:validate-data}\index{CLI commands!validate-data}
+
+Validate a feedback CSV against the data contract and print a report.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=bash]
+feedback-agent validate-data INPUT [OPTIONS]
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{INPUT}] \texttt{Path}. Path to feedback CSV to validate.
+\end{arglist}
+\apifield{Options}
+\begin{arglist}
+  \item[\texttt{-\allowbreak{}-\allowbreak{}strict}] \texttt{bool}, default \texttt{False}. Fail with a non-zero exit code on any validation error.
+\end{arglist}
+\apifield{Source}\texttt{feedback\_\allowbreak{}intelligence\_\allowbreak{}agent.\allowbreak{}cli.\allowbreak{}validate\_\allowbreak{}data}, \texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}cli.\allowbreak{}py:297}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/cli.py#L297}{online})

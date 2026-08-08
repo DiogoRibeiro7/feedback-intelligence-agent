@@ -1,0 +1,181 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_architecture.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\section{Interface layer}
+\label{layer:interface}
+
+Public entry points: the importable package surface, the Typer CLI, and the FastAPI application.
+
+\begin{longtable}{>{\raggedright\arraybackslash\small}p{0.17\textwidth} >{\raggedright\arraybackslash\small}p{0.33\textwidth} >{\raggedright\arraybackslash\small}p{0.22\textwidth} >{\raggedright\arraybackslash\small}p{0.22\textwidth}}
+\caption{Components of the interface layer.}\label{tab:layer-interface}\\
+\toprule
+Component & Responsibility & Depends on & Depended on by \\
+\midrule
+\endfirsthead
+\toprule
+Component & Responsibility & Depends on & Depended on by \\
+\midrule
+\endhead
+\midrule
+\multicolumn{4}{r}{\footnotesize continued on next page}\\
+\endfoot
+\bottomrule
+\endlastfoot
+\cref{module:feedback_intelligence_agent} & Feedback Intelligence Agent package. & \texttt{agent}, \texttt{config} & \texttt{api}, \texttt{experiments} \\
+\cref{module:feedback_intelligence_agent.api} & FastAPI application. & \texttt{\_\allowbreak{}\_\allowbreak{}init\_\allowbreak{}\_\allowbreak{}}, \texttt{active\_\allowbreak{}learning}, \texttt{auth}, \texttt{config}, \texttt{email\_\allowbreak{}summaries}, \texttt{factory}, \texttt{human\_\allowbreak{}feedback}, \texttt{jobs}, \texttt{memory}, \texttt{rate\_\allowbreak{}limit}, \texttt{reports}, \texttt{schemas}, \texttt{telemetry} & -- \\
+\cref{module:feedback_intelligence_agent.cli} & Command-line interface for the feedback intelligence agent. & \texttt{active\_\allowbreak{}learning}, \texttt{benchmarking}, \texttt{citations}, \texttt{config}, \texttt{data\_\allowbreak{}contracts}, \texttt{email\_\allowbreak{}summaries}, \texttt{evaluation}, \texttt{experiments}, \texttt{factory}, \texttt{human\_\allowbreak{}feedback}, \texttt{index\_\allowbreak{}updates}, \texttt{ingestion}, \texttt{jobs}, \texttt{lakehouse}, \texttt{prompt\_\allowbreak{}registry}, \texttt{prompts}, \texttt{reports}, \texttt{schemas}, \texttt{streaming\_\allowbreak{}ingestion}, \texttt{synthetic\_\allowbreak{}data}, \texttt{telemetry} & -- \\
+\end{longtable}
+
+\section{Application layer}
+\label{layer:application}
+
+Orchestration and workflow: wiring components together, running the agent loop, jobs, experiments, evaluation, and product workflows.
+
+\begin{longtable}{>{\raggedright\arraybackslash\small}p{0.17\textwidth} >{\raggedright\arraybackslash\small}p{0.33\textwidth} >{\raggedright\arraybackslash\small}p{0.22\textwidth} >{\raggedright\arraybackslash\small}p{0.22\textwidth}}
+\caption{Components of the application layer.}\label{tab:layer-application}\\
+\toprule
+Component & Responsibility & Depends on & Depended on by \\
+\midrule
+\endfirsthead
+\toprule
+Component & Responsibility & Depends on & Depended on by \\
+\midrule
+\endhead
+\midrule
+\multicolumn{4}{r}{\footnotesize continued on next page}\\
+\endfoot
+\bottomrule
+\endlastfoot
+\cref{module:feedback_intelligence_agent.active_learning} & Workflow state for active-learning follow-up items. & \texttt{human\_\allowbreak{}feedback} & \texttt{api}, \texttt{cli}, \texttt{factory} \\
+\cref{module:feedback_intelligence_agent.agent} & Agent orchestration for the feedback intelligence agent. & \texttt{citations}, \texttt{guardrails}, \texttt{hallucination}, \texttt{llm}, \texttt{memory}, \texttt{output\_\allowbreak{}parser}, \texttt{prompts}, \texttt{reranking}, \texttt{retrieval}, \texttt{schemas}, \texttt{telemetry}, \texttt{tools} & \texttt{\_\allowbreak{}\_\allowbreak{}init\_\allowbreak{}\_\allowbreak{}}, \texttt{benchmarking}, \texttt{evaluation}, \texttt{experiments}, \texttt{factory} \\
+\cref{module:feedback_intelligence_agent.benchmarking} & Latency and throughput benchmarks for the RAG pipeline. & \texttt{agent}, \texttt{chunking}, \texttt{config}, \texttt{embeddings}, \texttt{evaluation}, \texttt{factory}, \texttt{ingestion}, \texttt{vector\_\allowbreak{}store} & \texttt{cli} \\
+\cref{module:feedback_intelligence_agent.email_summaries} & Email summaries for saved insight reports. & \texttt{reports} & \texttt{api}, \texttt{cli} \\
+\cref{module:feedback_intelligence_agent.evaluation} & Offline evaluation for retrieval quality and answer quality. & \texttt{agent}, \texttt{hallucination}, \texttt{retrieval}, \texttt{schemas}, \texttt{telemetry} & \texttt{benchmarking}, \texttt{cli}, \texttt{experiments} \\
+\cref{module:feedback_intelligence_agent.experiments} & Repeatable experiment runner for comparing RAG configurations. & \texttt{\_\allowbreak{}\_\allowbreak{}init\_\allowbreak{}\_\allowbreak{}}, \texttt{agent}, \texttt{chunking}, \texttt{config}, \texttt{embeddings}, \texttt{evaluation}, \texttt{factory}, \texttt{ingestion}, \texttt{vector\_\allowbreak{}store} & \texttt{cli} \\
+\cref{module:feedback_intelligence_agent.factory} & Factories for constructing the application components. & \texttt{active\_\allowbreak{}learning}, \texttt{agent}, \texttt{chunking}, \texttt{config}, \texttt{embeddings}, \texttt{hallucination}, \texttt{human\_\allowbreak{}feedback}, \texttt{ingestion}, \texttt{jobs}, \texttt{lexical\_\allowbreak{}search}, \texttt{llm}, \texttt{memory}, \texttt{qdrant\_\allowbreak{}store}, \texttt{query\_\allowbreak{}expansion}, \texttt{reports}, \texttt{resilience}, \texttt{retrieval}, \texttt{schemas}, \texttt{telemetry}, \texttt{tools}, \texttt{vector\_\allowbreak{}store} & \texttt{api}, \texttt{benchmarking}, \texttt{cli}, \texttt{experiments}, \texttt{index\_\allowbreak{}updates}, \texttt{jobs} \\
+\cref{module:feedback_intelligence_agent.human_feedback} & Human review feedback on generated agent answers. & \texttt{schemas} & \texttt{active\_\allowbreak{}learning}, \texttt{api}, \texttt{cli}, \texttt{factory} \\
+\cref{module:feedback_intelligence_agent.jobs} & Asynchronous ingestion jobs with status tracking. & \texttt{chunking}, \texttt{data\_\allowbreak{}contracts}, \texttt{embeddings}, \texttt{factory}, \texttt{ingestion}, \texttt{telemetry}, \texttt{vector\_\allowbreak{}store} & \texttt{api}, \texttt{cli}, \texttt{factory} \\
+\cref{module:feedback_intelligence_agent.reports} & Saved insight reports for product and analyst workflows. & \texttt{schemas} & \texttt{api}, \texttt{cli}, \texttt{email\_\allowbreak{}summaries}, \texttt{factory} \\
+\end{longtable}
+
+\section{Domain layer}
+\label{layer:domain}
+
+Computation and domain logic: retrieval scoring, reranking, embeddings, prompting, parsing, guardrails, and answer-support checks.
+
+\begin{longtable}{>{\raggedright\arraybackslash\small}p{0.17\textwidth} >{\raggedright\arraybackslash\small}p{0.33\textwidth} >{\raggedright\arraybackslash\small}p{0.22\textwidth} >{\raggedright\arraybackslash\small}p{0.22\textwidth}}
+\caption{Components of the domain layer.}\label{tab:layer-domain}\\
+\toprule
+Component & Responsibility & Depends on & Depended on by \\
+\midrule
+\endfirsthead
+\toprule
+Component & Responsibility & Depends on & Depended on by \\
+\midrule
+\endhead
+\midrule
+\multicolumn{4}{r}{\footnotesize continued on next page}\\
+\endfoot
+\bottomrule
+\endlastfoot
+\cref{module:feedback_intelligence_agent.chunking} & Text chunking utilities. & \texttt{privacy}, \texttt{schemas} & \texttt{benchmarking}, \texttt{experiments}, \texttt{factory}, \texttt{index\_\allowbreak{}updates}, \texttt{jobs} \\
+\cref{module:feedback_intelligence_agent.citations} & Citation construction shared by the agent and the deterministic LLM provider. & \texttt{schemas} & \texttt{agent}, \texttt{cli}, \texttt{llm}, \texttt{prompts}, \texttt{tools} \\
+\cref{module:feedback_intelligence_agent.embeddings} & Embedding models. & -- & \texttt{benchmarking}, \texttt{experiments}, \texttt{factory}, \texttt{index\_\allowbreak{}updates}, \texttt{jobs}, \texttt{retrieval} \\
+\cref{module:feedback_intelligence_agent.guardrails} & Deterministic safety guardrails for the feedback intelligence agent. & -- & \texttt{agent}, \texttt{schemas} \\
+\cref{module:feedback_intelligence_agent.hallucination} & Hallucination checks for evidence-grounded answers. & \texttt{llm}, \texttt{schemas} & \texttt{agent}, \texttt{evaluation}, \texttt{factory} \\
+\cref{module:feedback_intelligence_agent.lexical_search} & Lexical BM25 search implemented from scratch. & \texttt{query\_\allowbreak{}expansion}, \texttt{schemas} & \texttt{factory} \\
+\cref{module:feedback_intelligence_agent.memory} & Conversation memory and follow-up query rewriting. & \texttt{llm} & \texttt{agent}, \texttt{api}, \texttt{factory} \\
+\cref{module:feedback_intelligence_agent.output_parser} & Structured LLM output parsing and deterministic repair. & -- & \texttt{agent} \\
+\cref{module:feedback_intelligence_agent.privacy} & Deterministic PII redaction helpers. & \texttt{schemas} & \texttt{chunking}, \texttt{lakehouse}, \texttt{streaming\_\allowbreak{}ingestion} \\
+\cref{module:feedback_intelligence_agent.prompt_registry} & Versioned prompt registry. & -- & \texttt{cli}, \texttt{prompts} \\
+\cref{module:feedback_intelligence_agent.prompts} & Prompt construction utilities and the default prompt registry. & \texttt{citations}, \texttt{prompt\_\allowbreak{}registry}, \texttt{schemas} & \texttt{agent}, \texttt{cli} \\
+\cref{module:feedback_intelligence_agent.query_expansion} & Deterministic query expansion for product-specific terminology. & -- & \texttt{factory}, \texttt{lexical\_\allowbreak{}search}, \texttt{retrieval} \\
+\cref{module:feedback_intelligence_agent.reranking} & Local candidate reranking for retrieved feedback chunks. & \texttt{schemas} & \texttt{agent} \\
+\cref{module:feedback_intelligence_agent.retrieval} & Retrieval helpers. & \texttt{embeddings}, \texttt{query\_\allowbreak{}expansion}, \texttt{schemas}, \texttt{vector\_\allowbreak{}store} & \texttt{agent}, \texttt{evaluation}, \texttt{factory} \\
+\cref{module:feedback_intelligence_agent.synthetic_data} & Synthetic customer feedback dataset generation. & \texttt{schemas} & \texttt{cli} \\
+\cref{module:feedback_intelligence_agent.tools} & Deterministic tool-use framework for the feedback intelligence agent. & \texttt{citations}, \texttt{schemas} & \texttt{agent}, \texttt{factory} \\
+\end{longtable}
+
+\section{Data layer}
+\label{layer:data}
+
+Reading, validating, persisting, and exporting feedback data and vector indexes.
+
+\begin{longtable}{>{\raggedright\arraybackslash\small}p{0.17\textwidth} >{\raggedright\arraybackslash\small}p{0.33\textwidth} >{\raggedright\arraybackslash\small}p{0.22\textwidth} >{\raggedright\arraybackslash\small}p{0.22\textwidth}}
+\caption{Components of the data layer.}\label{tab:layer-data}\\
+\toprule
+Component & Responsibility & Depends on & Depended on by \\
+\midrule
+\endfirsthead
+\toprule
+Component & Responsibility & Depends on & Depended on by \\
+\midrule
+\endhead
+\midrule
+\multicolumn{4}{r}{\footnotesize continued on next page}\\
+\endfoot
+\bottomrule
+\endlastfoot
+\cref{module:feedback_intelligence_agent.data_contracts} & Data contracts and dataset validation for customer feedback CSV files. & \texttt{schemas} & \texttt{cli}, \texttt{ingestion}, \texttt{jobs}, \texttt{lakehouse}, \texttt{streaming\_\allowbreak{}ingestion} \\
+\cref{module:feedback_intelligence_agent.index_updates} & Incremental index update helpers. & \texttt{chunking}, \texttt{embeddings}, \texttt{factory}, \texttt{schemas}, \texttt{telemetry}, \texttt{vector\_\allowbreak{}store} & \texttt{cli} \\
+\cref{module:feedback_intelligence_agent.ingestion} & Feedback ingestion utilities. & \texttt{data\_\allowbreak{}contracts}, \texttt{schemas}, \texttt{telemetry} & \texttt{benchmarking}, \texttt{cli}, \texttt{experiments}, \texttt{factory}, \texttt{jobs} \\
+\cref{module:feedback_intelligence_agent.lakehouse} & Local lakehouse-style feedback exports. & \texttt{data\_\allowbreak{}contracts}, \texttt{privacy}, \texttt{schemas}, \texttt{telemetry} & \texttt{cli} \\
+\cref{module:feedback_intelligence_agent.qdrant_store} & Optional Qdrant-backed vector store. & \texttt{schemas} & \texttt{factory} \\
+\cref{module:feedback_intelligence_agent.streaming_ingestion} & Streaming ingestion primitives for feedback events. & \texttt{data\_\allowbreak{}contracts}, \texttt{privacy}, \texttt{schemas}, \texttt{telemetry} & \texttt{cli} \\
+\cref{module:feedback_intelligence_agent.vector_store} & A small vector store with JSON persistence. & \texttt{schemas} & \texttt{benchmarking}, \texttt{experiments}, \texttt{factory}, \texttt{index\_\allowbreak{}updates}, \texttt{jobs}, \texttt{retrieval} \\
+\end{longtable}
+
+\section{Infrastructure layer}
+\label{layer:infrastructure}
+
+Adapters to processes and services outside the domain: LLM providers, telemetry sinks, resilience, authorization, rate limiting.
+
+\begin{longtable}{>{\raggedright\arraybackslash\small}p{0.17\textwidth} >{\raggedright\arraybackslash\small}p{0.33\textwidth} >{\raggedright\arraybackslash\small}p{0.22\textwidth} >{\raggedright\arraybackslash\small}p{0.22\textwidth}}
+\caption{Components of the infrastructure layer.}\label{tab:layer-infrastructure}\\
+\toprule
+Component & Responsibility & Depends on & Depended on by \\
+\midrule
+\endfirsthead
+\toprule
+Component & Responsibility & Depends on & Depended on by \\
+\midrule
+\endhead
+\midrule
+\multicolumn{4}{r}{\footnotesize continued on next page}\\
+\endfoot
+\bottomrule
+\endlastfoot
+\cref{module:feedback_intelligence_agent.auth} & Optional API-key authorization for the FastAPI service. & -- & \texttt{api} \\
+\cref{module:feedback_intelligence_agent.llm} & LLM provider abstraction. & \texttt{citations}, \texttt{schemas} & \texttt{agent}, \texttt{factory}, \texttt{hallucination}, \texttt{memory}, \texttt{resilience} \\
+\cref{module:feedback_intelligence_agent.rate_limit} & Small in-memory fixed-window rate limiter for API deployments. & -- & \texttt{api} \\
+\cref{module:feedback_intelligence_agent.resilience} & Retry, timeout, and circuit-breaker wrappers for LLM providers. & \texttt{llm}, \texttt{schemas} & \texttt{factory} \\
+\cref{module:feedback_intelligence_agent.telemetry} & Structured logging and OpenTelemetry-style telemetry. & -- & \texttt{agent}, \texttt{api}, \texttt{cli}, \texttt{evaluation}, \texttt{factory}, \texttt{index\_\allowbreak{}updates}, \texttt{ingestion}, \texttt{jobs}, \texttt{lakehouse}, \texttt{streaming\_\allowbreak{}ingestion} \\
+\end{longtable}
+
+\section{Foundation layer}
+\label{layer:foundation}
+
+Types and configuration shared by every other layer.
+
+\begin{longtable}{>{\raggedright\arraybackslash\small}p{0.17\textwidth} >{\raggedright\arraybackslash\small}p{0.33\textwidth} >{\raggedright\arraybackslash\small}p{0.22\textwidth} >{\raggedright\arraybackslash\small}p{0.22\textwidth}}
+\caption{Components of the foundation layer.}\label{tab:layer-foundation}\\
+\toprule
+Component & Responsibility & Depends on & Depended on by \\
+\midrule
+\endfirsthead
+\toprule
+Component & Responsibility & Depends on & Depended on by \\
+\midrule
+\endhead
+\midrule
+\multicolumn{4}{r}{\footnotesize continued on next page}\\
+\endfoot
+\bottomrule
+\endlastfoot
+\cref{module:feedback_intelligence_agent.config} & Application configuration. & -- & \texttt{\_\allowbreak{}\_\allowbreak{}init\_\allowbreak{}\_\allowbreak{}}, \texttt{api}, \texttt{benchmarking}, \texttt{cli}, \texttt{experiments}, \texttt{factory} \\
+\cref{module:feedback_intelligence_agent.schemas} & Typed domain schemas used across the project. & \texttt{guardrails} & \texttt{agent}, \texttt{api}, \texttt{chunking}, \texttt{citations}, \texttt{cli}, \texttt{data\_\allowbreak{}contracts}, \texttt{evaluation}, \texttt{factory}, \texttt{hallucination}, \texttt{human\_\allowbreak{}feedback}, \texttt{index\_\allowbreak{}updates}, \texttt{ingestion}, \texttt{lakehouse}, \texttt{lexical\_\allowbreak{}search}, \texttt{llm}, \texttt{privacy}, \texttt{prompts}, \texttt{qdrant\_\allowbreak{}store}, \texttt{reports}, \texttt{reranking}, \texttt{resilience}, \texttt{retrieval}, \texttt{streaming\_\allowbreak{}ingestion}, \texttt{synthetic\_\allowbreak{}data}, \texttt{tools}, \texttt{vector\_\allowbreak{}store} \\
+\end{longtable}

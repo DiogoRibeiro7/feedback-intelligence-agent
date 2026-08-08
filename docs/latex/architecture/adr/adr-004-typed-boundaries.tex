@@ -1,0 +1,53 @@
+\section{ADR-004: Validated types at every boundary}
+\label{adr:004}
+
+\subsection*{Status}
+
+Accepted; in force at revision \texttt{\projectrevisionshort}.
+
+\subsection*{Context}
+
+Data enters from CSV files, HTTP request bodies, JSONL streams, JSON files on
+disk, and language-model responses. All of these are untrusted and
+loosely-shaped.
+
+\subsection*{Decision}
+
+Every value crossing a boundary is a Pydantic model, and constraints are
+declared on the fields rather than checked imperatively: rating bounds,
+minimum text length, embedding-dimension range, metric ranges in $[0,1]$,
+non-negative counters, and cross-field rules such as
+\texttt{min\_rating} $\leq$ \texttt{max\_rating}. Persisted state --- stored
+conversations, jobs, reports, human feedback, active-learning state --- is
+re-validated on load rather than trusted.
+
+\subsection*{Consequences}
+
+\begin{itemize}
+  \item Invalid input fails at the boundary with a message naming the field, so
+    interior code can assume well-formed data and needs no defensive checks.
+  \item FastAPI derives request validation and the OpenAPI schema from the same
+    models, so the HTTP contract and the domain contract cannot diverge.
+  \item \texttt{schemas} acquires the highest fan-in in the package (26 of 43
+    modules import it), which the coupling table shows. The shared vocabulary
+    is a deliberate coupling.
+  \item Pydantic reaches the foundation layer and therefore, transitively,
+    every layer. Replacing it would be a repository-wide change.
+  \item Model construction costs more than a dictionary. The repository accepts
+    this; the benchmark harness measures the pipeline including that cost.
+\end{itemize}
+
+\subsection*{Alternatives}
+
+Dataclasses with hand-written validation, or dictionaries with runtime
+assertions. Both would require duplicating the HTTP schema separately from the
+domain types.
+
+\subsection*{Evidence}
+
+\srcfile{src/feedback\_intelligence\_agent/schemas.py},
+\srcfile{data\_contracts.py}, \srcfile{config.py}, \srcfile{evaluation.py},
+\srcfile{memory.py}, \srcfile{jobs.py}, \srcfile{reports.py};
+\srcfile{AGENTS.md} (``Use Pydantic models for external request and response
+schemas''; ``Raise specific exceptions for data quality issues'');
+\srcfile{pyproject.toml} (\texttt{plugins = ["pydantic.mypy"]}).

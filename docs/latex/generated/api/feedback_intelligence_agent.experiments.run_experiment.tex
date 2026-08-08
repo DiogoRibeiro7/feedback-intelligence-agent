@@ -1,0 +1,23 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{run\_experiment}}
+\label{func:feedback_intelligence_agent.experiments.run_experiment}\index{Functions!run\_experiment}
+
+Execute one experiment end to end and return the typed result.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+run_experiment(config: ExperimentConfig) -> ExperimentResult
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{config}] \texttt{ExperimentConfig}, required.
+\end{arglist}
+\apifield{Value}\texttt{ExperimentResult}
+\apifield{Details}The index is built in memory from the configured dataset using the configured chunking and embedding parameters, so experiments never touch the persisted application index.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}experiments.\allowbreak{}py:130}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/experiments.py#L130}{online}), module \cref{module:feedback_intelligence_agent.experiments}

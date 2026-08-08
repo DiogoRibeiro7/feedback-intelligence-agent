@@ -1,0 +1,233 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_engineering.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\section{Repository tree}
+
+The tree below is generated from the version-controlled file list at the documented revision and is collapsed below the second level.
+
+\begin{verbatim}
+.
+|-- .github/
+|   |-- ISSUE_TEMPLATE/
+|   |   `-- (4 files)
+|   |-- workflows/
+|   |   `-- (6 files)
+|   |-- CODEOWNERS
+|   |-- PULL_REQUEST_TEMPLATE.md
+|   |-- dependabot.yml
+|   `-- release.yml
+|-- data/
+|   `-- sample_feedback.csv
+|-- deploy/
+|   |-- docker-compose.prod.yml
+|   |-- ecs-fargate-task-definition.json
+|   `-- fly.toml
+|-- docs/
+|   |-- latex/
+|   |   |-- architecture/  (17 files)
+|   |   |-- diagrams/  (6 files)
+|   |   |-- engineering/  (16 files)
+|   |   |-- reference/  (3 files)
+|   |   `-- (6 files)
+|   |-- tools/
+|   |   `-- (11 files)
+|   |-- README.md
+|   |-- architecture.md
+|   |-- case_study.md
+|   |-- deployment.md
+|   |-- evaluation.md
+|   `-- prompts.md
+|-- examples/
+|   |-- experiment_config.yaml
+|   |-- queries.jsonl
+|   |-- stream_feedback.jsonl
+|   `-- tool_queries.jsonl
+|-- frontend/
+|   |-- src/
+|   |   `-- (4 files)
+|   |-- .env.example
+|   |-- .gitignore
+|   |-- Dockerfile
+|   |-- README.md
+|   |-- index.html
+|   |-- package-lock.json
+|   |-- package.json
+|   |-- tsconfig.json
+|   `-- vite.config.ts
+|-- scripts/
+|   |-- benchmark.py
+|   `-- run_demo.py
+|-- src/
+|   `-- feedback_intelligence_agent/
+|       `-- (43 files)
+|-- tests/
+|   |-- snapshots/
+|   |   `-- (2 files)
+|   |-- conftest.py
+|   |-- test_active_learning.py
+|   |-- test_agent.py
+|   |-- test_api.py
+|   |-- test_auth.py
+|   |-- test_benchmarking.py
+|   |-- test_chunking.py
+|   |-- test_citations.py
+|   |-- test_cli.py
+|   |-- test_data_contracts.py
+|   |-- test_docs_tools.py
+|   |-- test_email_summaries.py
+|   |-- test_embeddings_and_store.py
+|   |-- test_evaluation.py
+|   |-- test_experiments.py
+|   |-- test_guardrails.py
+|   |-- test_hallucination.py
+|   |-- test_human_feedback.py
+|   |-- test_index_updates.py
+|   |-- test_jobs.py
+|   |-- test_lakehouse.py
+|   |-- test_lexical_and_hybrid.py
+|   |-- test_llm_providers.py
+|   |-- test_memory.py
+|   |-- test_metadata_filters.py
+|   |-- test_output_parser.py
+|   |-- test_privacy.py
+|   |-- test_prompt_registry.py
+|   |-- test_prompt_snapshot.py
+|   |-- test_qdrant_store.py
+|   |-- test_query_expansion.py
+|   |-- test_rate_limit.py
+|   |-- test_reports.py
+|   |-- test_reranking.py
+|   |-- test_resilience.py
+|   |-- test_retrieval_regressions.py
+|   |-- test_streaming_ingestion.py
+|   |-- test_synthetic_data.py
+|   |-- test_telemetry.py
+|   `-- test_tools.py
+|-- .editorconfig
+|-- .env.example
+|-- .gitattributes
+|-- .gitignore
+|-- .zenodo.json
+|-- CHANGELOG.md
+|-- CITATION.cff
+|-- CODE_OF_CONDUCT.md
+|-- CONTRIBUTING.md
+|-- Dockerfile
+|-- LICENSE
+|-- Makefile
+|-- README.md
+|-- ROADMAP.md
+|-- SECURITY.md
+|-- SUPPORT.md
+|-- docker-compose.yml
+|-- poetry.lock
+`-- pyproject.toml
+\end{verbatim}
+
+\section{Directory responsibilities}
+
+\begin{longtable}{>{\raggedright\arraybackslash\small}p{0.20\textwidth} >{\raggedright\arraybackslash\small}p{0.28\textwidth} >{\raggedright\arraybackslash\small}p{0.22\textwidth} >{\raggedright\arraybackslash\small}p{0.11\textwidth} >{\raggedright\arraybackslash\small}p{0.11\textwidth}}
+\caption{Responsibility and provenance of each significant directory.}\label{tab:directories}\\
+\toprule
+Directory & Responsibility & Expected contents & Provenance & In VCS \\
+\midrule
+\endfirsthead
+\toprule
+Directory & Responsibility & Expected contents & Provenance & In VCS \\
+\midrule
+\endhead
+\midrule
+\multicolumn{5}{r}{\footnotesize continued on next page}\\
+\endfoot
+\bottomrule
+\endlastfoot
+\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent} & Python package: the entire importable API. & Modules, no subpackages. & authored & yes \\
+\texttt{tests} & Pytest suite mirroring the package module-for-module. & test\_*.py plus prompt snapshots. & authored & yes \\
+\texttt{scripts} & Executable entry points that are not part of the package. & Deterministic demo and benchmark drivers. & authored & yes \\
+\texttt{data} & Version-controlled sample dataset used by demos, tests, and CI. & sample\_feedback.csv. & authored & yes \\
+\texttt{examples} & Input fixtures for evaluation, streaming, tools, and experiments. & JSONL and YAML. & authored & yes \\
+\texttt{docs} & Documentation sources: Markdown notes, the LaTeX manual, and its generator. & Markdown, LaTeX, JSON metadata, Python tools. & mixed & yes \\
+\texttt{docs/\allowbreak{}latex/\allowbreak{}generated} & LaTeX fragments produced by the documentation generator. & One fragment per documented object. & generated & yes \\
+\texttt{docs/\allowbreak{}metadata} & Normalized documentation model in JSON. & Repository inventory, API index, dependency graph, manifest. & generated & yes \\
+\texttt{docs/\allowbreak{}tools} & Extraction and LaTeX rendering layers of the documentation system. & Python modules. & authored & yes \\
+\texttt{frontend} & Vite/TypeScript demo client for the HTTP API. & Source, build config, Dockerfile. & authored & yes \\
+\texttt{deploy} & Deployment descriptors for production-like targets. & Compose, ECS task definition, Fly.io config. & authored & yes \\
+\texttt{.\allowbreak{}github} & Repository governance and CI/CD definitions. & Workflows, issue templates, Dependabot. & authored & yes \\
+\texttt{.\allowbreak{}artifacts} & Local run outputs: index, telemetry, jobs, reports, experiments. & JSON and JSONL. & generated & no \\
+\texttt{dist} & Built Python distributions. & sdist and wheel. & generated & no \\
+\end{longtable}
+
+\section{File census}
+
+The census covers the authored repository. The 314 files this documentation system generates under \texttt{docs/metadata/} and \texttt{docs/latex/generated/} are excluded: a census that measured its own output could not be reproducible, because the inventory records the manifest's size while the manifest records the inventory's digest.
+
+\begin{longtable}{>{\raggedright\arraybackslash\small}p{0.45\textwidth} >{\small}r}
+\caption{Version-controlled files by role.}\label{tab:file-categories}\\
+\toprule
+Category & Files \\
+\midrule
+\endfirsthead
+\toprule
+Category & Files \\
+\midrule
+\endhead
+\midrule
+\multicolumn{2}{r}{\footnotesize continued on next page}\\
+\endfoot
+\bottomrule
+\endlastfoot
+build-configuration & 1 \\
+build-interface & 1 \\
+ci-workflow & 6 \\
+citation-metadata & 2 \\
+configuration-template & 1 \\
+container & 2 \\
+dataset & 1 \\
+dependency-lock & 1 \\
+deployment & 3 \\
+documentation & 13 \\
+documentation-latex & 48 \\
+documentation-tool & 11 \\
+editor-configuration & 1 \\
+example-data & 4 \\
+frontend & 13 \\
+license & 1 \\
+python-script & 2 \\
+python-source & 43 \\
+python-test & 40 \\
+repository-configuration & 2 \\
+repository-governance & 8 \\
+test-fixture & 2 \\
+\end{longtable}
+
+\begin{longtable}{>{\raggedright\arraybackslash\small}p{0.35\textwidth} >{\small}r >{\small}r}
+\caption{Version-controlled files by language.}\label{tab:file-languages}\\
+\toprule
+Language & Files & Lines \\
+\midrule
+\endfirsthead
+\toprule
+Language & Files & Lines \\
+\midrule
+\endhead
+\midrule
+\multicolumn{3}{r}{\footnotesize continued on next page}\\
+\endfoot
+\bottomrule
+\endlastfoot
+CSS & 1 & 430 \\
+CSV & 1 & 13 \\
+HTML & 1 & 110 \\
+JSON & 5 & 1018 \\
+JSON Lines & 3 & 16 \\
+LaTeX & 47 & 4144 \\
+Markdown & 15 & 2606 \\
+Python & 96 & 26215 \\
+TOML & 2 & 161 \\
+TypeScript & 4 & 815 \\
+YAML & 16 & 680 \\
+\end{longtable}

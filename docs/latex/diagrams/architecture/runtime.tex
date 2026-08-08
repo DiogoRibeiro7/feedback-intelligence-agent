@@ -1,0 +1,55 @@
+% Authored TikZ: runtime execution flow for one answer.
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[
+  stage/.style={rectangle, draw=black, rounded corners=2pt, align=center,
+    font=\scriptsize, text width=44mm, minimum height=7mm, inner sep=3pt},
+  gate/.style={stage, very thick},
+  side/.style={rectangle, draw=rulegrey, dashed, align=center,
+    font=\scriptsize, text width=34mm, minimum height=6mm, inner sep=3pt},
+  flow/.style={-{Latex[length=1.8mm]}, thick},
+  branch/.style={-{Latex[length=1.8mm]}, rulegrey, dashed},
+  node distance=3.2mm
+]
+  \node[stage] (entry) {Entry point\\ \texttt{api} / \texttt{cli} / library};
+  \node[gate, below=of entry] (input) {Input guardrail\\ \texttt{guardrails.check\_input}};
+  \node[stage, below=of input] (rewrite) {Query rewrite (with history)\\ \texttt{memory.DeterministicQueryRewriter}};
+  \node[stage, below=of rewrite] (route) {Route classification\\ \texttt{agent.route}};
+  \node[stage, below=of route] (retrieve) {Retrieval, candidate pool $4k$\\ \texttt{QueryEngine} / \texttt{BM25Retriever} / \texttt{HybridRetriever}};
+  \node[stage, below=of retrieve] (filter) {Metadata filtering\\ tenant, segment, channel, rating, date};
+  \node[stage, below=of filter] (rerank) {Reranking to $k$\\ \texttt{DeterministicJudgeReranker}};
+  \node[gate, below=of rerank] (ctx) {Context guardrail\\ \texttt{guardrails.check\_context}};
+  \node[stage, below=of ctx] (tool) {Optional tool run\\ \texttt{tools.ToolRouter}};
+  \node[stage, below=of tool] (prompt) {Prompt construction\\ \texttt{prompts.build\_grounded\_prompt}};
+  \node[stage, below=of prompt] (gen) {Generation\\ \texttt{llm.LLMProvider.generate}};
+  \node[stage, below=of gen] (parse) {Parse and repair\\ \texttt{output\_parser.parse\_llm\_output}};
+  \node[stage, below=of parse] (cite) {Citations\\ \texttt{citations.build\_citations}};
+  \node[stage, below=of cite] (check) {Evidence-overlap check\\ \texttt{hallucination}};
+  \node[stage, below=of check] (out) {\texttt{AgentAnswer}\\ answer, actions, citations,\\ route, confidence, diagnostics};
+
+  \foreach \a/\b in {entry/input, input/rewrite, rewrite/route, route/retrieve,
+                     retrieve/filter, filter/rerank, rerank/ctx, ctx/tool,
+                     tool/prompt, prompt/gen, gen/parse, parse/cite,
+                     cite/check, check/out}
+    \draw[flow] (\a) -- (\b);
+
+  \node[side, right=10mm of input] (refuse) {Refusal answer\\ confidence $0$, no citations};
+  \draw[branch] (input.east) -- node[above, font=\scriptsize] {blocked} (refuse.west);
+  \draw[branch] (refuse.east) to[out=0, in=0, looseness=1.4] (out.east);
+
+  \node[side, right=10mm of ctx] (drop) {Drop injection-shaped\\ chunks, continue};
+  \draw[branch] (ctx.east) -- (drop.west);
+
+  \node[side, right=10mm of gen] (resil) {Timeout, retry, circuit breaker\\ (remote providers only)};
+  \draw[branch] (gen.east) -- (resil.west);
+
+  \node[side, left=10mm of retrieve] (span) {Telemetry span per stage\\ shared correlation id};
+  \draw[branch] (span.east) -- (retrieve.west);
+\end{tikzpicture}
+\caption{Execution of one answer. Heavy borders mark the two independent
+guardrail gates: the input gate runs before any retrieval, the context gate
+runs on retrieved evidence before generation. Dashed boxes are branches and
+cross-cutting concerns rather than pipeline stages.}
+\label{fig:runtime-flow}
+\end{figure}

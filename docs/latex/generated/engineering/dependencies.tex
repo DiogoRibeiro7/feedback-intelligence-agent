@@ -1,0 +1,134 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_engineering.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\section{Python dependencies}
+
+The package targets Python \texttt{\textgreater{}=3.\allowbreak{}10,\allowbreak{}\textless{}3.\allowbreak{}13}.
+
+\begin{longtable}{>{\raggedright\arraybackslash\small}p{0.30\textwidth} >{\raggedright\arraybackslash\small}p{0.30\textwidth} >{\raggedright\arraybackslash\small}p{0.32\textwidth}}
+\caption{Required runtime dependencies.}\label{tab:deps-runtime}\\
+\toprule
+Distribution & Version constraint & Extras requested \\
+\midrule
+\endfirsthead
+\toprule
+Distribution & Version constraint & Extras requested \\
+\midrule
+\endhead
+\midrule
+\multicolumn{3}{r}{\footnotesize continued on next page}\\
+\endfoot
+\bottomrule
+\endlastfoot
+\texttt{click} & \texttt{\textgreater{}=8.\allowbreak{}1.\allowbreak{}7,\allowbreak{}\textless{}8.\allowbreak{}2} & -- \\
+\texttt{fastapi} & \texttt{\textasciicircum{}0.\allowbreak{}137.\allowbreak{}0} & -- \\
+\texttt{httpx} & \texttt{\textasciicircum{}0.\allowbreak{}27.\allowbreak{}0} & -- \\
+\texttt{numpy} & \texttt{\textasciicircum{}1.\allowbreak{}26.\allowbreak{}0} & -- \\
+\texttt{pandas} & \texttt{\textasciicircum{}2.\allowbreak{}2.\allowbreak{}0} & -- \\
+\texttt{pydantic} & \texttt{\textasciicircum{}2.\allowbreak{}7.\allowbreak{}0} & -- \\
+\texttt{pydantic-\allowbreak{}settings} & \texttt{\textasciicircum{}2.\allowbreak{}3.\allowbreak{}0} & -- \\
+\texttt{python-\allowbreak{}dotenv} & \texttt{\textasciicircum{}1.\allowbreak{}0.\allowbreak{}1} & -- \\
+\texttt{pyyaml} & \texttt{\textasciicircum{}6.\allowbreak{}0.\allowbreak{}3} & -- \\
+\texttt{starlette} & \texttt{\textgreater{}=1.\allowbreak{}3.\allowbreak{}1,\allowbreak{}\textless{}2.\allowbreak{}0} & -- \\
+\texttt{typer} & \texttt{\textasciicircum{}0.\allowbreak{}12.\allowbreak{}3} & \texttt{all} \\
+\texttt{uvicorn} & \texttt{\textasciicircum{}0.\allowbreak{}30.\allowbreak{}0} & \texttt{standard} \\
+\end{longtable}
+
+\begin{longtable}{>{\raggedright\arraybackslash\small}p{0.30\textwidth} >{\raggedright\arraybackslash\small}p{0.30\textwidth} >{\raggedright\arraybackslash\small}p{0.32\textwidth}}
+\caption{Optional runtime dependencies, installed through extras.}\label{tab:deps-optional}\\
+\toprule
+Distribution & Version constraint & Extras requested \\
+\midrule
+\endfirsthead
+\toprule
+Distribution & Version constraint & Extras requested \\
+\midrule
+\endhead
+\midrule
+\multicolumn{3}{r}{\footnotesize continued on next page}\\
+\endfoot
+\bottomrule
+\endlastfoot
+\texttt{anthropic} & \texttt{\textgreater{}=0.\allowbreak{}40,\allowbreak{}\textless{}2.\allowbreak{}0} & -- \\
+\texttt{boto3} & \texttt{\textgreater{}=1.\allowbreak{}34,\allowbreak{}\textless{}2.\allowbreak{}0} & -- \\
+\texttt{confluent-\allowbreak{}kafka} & \texttt{\textgreater{}=2.\allowbreak{}3,\allowbreak{}\textless{}3.\allowbreak{}0} & -- \\
+\texttt{mlflow} & \texttt{\textgreater{}=3.\allowbreak{}0,\allowbreak{}\textless{}4.\allowbreak{}0} & -- \\
+\texttt{opentelemetry-\allowbreak{}api} & \texttt{\textgreater{}=1.\allowbreak{}27,\allowbreak{}\textless{}2.\allowbreak{}0} & -- \\
+\texttt{opentelemetry-\allowbreak{}sdk} & \texttt{\textgreater{}=1.\allowbreak{}27,\allowbreak{}\textless{}2.\allowbreak{}0} & -- \\
+\texttt{qdrant-\allowbreak{}client} & \texttt{\textgreater{}=1.\allowbreak{}7,\allowbreak{}\textless{}2.\allowbreak{}0} & -- \\
+\end{longtable}
+
+\begin{longtable}{>{\raggedright\arraybackslash\small}p{0.35\textwidth} >{\raggedright\arraybackslash\small}p{0.55\textwidth}}
+\caption{Poetry extras and the distributions they install.}\label{tab:deps-extras}\\
+\toprule
+Extra & Distributions \\
+\midrule
+\endfirsthead
+\toprule
+Extra & Distributions \\
+\midrule
+\endhead
+\midrule
+\multicolumn{2}{r}{\footnotesize continued on next page}\\
+\endfoot
+\bottomrule
+\endlastfoot
+\texttt{anthropic} & \texttt{anthropic} \\
+\texttt{bedrock} & \texttt{boto3} \\
+\texttt{mlflow} & \texttt{mlflow} \\
+\texttt{otel} & \texttt{opentelemetry-\allowbreak{}api}, \texttt{opentelemetry-\allowbreak{}sdk} \\
+\texttt{qdrant} & \texttt{qdrant-\allowbreak{}client} \\
+\texttt{streaming} & \texttt{boto3}, \texttt{confluent-\allowbreak{}kafka} \\
+\end{longtable}
+
+\begin{longtable}{>{\raggedright\arraybackslash\small}p{0.30\textwidth} >{\raggedright\arraybackslash\small}p{0.30\textwidth} >{\raggedright\arraybackslash\small}p{0.32\textwidth}}
+\caption{Development dependencies (Poetry dev group).}\label{tab:deps-dev}\\
+\toprule
+Distribution & Version constraint & Extras requested \\
+\midrule
+\endfirsthead
+\toprule
+Distribution & Version constraint & Extras requested \\
+\midrule
+\endhead
+\midrule
+\multicolumn{3}{r}{\footnotesize continued on next page}\\
+\endfoot
+\bottomrule
+\endlastfoot
+\texttt{mypy} & \texttt{\textasciicircum{}1.\allowbreak{}10.\allowbreak{}0} & -- \\
+\texttt{pandas-\allowbreak{}stubs} & \texttt{\textasciicircum{}2.\allowbreak{}2.\allowbreak{}2} & -- \\
+\texttt{pytest} & \texttt{\textasciicircum{}9.\allowbreak{}1.\allowbreak{}0} & -- \\
+\texttt{pytest-\allowbreak{}cov} & \texttt{\textasciicircum{}7.\allowbreak{}0.\allowbreak{}0} & -- \\
+\texttt{ruff} & \texttt{\textasciicircum{}0.\allowbreak{}5.\allowbreak{}0} & -- \\
+\texttt{types-\allowbreak{}pyyaml} & \texttt{\textasciicircum{}6.\allowbreak{}0.\allowbreak{}12.\allowbreak{}20260518} & -- \\
+\end{longtable}
+
+\section{Dependency locking}
+
+Exact resolved versions are pinned in \texttt{poetry.\allowbreak{}lock}, which locks 142 packages. The lock file is version controlled, so a checkout of a given revision resolves to the same dependency set.
+
+\section{Frontend dependencies}
+
+\begin{longtable}{>{\raggedright\arraybackslash\small}p{0.35\textwidth} >{\raggedright\arraybackslash\small}p{0.30\textwidth} >{\raggedright\arraybackslash\small}p{0.27\textwidth}}
+\caption{Frontend npm dependencies.}\label{tab:deps-frontend}\\
+\toprule
+Package & Version constraint & Group \\
+\midrule
+\endfirsthead
+\toprule
+Package & Version constraint & Group \\
+\midrule
+\endhead
+\midrule
+\multicolumn{3}{r}{\footnotesize continued on next page}\\
+\endfoot
+\bottomrule
+\endlastfoot
+\texttt{typescript} & \texttt{\textasciicircum{}5.\allowbreak{}4.\allowbreak{}5} & development \\
+\texttt{vite} & \texttt{\textasciicircum{}8.\allowbreak{}0.\allowbreak{}16} & development \\
+\end{longtable}

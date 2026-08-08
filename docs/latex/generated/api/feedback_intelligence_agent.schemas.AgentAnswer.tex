@@ -1,0 +1,27 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{AgentAnswer}}
+\label{class:feedback_intelligence_agent.schemas.AgentAnswer}\label{schema:AgentAnswer}\index{Classes!AgentAnswer}
+
+Final answer returned by the insight agent.
+\apifield{Inherits}\texttt{BaseModel}
+\apifield{Fields}
+\begin{arglist}
+  \item[\texttt{question}] \texttt{str}, required
+  \item[\texttt{answer}] \texttt{str}, required
+  \item[\texttt{recommended\_\allowbreak{}actions}] \texttt{list[str]\allowbreak{}}, required
+  \item[\texttt{citations}] \texttt{list[Citation]\allowbreak{}}, required
+  \item[\texttt{route}] \texttt{str}, required
+  \item[\texttt{confidence}] \texttt{float}, required
+  \item[\texttt{guardrail}] \texttt{GuardrailDecision \textbar{} None}, default \texttt{None}
+  \item[\texttt{tool\_\allowbreak{}run}] \texttt{ToolRunRecord \textbar{} None}, default \texttt{None}
+  \item[\texttt{diagnostics}] \texttt{dict[str,\allowbreak{} Any]\allowbreak{}}, default \texttt{dict()\allowbreak{}}
+\end{arglist}
+\apifield{Details}\texttt{guardrail} records the deterministic safety decision made for the request, so API and CLI consumers can see whether the question was answered normally or refused (and why). \texttt{tool\_\allowbreak{}run} records the tool invoked for the question, if any, making tool use visible in the agent answer and the API response.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}schemas.\allowbreak{}py:149}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/schemas.py#L149}{online}), pydantic model, module \cref{module:feedback_intelligence_agent.schemas}

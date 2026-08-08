@@ -1,0 +1,48 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{ChatRequest}}
+\label{class:feedback_intelligence_agent.schemas.ChatRequest}\label{schema:ChatRequest}\index{Classes!ChatRequest}
+
+API request for the `/chat` endpoint.
+\apifield{Inherits}\texttt{BaseModel}
+\apifield{Fields}
+\begin{arglist}
+  \item[\texttt{message}] \texttt{str}, required, \texttt{min\_\allowbreak{}length=1}
+  \item[\texttt{conversation\_\allowbreak{}id}] \texttt{str \textbar{} None}, default \texttt{None}
+  \item[\texttt{top\_\allowbreak{}k}] \texttt{int}, default \texttt{4}, \texttt{ge=1,\allowbreak{} le=12}
+  \item[\texttt{tenant\_\allowbreak{}id}] \texttt{str \textbar{} None}, default \texttt{None}, \texttt{min\_\allowbreak{}length=1}
+  \item[\texttt{customer\_\allowbreak{}segment}] \texttt{str \textbar{} None}, default \texttt{None}, \texttt{min\_\allowbreak{}length=1}
+  \item[\texttt{channel}] \texttt{FeedbackChannel \textbar{} None}, default \texttt{None}
+  \item[\texttt{min\_\allowbreak{}rating}] \texttt{int \textbar{} None}, default \texttt{None}, \texttt{ge=1,\allowbreak{} le=5}
+  \item[\texttt{max\_\allowbreak{}rating}] \texttt{int \textbar{} None}, default \texttt{None}, \texttt{ge=1,\allowbreak{} le=5}
+  \item[\texttt{created\_\allowbreak{}after}] \texttt{datetime \textbar{} None}, default \texttt{None}
+  \item[\texttt{created\_\allowbreak{}before}] \texttt{datetime \textbar{} None}, default \texttt{None}
+\end{arglist}
+\apifield{Details}\texttt{conversation\_\allowbreak{}id} is optional: omit it to start a new conversation, or pass the identifier returned by a previous `/chat` call to continue with the stored turns as context.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}schemas.\allowbreak{}py:231}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/schemas.py#L231}{online}), pydantic model, module \cref{module:feedback_intelligence_agent.schemas}
+
+\subsection{\texttt{validate\_filter\_ranges}}
+\label{method:feedback_intelligence_agent.schemas.ChatRequest.validate_filter_ranges}\index{Methods!validate\_filter\_ranges}
+Validate metadata filters at request parsing time.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+validate_filter_ranges(self) -> ChatRequest
+\end{lstlisting}
+\apifield{Value}\texttt{ChatRequest}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}schemas.\allowbreak{}py:251}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/schemas.py#L251}{online})
+
+\subsection{\texttt{metadata\_filters}}
+\label{method:feedback_intelligence_agent.schemas.ChatRequest.metadata_filters}\index{Methods!metadata\_filters}
+Return the request's metadata filters, or None when no filter is set.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+metadata_filters(self) -> MetadataFilters | None
+\end{lstlisting}
+\apifield{Value}\texttt{MetadataFilters \textbar{} None}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}schemas.\allowbreak{}py:256}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/schemas.py#L256}{online})

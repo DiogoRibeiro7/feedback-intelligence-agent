@@ -1,0 +1,89 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_architecture.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\begin{figure}[htbp]
+\centering
+\resizebox{\textwidth}{!}{%
+\begin{tikzpicture}[
+  mod/.style={rectangle, draw=black, rounded corners=2pt, font=\scriptsize\ttfamily,
+    minimum height=6mm, inner xsep=3pt},
+  dep/.style={-{Latex[length=1.6mm]}, gray, thin},
+  lazy/.style={-{Latex[length=1.6mm]}, gray, thin, dashed}
+]
+  \node[mod] (napi) at (-1.50,0.00) {api};
+  \node[mod] (ncli) at (1.50,0.00) {cli};
+  \node[font=\scriptsize\bfseries, anchor=west] at (-4.70,0.00) {interface};
+  \node[mod] (nagent) at (-7.50,-2.00) {agent};
+  \node[mod] (nbenchmarking) at (-4.50,-2.00) {benchmarking};
+  \node[mod] (nevaluation) at (-1.50,-2.00) {evaluation};
+  \node[mod] (nexperiments) at (1.50,-2.00) {experiments};
+  \node[mod] (nfactory) at (4.50,-2.00) {factory};
+  \node[mod] (njobs) at (7.50,-2.00) {jobs};
+  \node[font=\scriptsize\bfseries, anchor=west] at (-10.70,-2.00) {application};
+  \node[mod] (nchunking) at (0.00,-4.00) {chunking};
+  \node[font=\scriptsize\bfseries, anchor=west] at (-3.20,-4.00) {domain};
+  \node[mod] (nindexXupdates) at (-1.50,-6.00) {index\_updates};
+  \node[mod] (ningestion) at (1.50,-6.00) {ingestion};
+  \node[font=\scriptsize\bfseries, anchor=west] at (-4.70,-6.00) {data};
+  \node[mod] (nllm) at (-1.50,-8.00) {llm};
+  \node[mod] (ntelemetry) at (1.50,-8.00) {telemetry};
+  \node[font=\scriptsize\bfseries, anchor=west] at (-4.70,-8.00) {infrastructure};
+  \node[mod] (nschemas) at (0.00,-10.00) {schemas};
+  \node[font=\scriptsize\bfseries, anchor=west] at (-3.20,-10.00) {foundation};
+  \draw[dep] (nagent) -- (nllm);
+  \draw[dep] (nagent) -- (nschemas);
+  \draw[dep] (nagent) -- (ntelemetry);
+  \draw[dep] (napi) -- (nfactory);
+  \draw[dep] (napi) -- (njobs);
+  \draw[dep] (napi) -- (nschemas);
+  \draw[dep] (napi) -- (ntelemetry);
+  \draw[dep] (nbenchmarking) -- (nagent);
+  \draw[dep] (nbenchmarking) -- (nchunking);
+  \draw[dep] (nbenchmarking) -- (nevaluation);
+  \draw[dep] (nbenchmarking) -- (nfactory);
+  \draw[dep] (nbenchmarking) -- (ningestion);
+  \draw[dep] (nchunking) -- (nschemas);
+  \draw[dep] (ncli) -- (nbenchmarking);
+  \draw[dep] (ncli) -- (nevaluation);
+  \draw[dep] (ncli) -- (nexperiments);
+  \draw[dep] (ncli) -- (nfactory);
+  \draw[dep] (ncli) -- (nindexXupdates);
+  \draw[dep] (ncli) -- (ningestion);
+  \draw[dep] (ncli) -- (njobs);
+  \draw[dep] (ncli) -- (nschemas);
+  \draw[dep] (ncli) -- (ntelemetry);
+  \draw[dep] (nevaluation) -- (nagent);
+  \draw[dep] (nevaluation) -- (nschemas);
+  \draw[dep] (nevaluation) -- (ntelemetry);
+  \draw[dep] (nexperiments) -- (nagent);
+  \draw[dep] (nexperiments) -- (nchunking);
+  \draw[dep] (nexperiments) -- (nevaluation);
+  \draw[dep] (nexperiments) -- (nfactory);
+  \draw[dep] (nexperiments) -- (ningestion);
+  \draw[dep] (nfactory) -- (nagent);
+  \draw[dep] (nfactory) -- (nchunking);
+  \draw[dep] (nfactory) -- (ningestion);
+  \draw[lazy] (nfactory) -- (njobs);
+  \draw[dep] (nfactory) -- (nllm);
+  \draw[dep] (nfactory) -- (nschemas);
+  \draw[dep] (nfactory) -- (ntelemetry);
+  \draw[dep] (nindexXupdates) -- (nchunking);
+  \draw[dep] (nindexXupdates) -- (nfactory);
+  \draw[dep] (nindexXupdates) -- (nschemas);
+  \draw[dep] (nindexXupdates) -- (ntelemetry);
+  \draw[dep] (ningestion) -- (nschemas);
+  \draw[dep] (ningestion) -- (ntelemetry);
+  \draw[dep] (njobs) -- (nchunking);
+  \draw[dep] (njobs) -- (nfactory);
+  \draw[dep] (njobs) -- (ningestion);
+  \draw[dep] (njobs) -- (ntelemetry);
+  \draw[dep] (nllm) -- (nschemas);
+\end{tikzpicture}%
+}
+\caption{Internal dependency graph of the 14 most connected modules. Solid edges are module-level (eager) imports; dashed edges are deferred imports performed inside function bodies or under \texttt{TYPE\_CHECKING}.}
+\label{fig:module-dependency-core}
+\end{figure}

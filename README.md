@@ -41,6 +41,19 @@ changing the rest of the system.
 - [Deployment](docs/deployment.md): local, Docker Compose, ECS Fargate, and Fly.io paths.
 - [Prompt registry](docs/prompts.md): prompt versioning and snapshot workflow.
 
+For the complete technical manual — every public function, class, schema, CLI
+command, HTTP endpoint, and configuration variable, plus the architecture and
+engineering references — see the LaTeX reference manual in
+[docs/latex/](docs/latex/) and its [toolchain README](docs/README.md):
+
+```bash
+make docs      # regenerate the LaTeX sources from the repository, then validate
+make docs-pdf  # also compile docs/latex/main.tex to PDF (needs latexmk)
+```
+
+Generation is AST-based and performs no application imports, no network access,
+and no writes outside `docs/`.
+
 ## What this demonstrates
 
 - Agentic RAG workflow with retrieval, routing, evidence selection, and cited responses.

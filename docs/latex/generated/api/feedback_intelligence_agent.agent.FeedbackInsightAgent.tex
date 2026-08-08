@@ -1,0 +1,80 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{FeedbackInsightAgent}}
+\label{class:feedback_intelligence_agent.agent.FeedbackInsightAgent}\index{Classes!FeedbackInsightAgent}
+
+Evidence-grounded feedback intelligence agent.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+FeedbackInsightAgent(self, query_engine: Retriever, llm: LLMProvider, *, telemetry: Telemetry | None = None, tools: ToolRegistry | None = None, query_rewriter: QueryRewriter | None = None, reranker: Reranker | None = None, hallucination_checker: EvidenceOverlapHallucinationChecker | None = None) -> None
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{query\_\allowbreak{}engine}] \texttt{Retriever}, required. Retriever used to gather evidence.
+  \item[\texttt{llm}] \texttt{LLMProvider}, required. Text generation provider.
+  \item[\texttt{telemetry}] \texttt{Telemetry \textbar{} None}, default \texttt{None}, keyword-only. Optional telemetry emitter; defaults to a no-op instance.
+  \item[\texttt{tools}] \texttt{ToolRegistry \textbar{} None}, default \texttt{None}, keyword-only. Optional registry of local tools; when omitted the agent answers every question with the plain RAG flow.
+  \item[\texttt{query\_\allowbreak{}rewriter}] \texttt{QueryRewriter \textbar{} None}, default \texttt{None}, keyword-only. Optional rewriter that converts follow-up questions into standalone questions when conversation history is passed to \texttt{answer}; defaults to the deterministic local rewriter.
+  \item[\texttt{reranker}] \texttt{Reranker \textbar{} None}, default \texttt{None}, keyword-only. Optional candidate reranker; defaults to the deterministic local judge reranker.
+  \item[\texttt{hallucination\_\allowbreak{}checker}] \texttt{EvidenceOverlapHallucinationChecker \textbar{} None}, default \texttt{None}, keyword-only. Optional evidence-support checker; defaults to deterministic lexical evidence overlap.
+\end{arglist}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}agent.\allowbreak{}py:62}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/agent.py#L62}{online}), class, module \cref{module:feedback_intelligence_agent.agent}
+
+\subsection{\texttt{answer}}
+\label{method:feedback_intelligence_agent.agent.FeedbackInsightAgent.answer}\index{Methods!answer}
+Answer a user question using retrieved feedback as evidence.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+answer(self, question: str, *, top_k: int = 4, history: Sequence[ConversationTurn] | None = None, filters: MetadataFilters | None = None) -> AgentAnswer
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{question}] \texttt{str}, required.
+  \item[\texttt{top\_\allowbreak{}k}] \texttt{int}, default \texttt{4}, keyword-only.
+  \item[\texttt{history}] \texttt{Sequence[ConversationTurn]\allowbreak{} \textbar{} None}, default \texttt{None}, keyword-only.
+  \item[\texttt{filters}] \texttt{MetadataFilters \textbar{} None}, default \texttt{None}, keyword-only.
+\end{arglist}
+\apifield{Value}\texttt{AgentAnswer}
+\apifield{Details}Two deterministic guardrail gates protect the run: the input gate refuses unsafe questions before retrieval, and the context gate drops retrieved chunks carrying injection-style content before generation.
+
+When \texttt{history} (previous conversation turns) is supplied, follow-up questions are first rewritten into standalone questions using the last turn, and the rewritten question drives routing, retrieval, and generation. The full history is never sent to retrieval. Without \texttt{history} the single-turn behaviour is unchanged.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}agent.\allowbreak{}py:101}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/agent.py#L101}{online})
+
+\subsection{\texttt{chat}}
+\label{method:feedback_intelligence_agent.agent.FeedbackInsightAgent.chat}\index{Methods!chat}
+Answer a message inside a stored conversation and persist the turn.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+chat(self, message: str, *, store: ConversationStore, conversation_id: str | None = None, top_k: int = 4, filters: MetadataFilters | None = None) -> tuple[AgentAnswer, str]
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{message}] \texttt{str}, required.
+  \item[\texttt{store}] \texttt{ConversationStore}, required, keyword-only.
+  \item[\texttt{conversation\_\allowbreak{}id}] \texttt{str \textbar{} None}, default \texttt{None}, keyword-only.
+  \item[\texttt{top\_\allowbreak{}k}] \texttt{int}, default \texttt{4}, keyword-only.
+  \item[\texttt{filters}] \texttt{MetadataFilters \textbar{} None}, default \texttt{None}, keyword-only.
+\end{arglist}
+\apifield{Value}\texttt{tuple[AgentAnswer,\allowbreak{} str]\allowbreak{}}. The agent answer and the conversation identifier (newly generated when none was supplied).
+\apifield{Details}Loads the conversation from \texttt{store} (or starts a new one when \texttt{conversation\_\allowbreak{}id} is \texttt{None}), answers with the previous turns as context, records the new turn (user message, answer, cited document IDs, route, and confidence), and saves the conversation back.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}agent.\allowbreak{}py:263}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/agent.py#L263}{online})
+
+\subsection{\texttt{route}}
+\label{method:feedback_intelligence_agent.agent.FeedbackInsightAgent.route}\index{Methods!route}
+Classify a question into a stable route for observability and prompts.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+route(self, question: str) -> str
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{question}] \texttt{str}, required.
+\end{arglist}
+\apifield{Value}\texttt{str}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}agent.\allowbreak{}py:435}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/agent.py#L435}{online})

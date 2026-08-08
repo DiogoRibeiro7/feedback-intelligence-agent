@@ -1,0 +1,93 @@
+% Authored: component architecture, with generated component tables.
+
+\chapter{Component Architecture}
+\label{ch:components}
+
+Each module is a component. The tables in this chapter are generated from the
+import graph, so the ``depends on'' and ``depended on by'' columns are facts
+about the source rather than intentions.
+
+\section{The composition root}
+
+\cref{module:feedback_intelligence_agent.factory} is the only module that
+chooses concrete implementations. It reads \texttt{Settings} and returns wired
+objects: a telemetry emitter, a vector store (JSON or Qdrant), a retriever
+(dense, lexical, or hybrid), an LLM provider (one of six, optionally wrapped in
+the resilience policy), a hallucination checker (with or without an LLM judge),
+and the four JSON-backed stores.
+
+This concentration is deliberate and load-bearing. It has two visible
+consequences in the generated tables: \texttt{factory} has by far the highest
+fan-out of any module, and no other module contains a provider-selection
+branch. Adding a provider means adding one adapter class and one branch here.
+
+\section{The agent}
+
+\cref{class:feedback_intelligence_agent.agent.FeedbackInsightAgent} is the
+orchestrator. It receives its collaborators through its constructor --- a
+retriever, an LLM provider, and optional telemetry, tools, query rewriter,
+reranker, and hallucination checker --- and defaults each optional
+collaborator to its deterministic local implementation. It performs no I/O of
+its own beyond what those collaborators do.
+
+Its public surface is two methods: \texttt{answer} for a single question and
+\texttt{chat} for a question inside a persisted conversation. \texttt{chat} is
+implemented in terms of \texttt{answer}, adding conversation load, turn
+recording, and save.
+
+\section{Boundary contracts}
+
+The components communicate through the typed models of
+\cref{ch:schemas}. The important ones for component boundaries are:
+
+\begin{description}[nosep]
+  \item[\texttt{FeedbackRecord}] output of ingestion, input to chunking.
+  \item[\texttt{DocumentChunk}] output of chunking, input to embedding,
+    indexing, lexical indexing, and tools.
+  \item[\texttt{SearchResult}] output of every retriever and of reranking,
+    input to prompting, tools, citation building, and hallucination checking.
+  \item[\texttt{AgentAnswer}] output of the agent, input to the API response
+    models, the CLI renderers, the report store, and evaluation.
+\end{description}
+
+Because these are Pydantic models rather than dictionaries, a boundary
+violation is a validation error at the boundary rather than a \texttt{KeyError}
+deep inside a consumer.
+
+\section{Failure modes by component}
+
+The following failure behaviours are implemented, and are worth stating at the
+component level because they determine what a caller must handle:
+
+\begin{description}
+  \item[Ingestion] Raises \texttt{FeedbackIngestionError} in strict mode on any
+    contract violation; in non-strict mode it drops invalid rows and reports
+    them. The row number is always included.
+  \item[Retrieval] Raises \texttt{ValueError} for an empty question or a
+    non-positive \texttt{top\_k}. An empty result set is not an error.
+  \item[Tools] A tool failure is caught and converted into a
+    \texttt{ToolRunRecord} with status \texttt{error}; an unknown tool request
+    produces status \texttt{refused}. Neither aborts the answer --- the plain
+    retrieval-augmented flow continues and the note is appended to the answer
+    text.
+  \item[LLM providers] Remote providers are wrapped by
+    \cref{class:feedback_intelligence_agent.resilience.ResilientLLMProvider},
+    which applies a timeout, bounded retries with backoff, and a circuit
+    breaker. The local provider is never wrapped.
+  \item[Output parsing] A malformed model response is repaired deterministically
+    rather than raising; the parse result records the detected format, whether
+    a repair was applied, and any validation error, and these appear in the
+    answer diagnostics.
+  \item[Guardrails] An unsafe question short-circuits to a refusal answer with
+    confidence $0$ and route \texttt{guardrail\_refusal}, before any retrieval
+    happens.
+  \item[HTTP layer] Every handler converts domain exceptions into status codes;
+    no domain exception escapes as a 500 except an incoherent authorization
+    configuration.
+\end{description}
+
+\input{diagrams/architecture/components}
+
+\section{Component inventory}
+
+\input{generated/architecture/components}

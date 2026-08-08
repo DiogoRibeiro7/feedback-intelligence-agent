@@ -1,0 +1,56 @@
+% Authored: quality assurance, with the generated gate tables.
+
+\chapter{Quality Assurance}
+\label{ch:quality-assurance}
+
+\section{Gates}
+
+Every gate below is implemented: it has a command, it runs in CI, and it fails
+the build. Nothing in this chapter is aspirational.
+
+\input{generated/engineering/quality-gates}
+
+\section{What each gate actually enforces}
+
+\begin{description}
+  \item[Linting] Ruff with eight rule sets selected: \texttt{E} (pycodestyle),
+    \texttt{F} (pyflakes), \texttt{I} (import sorting), \texttt{B}
+    (bugbear), \texttt{UP} (pyupgrade), \texttt{N} (naming), \texttt{ANN}
+    (annotations), \texttt{C4} (comprehensions), and \texttt{SIM}
+    (simplification). Two rules are ignored, \texttt{ANN101} and
+    \texttt{ANN102}, which would require annotating \texttt{self} and
+    \texttt{cls}. Selecting \texttt{ANN} is the load-bearing choice: it makes
+    missing annotations a lint failure, not just a type-checker weakness.
+  \item[Formatting] \texttt{ruff format -{}-check} in CI, so formatting drift
+    fails the build rather than being silently rewritten.
+  \item[Type checking] \texttt{mypy} in \texttt{strict} mode over
+    \srcfile{src/} with the Pydantic plugin. Strict mode implies, among
+    others, no implicit \texttt{Any} in signatures, no untyped definitions, and
+    no untyped calls from typed code. The six \texttt{ignore\_missing\_imports}
+    overrides are scoped to the optional SDKs and each carries a comment
+    explaining why.
+  \item[Tests and coverage] See \cref{ch:testing}.
+  \item[Deterministic demo] \srcfile{scripts/run\_demo.py} runs the whole
+    pipeline offline. It is the gate that catches wiring breakage the unit
+    tests miss, because it constructs the system the way a user would.
+  \item[Package build] \texttt{poetry build} on every push, so packaging
+    metadata breakage is caught immediately rather than at release.
+  \item[Security static analysis] CodeQL for Python and JavaScript/TypeScript
+    on \texttt{main} and on pull requests, plus a weekly scheduled scan.
+  \item[Dependency review] \texttt{actions/dependency-review-action} on pull
+    requests, failing on high severity and always commenting a summary.
+\end{description}
+
+\section{Scope boundaries worth knowing}
+
+Two scope limits follow from the configuration and are visible in it:
+
+\begin{itemize}
+  \item \texttt{mypy} runs over \srcfile{src} only. Test code and scripts are
+    linted and formatted but not type-checked. The documentation tooling in
+    \srcfile{docs/tools/} is included in the type-check target added for it;
+    see \cref{ch:documentation-system}.
+  \item Ruff's \texttt{src} setting lists \srcfile{src}, \srcfile{tests}, and
+    \srcfile{docs}, which is what lets import sorting classify first-party
+    imports correctly in all three trees.
+\end{itemize}

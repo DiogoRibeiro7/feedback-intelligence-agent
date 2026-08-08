@@ -1,0 +1,41 @@
+% Authored: architecture decision records.
+
+\chapter{Architecture Decision Records}
+\label{ch:adr}
+
+\section*{Method}
+\addcontentsline{toc}{section}{Method}
+
+The records below document decisions that are \emph{observable} in the
+repository at revision \texttt{\projectrevision}: a structural choice that is
+consistently applied and that could plausibly have been made differently.
+
+Two rules were applied while writing them.
+
+\begin{enumerate}
+  \item A decision is recorded only when the repository contains evidence for
+    it: the code itself, a source comment or docstring that states the reason,
+    a configuration file, a CI step, or the contributor instructions in
+    \srcfile{AGENTS.md}.
+  \item Where the \emph{rationale} cannot be established from repository
+    evidence, the record says so explicitly instead of supplying a plausible
+    motivation. The repository has no ADR directory, no design document, and no
+    commit messages that argue for a design; \srcfile{CHANGELOG.md} records
+    what changed, not why.
+\end{enumerate}
+
+Every record therefore carries an \textbf{Evidence} subsection naming the files
+that support it. Status values are descriptive of the current revision: an
+\emph{Accepted} record means the decision is in force in the source, not that a
+review body approved it.
+
+\input{architecture/adr/adr-001-local-first-defaults}
+\input{architecture/adr/adr-002-structural-protocols}
+\input{architecture/adr/adr-003-single-composition-root}
+\input{architecture/adr/adr-004-typed-boundaries}
+\input{architecture/adr/adr-005-optional-extras}
+\input{architecture/adr/adr-006-deferred-import-cycle}
+\input{architecture/adr/adr-007-file-backed-stores}
+\input{architecture/adr/adr-008-two-gate-guardrails}
+\input{architecture/adr/adr-009-replayed-streaming}
+\input{architecture/adr/adr-010-nearest-rank-percentile}

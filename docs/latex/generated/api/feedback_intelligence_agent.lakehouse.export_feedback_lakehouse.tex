@@ -1,0 +1,28 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{export\_feedback\_lakehouse}}
+\label{func:feedback_intelligence_agent.lakehouse.export_feedback_lakehouse}\index{Functions!export\_feedback\_lakehouse}
+
+Export feedback records to a partitioned local lakehouse-style table.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+export_feedback_lakehouse(records: Iterable[FeedbackRecord], output_dir: str | Path, *, table_format: LakehouseTableFormat = LakehouseTableFormat.delta, data_format: LakehouseDataFormat = LakehouseDataFormat.jsonl, partition_columns: Sequence[str] = DEFAULT_PARTITION_COLUMNS, telemetry: Telemetry | None = None) -> LakehouseExportResult
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{records}] \texttt{Iterable[FeedbackRecord]\allowbreak{}}, required.
+  \item[\texttt{output\_\allowbreak{}dir}] \texttt{str \textbar{} Path}, required.
+  \item[\texttt{table\_\allowbreak{}format}] \texttt{LakehouseTableFormat}, default \texttt{LakehouseTableFormat.\allowbreak{}delta}, keyword-only.
+  \item[\texttt{data\_\allowbreak{}format}] \texttt{LakehouseDataFormat}, default \texttt{LakehouseDataFormat.\allowbreak{}jsonl}, keyword-only.
+  \item[\texttt{partition\_\allowbreak{}columns}] \texttt{Sequence[str]\allowbreak{}}, default \texttt{DEFAULT\_\allowbreak{}PARTITION\_\allowbreak{}COLUMNS}, keyword-only.
+  \item[\texttt{telemetry}] \texttt{Telemetry \textbar{} None}, default \texttt{None}, keyword-only.
+\end{arglist}
+\apifield{Value}\texttt{LakehouseExportResult}
+\apifield{Raises}\texttt{ValueError}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}lakehouse.\allowbreak{}py:73}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/lakehouse.py#L73}{online}), module \cref{module:feedback_intelligence_agent.lakehouse}

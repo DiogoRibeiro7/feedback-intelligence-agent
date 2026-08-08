@@ -1,0 +1,24 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{feedback\_to\_chunks}}
+\label{func:feedback_intelligence_agent.chunking.feedback_to_chunks}\index{Functions!feedback\_to\_chunks}
+
+Convert validated feedback records into searchable document chunks.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+feedback_to_chunks(records: Iterable[FeedbackRecord], *, max_words: int = 80, overlap_words: int = 16) -> list[DocumentChunk]
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{records}] \texttt{Iterable[FeedbackRecord]\allowbreak{}}, required. Validated feedback records to chunk.
+  \item[\texttt{max\_\allowbreak{}words}] \texttt{int}, default \texttt{80}, keyword-only. Maximum words per chunk (see \texttt{chunk\_\allowbreak{}text}).
+  \item[\texttt{overlap\_\allowbreak{}words}] \texttt{int}, default \texttt{16}, keyword-only. Words shared between adjacent chunks.
+\end{arglist}
+\apifield{Value}\texttt{list[DocumentChunk]\allowbreak{}}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}chunking.\allowbreak{}py:55}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/chunking.py#L55}{online}), module \cref{module:feedback_intelligence_agent.chunking}

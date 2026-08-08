@@ -1,0 +1,24 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{build\_llm}}
+\label{func:feedback_intelligence_agent.factory.build_llm}\index{Functions!build\_llm}
+
+Construct the LLM provider selected by \texttt{FEEDBACK\_\allowbreak{}AGENT\_\allowbreak{}LLM\_\allowbreak{}PROVIDER}.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+build_llm(settings: Settings) -> LLMProvider
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{settings}] \texttt{Settings}, required.
+\end{arglist}
+\apifield{Value}\texttt{LLMProvider}
+\apifield{Raises}\texttt{ValueError}
+\apifield{Details}\texttt{local} (the default) needs no API key and stays fully deterministic. \texttt{openai} targets any OpenAI-compatible Chat Completions endpoint (\texttt{OPENAI\_\allowbreak{}BASE\_\allowbreak{}URL}), \texttt{openai\_\allowbreak{}responses} targets OpenAI's Responses API, \texttt{anthropic} uses the official SDK (optional \texttt{anthropic} extra), \texttt{bedrock} uses AWS Bedrock Runtime (optional \texttt{bedrock} extra), and \texttt{ollama} talks to a local Ollama server. Missing credentials raise a clear configuration error at construction time.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}factory.\allowbreak{}py:243}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/factory.py#L243}{online}), module \cref{module:feedback_intelligence_agent.factory}

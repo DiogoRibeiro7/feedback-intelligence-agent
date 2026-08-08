@@ -1,0 +1,87 @@
+% Authored: implemented security controls.
+
+\chapter{Security}
+\label{ch:security}
+
+This chapter documents controls that exist. \srcfile{SECURITY.md} states the
+project's own security model: the default demo runs locally without API keys or
+managed services; optional integrations must be configured explicitly; and real
+customer data, secrets, keys, or private deployment configuration must not
+appear in issues, pull requests, examples, or tests.
+
+\section{Application controls}
+
+\begin{description}
+  \item[API-key authorization] Optional, disabled by default. Three ordered
+    roles --- \texttt{reader} (rank 1), \texttt{writer} (2), \texttt{admin}
+    (3) --- are checked against the \texttt{X-Feedback-Agent-Key} header. A
+    higher-ranked key satisfies a lower-ranked requirement. Read routes require
+    \texttt{reader}, mutating workflow routes require \texttt{writer}, and
+    indexing and ingestion-job submission require \texttt{admin}; the required
+    role for every route appears in \cref{ch:http}. Enabling authorization with
+    no key configured raises \texttt{ApiAuthConfigurationError}, which maps to
+    \texttt{500} --- a misconfiguration fails loudly rather than silently
+    allowing traffic.
+  \item[Rate limiting] Optional, disabled by default. An in-process
+    fixed-window limiter over all routes except the probes, keyed by API key
+    when present and by client address otherwise. It is per worker, not per
+    service; see \cref{ch:runtime}.
+  \item[CORS] Explicit origin allow-list, defaulting to the local Vite
+    development and preview ports. A wildcard origin automatically disables
+    credentialed requests, which prevents the unsafe wildcard-plus-credentials
+    combination.
+  \item[Prompt-injection guardrails] Two independent gates; see
+    \cref{adr:008}.
+  \item[PII redaction] Deterministic pattern-based redaction of email
+    addresses, phone numbers, and access tokens, applied on the data path
+    before storage and indexing. The token patterns cover common credential
+    prefixes (\texttt{sk}, \texttt{pk}, \texttt{ghp}, \texttt{github\_pat},
+    Slack \texttt{xox*}, \texttt{AKIA}/\texttt{ASIA}), assignment-shaped
+    secrets (\texttt{api\_key = ...}), and bearer tokens. Redaction replaces
+    matches with explicit placeholders rather than deleting them, so the
+    redaction is visible in the stored text.
+  \item[Input validation] Every request body, CSV row, and stream event is
+    validated against a Pydantic model at the boundary; see \cref{adr:004}.
+  \item[Error mapping] Domain exceptions are converted to status codes at the
+    HTTP boundary, so stack traces and internal messages are not returned to
+    callers.
+\end{description}
+
+\section{Supply-chain controls}
+
+\begin{description}[nosep]
+  \item[Dependency locking] \srcfile{poetry.lock} and
+    \srcfile{frontend/package-lock.json} are both version controlled; CI
+    installs from them.
+  \item[Dependency review] Every pull request is scanned by
+    \texttt{actions/dependency-review-action}, failing on high severity.
+  \item[npm audit] The frontend workflow runs \texttt{npm audit} as a build
+    step.
+  \item[Dependabot] Weekly grouped updates for pip, npm, and GitHub Actions.
+  \item[CodeQL] Static analysis for Python and JavaScript/TypeScript on
+    \texttt{main}, on pull requests, and weekly.
+  \item[Least-privilege workflows] Every workflow declares an explicit minimal
+    \texttt{permissions} block, and no workflow references any secret.
+\end{description}
+
+\section{Vulnerability reporting}
+
+\srcfile{SECURITY.md} directs reporters to GitHub Security Advisories rather
+than public issues, and asks for affected component, reproduction, impact, and
+known mitigations. Security fixes are stated to apply to \texttt{main} and the
+latest release.
+
+\section{Boundaries}
+
+Three limits follow directly from the design and should not be mistaken for
+gaps in this document:
+
+\begin{itemize}[nosep]
+  \item Authorization is a shared-secret API key, not an identity system. There
+    are no users, no sessions, no token expiry, and no revocation beyond
+    rotating the configured key.
+  \item Guardrails and redaction are deterministic pattern matching. They catch
+    the shapes they encode and nothing else.
+  \item The rate limiter is in-process, so it bounds a worker rather than a
+    deployment.
+\end{itemize}

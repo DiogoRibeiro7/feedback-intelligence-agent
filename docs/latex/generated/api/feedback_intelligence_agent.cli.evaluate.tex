@@ -1,0 +1,27 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{evaluate}}
+\label{func:feedback_intelligence_agent.cli.evaluate}\index{Functions!evaluate}
+
+Run offline retrieval and answer-quality evaluation and write a JSON report.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+evaluate(queries: Annotated[Path, typer.Option(help='Path to JSONL evaluation cases.')] = Path('examples/queries.jsonl'), output: Annotated[Path, typer.Option(help='Path for the JSON evaluation report.')] = Path('.artifacts/evaluation_report.json'), index_path: Annotated[Path, typer.Option(help='Path to vector index.')] = Path('.artifacts/vector_store.json'), top_k: Annotated[int, typer.Option(help='Number of chunks to retrieve.')] = 4, retriever: Annotated[RetrieverChoice, typer.Option(help='Retrieval strategy: dense, lexical, or hybrid.')] = RetrieverChoice.dense, dense_weight: Annotated[float, typer.Option(help='Dense score weight for hybrid retrieval.')] = 0.6, lexical_weight: Annotated[float, typer.Option(help='Lexical score weight for hybrid retrieval.')] = 0.4) -> None
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{queries}] \texttt{Annotated[Path,\allowbreak{} typer.\allowbreak{}Option(help='Path to JSONL evaluation cases.\allowbreak{}')\allowbreak{}]\allowbreak{}}, default \texttt{Path('examples/\allowbreak{}queries.\allowbreak{}jsonl')\allowbreak{}}.
+  \item[\texttt{output}] \texttt{Annotated[Path,\allowbreak{} typer.\allowbreak{}Option(help='Path for the JSON evaluation report.\allowbreak{}')\allowbreak{}]\allowbreak{}}, default \texttt{Path('.\allowbreak{}artifacts/\allowbreak{}evaluation\_\allowbreak{}report.\allowbreak{}json')\allowbreak{}}.
+  \item[\texttt{index\_\allowbreak{}path}] \texttt{Annotated[Path,\allowbreak{} typer.\allowbreak{}Option(help='Path to vector index.\allowbreak{}')\allowbreak{}]\allowbreak{}}, default \texttt{Path('.\allowbreak{}artifacts/\allowbreak{}vector\_\allowbreak{}store.\allowbreak{}json')\allowbreak{}}.
+  \item[\texttt{top\_\allowbreak{}k}] \texttt{Annotated[int,\allowbreak{} typer.\allowbreak{}Option(help='Number of chunks to retrieve.\allowbreak{}')\allowbreak{}]\allowbreak{}}, default \texttt{4}.
+  \item[\texttt{retriever}] \texttt{Annotated[RetrieverChoice,\allowbreak{} typer.\allowbreak{}Option(help='Retrieval strategy: dense,\allowbreak{} lexical,\allowbreak{} or hybrid.\allowbreak{}')\allowbreak{}]\allowbreak{}}, default \texttt{RetrieverChoice.\allowbreak{}dense}.
+  \item[\texttt{dense\_\allowbreak{}weight}] \texttt{Annotated[float,\allowbreak{} typer.\allowbreak{}Option(help='Dense score weight for hybrid retrieval.\allowbreak{}')\allowbreak{}]\allowbreak{}}, default \texttt{0.\allowbreak{}6}.
+  \item[\texttt{lexical\_\allowbreak{}weight}] \texttt{Annotated[float,\allowbreak{} typer.\allowbreak{}Option(help='Lexical score weight for hybrid retrieval.\allowbreak{}')\allowbreak{}]\allowbreak{}}, default \texttt{0.\allowbreak{}4}.
+\end{arglist}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}cli.\allowbreak{}py:861}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/cli.py#L861}{online}), module \cref{module:feedback_intelligence_agent.cli}

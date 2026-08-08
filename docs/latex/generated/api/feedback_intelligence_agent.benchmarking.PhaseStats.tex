@@ -1,0 +1,24 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{PhaseStats}}
+\label{class:feedback_intelligence_agent.benchmarking.PhaseStats}\label{schema:PhaseStats}\index{Classes!PhaseStats}
+
+Summary statistics for one benchmarked phase, in milliseconds.
+\apifield{Inherits}\texttt{BaseModel}
+\apifield{Fields}
+\begin{arglist}
+  \item[\texttt{phase}] \texttt{str}, required
+  \item[\texttt{samples}] \texttt{int}, required, \texttt{ge=1}
+  \item[\texttt{mean\_\allowbreak{}ms}] \texttt{float}, required
+  \item[\texttt{median\_\allowbreak{}ms}] \texttt{float}, required
+  \item[\texttt{p95\_\allowbreak{}ms}] \texttt{float}, required
+  \item[\texttt{min\_\allowbreak{}ms}] \texttt{float}, required
+  \item[\texttt{max\_\allowbreak{}ms}] \texttt{float}, required
+\end{arglist}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}benchmarking.\allowbreak{}py:83}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/benchmarking.py#L83}{online}), pydantic model, module \cref{module:feedback_intelligence_agent.benchmarking}

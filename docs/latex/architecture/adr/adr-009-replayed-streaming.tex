@@ -1,0 +1,58 @@
+\section{ADR-009: Stream by replaying a completed answer}
+\label{adr:009}
+
+\subsection*{Status}
+
+Accepted; in force at revision \texttt{\projectrevisionshort}.
+
+\subsection*{Context}
+
+A streaming endpoint is expected of a chat-style API, but the default provider
+is the deterministic local one, which has no token stream, and the pipeline
+performs retrieval, reranking, tool routing, parsing, citation building, and an
+evidence check --- work that must complete before citations and confidence can
+be known.
+
+\subsection*{Decision}
+
+\texttt{POST /query/stream} computes the complete answer first, then emits it
+as Server-Sent \texttt{content} events split on whitespace boundaries
+(eight words per chunk by default), followed by one \texttt{metadata} event
+carrying provider, latency, route, confidence, sources, retrieval scores,
+citations, recommended actions, and the guardrail decision. Each event's
+payload is JSON-encoded onto a single \texttt{data:} line.
+
+The source states the reason for both choices: the split ``keeps every
+separator, so concatenating the chunks reproduces the original text byte for
+byte'', and JSON encoding is used ``so answer text containing newlines never
+breaks the SSE framing''.
+
+\subsection*{Consequences}
+
+\begin{itemize}
+  \item The endpoint behaves identically for every provider, including the
+    local one, and is testable without network access.
+  \item Clients can render progressively and then attach evidence, which the
+    bundled frontend does.
+  \item Time to first byte is not improved --- it equals the full answer
+    latency --- so the endpoint delivers the streaming \emph{interface} without
+    the streaming \emph{benefit}. The measured latency is reported in the
+    metadata event, which makes this visible to clients.
+  \item Newlines in answers cannot corrupt the event framing.
+\end{itemize}
+
+\subsection*{Alternatives}
+
+True token streaming from providers that support it, with a fallback for those
+that do not. That would make the endpoint's timing behaviour depend on
+configuration and would require citations to be sent before the answer is
+complete or omitted entirely.
+
+\subsection*{Evidence}
+
+\srcfile{src/feedback\_intelligence\_agent/api.py}
+(\texttt{query\_stream}, \texttt{\_split\_for\_streaming}, \texttt{\_sse\_event},
+\texttt{\_build\_stream\_metadata} and their docstrings);
+\srcfile{src/feedback\_intelligence\_agent/schemas.py}
+(\texttt{StreamMetadata}); \srcfile{frontend/src/api.ts};
+\srcfile{tests/test\_api.py}.

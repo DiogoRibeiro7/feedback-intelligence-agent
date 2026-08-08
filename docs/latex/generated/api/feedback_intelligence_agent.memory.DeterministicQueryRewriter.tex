@@ -1,0 +1,35 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{DeterministicQueryRewriter}}
+\label{class:feedback_intelligence_agent.memory.DeterministicQueryRewriter}\index{Classes!DeterministicQueryRewriter}
+
+Local, deterministic follow-up rewriter with two transparent rules.
+\apifield{Attributes}
+\begin{arglist}
+  \item[\texttt{short\_\allowbreak{}question\_\allowbreak{}tokens}] \texttt{int}, default \texttt{4}
+\end{arglist}
+\apifield{Details}1. **Pronoun resolution**: standalone pronouns (\texttt{it}, \texttt{they}, \texttt{them}, trailing \texttt{this}/\texttt{that}/...) are replaced with the salient entities of the previous user message. 2. **Ellipsis expansion**: elliptical openers ("What about X?", "And X?") and very short questions get the previous turn's missing entities appended ("... regarding enterprise onboarding").
+
+Standalone questions are returned unchanged, so single-turn behaviour is never affected. No model call is involved.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}memory.\allowbreak{}py:257}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/memory.py#L257}{online}), class, module \cref{module:feedback_intelligence_agent.memory}
+
+\subsection{\texttt{rewrite}}
+\label{method:feedback_intelligence_agent.memory.DeterministicQueryRewriter.rewrite}\index{Methods!rewrite}
+Rewrite a follow-up question using entities from the previous turn.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+rewrite(self, question: str, previous_turn: ConversationTurn | None) -> QueryRewrite
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{question}] \texttt{str}, required.
+  \item[\texttt{previous\_\allowbreak{}turn}] \texttt{ConversationTurn \textbar{} None}, required.
+\end{arglist}
+\apifield{Value}\texttt{QueryRewrite}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}memory.\allowbreak{}py:273}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/memory.py#L273}{online})

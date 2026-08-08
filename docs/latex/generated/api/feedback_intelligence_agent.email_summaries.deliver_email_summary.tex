@@ -1,0 +1,30 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{deliver\_email\_summary}}
+\label{func:feedback_intelligence_agent.email_summaries.deliver_email_summary}\index{Functions!deliver\_email\_summary}
+
+Send a rendered email summary through SMTP.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+deliver_email_summary(summary: EmailSummary, *, smtp_host: str | None, smtp_port: int, from_address: str, username: str | None = None, password: str | None = None, use_tls: bool = True, smtp_factory: SmtpFactory = smtplib.SMTP) -> EmailSummaryDelivery
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{summary}] \texttt{EmailSummary}, required.
+  \item[\texttt{smtp\_\allowbreak{}host}] \texttt{str \textbar{} None}, required, keyword-only.
+  \item[\texttt{smtp\_\allowbreak{}port}] \texttt{int}, required, keyword-only.
+  \item[\texttt{from\_\allowbreak{}address}] \texttt{str}, required, keyword-only.
+  \item[\texttt{username}] \texttt{str \textbar{} None}, default \texttt{None}, keyword-only.
+  \item[\texttt{password}] \texttt{str \textbar{} None}, default \texttt{None}, keyword-only.
+  \item[\texttt{use\_\allowbreak{}tls}] \texttt{bool}, default \texttt{True}, keyword-only.
+  \item[\texttt{smtp\_\allowbreak{}factory}] \texttt{SmtpFactory}, default \texttt{smtplib.\allowbreak{}SMTP}, keyword-only.
+\end{arglist}
+\apifield{Value}\texttt{EmailSummaryDelivery}
+\apifield{Raises}\texttt{ValueError}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}email\_\allowbreak{}summaries.\allowbreak{}py:126}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/email_summaries.py#L126}{online}), module \cref{module:feedback_intelligence_agent.email_summaries}

@@ -1,0 +1,70 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{Telemetry}}
+\label{class:feedback_intelligence_agent.telemetry.Telemetry}\index{Classes!Telemetry}
+
+Telemetry emitter that writes structured events to an optional sink.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+Telemetry(self, sink: TelemetrySink | None = None) -> None
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{sink}] \texttt{TelemetrySink \textbar{} None}, default \texttt{None}.
+\end{arglist}
+\apifield{Properties}
+\begin{arglist}
+  \item[\texttt{enabled}] True when a sink is attached and events are recorded.
+\end{arglist}
+\apifield{Details}Without a sink the emitter is a cheap no-op, so instrumented code never needs to guard telemetry calls. Inject a sink (in-memory for tests, JSONL for local traces) to capture events.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}telemetry.\allowbreak{}py:202}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/telemetry.py#L202}{online}), class, module \cref{module:feedback_intelligence_agent.telemetry}
+
+\subsection{\texttt{new\_correlation\_id}}
+\label{method:feedback_intelligence_agent.telemetry.Telemetry.new_correlation_id}\index{Methods!new\_correlation\_id}
+Return a fresh identifier used to correlate events of one operation.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+new_correlation_id(self) -> str
+\end{lstlisting}
+\apifield{Value}\texttt{str}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}telemetry.\allowbreak{}py:219}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/telemetry.py#L219}{online})
+
+\subsection{\texttt{emit}}
+\label{method:feedback_intelligence_agent.telemetry.Telemetry.emit}\index{Methods!emit}
+Emit one telemetry event to the configured sink, if any.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+emit(self, name: str, *, correlation_id: str, duration_ms: float | None = None, metadata: Mapping[str, Any] | None = None) -> None
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{name}] \texttt{str}, required.
+  \item[\texttt{correlation\_\allowbreak{}id}] \texttt{str}, required, keyword-only.
+  \item[\texttt{duration\_\allowbreak{}ms}] \texttt{float \textbar{} None}, default \texttt{None}, keyword-only.
+  \item[\texttt{metadata}] \texttt{Mapping[str,\allowbreak{} Any]\allowbreak{} \textbar{} None}, default \texttt{None}, keyword-only.
+\end{arglist}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}telemetry.\allowbreak{}py:223}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/telemetry.py#L223}{online})
+
+\subsection{\texttt{span}}
+\label{method:feedback_intelligence_agent.telemetry.Telemetry.span}\index{Methods!span}
+Emit a started/finished event pair around a block of work.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+span(self, started_name: str, finished_name: str, *, correlation_id: str, metadata: Mapping[str, Any] | None = None) -> Iterator[dict[str, Any]]
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{started\_\allowbreak{}name}] \texttt{str}, required.
+  \item[\texttt{finished\_\allowbreak{}name}] \texttt{str}, required.
+  \item[\texttt{correlation\_\allowbreak{}id}] \texttt{str}, required, keyword-only.
+  \item[\texttt{metadata}] \texttt{Mapping[str,\allowbreak{} Any]\allowbreak{} \textbar{} None}, default \texttt{None}, keyword-only.
+\end{arglist}
+\apifield{Value}\texttt{Iterator[dict[str,\allowbreak{} Any]\allowbreak{}]\allowbreak{}}
+\apifield{Details}Yields a mutable metadata dictionary so callers can attach result attributes (e.g. counts, scores) that should appear on the finished event. On error the finished event carries \texttt{status: error} and the exception message, and the exception is re-raised.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}telemetry.\allowbreak{}py:244}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/telemetry.py#L244}{online})

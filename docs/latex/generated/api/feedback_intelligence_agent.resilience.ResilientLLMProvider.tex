@@ -1,0 +1,45 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{ResilientLLMProvider}}
+\label{class:feedback_intelligence_agent.resilience.ResilientLLMProvider}\index{Classes!ResilientLLMProvider}
+
+Wrap an LLM provider with retries, per-attempt timeout, and circuit breaking.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+ResilientLLMProvider(self, provider: LLMProvider, *, policy: ResiliencePolicy, sleeper: Callable[[float], None] = time.sleep, monotonic: Callable[[], float] = time.monotonic) -> None
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{provider}] \texttt{LLMProvider}, required.
+  \item[\texttt{policy}] \texttt{ResiliencePolicy}, required, keyword-only.
+  \item[\texttt{sleeper}] \texttt{Callable[[float]\allowbreak{},\allowbreak{} None]\allowbreak{}}, default \texttt{time.\allowbreak{}sleep}, keyword-only.
+  \item[\texttt{monotonic}] \texttt{Callable[[]\allowbreak{},\allowbreak{} float]\allowbreak{}}, default \texttt{time.\allowbreak{}monotonic}, keyword-only.
+\end{arglist}
+\apifield{Properties}
+\begin{arglist}
+  \item[\texttt{provider\_\allowbreak{}name}] Return the underlying provider class name for diagnostics.
+\end{arglist}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}resilience.\allowbreak{}py:74}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/resilience.py#L74}{online}), class, module \cref{module:feedback_intelligence_agent.resilience}
+
+\subsection{\texttt{generate}}
+\label{method:feedback_intelligence_agent.resilience.ResilientLLMProvider.generate}\index{Methods!generate}
+Generate text with retries and circuit-breaker protection.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+generate(self, prompt: str, *, question: str, results: list[SearchResult]) -> str
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{prompt}] \texttt{str}, required.
+  \item[\texttt{question}] \texttt{str}, required, keyword-only.
+  \item[\texttt{results}] \texttt{list[SearchResult]\allowbreak{}}, required, keyword-only.
+\end{arglist}
+\apifield{Value}\texttt{str}
+\apifield{Raises}\texttt{LLMProviderError}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}resilience.\allowbreak{}py:98}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/resilience.py#L98}{online})

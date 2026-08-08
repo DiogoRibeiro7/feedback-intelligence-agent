@@ -1,0 +1,42 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{HybridRetriever}}
+\label{class:feedback_intelligence_agent.retrieval.HybridRetriever}\index{Classes!HybridRetriever}
+
+Combine dense and lexical retrieval with weighted, normalized scores.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+HybridRetriever(self, dense: Retriever, lexical: Retriever, *, dense_weight: float = 0.6, lexical_weight: float = 0.4) -> None
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{dense}] \texttt{Retriever}, required.
+  \item[\texttt{lexical}] \texttt{Retriever}, required.
+  \item[\texttt{dense\_\allowbreak{}weight}] \texttt{float}, default \texttt{0.\allowbreak{}6}, keyword-only.
+  \item[\texttt{lexical\_\allowbreak{}weight}] \texttt{float}, default \texttt{0.\allowbreak{}4}, keyword-only.
+\end{arglist}
+\apifield{Raises}\texttt{ValueError}
+\apifield{Details}Each underlying retriever is queried for an enlarged candidate pool. Scores are min-max normalized per result list so the two scales are comparable, then combined as a weighted sum. Documents appearing in both lists are de-duplicated by chunk ID and receive contributions from both retrievers.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}retrieval.\allowbreak{}py:50}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/retrieval.py#L50}{online}), class, module \cref{module:feedback_intelligence_agent.retrieval}
+
+\subsection{\texttt{search}}
+\label{method:feedback_intelligence_agent.retrieval.HybridRetriever.search}\index{Methods!search}
+Return de-duplicated chunks ranked by the combined hybrid score.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+search(self, question: str, *, top_k: int = 4) -> list[SearchResult]
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{question}] \texttt{str}, required.
+  \item[\texttt{top\_\allowbreak{}k}] \texttt{int}, default \texttt{4}, keyword-only.
+\end{arglist}
+\apifield{Value}\texttt{list[SearchResult]\allowbreak{}}
+\apifield{Raises}\texttt{ValueError}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}retrieval.\allowbreak{}py:78}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/retrieval.py#L78}{online})

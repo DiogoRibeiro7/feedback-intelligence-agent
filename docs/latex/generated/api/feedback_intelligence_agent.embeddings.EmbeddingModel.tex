@@ -1,0 +1,32 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{EmbeddingModel}}
+\label{class:feedback_intelligence_agent.embeddings.EmbeddingModel}\index{Classes!EmbeddingModel}
+
+Protocol implemented by all embedding providers.
+\apifield{Inherits}\texttt{Protocol}
+\apifield{Attributes}
+\begin{arglist}
+  \item[\texttt{dim}] \texttt{int}, required
+\end{arglist}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}embeddings.\allowbreak{}py:22}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/embeddings.py#L22}{online}), protocol, module \cref{module:feedback_intelligence_agent.embeddings}
+
+\subsection{\texttt{embed}}
+\label{method:feedback_intelligence_agent.embeddings.EmbeddingModel.embed}\index{Methods!embed}
+Embed a sequence of texts into a two-dimensional NumPy array.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+embed(self, texts: Sequence[str]) -> npt.NDArray[np.float64]
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{texts}] \texttt{Sequence[str]\allowbreak{}}, required.
+\end{arglist}
+\apifield{Value}\texttt{npt.\allowbreak{}NDArray[np.\allowbreak{}float64]\allowbreak{}}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}embeddings.\allowbreak{}py:27}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/embeddings.py#L27}{online})

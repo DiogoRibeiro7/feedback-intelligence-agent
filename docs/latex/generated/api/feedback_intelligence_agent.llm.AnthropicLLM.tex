@@ -1,0 +1,47 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{AnthropicLLM}}
+\label{class:feedback_intelligence_agent.llm.AnthropicLLM}\index{Classes!AnthropicLLM}
+
+Optional Anthropic provider backed by the official \texttt{anthropic} SDK.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+AnthropicLLM(self, api_key: str, model: str = DEFAULT_MODEL, *, max_tokens: int = 1024) -> None
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{api\_\allowbreak{}key}] \texttt{str}, required.
+  \item[\texttt{model}] \texttt{str}, default \texttt{DEFAULT\_\allowbreak{}MODEL}.
+  \item[\texttt{max\_\allowbreak{}tokens}] \texttt{int}, default \texttt{1024}, keyword-only.
+\end{arglist}
+\apifield{Raises}\texttt{ValueError}
+\apifield{Attributes}
+\begin{arglist}
+  \item[\texttt{DEFAULT\_\allowbreak{}MODEL}] default \texttt{'claude-\allowbreak{}opus-\allowbreak{}4-\allowbreak{}8'}
+  \item[\texttt{capabilities}] default \texttt{ProviderCapabilities(supports\_\allowbreak{}streaming=True,\allowbreak{} supports\_\allowbreak{}tool\_\allowbreak{}calling=True,\allowbreak{} supports\_\allowbreak{}json\_\allowbreak{}mode=True,\allowbreak{} max\_\allowbreak{}context\_\allowbreak{}tokens=1000000)\allowbreak{}}
+\end{arglist}
+\apifield{Details}The SDK is an optional dependency (poetry extra \texttt{anthropic}) and is imported lazily, so the default local path never requires it.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}llm.\allowbreak{}py:441}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/llm.py#L441}{online}), class, module \cref{module:feedback_intelligence_agent.llm}
+
+\subsection{\texttt{generate}}
+\label{method:feedback_intelligence_agent.llm.AnthropicLLM.generate}\index{Methods!generate}
+Generate text using the Anthropic Messages API.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+generate(self, prompt: str, *, question: str, results: list[SearchResult]) -> str
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{prompt}] \texttt{str}, required.
+  \item[\texttt{question}] \texttt{str}, required, keyword-only.
+  \item[\texttt{results}] \texttt{list[SearchResult]\allowbreak{}}, required, keyword-only.
+\end{arglist}
+\apifield{Value}\texttt{str}
+\apifield{Raises}\texttt{LLMProviderError}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}llm.\allowbreak{}py:474}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/llm.py#L474}{online})

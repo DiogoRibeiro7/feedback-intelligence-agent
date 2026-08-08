@@ -1,0 +1,26 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{answer\_feedback\_active\_learning\_update}}
+\label{func:feedback_intelligence_agent.cli.answer_feedback_active_learning_update}\index{Functions!answer\_feedback\_active\_learning\_update}
+
+Assign or transition one active-learning queue item.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+answer_feedback_active_learning_update(feedback_id: Annotated[str, typer.Argument(help='Answer feedback identifier.')], status: Annotated[ActiveLearningStatus | None, typer.Option(help='Workflow status to set.')] = None, assignee: Annotated[str | None, typer.Option(help='Reviewer or owner to assign.')] = None, notes: Annotated[str | None, typer.Option(help='Optional workflow notes.')] = None, state_store_path: Annotated[Path, typer.Option(help='Directory holding active-learning state JSON files.')] = Path('.artifacts/active_learning')) -> None
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{feedback\_\allowbreak{}id}] \texttt{Annotated[str,\allowbreak{} typer.\allowbreak{}Argument(help='Answer feedback identifier.\allowbreak{}')\allowbreak{}]\allowbreak{}}, required.
+  \item[\texttt{status}] \texttt{Annotated[ActiveLearningStatus \textbar{} None,\allowbreak{} typer.\allowbreak{}Option(help='Workflow status to set.\allowbreak{}')\allowbreak{}]\allowbreak{}}, default \texttt{None}.
+  \item[\texttt{assignee}] \texttt{Annotated[str \textbar{} None,\allowbreak{} typer.\allowbreak{}Option(help='Reviewer or owner to assign.\allowbreak{}')\allowbreak{}]\allowbreak{}}, default \texttt{None}.
+  \item[\texttt{notes}] \texttt{Annotated[str \textbar{} None,\allowbreak{} typer.\allowbreak{}Option(help='Optional workflow notes.\allowbreak{}')\allowbreak{}]\allowbreak{}}, default \texttt{None}.
+  \item[\texttt{state\_\allowbreak{}store\_\allowbreak{}path}] \texttt{Annotated[Path,\allowbreak{} typer.\allowbreak{}Option(help='Directory holding active-\allowbreak{}learning state JSON files.\allowbreak{}')\allowbreak{}]\allowbreak{}}, default \texttt{Path('.\allowbreak{}artifacts/\allowbreak{}active\_\allowbreak{}learning')\allowbreak{}}.
+\end{arglist}
+\apifield{Raises}\texttt{Exit}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}cli.\allowbreak{}py:808}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/cli.py#L808}{online}), module \cref{module:feedback_intelligence_agent.cli}

@@ -1,0 +1,94 @@
+% Authored: observability.
+
+\chapter{Observability}
+\label{ch:observability}
+
+\section{Two layers}
+
+\cref{module:feedback_intelligence_agent.telemetry} provides two independent
+mechanisms, and the distinction matters operationally.
+
+\begin{description}
+  \item[Structured logging] \texttt{configure\_logging} sets the root logger to
+    emit bare messages, and \texttt{log\_event(name, payload)} writes a single
+    JSON object per event with sorted keys. Log events are always emitted; they
+    are not gated by the telemetry switch. They are what a container's stdout
+    collector sees.
+  \item[Span telemetry] \texttt{Telemetry} records events and spans with
+    timestamps, durations, and a correlation identifier, through a pluggable
+    sink. A \texttt{Telemetry} constructed without a sink is a no-op: the
+    default code path emits nothing and pays nothing.
+\end{description}
+
+\section{Sinks}
+
+Three sinks implement the \texttt{TelemetrySink} protocol:
+
+\begin{description}[nosep]
+  \item[\texttt{InMemoryTelemetrySink}] collects events for assertions; used by
+    the test suite.
+  \item[\texttt{JsonlTelemetrySink}] appends one JSON object per line to a
+    configured file, guarded by a lock so concurrent emissions do not
+    interleave. This is the default when telemetry is enabled.
+  \item[\texttt{OpenTelemetryTraceSink}] converts events into spans on the
+    process-global OpenTelemetry tracer provider. It requires the \texttt{otel}
+    extra and raises \texttt{TelemetryConfigurationError} when the SDK is
+    unavailable, rather than silently degrading.
+\end{description}
+
+\section{Instrumented stages}
+
+Spans are emitted with a shared correlation identifier per request, so a single
+answer can be reconstructed end to end:
+
+\begin{longtable}{p{0.32\textwidth} p{0.58\textwidth}}
+\toprule
+Span & Recorded attributes \\
+\midrule
+\endfirsthead
+\toprule
+Span & Recorded attributes \\
+\midrule
+\endhead
+\bottomrule
+\endlastfoot
+\texttt{ingestion\_*} & path, strict mode, record count \\
+\texttt{embedding\_*} & model, dimension, chunk count, vector count \\
+\texttt{agent\_run\_*} & route, top-$k$, question length, guardrail decision,
+  dropped chunks, tool name and status, citations, confidence, retrieved
+  chunks, hallucination risk and score \\
+\texttt{retrieval\_*} & retriever class, route, top-$k$, candidate-$k$,
+  metadata filters, filtered-out count, reranker class, result count,
+  min and max score \\
+\texttt{tool\_run\_*} & tool name, selection reason, output field count \\
+\texttt{llm\_call\_*} & provider, prompt characters, response characters \\
+\texttt{response\_parsing\_*} & output format, repair applied, validation error \\
+\texttt{hallucination\_check\_*} & risk, detection flag, overlap score,
+  unsupported sentence count, judge label and confidence \\
+\texttt{evaluation\_finished} & every aggregate metric of the report \\
+\end{longtable}
+
+Notice what these attributes are: they are the quality signals of the system,
+not just timings. Retrieval score spread, citation count, hallucination risk,
+repair rate, and guardrail drops are all observable per request without
+re-running anything.
+
+\section{Health and readiness}
+
+\texttt{GET /health} is a liveness probe: it performs no dependency check, so
+an orchestrator can use it to decide whether to restart the container.
+\texttt{GET /ready} is a readiness probe whose semantics follow from the
+startup design --- because the agent and all stores are constructed during
+application construction, reaching the handler proves the application is fully
+built. Neither endpoint is rate limited and neither requires a key.
+
+The production Compose file wires a container healthcheck; the ECS task
+definition and the Fly.io configuration are the other deployment descriptors
+present.
+
+\section{What is not implemented}
+
+There are no metrics counters, no histogram export, no log aggregation
+configuration, no dashboards, and no alerting rules in the repository. The
+telemetry attributes above are the raw material for such things, not the things
+themselves.

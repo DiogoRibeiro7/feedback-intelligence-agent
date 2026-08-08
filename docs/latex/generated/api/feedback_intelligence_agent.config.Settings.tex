@@ -1,0 +1,82 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{Settings}}
+\label{class:feedback_intelligence_agent.config.Settings}\label{schema:Settings}\index{Classes!Settings}
+
+Runtime settings loaded from environment variables.
+\apifield{Inherits}\texttt{BaseSettings}
+\apifield{Fields}
+\begin{arglist}
+  \item[\texttt{model\_\allowbreak{}config}] default \texttt{SettingsConfigDict(env\_\allowbreak{}file='.\allowbreak{}env',\allowbreak{} env\_\allowbreak{}prefix='FEEDBACK\_\allowbreak{}AGENT\_\allowbreak{}',\allowbreak{} extra='ignore')\allowbreak{}}
+  \item[\texttt{data\_\allowbreak{}path}] \texttt{Path}, default \texttt{Path('data/\allowbreak{}sample\_\allowbreak{}feedback.\allowbreak{}csv')\allowbreak{}}
+  \item[\texttt{index\_\allowbreak{}path}] \texttt{Path}, default \texttt{Path('.\allowbreak{}artifacts/\allowbreak{}vector\_\allowbreak{}store.\allowbreak{}json')\allowbreak{}}
+  \item[\texttt{embedding\_\allowbreak{}dim}] \texttt{int}, default \texttt{512}, \texttt{ge=64,\allowbreak{} le=8192}
+  \item[\texttt{vector\_\allowbreak{}store}] \texttt{VectorStoreType}, default \texttt{'json'}
+  \item[\texttt{qdrant\_\allowbreak{}url}] \texttt{str}, default \texttt{'http:/\allowbreak{}/\allowbreak{}localhost:6333'}
+  \item[\texttt{qdrant\_\allowbreak{}collection}] \texttt{str}, default \texttt{'feedback\_\allowbreak{}intelligence'}
+  \item[\texttt{retriever\_\allowbreak{}type}] \texttt{RetrieverType}, default \texttt{'dense'}
+  \item[\texttt{dense\_\allowbreak{}weight}] \texttt{float}, default \texttt{0.\allowbreak{}6}, \texttt{ge=0.\allowbreak{}0}
+  \item[\texttt{lexical\_\allowbreak{}weight}] \texttt{float}, default \texttt{0.\allowbreak{}4}, \texttt{ge=0.\allowbreak{}0}
+  \item[\texttt{llm\_\allowbreak{}provider}] \texttt{Literal['local',\allowbreak{} 'openai',\allowbreak{} 'openai\_\allowbreak{}responses',\allowbreak{} 'anthropic',\allowbreak{} 'bedrock',\allowbreak{} 'ollama']\allowbreak{}}, default \texttt{'local'}
+  \item[\texttt{openai\_\allowbreak{}api\_\allowbreak{}key}] \texttt{str \textbar{} None}, default \texttt{None}, \texttt{validation\_\allowbreak{}alias='OPENAI\_\allowbreak{}API\_\allowbreak{}KEY'}
+  \item[\texttt{openai\_\allowbreak{}model}] \texttt{str}, default \texttt{'gpt-\allowbreak{}4o-\allowbreak{}mini'}, \texttt{validation\_\allowbreak{}alias='OPENAI\_\allowbreak{}MODEL'}
+  \item[\texttt{openai\_\allowbreak{}base\_\allowbreak{}url}] \texttt{str}, default \texttt{'https:/\allowbreak{}/\allowbreak{}api.\allowbreak{}openai.\allowbreak{}com'}, \texttt{validation\_\allowbreak{}alias='OPENAI\_\allowbreak{}BASE\_\allowbreak{}URL'}
+  \item[\texttt{anthropic\_\allowbreak{}api\_\allowbreak{}key}] \texttt{str \textbar{} None}, default \texttt{None}, \texttt{validation\_\allowbreak{}alias='ANTHROPIC\_\allowbreak{}API\_\allowbreak{}KEY'}
+  \item[\texttt{anthropic\_\allowbreak{}model}] \texttt{str}, default \texttt{'claude-\allowbreak{}opus-\allowbreak{}4-\allowbreak{}8'}, \texttt{validation\_\allowbreak{}alias='ANTHROPIC\_\allowbreak{}MODEL'}
+  \item[\texttt{bedrock\_\allowbreak{}model}] \texttt{str}, default \texttt{'anthropic.\allowbreak{}claude-\allowbreak{}3-\allowbreak{}haiku-\allowbreak{}20240307-\allowbreak{}v1:0'}, \texttt{validation\_\allowbreak{}alias='AWS\_\allowbreak{}BEDROCK\_\allowbreak{}MODEL'}
+  \item[\texttt{bedrock\_\allowbreak{}region}] \texttt{str \textbar{} None}, default \texttt{None}, \texttt{validation\_\allowbreak{}alias='AWS\_\allowbreak{}REGION'}
+  \item[\texttt{bedrock\_\allowbreak{}max\_\allowbreak{}tokens}] \texttt{int}, default \texttt{1024}, \texttt{ge=1,\allowbreak{} validation\_\allowbreak{}alias='AWS\_\allowbreak{}BEDROCK\_\allowbreak{}MAX\_\allowbreak{}TOKENS'}
+  \item[\texttt{bedrock\_\allowbreak{}temperature}] \texttt{float}, default \texttt{0.\allowbreak{}2}, \texttt{ge=0.\allowbreak{}0,\allowbreak{} validation\_\allowbreak{}alias='AWS\_\allowbreak{}BEDROCK\_\allowbreak{}TEMPERATURE'}
+  \item[\texttt{llm\_\allowbreak{}resilience\_\allowbreak{}enabled}] \texttt{bool}, default \texttt{True}
+  \item[\texttt{llm\_\allowbreak{}timeout\_\allowbreak{}seconds}] \texttt{float}, default \texttt{30.\allowbreak{}0}, \texttt{gt=0.\allowbreak{}0}
+  \item[\texttt{llm\_\allowbreak{}retry\_\allowbreak{}max\_\allowbreak{}attempts}] \texttt{int}, default \texttt{3}, \texttt{ge=1}
+  \item[\texttt{llm\_\allowbreak{}retry\_\allowbreak{}backoff\_\allowbreak{}seconds}] \texttt{float}, default \texttt{0.\allowbreak{}25}, \texttt{ge=0.\allowbreak{}0}
+  \item[\texttt{llm\_\allowbreak{}circuit\_\allowbreak{}failure\_\allowbreak{}threshold}] \texttt{int}, default \texttt{3}, \texttt{ge=1}
+  \item[\texttt{llm\_\allowbreak{}circuit\_\allowbreak{}recovery\_\allowbreak{}seconds}] \texttt{float}, default \texttt{30.\allowbreak{}0}, \texttt{gt=0.\allowbreak{}0}
+  \item[\texttt{hallucination\_\allowbreak{}judge\_\allowbreak{}enabled}] \texttt{bool}, default \texttt{False}
+  \item[\texttt{ollama\_\allowbreak{}base\_\allowbreak{}url}] \texttt{str}, default \texttt{'http:/\allowbreak{}/\allowbreak{}localhost:11434'}, \texttt{validation\_\allowbreak{}alias='OLLAMA\_\allowbreak{}BASE\_\allowbreak{}URL'}
+  \item[\texttt{ollama\_\allowbreak{}model}] \texttt{str}, default \texttt{'llama3.\allowbreak{}2'}, \texttt{validation\_\allowbreak{}alias='OLLAMA\_\allowbreak{}MODEL'}
+  \item[\texttt{telemetry\_\allowbreak{}enabled}] \texttt{bool}, default \texttt{False}
+  \item[\texttt{telemetry\_\allowbreak{}backend}] \texttt{TelemetryBackend}, default \texttt{'jsonl'}
+  \item[\texttt{telemetry\_\allowbreak{}path}] \texttt{Path}, default \texttt{Path('.\allowbreak{}artifacts/\allowbreak{}telemetry.\allowbreak{}jsonl')\allowbreak{}}
+  \item[\texttt{telemetry\_\allowbreak{}service\_\allowbreak{}name}] \texttt{str}, default \texttt{'feedback-\allowbreak{}intelligence-\allowbreak{}agent'}
+  \item[\texttt{conversation\_\allowbreak{}store\_\allowbreak{}path}] \texttt{Path}, default \texttt{Path('.\allowbreak{}artifacts/\allowbreak{}conversations')\allowbreak{}}
+  \item[\texttt{job\_\allowbreak{}store\_\allowbreak{}path}] \texttt{Path}, default \texttt{Path('.\allowbreak{}artifacts/\allowbreak{}jobs')\allowbreak{}}
+  \item[\texttt{report\_\allowbreak{}store\_\allowbreak{}path}] \texttt{Path}, default \texttt{Path('.\allowbreak{}artifacts/\allowbreak{}reports')\allowbreak{}}
+  \item[\texttt{human\_\allowbreak{}feedback\_\allowbreak{}store\_\allowbreak{}path}] \texttt{Path}, default \texttt{Path('.\allowbreak{}artifacts/\allowbreak{}human\_\allowbreak{}feedback')\allowbreak{}}
+  \item[\texttt{active\_\allowbreak{}learning\_\allowbreak{}state\_\allowbreak{}store\_\allowbreak{}path}] \texttt{Path}, default \texttt{Path('.\allowbreak{}artifacts/\allowbreak{}active\_\allowbreak{}learning')\allowbreak{}}
+  \item[\texttt{api\_\allowbreak{}auth\_\allowbreak{}enabled}] \texttt{bool}, default \texttt{False}
+  \item[\texttt{api\_\allowbreak{}reader\_\allowbreak{}key}] \texttt{str \textbar{} None}, default \texttt{None}
+  \item[\texttt{api\_\allowbreak{}writer\_\allowbreak{}key}] \texttt{str \textbar{} None}, default \texttt{None}
+  \item[\texttt{api\_\allowbreak{}admin\_\allowbreak{}key}] \texttt{str \textbar{} None}, default \texttt{None}
+  \item[\texttt{api\_\allowbreak{}rate\_\allowbreak{}limit\_\allowbreak{}enabled}] \texttt{bool}, default \texttt{False}
+  \item[\texttt{api\_\allowbreak{}rate\_\allowbreak{}limit\_\allowbreak{}max\_\allowbreak{}requests}] \texttt{int}, default \texttt{120}, \texttt{ge=1}
+  \item[\texttt{api\_\allowbreak{}rate\_\allowbreak{}limit\_\allowbreak{}window\_\allowbreak{}seconds}] \texttt{float}, default \texttt{60.\allowbreak{}0}, \texttt{gt=0.\allowbreak{}0}
+  \item[\texttt{email\_\allowbreak{}smtp\_\allowbreak{}host}] \texttt{str \textbar{} None}, default \texttt{None}
+  \item[\texttt{email\_\allowbreak{}smtp\_\allowbreak{}port}] \texttt{int}, default \texttt{587}, \texttt{ge=1,\allowbreak{} le=65535}
+  \item[\texttt{email\_\allowbreak{}from\_\allowbreak{}address}] \texttt{str}, default \texttt{'feedback-\allowbreak{}agent@example.\allowbreak{}local'}
+  \item[\texttt{email\_\allowbreak{}smtp\_\allowbreak{}username}] \texttt{str \textbar{} None}, default \texttt{None}
+  \item[\texttt{email\_\allowbreak{}smtp\_\allowbreak{}password}] \texttt{str \textbar{} None}, default \texttt{None}
+  \item[\texttt{email\_\allowbreak{}smtp\_\allowbreak{}use\_\allowbreak{}tls}] \texttt{bool}, default \texttt{True}
+  \item[\texttt{cors\_\allowbreak{}allow\_\allowbreak{}origins}] \texttt{str}, default \texttt{'http:/\allowbreak{}/\allowbreak{}localhost:5173,\allowbreak{}http:/\allowbreak{}/\allowbreak{}localhost:4173,\allowbreak{}http:/\allowbreak{}/\allowbreak{}127.\allowbreak{}0.\allowbreak{}0.\allowbreak{}1:5173,\allowbreak{}http:/\allowbreak{}/\allowbreak{}127.\allowbreak{}0.\allowbreak{}0.\allowbreak{}1:4173'}
+\end{arglist}
+\apifield{Properties}
+\begin{arglist}
+  \item[\texttt{cors\_\allowbreak{}origins}] Parse the comma-separated CORS origins into a list.
+\end{arglist}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}config.\allowbreak{}py:16}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/config.py#L16}{online}), pydantic model, module \cref{module:feedback_intelligence_agent.config}
+
+\subsection{\texttt{ensure\_artifact\_dir}}
+\label{method:feedback_intelligence_agent.config.Settings.ensure_artifact_dir}\index{Methods!ensure\_artifact\_dir}
+Create the parent folder used by local artifacts.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+ensure_artifact_dir(self) -> None
+\end{lstlisting}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}config.\allowbreak{}py:111}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/config.py#L111}{online})

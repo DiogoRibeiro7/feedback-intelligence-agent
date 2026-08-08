@@ -1,0 +1,33 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{ActiveLearningQueueItem}}
+\label{class:feedback_intelligence_agent.human_feedback.ActiveLearningQueueItem}\label{schema:ActiveLearningQueueItem}\index{Classes!ActiveLearningQueueItem}
+
+One reviewed answer that should be revisited in the improvement loop.
+\apifield{Inherits}\texttt{BaseModel}
+\apifield{Fields}
+\begin{arglist}
+  \item[\texttt{feedback\_\allowbreak{}id}] \texttt{str}, required
+  \item[\texttt{question}] \texttt{str}, required
+  \item[\texttt{tenant\_\allowbreak{}id}] \texttt{str}, required
+  \item[\texttt{route}] \texttt{str}, required
+  \item[\texttt{rating}] \texttt{HumanFeedbackRating}, required
+  \item[\texttt{confidence}] \texttt{float}, required
+  \item[\texttt{created\_\allowbreak{}at}] \texttt{datetime}, required
+  \item[\texttt{report\_\allowbreak{}id}] \texttt{str \textbar{} None}, default \texttt{None}
+  \item[\texttt{has\_\allowbreak{}comment}] \texttt{bool}, required
+  \item[\texttt{tags}] \texttt{list[str]\allowbreak{}}, default \texttt{list()\allowbreak{}}
+  \item[\texttt{priority\_\allowbreak{}score}] \texttt{float}, required, \texttt{ge=0.\allowbreak{}0}
+  \item[\texttt{reasons}] \texttt{list[str]\allowbreak{}}, default \texttt{list()\allowbreak{}}
+  \item[\texttt{workflow\_\allowbreak{}status}] \texttt{str}, default \texttt{'open'}
+  \item[\texttt{assignee}] \texttt{str \textbar{} None}, default \texttt{None}
+  \item[\texttt{state\_\allowbreak{}notes}] \texttt{str \textbar{} None}, default \texttt{None}
+  \item[\texttt{state\_\allowbreak{}updated\_\allowbreak{}at}] \texttt{datetime \textbar{} None}, default \texttt{None}
+\end{arglist}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}human\_\allowbreak{}feedback.\allowbreak{}py:146}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/human_feedback.py#L146}{online}), pydantic model, module \cref{module:feedback_intelligence_agent.human_feedback}

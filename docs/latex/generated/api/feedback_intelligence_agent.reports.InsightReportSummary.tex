@@ -1,0 +1,26 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{InsightReportSummary}}
+\label{class:feedback_intelligence_agent.reports.InsightReportSummary}\label{schema:InsightReportSummary}\index{Classes!InsightReportSummary}
+
+Lightweight report metadata for list endpoints and CLI output.
+\apifield{Inherits}\texttt{BaseModel}
+\apifield{Fields}
+\begin{arglist}
+  \item[\texttt{report\_\allowbreak{}id}] \texttt{str}, required
+  \item[\texttt{title}] \texttt{str}, required
+  \item[\texttt{question}] \texttt{str}, required
+  \item[\texttt{created\_\allowbreak{}at}] \texttt{datetime}, required
+  \item[\texttt{tenant\_\allowbreak{}id}] \texttt{str}, default \texttt{'default'}
+  \item[\texttt{route}] \texttt{str}, required
+  \item[\texttt{confidence}] \texttt{float}, required
+  \item[\texttt{citations}] \texttt{int}, required, \texttt{ge=0}
+  \item[\texttt{tags}] \texttt{list[str]\allowbreak{}}, default \texttt{list()\allowbreak{}}
+\end{arglist}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}reports.\allowbreak{}py:82}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/reports.py#L82}{online}), pydantic model, module \cref{module:feedback_intelligence_agent.reports}

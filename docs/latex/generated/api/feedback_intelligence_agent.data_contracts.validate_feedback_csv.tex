@@ -1,0 +1,28 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{validate\_feedback\_csv}}
+\label{func:feedback_intelligence_agent.data_contracts.validate_feedback_csv}\index{Functions!validate\_feedback\_csv}
+
+Validate a feedback CSV file against the data contract.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+validate_feedback_csv(path: str | Path, *, strict: bool = False) -> tuple[ValidationReport, list[FeedbackRecord]]
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{path}] \texttt{str \textbar{} Path}, required. Path to the CSV file to validate.
+  \item[\texttt{strict}] \texttt{bool}, default \texttt{False}, keyword-only. When True, raise \texttt{DataContractError} if any error is found. When False, invalid rows are skipped and reported.
+\end{arglist}
+\apifield{Value}\texttt{tuple[ValidationReport,\allowbreak{} list[FeedbackRecord]\allowbreak{}]\allowbreak{}}. A tuple of the validation report and the feedback records that passed validation (all rows in a clean dataset, the valid subset otherwise).
+\apifield{Raises}
+\begin{arglist}
+  \item[\texttt{FileNotFoundError}] If the file does not exist.
+  \item[\texttt{DataContractError}] In strict mode, if the dataset has any validation error.
+\end{arglist}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}data\_\allowbreak{}contracts.\allowbreak{}py:119}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/data_contracts.py#L119}{online}), module \cref{module:feedback_intelligence_agent.data_contracts}

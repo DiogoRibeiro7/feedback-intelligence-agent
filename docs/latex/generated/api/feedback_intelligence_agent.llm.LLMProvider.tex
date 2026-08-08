@@ -1,0 +1,34 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{LLMProvider}}
+\label{class:feedback_intelligence_agent.llm.LLMProvider}\index{Classes!LLMProvider}
+
+Protocol for text generation providers.
+\apifield{Inherits}\texttt{Protocol}
+\apifield{Attributes}
+\begin{arglist}
+  \item[\texttt{capabilities}] \texttt{ProviderCapabilities}, required
+\end{arglist}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}llm.\allowbreak{}py:44}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/llm.py#L44}{online}), protocol, module \cref{module:feedback_intelligence_agent.llm}
+
+\subsection{\texttt{generate}}
+\label{method:feedback_intelligence_agent.llm.LLMProvider.generate}\index{Methods!generate}
+Generate a response from a grounded prompt.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+generate(self, prompt: str, *, question: str, results: list[SearchResult]) -> str
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{prompt}] \texttt{str}, required.
+  \item[\texttt{question}] \texttt{str}, required, keyword-only.
+  \item[\texttt{results}] \texttt{list[SearchResult]\allowbreak{}}, required, keyword-only.
+\end{arglist}
+\apifield{Value}\texttt{str}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}llm.\allowbreak{}py:49}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/llm.py#L49}{online})

@@ -1,0 +1,39 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{QueryEngine}}
+\label{class:feedback_intelligence_agent.retrieval.QueryEngine}\index{Classes!QueryEngine}
+
+Embed user questions and retrieve relevant document chunks.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+QueryEngine(self, embedding_model: EmbeddingModel, vector_store: VectorStore, *, query_expander: QueryExpander | None = None) -> None
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{embedding\_\allowbreak{}model}] \texttt{EmbeddingModel}, required.
+  \item[\texttt{vector\_\allowbreak{}store}] \texttt{VectorStore}, required.
+  \item[\texttt{query\_\allowbreak{}expander}] \texttt{QueryExpander \textbar{} None}, default \texttt{None}, keyword-only.
+\end{arglist}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}retrieval.\allowbreak{}py:22}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/retrieval.py#L22}{online}), class, module \cref{module:feedback_intelligence_agent.retrieval}
+
+\subsection{\texttt{search}}
+\label{method:feedback_intelligence_agent.retrieval.QueryEngine.search}\index{Methods!search}
+Search for chunks relevant to a natural-language question.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+search(self, question: str, *, top_k: int = 4) -> list[SearchResult]
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{question}] \texttt{str}, required.
+  \item[\texttt{top\_\allowbreak{}k}] \texttt{int}, default \texttt{4}, keyword-only.
+\end{arglist}
+\apifield{Value}\texttt{list[SearchResult]\allowbreak{}}
+\apifield{Raises}\texttt{ValueError}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}retrieval.\allowbreak{}py:37}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/retrieval.py#L37}{online})

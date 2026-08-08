@@ -1,0 +1,74 @@
+% Authored TikZ: system context diagram.
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[
+  actor/.style={rectangle, draw=black, rounded corners=6pt, align=center,
+    font=\small, minimum width=26mm, minimum height=8mm},
+  entry/.style={rectangle, draw=black, align=center, font=\small,
+    minimum width=26mm, minimum height=8mm},
+  core/.style={rectangle, draw=black, very thick, align=center, font=\small,
+    minimum width=44mm, minimum height=11mm},
+  ext/.style={rectangle, draw=rulegrey, dashed, align=center,
+    font=\scriptsize, minimum width=28mm, minimum height=8mm},
+  flow/.style={-{Latex[length=2mm]}, thick},
+  optional/.style={-{Latex[length=2mm]}, rulegrey, dashed}
+]
+
+  % Actors.
+  \node[actor] (lib) {Library consumer};
+  \node[actor, right=8mm of lib] (op) {Operator / analyst};
+  \node[actor, right=8mm of op] (web) {Browser client\\ \scriptsize frontend/};
+
+  % Entry points.
+  \node[entry, below=10mm of lib] (pyapi) {Python API\\ \scriptsize \texttt{\_\_init\_\_}};
+  \node[entry, below=10mm of op] (cli) {CLI\\ \scriptsize \texttt{cli.py}};
+  \node[entry, below=10mm of web] (http) {HTTP API\\ \scriptsize \texttt{api.create\_app}};
+
+  % Composition root and core.
+  \node[core, below=10mm of cli] (factory) {Composition root\\ \scriptsize \texttt{factory.build\_agent}};
+  \node[core, below=8mm of factory] (agent) {Feedback insight agent\\ \scriptsize \texttt{agent.FeedbackInsightAgent}};
+
+  % Internal resources.
+  \node[entry, below left=12mm and 6mm of agent] (index)
+    {Vector index\\ \scriptsize \texttt{.artifacts/vector\_store.json}};
+  \node[entry, below=12mm of agent] (data)
+    {Feedback dataset\\ \scriptsize \texttt{data/*.csv}};
+  \node[entry, below right=12mm and 6mm of agent] (stores)
+    {JSON stores\\ \scriptsize conversations, jobs,\\ reports, feedback};
+
+  % External systems.
+  \node[ext, right=16mm of factory] (llm) {LLM providers\\ OpenAI, Anthropic,\\ Bedrock, Ollama};
+  \node[ext, below=5mm of llm] (qdrant) {Qdrant};
+  \node[ext, below=5mm of qdrant] (stream) {Kafka / Kinesis};
+  \node[ext, left=16mm of factory] (otel) {OpenTelemetry\\ collector};
+  \node[ext, below=5mm of otel] (mlflow) {MLflow tracking};
+  \node[ext, above=5mm of otel] (smtp) {SMTP server};
+
+  % Edges.
+  \draw[flow] (lib) -- (pyapi);
+  \draw[flow] (op) -- (cli);
+  \draw[flow] (web) -- (http);
+  \draw[flow] (pyapi) -- (factory);
+  \draw[flow] (cli) -- (factory);
+  \draw[flow] (http) -- (factory);
+  \draw[flow] (factory) -- (agent);
+  \draw[flow] (agent) -- (index);
+  \draw[flow] (agent) -- (data);
+  \draw[flow] (agent) -- (stores);
+
+  \draw[optional] (factory) -- (llm);
+  \draw[optional] (factory.east) to[out=-20, in=180] (qdrant.west);
+  \draw[optional] (factory.east) to[out=-40, in=180] (stream.west);
+  \draw[optional] (factory) -- (otel);
+  \draw[optional] (factory.west) to[out=-160, in=0] (mlflow.east);
+  \draw[optional] (factory.west) to[out=160, in=0] (smtp.east);
+
+\end{tikzpicture}
+\caption{System context. Solid edges are always present; dashed edges are
+optional integrations, each gated by a configuration setting and a Poetry
+extra. With every dashed edge removed the system still answers questions,
+because the default LLM provider, embedding model, and vector store are all
+local and deterministic.}
+\label{fig:system-context}
+\end{figure}

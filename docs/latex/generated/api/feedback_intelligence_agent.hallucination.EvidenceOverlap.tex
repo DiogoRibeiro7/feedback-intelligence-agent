@@ -1,0 +1,24 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{EvidenceOverlap}}
+\label{class:feedback_intelligence_agent.hallucination.EvidenceOverlap}\label{schema:EvidenceOverlap}\index{Classes!EvidenceOverlap}
+
+Lexical evidence-overlap result for one answer.
+\apifield{Inherits}\texttt{BaseModel}
+\apifield{Fields}
+\begin{arglist}
+  \item[\texttt{score}] \texttt{float}, required, \texttt{ge=0.\allowbreak{}0,\allowbreak{} le=1.\allowbreak{}0}
+  \item[\texttt{supported\_\allowbreak{}sentences}] \texttt{int}, required, \texttt{ge=0}
+  \item[\texttt{total\_\allowbreak{}sentences}] \texttt{int}, required, \texttt{ge=0}
+  \item[\texttt{unsupported\_\allowbreak{}sentences}] \texttt{list[str]\allowbreak{}}, default \texttt{list()\allowbreak{}}
+  \item[\texttt{sentence\_\allowbreak{}threshold}] \texttt{float}, required, \texttt{ge=0.\allowbreak{}0,\allowbreak{} le=1.\allowbreak{}0}
+  \item[\texttt{pass\_\allowbreak{}threshold}] \texttt{float}, required, \texttt{ge=0.\allowbreak{}0,\allowbreak{} le=1.\allowbreak{}0}
+  \item[\texttt{passed}] \texttt{bool}, required
+\end{arglist}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}hallucination.\allowbreak{}py:57}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/hallucination.py#L57}{online}), pydantic model, module \cref{module:feedback_intelligence_agent.hallucination}

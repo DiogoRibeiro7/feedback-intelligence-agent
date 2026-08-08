@@ -1,0 +1,22 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{RetrievalMetrics}}
+\label{class:feedback_intelligence_agent.evaluation.RetrievalMetrics}\label{schema:RetrievalMetrics}\index{Classes!RetrievalMetrics}
+
+Aggregate retrieval metrics across answerable cases.
+\apifield{Inherits}\texttt{BaseModel}
+\apifield{Fields}
+\begin{arglist}
+  \item[\texttt{precision\_\allowbreak{}at\_\allowbreak{}k}] \texttt{float}, required, \texttt{ge=0.\allowbreak{}0,\allowbreak{} le=1.\allowbreak{}0}
+  \item[\texttt{recall\_\allowbreak{}at\_\allowbreak{}k}] \texttt{float}, required, \texttt{ge=0.\allowbreak{}0,\allowbreak{} le=1.\allowbreak{}0}
+  \item[\texttt{mean\_\allowbreak{}reciprocal\_\allowbreak{}rank}] \texttt{float}, required, \texttt{ge=0.\allowbreak{}0,\allowbreak{} le=1.\allowbreak{}0}
+  \item[\texttt{context\_\allowbreak{}hit\_\allowbreak{}rate}] \texttt{float}, required, \texttt{ge=0.\allowbreak{}0,\allowbreak{} le=1.\allowbreak{}0}
+  \item[\texttt{evaluated\_\allowbreak{}cases}] \texttt{int}, required, \texttt{ge=0}
+\end{arglist}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}evaluation.\allowbreak{}py:191}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/evaluation.py#L191}{online}), pydantic model, module \cref{module:feedback_intelligence_agent.evaluation}

@@ -1,0 +1,110 @@
+% Authored: recommendations. Nothing here is implemented.
+
+\chapter{Recommended Engineering Improvements}
+\label{ch:improvements}
+
+\begin{quote}
+\textbf{Nothing in this chapter is implemented.} Every item below is a
+recommendation derived from an observed gap. None of it should be read as a
+description of the repository's current capability; the implemented controls
+are documented in \cref{ch:quality-assurance}, \cref{ch:ci-cd}, and
+\cref{ch:security}.
+\end{quote}
+
+\section{Version consistency check}
+
+\textbf{Gap.} The version appears in four files (\cref{ch:releases}) and
+nothing verifies that they agree. The release workflow validates that
+\srcfile{CITATION.cff} and \srcfile{.zenodo.json} \emph{parse}, not that their
+version fields match \srcfile{pyproject.toml} or the package
+\texttt{\_\_version\_\_}.
+
+\textbf{Recommendation.} A test, or a step in the release workflow, asserting
+that all four agree and that the tag being released matches them.
+
+\section{Type checking outside \texttt{src}}
+
+\textbf{Gap.} \texttt{mypy} runs over \srcfile{src} only. \srcfile{tests/} and
+\srcfile{scripts/} are linted with the \texttt{ANN} rule set but never
+type-checked, so annotation errors there are invisible.
+
+\textbf{Recommendation.} Extend the type-check target to \srcfile{tests} and
+\srcfile{scripts}, accepting a looser configuration for tests if strict mode
+proves noisy.
+
+\section{Contract testing against real optional SDKs}
+
+\textbf{Gap.} The six optional integrations are covered only through injected
+fakes, and CI installs no extras. An upstream SDK change that breaks an adapter
+would pass every gate.
+
+\textbf{Recommendation.} A scheduled workflow that installs each extra and runs
+the corresponding adapter tests against the real SDK surface --- import,
+signature, and response shape --- without requiring credentials.
+
+\section{Artifact checksums}
+
+\textbf{Gap.} No checksum manifest exists for datasets or run artifacts, so a
+result cannot be tied to the exact bytes of its inputs. The only digest
+mechanism in the repository is the documentation manifest.
+
+\textbf{Recommendation.} Record a SHA-256 for the input dataset and the built
+index inside evaluation and experiment outputs, so a report identifies its
+inputs by content rather than by path.
+
+\section{Performance regression gate}
+
+\textbf{Gap.} The benchmark harness is tested, but no workflow runs it and no
+threshold is enforced, so a latency regression is invisible to CI.
+
+\textbf{Recommendation.} A scheduled benchmark run publishing results as an
+artifact. A blocking threshold on shared runners is not advisable --- runner
+variance would dominate --- so trend visibility rather than a gate.
+
+\section{Shared rate-limit state}
+
+\textbf{Gap.} The rate limiter keeps counters in process memory, so with $n$
+workers the effective limit is $n$ times the configured value
+(\cref{ch:runtime}). The production Compose file runs multiple workers.
+
+\textbf{Recommendation.} Either document the per-worker semantics in the
+operator-facing deployment notes, or move the counters to shared state for
+multi-worker deployments.
+
+\section{Concurrency safety for file-backed stores}
+
+\textbf{Gap.} The JSON stores perform whole-file reads and writes with no
+locking (\cref{adr:007}), so concurrent writers to the same entity can race.
+
+\textbf{Recommendation.} Atomic replace (write to a temporary file, then
+rename) as a minimum, or a store implementation backed by SQLite for
+deployments that need durability under concurrency.
+
+\section{Ingestion job durability}
+
+\textbf{Gap.} Background ingestion runs inside the serving process via
+\texttt{BackgroundTasks}. A restart mid-job leaves the record in its last
+persisted state with no resumption.
+
+\textbf{Recommendation.} Record a heartbeat so an interrupted job is
+distinguishable from a running one, and mark orphaned jobs as failed on
+startup.
+
+\section{Documentation coverage threshold}
+
+\textbf{Gap.} The validator checks that every public object is rendered, but
+not that every public object is \emph{documented}: an object with an empty
+docstring passes.
+
+\textbf{Recommendation.} Add a docstring-coverage metric to the validator with
+a floor, in the same spirit as the existing coverage floor.
+
+\section{Codified branch protection}
+
+\textbf{Gap.} The repository has two long-lived branches and a full CI suite,
+but no descriptor of which checks are required to merge, so the enforced policy
+cannot be documented from repository evidence.
+
+\textbf{Recommendation.} Record the required-check policy in the repository ---
+as a ruleset file or as documentation --- so it is reviewable alongside the
+code.

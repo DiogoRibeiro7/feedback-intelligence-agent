@@ -1,0 +1,526 @@
+% Authored: mathematical and statistical exposition of the implemented methods.
+
+\chapter{Mathematical and Statistical Methods}
+\label{ch:mathematics}
+
+This chapter documents the mathematics the package implements, rather than
+paraphrasing the code that implements it. Every formula below corresponds to
+a specific function whose reference entry is cross-linked; no theoretical
+guarantee is claimed that the repository does not establish. All methods are
+deterministic: given the same inputs they produce the same outputs, with no
+sampling and no learned parameters.
+
+Throughout, $\mathcal{D} = \{d_1,\dots,d_N\}$ denotes the corpus of document
+chunks produced by \cref{func:feedback_intelligence_agent.chunking.feedback_to_chunks},
+and $q$ denotes a user question.
+
+\section{Feature-hashing embeddings}
+\label{sec:math-embeddings}
+
+\subsection*{Objective}
+
+Map arbitrary text to a fixed-dimensional vector without a trained model,
+without network access, and without persisted vocabulary, so retrieval can be
+exercised end to end in tests, demos, and CI.
+
+\subsection*{Formulation}
+
+Let $\phi(t)$ be the multiset of features of text $t$: the unigrams and
+adjacent bigrams of its lower-cased alphanumeric tokens,
+
+\begin{equation}
+\phi(t) = \{\texttt{uni:}w_i\}_{i=1}^{n}
+        \;\cup\;
+        \{\texttt{bi:}w_i\_w_{i+1}\}_{i=1}^{n-1},
+\end{equation}
+
+where $w_1,\dots,w_n$ are the tokens matched by \texttt{[a-zA-Z0-9\_]+}.
+
+Let $h(f)$ be the 64-bit unsigned integer obtained from the BLAKE2b digest of
+feature $f$ with an 8-byte digest size, interpreted big-endian. Define the
+column index and the sign
+
+\begin{align}
+c(f) &= h(f) \bmod D, \\
+s(f) &= \begin{cases}
+  +1 & \text{if } \left\lfloor h(f)/D \right\rfloor \bmod 2 = 0,\\
+  -1 & \text{otherwise,}
+\end{cases}
+\end{align}
+
+with $D$ the embedding dimension (default $512$, constrained to $[64, 8192]$).
+The unnormalised embedding is the signed feature-count vector
+
+\begin{equation}
+\tilde{x}(t)_j = \sum_{f \in \phi(t)} s(f)\,\mathbb{1}\!\left[c(f) = j\right],
+\qquad j = 0,\dots,D-1,
+\end{equation}
+
+and the returned embedding is its $L^2$ normalisation
+
+\begin{equation}
+x(t) = \frac{\tilde{x}(t)}{\max\left(\lVert \tilde{x}(t) \rVert_2,\, \epsilon\right)},
+\end{equation}
+
+where the implementation replaces a zero norm by $1$ rather than dividing by
+zero, so the embedding of a text with no tokens is the zero vector.
+
+\subsection*{Assumptions and limitations}
+
+The signed hashing trick makes the expected inner product of two hashed vectors
+an unbiased estimate of the inner product of the exact (unhashed) count
+vectors, with collision noise decreasing in $D$; the sign function is what
+cancels collision cross-terms in expectation. This is a property of the
+construction, not a claim measured in this repository. The model carries no
+semantic similarity: two paraphrases sharing no tokens receive near-orthogonal
+vectors. The source states this explicitly --- it exists to keep the pipeline
+runnable and testable, not to compete with neural embeddings --- and the
+lexical and hybrid retrievers exist partly to compensate.
+
+\subsection*{Complexity}
+
+Embedding $m$ texts of average token length $\bar{n}$ costs
+$\mathcal{O}(m\bar{n})$ hash evaluations and $\mathcal{O}(mD)$ space.
+
+\medskip\noindent
+Implementation: \cref{class:feedback_intelligence_agent.embeddings.HashingEmbeddingModel}.
+
+\section{Dense retrieval by cosine similarity}
+\label{sec:math-dense}
+
+Because both stored and query vectors are $L^2$-normalised, cosine similarity
+reduces to an inner product, and the store computes it as a single
+matrix--vector product:
+
+\begin{equation}
+\operatorname{score}(q, d) = x(q)^{\top} x(d)
+ = \cos\!\big(x(q), x(d)\big) \in [-1, 1].
+\end{equation}
+
+Retrieval returns the top $k$ chunks by this score. The implementation selects
+candidates with \texttt{np.argpartition} (average $\mathcal{O}(N)$) and sorts
+only the selected $k$ (\texttt{np.argsort}, $\mathcal{O}(k \log k)$), rather
+than sorting all $N$ scores. Total cost per query is
+$\mathcal{O}(ND + N + k\log k)$.
+
+\paragraph{Numerical considerations.}
+Normalisation bounds every score in $[-1,1]$ regardless of document length,
+which is what makes the min--max fusion in \cref{sec:math-hybrid} meaningful.
+The store validates that the query vector is one-dimensional with exactly $D$
+components before multiplying, converting a shape error into a clear
+\texttt{ValueError} rather than a broadcasting surprise.
+
+\medskip\noindent
+Implementation: \cref{class:feedback_intelligence_agent.vector_store.InMemoryVectorStore},
+\cref{class:feedback_intelligence_agent.retrieval.QueryEngine}.
+
+\section{Okapi BM25 lexical retrieval}
+\label{sec:math-bm25}
+
+\subsection*{Objective}
+
+Reward exact term matches --- product names, integration names, error codes ---
+that a hashed bag-of-features representation dilutes.
+
+\subsection*{Formulation}
+
+For a query with terms $t_1,\dots,t_M$ (obtained by the same tokenisation as
+the index) and a document $d$ with term frequency $f(t,d)$ and length $|d|$ in
+tokens, the score is
+
+\begin{equation}
+\operatorname{BM25}(q,d) = \sum_{i=1}^{M}
+\operatorname{IDF}(t_i)\;
+\frac{f(t_i,d)\,(k_1 + 1)}
+     {f(t_i,d) + k_1\left(1 - b + b\,\dfrac{|d|}{\overline{|d|}}\right)},
+\end{equation}
+
+with $\overline{|d|}$ the mean document length over the corpus. The inverse
+document frequency uses the standard smoothed form
+
+\begin{equation}
+\operatorname{IDF}(t) = \ln\!\left(1 + \frac{N - n(t) + 0.5}{n(t) + 0.5}\right),
+\end{equation}
+
+where $n(t)$ is the number of documents containing $t$. Adding $1$ inside the
+logarithm keeps $\operatorname{IDF}(t) > 0$ for every term, so a term occurring
+in every document contributes a small positive weight rather than a negative
+one --- the well-known pathology of the unsmoothed Robertson--Sp\"arck~Jones
+form.
+
+\subsection*{Parameters and validation}
+
+The defaults are $k_1 = 1.5$ (term-frequency saturation) and $b = 0.75$ (length
+normalisation strength). The constructor enforces $k_1 \geq 0$ and
+$b \in [0,1]$; $b = 0$ disables length normalisation and $b = 1$ applies it
+fully. The corpus statistics $f(\cdot,\cdot)$, $|d|$, $\overline{|d|}$, and
+$\operatorname{IDF}(\cdot)$ are computed once at construction, so the index is
+immutable for its lifetime.
+
+\subsection*{Ranking and stability}
+
+Only documents with a strictly positive score are returned. Ties are broken by
+ascending corpus position, making the ranking a total order and the output
+reproducible across runs. Scores are rounded to six decimals before being
+returned.
+
+\subsection*{Complexity}
+
+Index construction is $\mathcal{O}\!\left(\sum_d |d|\right)$ time and
+$\mathcal{O}(V + \sum_d |d|)$ space for vocabulary $V$. A query costs
+$\mathcal{O}(NM)$ in the implemented form, because every document is scored
+against every query term; no posting-list inversion is used, which is
+acceptable at the corpus sizes this package targets and keeps the code
+dependency-free.
+
+\medskip\noindent
+Implementation: \cref{class:feedback_intelligence_agent.lexical_search.BM25Retriever}.
+
+\section{Hybrid fusion}
+\label{sec:math-hybrid}
+
+\subsection*{Objective}
+
+Combine two rankings whose scores live on incomparable scales: cosine
+similarity in $[-1,1]$ and unbounded non-negative BM25.
+
+\subsection*{Formulation}
+
+Each retriever is queried for an enlarged candidate pool of size
+$k' = \max(2k, k)$. Let $R_{\text{dense}}$ and $R_{\text{lex}}$ be the returned
+result lists. Scores within each list are min--max normalised,
+
+\begin{equation}
+\nu(s; S) =
+\begin{cases}
+  \dfrac{s - \min S}{\max S - \min S} & \text{if } \max S \neq \min S,\\[8pt]
+  1 & \text{otherwise,}
+\end{cases}
+\end{equation}
+
+so a list whose scores are all equal maps to all ones rather than to a division
+by zero. With user weights $w_{\text{dense}}, w_{\text{lex}} \geq 0$ normalised
+to sum to one,
+
+\begin{equation}
+\bar{w}_{\text{dense}} = \frac{w_{\text{dense}}}{w_{\text{dense}} + w_{\text{lex}}},
+\qquad
+\bar{w}_{\text{lex}} = \frac{w_{\text{lex}}}{w_{\text{dense}} + w_{\text{lex}}},
+\end{equation}
+
+the fused score of a chunk $c$ is the weighted sum of the contributions it
+receives from the lists it appears in:
+
+\begin{equation}
+\operatorname{score}(c) =
+\bar{w}_{\text{dense}}\,\nu\!\big(s_{\text{dense}}(c); S_{\text{dense}}\big)\,
+  \mathbb{1}[c \in R_{\text{dense}}]
++ \bar{w}_{\text{lex}}\,\nu\!\big(s_{\text{lex}}(c); S_{\text{lex}}\big)\,
+  \mathbb{1}[c \in R_{\text{lex}}].
+\end{equation}
+
+Chunks are de-duplicated by chunk identifier, so a chunk retrieved by both
+retrievers accumulates both contributions and is therefore favoured over one
+retrieved by a single retriever at the same normalised score.
+
+\subsection*{Properties and limitations}
+
+Normalising the weights makes the fused score scale-free: only the ratio
+$w_{\text{dense}} : w_{\text{lex}}$ matters. The defaults are $0.6 : 0.4$. Two
+consequences follow directly from the definition and are worth stating plainly:
+
+\begin{itemize}[nosep]
+  \item Because normalisation is per query and per list, fused scores are not
+    comparable across queries.
+  \item The top-scoring item of each list always normalises to $1$, so a list
+    that contains no genuinely relevant document still contributes a
+    full-weight vote for its best item. Fusion improves recall; it does not
+    detect that a retriever failed.
+\end{itemize}
+
+The constructor rejects negative weights and rejects the case where both are
+zero.
+
+\medskip\noindent
+Implementation: \cref{class:feedback_intelligence_agent.retrieval.HybridRetriever},
+\cref{func:feedback_intelligence_agent.retrieval.min_max_normalize}.
+
+\section{Deterministic judge reranking}
+\label{sec:math-reranking}
+
+\subsection*{Objective}
+
+Reorder the enlarged candidate pool with domain-aware signals, standing in for
+a cross-encoder or LLM judge while remaining local and deterministic.
+
+\subsection*{Formulation}
+
+Let $T(q)$ be the content tokens of the question (alphabetic-initial tokens of
+at least three characters, minus a fixed stop list) and let $\sigma(c)$ be the
+lower-cased concatenation of the chunk text with its \texttt{customer\_segment},
+\texttt{channel}, and \texttt{rating} metadata. Define four signals in $[0,1]$:
+
+\begin{align}
+o(q,c) &= \frac{\left|\{t \in T(q) : t \subseteq \sigma(c)\}\right|}{|T(q)|}
+  && \text{(lexical overlap)}, \\
+r(q,c) &= \min\!\left(\frac{|\{\kappa \in K(\rho) : \kappa \subseteq \sigma(c)\}|}{3}, 1\right)
+  && \text{(route-keyword hits)}, \\
+g(q,c) &= \mathbb{1}\!\left[\text{segment of } c \text{ appears in } q\right]
+  && \text{(segment match)}, \\
+\ell(q,c) &= \mathbb{1}\!\left[T(q) \cap \Theta \neq \emptyset
+  \;\wedge\; \operatorname{rating}(c) \leq 2\right]
+  && \text{(risk signal)},
+\end{align}
+
+where $K(\rho)$ are the keywords of the route $\rho$ selected for the question
+and $\Theta = \{\text{unhappy},\allowbreak \text{complain},\allowbreak
+\text{complaints},\allowbreak \text{risk},\allowbreak \text{churn},\allowbreak
+\text{bad},\allowbreak \text{poor}\}$. The reranked score adds a fixed linear
+combination of these signals to the retrieval score $s(c)$:
+
+\begin{equation}
+\operatorname{score}(q,c) = s(c)
+  + 0.22\,o(q,c)
+  + 0.18\,r(q,c)
+  + 0.08\,g(q,c)
+  + 0.06\,\ell(q,c),
+\end{equation}
+
+rounded to six decimals, and the top $k$ are kept.
+
+\subsection*{Interpretation and limitations}
+
+The coefficients are fixed constants in the source. The repository contains no
+tuning procedure, no held-out selection, and no sensitivity analysis for them,
+so they should be read as engineering defaults rather than as fitted
+parameters. The maximum possible adjustment is $0.54$, which is large relative
+to a cosine score in $[-1,1]$ and to a fused hybrid score in $[0,1]$: the
+reranker can and does override the first-stage ordering. Because $s(c)$ enters
+additively and unnormalised, the relative influence of the signals depends on
+which retriever produced $s(c)$.
+
+\medskip\noindent
+Implementation: \cref{class:feedback_intelligence_agent.reranking.DeterministicJudgeReranker}.
+
+\section{Answer confidence}
+\label{sec:math-confidence}
+
+The agent reports a confidence score combining retrieval quality with citation
+density. With $R$ the final result set and $C$ the citations built from it,
+
+\begin{equation}
+\operatorname{conf} =
+\begin{cases}
+  0 & \text{if } R = \emptyset \text{ or } C = \emptyset, \\[4pt]
+  \min\!\left(
+    0.75 \max\!\left(\max_{c \in R} s(c),\, 0\right)
+    + 0.25 \min\!\left(\dfrac{|C|}{3}, 1\right),
+    \; 1
+  \right) & \text{otherwise,}
+\end{cases}
+\end{equation}
+
+rounded to three decimals. Three or more citations saturate the citation term.
+A refused answer reports confidence $0$ by construction.
+
+This is a heuristic index, not a calibrated probability: the repository
+contains no calibration data and makes no claim that $\operatorname{conf}$
+estimates the probability that an answer is correct.
+
+\medskip\noindent
+Implementation: \cref{class:feedback_intelligence_agent.agent.FeedbackInsightAgent}.
+
+\section{Evidence overlap and hallucination risk}
+\label{sec:math-hallucination}
+
+\subsection*{Objective}
+
+Detect answers that drift away from the retrieved evidence, deterministically
+and without a second model call.
+
+\subsection*{Formulation}
+
+Split the answer $a$ into sentences $a_1,\dots,a_S$ on terminal punctuation.
+Let $\tau(\cdot)$ extract content tokens: lower-cased tokens matching
+\texttt{[a-zA-Z][a-zA-Z0-9\_-]\{2,\}}, minus a fixed stop list, minus tokens
+beginning with the document-identifier prefix \texttt{fb-} so citation markers
+cannot be mistaken for supported content. Let $E = \tau(\text{concatenated
+retrieved chunk texts})$.
+
+A sentence is \emph{supported} when its token overlap fraction reaches the
+sentence threshold $\theta_s$ (default $0.5$):
+
+\begin{equation}
+\operatorname{supported}(a_i) =
+  \mathbb{1}\!\left[
+    \frac{|\tau(a_i) \cap E|}{|\tau(a_i)|} \geq \theta_s
+  \right],
+\qquad \tau(a_i) \neq \emptyset .
+\end{equation}
+
+Sentences with no content tokens are excluded from both numerator and
+denominator. With $S'$ the number of scored sentences, the overlap score is
+
+\begin{equation}
+\Omega(a, E) = \frac{1}{S'}\sum_{i : \tau(a_i) \neq \emptyset}
+  \operatorname{supported}(a_i),
+\end{equation}
+
+rounded to four decimals, and the check passes when
+$\Omega \geq \theta_p$ with the pass threshold $\theta_p$ default $0.75$. Both
+thresholds are validated to lie in $[0,1]$.
+
+\subsection*{Risk aggregation}
+
+An optional LLM-as-judge returns a label
+$v \in \{\text{supported}, \text{unsupported}, \text{uncertain}\}$. The risk
+level is a deterministic function of the two signals, with the judge able to
+escalate but never to clear a failed lexical gate:
+
+\begin{equation}
+\operatorname{risk} =
+\begin{cases}
+  \text{high}   & v = \text{unsupported},\\
+  \text{high}   & \Omega < \theta_p,\\
+  \text{medium} & v = \text{uncertain},\\
+  \text{medium} & \text{some sentence is unsupported},\\
+  \text{low}    & \text{otherwise.}
+\end{cases}
+\end{equation}
+
+A hallucination is recorded exactly when $\operatorname{risk} = \text{high}$.
+
+\subsection*{Limitations}
+
+$\Omega$ is a lexical proxy for claim support. It cannot detect a fluent
+restatement that contradicts the evidence while reusing its vocabulary, and it
+penalises correct paraphrase that introduces new content words. The judge
+parser is deliberately conservative: an unparseable or missing verdict yields
+\text{uncertain} with confidence $0$ rather than \text{supported}.
+
+\medskip\noindent
+Implementation: \cref{func:feedback_intelligence_agent.hallucination.evidence_overlap_score},
+\cref{class:feedback_intelligence_agent.hallucination.EvidenceOverlapHallucinationChecker}.
+
+\section{Offline evaluation metrics}
+\label{sec:math-evaluation}
+
+Let $\hat{R}_k$ be the deduplicated list of the first $k$ retrieved document
+identifiers for a case, preserving first-seen order, and let $G$ be the set of
+relevant document identifiers declared for that case. Deduplication is applied
+before scoring so that returning the same relevant document repeatedly cannot
+inflate any metric.
+
+\begin{align}
+\operatorname{P@}k &= \frac{|\hat{R}_k \cap G|}{|\hat{R}_k|},
+  \qquad \operatorname{P@}k = 0 \text{ when } \hat{R}_k = \emptyset, \\
+\operatorname{R@}k &= \frac{|\hat{R}_k \cap G|}{|G|},
+  \qquad \operatorname{R@}k = 0 \text{ when } G = \emptyset, \\
+\operatorname{RR} &= \begin{cases}
+  \dfrac{1}{\min\{i : \hat{R}_i \in G\}} & \text{if such an } i \text{ exists},\\
+  0 & \text{otherwise,}
+\end{cases} \\
+\operatorname{Hit} &= \mathbb{1}\!\left[\hat{R} \cap G \neq \emptyset\right].
+\end{align}
+
+Both $\operatorname{P@}k$ and $\operatorname{R@}k$ require $k > 0$ and raise
+otherwise. Note that $\operatorname{R@}k$ returning $0$ for an empty $G$ is a
+deliberate convention for unanswerable cases: they contribute no recall rather
+than a vacuous $1$.
+
+Answer-side metrics, with $\mathcal{K}$ the expected keywords:
+
+\begin{align}
+\operatorname{KeywordCoverage}
+  &= \frac{|\{\kappa \in \mathcal{K} : \kappa \subseteq \operatorname{lower}(a)\}|}
+          {|\mathcal{K}|},
+  \qquad = 1 \text{ when } \mathcal{K} = \emptyset, \\
+\operatorname{Groundedness}
+  &= \frac{1}{S'}\sum_{i} \mathbb{1}\!\left[
+      \frac{|\tau(a_i) \cap E|}{|\tau(a_i)|} \geq 0.5\right], \\
+\operatorname{RefusalCorrect}
+  &= \mathbb{1}\!\left[\operatorname{refused}(a) \neq \operatorname{answerable}\right], \\
+\operatorname{CitationAligned}
+  &= \mathbb{1}\!\left[\{\text{cited ids}\} \cap G \neq \emptyset\right].
+\end{align}
+
+Refusal is detected by matching a fixed list of abstention markers against the
+lower-cased answer.
+
+\paragraph{Aggregation.}
+The report averages retrieval metrics and citation alignment over
+\emph{answerable} cases only, because unanswerable cases have no relevant
+documents; answer metrics are averaged over \emph{all} cases. Every aggregate
+is the arithmetic mean rounded to four decimals, with the empty mean defined as
+$0$:
+
+\begin{equation}
+\overline{m} = \operatorname{round}\!\left(\frac{1}{|\mathcal{C}|}
+  \sum_{c \in \mathcal{C}} m(c),\; 4\right),
+\qquad \overline{m} = 0 \text{ when } \mathcal{C} = \emptyset .
+\end{equation}
+
+The report is a point estimate over a small, hand-authored case set. It carries
+no confidence interval and no significance test, and the repository does not
+claim any; its purpose is regression detection between revisions, for which a
+deterministic point estimate is sufficient.
+
+\medskip\noindent
+Implementation: \cref{func:feedback_intelligence_agent.evaluation.precision_at_k},
+\cref{func:feedback_intelligence_agent.evaluation.recall_at_k},
+\cref{func:feedback_intelligence_agent.evaluation.reciprocal_rank},
+\cref{func:feedback_intelligence_agent.evaluation.groundedness_score},
+\cref{func:feedback_intelligence_agent.evaluation.aggregate_report}.
+
+\section{Latency statistics}
+\label{sec:math-latency}
+
+The benchmark harness times each pipeline phase over repeated calls after a
+warm-up, and summarises with mean, median, minimum, maximum, and the 95th
+percentile. The percentile uses the \emph{nearest-rank} method on the sorted
+samples $y_{(1)} \leq \cdots \leq y_{(n)}$:
+
+\begin{equation}
+\operatorname{P}_{p} = y_{(\rho)},
+\qquad
+\rho = \min\!\left(\max\!\left(\left\lceil p\,n \right\rceil, 1\right), n\right),
+\qquad p \in [0,1],
+\end{equation}
+
+with $\operatorname{P}_0 = y_{(1)}$ by definition. Nearest-rank always returns
+an actually observed sample, which the source gives as the reason for
+preferring it over interpolation for latency reporting: no value is fabricated
+between measurements. Note the consequence for small $n$: with $n = 10$
+repetitions, $\operatorname{P}_{0.95} = y_{(10)}$, the maximum. Percentile
+estimates from small samples are coarse, and the harness exposes the sample
+count alongside every statistic so this is visible in the report.
+
+\medskip\noindent
+Implementation: \cref{func:feedback_intelligence_agent.benchmarking.percentile},
+\cref{func:feedback_intelligence_agent.benchmarking.summarize}.
+
+\section{Synthetic data generation}
+\label{sec:math-synthetic}
+
+Synthetic datasets are drawn from a locally seeded
+\texttt{random.Random} instance rather than from the global \texttt{random} or
+NumPy state. The seed and the generation parameters fully determine the output:
+the same configuration yields a byte-identical CSV, written with a fixed field
+order, UTF-8 encoding, and \texttt{\textbackslash n} newlines. This is the
+mechanism that makes generated datasets usable in regression tests, and it is
+one of the six terms of the reproducibility equation documented in the
+engineering part of the complete manual.
+
+\medskip\noindent
+Implementation: \cref{class:feedback_intelligence_agent.synthetic_data.SyntheticDataConfig},
+\cref{func:feedback_intelligence_agent.synthetic_data.generate_feedback_rows}.
+
+\section{References}
+
+The BM25 formulation follows the Okapi weighting scheme of
+Robertson and Sp\"arck~Jones~\cite{robertson1976relevance,robertson2009prf};
+the signed feature-hashing construction follows
+Weinberger et al.~\cite{weinberger2009hashing}; the retrieval metrics are
+standard information-retrieval measures as presented by
+Manning et al.~\cite{manning2008ir}. These references are supplied to identify
+the methods implemented; the repository itself cites no literature.

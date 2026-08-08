@@ -1,0 +1,87 @@
+% Authored: dependency analysis, with generated graph tables and figures.
+
+\chapter{Module Dependencies}
+\label{ch:dependencies}
+
+The graph in this chapter is derived by parsing every import statement in the
+package and classifying it by the syntactic context it appears in. The
+machine-readable form is \srcfile{docs/metadata/module-dependencies.json}.
+
+\section{Import contexts}
+
+Three contexts are distinguished, because they have materially different
+consequences:
+
+\begin{description}
+  \item[Eager] A module-level import. It executes when the importing module is
+    first imported, and only eager edges can form a runtime import cycle.
+  \item[Deferred (function-local)] An import inside a function body. It
+    executes on first call. The package uses this for two purposes: to break an
+    import cycle, and to keep an optional distribution out of the default
+    import path.
+  \item[Typing-only] An import guarded by \texttt{if TYPE\_CHECKING:}. It never
+    executes at runtime and exists only so annotations can name a type.
+\end{description}
+
+\input{generated/architecture/module-graph}
+
+\section{Reading the graph}
+
+Two shapes dominate and are visible in the coupling table:
+
+\begin{description}
+  \item[Shared foundations] \pkg{schemas} and \pkg{telemetry} have the highest
+    fan-in in the package while importing almost nothing themselves. That is
+    the expected shape for a shared vocabulary and a cross-cutting emitter.
+  \item[Composition roots] \pkg{factory}, \pkg{cli}, and \pkg{api} have high
+    fan-out and low fan-in. They exist to assemble, so they know about many
+    modules and few modules know about them.
+\end{description}
+
+\section{Layer boundary observations}
+\label{sec:layer-violations}
+
+\input{generated/architecture/layer-violations}
+
+Four of these edges have a visible explanation in the source itself and are
+worth naming, since the table alone does not carry it:
+
+\begin{itemize}
+  \item \pkg{schemas} imports \texttt{GuardrailDecision} from \pkg{guardrails}
+    because \texttt{AgentAnswer} embeds the guardrail decision as a field. The
+    contract type and the component that produces it live in different layers.
+  \item \pkg{llm} imports \pkg{citations} because the deterministic local
+    provider composes an answer that already carries citation markers, which
+    requires the same citation-construction code the agent uses.
+  \item \pkg{lakehouse} and \pkg{streaming\_ingestion} import \pkg{privacy}
+    because redaction is applied on the data path, at export and at ingestion,
+    rather than downstream.
+  \item \pkg{index\_updates} imports \pkg{factory} to reuse the chunk
+    embedding-text construction, which is what makes an incremental update
+    produce vectors identical to a full rebuild.
+\end{itemize}
+
+For the remaining edges the repository records no rationale.
+
+\noevidence
+
+\section{Cycles, coupling, and the complete edge list}
+
+\input{generated/architecture/dependencies}
+
+\section{External coupling}
+
+The package imports nine third-party distributions eagerly: \texttt{fastapi},
+\texttt{starlette}, \texttt{httpx}, \texttt{numpy}, \texttt{pandas},
+\texttt{pydantic}, \texttt{pydantic\_settings}, \texttt{typer}, and
+\texttt{yaml}. Every other third-party distribution is imported inside a
+function body and corresponds to a Poetry extra, which is what allows
+\texttt{poetry install} without extras to produce a working system. The
+generated deferred-import table lists each module that does this and the
+distributions involved.
+
+The heaviest single external coupling is to Pydantic: it appears in the
+foundation layer (\texttt{Settings}, all schemas) and therefore transitively in
+every other layer. Replacing it would touch nearly every module. This is a
+fact about the current design, not a criticism --- validation at the boundary
+is what the type discipline in this repository is built on.

@@ -1,0 +1,26 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{LakehouseExportResult}}
+\label{class:feedback_intelligence_agent.lakehouse.LakehouseExportResult}\label{schema:LakehouseExportResult}\index{Classes!LakehouseExportResult}
+
+Summary of a local lakehouse export.
+\apifield{Inherits}\texttt{BaseModel}
+\apifield{Fields}
+\begin{arglist}
+  \item[\texttt{table\_\allowbreak{}path}] \texttt{str}, required
+  \item[\texttt{table\_\allowbreak{}format}] \texttt{LakehouseTableFormat}, required
+  \item[\texttt{data\_\allowbreak{}format}] \texttt{LakehouseDataFormat}, required
+  \item[\texttt{partition\_\allowbreak{}columns}] \texttt{list[str]\allowbreak{}}, required
+  \item[\texttt{records}] \texttt{int}, required, \texttt{ge=0}
+  \item[\texttt{partitions}] \texttt{int}, required, \texttt{ge=0}
+  \item[\texttt{data\_\allowbreak{}files}] \texttt{list[LakehouseDataFile]\allowbreak{}}, required
+  \item[\texttt{manifest\_\allowbreak{}path}] \texttt{str}, required
+  \item[\texttt{metadata\_\allowbreak{}path}] \texttt{str}, required
+\end{arglist}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}lakehouse.\allowbreak{}py:59}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/lakehouse.py#L59}{online}), pydantic model, module \cref{module:feedback_intelligence_agent.lakehouse}

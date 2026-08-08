@@ -1,0 +1,25 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{update\_index}}
+\label{func:feedback_intelligence_agent.cli.update_index}\index{Functions!update\_index}
+
+Incrementally merge a validated feedback CSV batch into a JSON index.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+update_index(input: Annotated[Path, typer.Option(help='Feedback CSV batch to merge into the index.')], index_path: Annotated[Path, typer.Option(help='JSON vector index path to update.')] = Path('.artifacts/vector_store.json'), embedding_dim: Annotated[int, typer.Option(help='Hashing embedding dimension.')] = 512, chunk_size: Annotated[int, typer.Option(help='Maximum words per chunk.')] = 80, chunk_overlap: Annotated[int, typer.Option(help='Words shared between adjacent chunks.')] = 16) -> None
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{input}] \texttt{Annotated[Path,\allowbreak{} typer.\allowbreak{}Option(help='Feedback CSV batch to merge into the index.\allowbreak{}')\allowbreak{}]\allowbreak{}}, required.
+  \item[\texttt{index\_\allowbreak{}path}] \texttt{Annotated[Path,\allowbreak{} typer.\allowbreak{}Option(help='JSON vector index path to update.\allowbreak{}')\allowbreak{}]\allowbreak{}}, default \texttt{Path('.\allowbreak{}artifacts/\allowbreak{}vector\_\allowbreak{}store.\allowbreak{}json')\allowbreak{}}.
+  \item[\texttt{embedding\_\allowbreak{}dim}] \texttt{Annotated[int,\allowbreak{} typer.\allowbreak{}Option(help='Hashing embedding dimension.\allowbreak{}')\allowbreak{}]\allowbreak{}}, default \texttt{512}.
+  \item[\texttt{chunk\_\allowbreak{}size}] \texttt{Annotated[int,\allowbreak{} typer.\allowbreak{}Option(help='Maximum words per chunk.\allowbreak{}')\allowbreak{}]\allowbreak{}}, default \texttt{80}.
+  \item[\texttt{chunk\_\allowbreak{}overlap}] \texttt{Annotated[int,\allowbreak{} typer.\allowbreak{}Option(help='Words shared between adjacent chunks.\allowbreak{}')\allowbreak{}]\allowbreak{}}, default \texttt{16}.
+\end{arglist}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}cli.\allowbreak{}py:240}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/cli.py#L240}{online}), module \cref{module:feedback_intelligence_agent.cli}

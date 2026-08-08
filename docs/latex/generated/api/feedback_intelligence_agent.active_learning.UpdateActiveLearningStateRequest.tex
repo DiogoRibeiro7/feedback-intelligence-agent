@@ -1,0 +1,34 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{UpdateActiveLearningStateRequest}}
+\label{class:feedback_intelligence_agent.active_learning.UpdateActiveLearningStateRequest}\label{schema:UpdateActiveLearningStateRequest}\index{Classes!UpdateActiveLearningStateRequest}
+
+Request to assign or transition one active-learning queue item.
+\apifield{Inherits}\texttt{BaseModel}
+\apifield{Fields}
+\begin{arglist}
+  \item[\texttt{status}] \texttt{ActiveLearningStatus \textbar{} None}, default \texttt{None}
+  \item[\texttt{assignee}] \texttt{str \textbar{} None}, default \texttt{None}, \texttt{max\_\allowbreak{}length=120}
+  \item[\texttt{notes}] \texttt{str \textbar{} None}, default \texttt{None}, \texttt{max\_\allowbreak{}length=2000}
+\end{arglist}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}active\_\allowbreak{}learning.\allowbreak{}py:29}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/active_learning.py#L29}{online}), pydantic model, module \cref{module:feedback_intelligence_agent.active_learning}
+
+\subsection{\texttt{normalise\_optional\_text}}
+\label{method:feedback_intelligence_agent.active_learning.UpdateActiveLearningStateRequest.normalise_optional_text}\index{Methods!normalise\_optional\_text}
+Trim empty optional text fields to None.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+normalise_optional_text(cls, value: str | None) -> str | None
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{value}] \texttt{str \textbar{} None}, required.
+\end{arglist}
+\apifield{Value}\texttt{str \textbar{} None}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}active\_\allowbreak{}learning.\allowbreak{}py:38}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/active_learning.py#L38}{online})

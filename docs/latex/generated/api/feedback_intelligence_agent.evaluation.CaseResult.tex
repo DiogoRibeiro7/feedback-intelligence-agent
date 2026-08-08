@@ -1,0 +1,33 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{CaseResult}}
+\label{class:feedback_intelligence_agent.evaluation.CaseResult}\label{schema:CaseResult}\index{Classes!CaseResult}
+
+Per-case evaluation detail kept in the report for debugging.
+\apifield{Inherits}\texttt{BaseModel}
+\apifield{Fields}
+\begin{arglist}
+  \item[\texttt{question}] \texttt{str}, required
+  \item[\texttt{is\_\allowbreak{}answerable}] \texttt{bool}, required
+  \item[\texttt{retrieved\_\allowbreak{}document\_\allowbreak{}ids}] \texttt{list[str]\allowbreak{}}, required
+  \item[\texttt{precision\_\allowbreak{}at\_\allowbreak{}k}] \texttt{float}, required
+  \item[\texttt{recall\_\allowbreak{}at\_\allowbreak{}k}] \texttt{float}, required
+  \item[\texttt{reciprocal\_\allowbreak{}rank}] \texttt{float}, required
+  \item[\texttt{context\_\allowbreak{}hit}] \texttt{bool}, required
+  \item[\texttt{keyword\_\allowbreak{}coverage}] \texttt{float}, required
+  \item[\texttt{groundedness}] \texttt{float}, required
+  \item[\texttt{citation\_\allowbreak{}aligned}] \texttt{bool}, required
+  \item[\texttt{evidence\_\allowbreak{}overlap}] \texttt{float}, default \texttt{0.\allowbreak{}0}, \texttt{ge=0.\allowbreak{}0,\allowbreak{} le=1.\allowbreak{}0}
+  \item[\texttt{hallucination\_\allowbreak{}detected}] \texttt{bool}, default \texttt{False}
+  \item[\texttt{hallucination\_\allowbreak{}risk}] \texttt{str}, default \texttt{'low'}
+  \item[\texttt{judge\_\allowbreak{}label}] \texttt{str \textbar{} None}, default \texttt{None}
+  \item[\texttt{refused}] \texttt{bool}, required
+  \item[\texttt{refusal\_\allowbreak{}correct}] \texttt{bool}, required
+\end{arglist}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}evaluation.\allowbreak{}py:214}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/evaluation.py#L214}{online}), pydantic model, module \cref{module:feedback_intelligence_agent.evaluation}

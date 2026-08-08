@@ -1,0 +1,50 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{SaveInsightReportRequest}}
+\label{class:feedback_intelligence_agent.reports.SaveInsightReportRequest}\label{schema:SaveInsightReportRequest}\index{Classes!SaveInsightReportRequest}
+
+Request to persist one generated agent answer as an insight report.
+\apifield{Inherits}\texttt{BaseModel}
+\apifield{Fields}
+\begin{arglist}
+  \item[\texttt{title}] \texttt{str}, required, \texttt{max\_\allowbreak{}length=120,\allowbreak{} min\_\allowbreak{}length=1}
+  \item[\texttt{result}] \texttt{AgentAnswer}, required
+  \item[\texttt{tenant\_\allowbreak{}id}] \texttt{str}, default \texttt{'default'}, \texttt{min\_\allowbreak{}length=1}
+  \item[\texttt{tags}] \texttt{list[str]\allowbreak{}}, default \texttt{list()\allowbreak{}}
+  \item[\texttt{notes}] \texttt{str \textbar{} None}, default \texttt{None}, \texttt{max\_\allowbreak{}length=2000}
+\end{arglist}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}reports.\allowbreak{}py:25}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/reports.py#L25}{online}), pydantic model, module \cref{module:feedback_intelligence_agent.reports}
+
+\subsection{\texttt{normalise\_tenant\_id}}
+\label{method:feedback_intelligence_agent.reports.SaveInsightReportRequest.normalise_tenant_id}\index{Methods!normalise\_tenant\_id}
+Normalize tenant identifiers for deterministic filtering.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+normalise_tenant_id(cls, value: str) -> str
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{value}] \texttt{str}, required.
+\end{arglist}
+\apifield{Value}\texttt{str}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}reports.\allowbreak{}py:36}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/reports.py#L36}{online})
+
+\subsection{\texttt{normalise\_tags}}
+\label{method:feedback_intelligence_agent.reports.SaveInsightReportRequest.normalise_tags}\index{Methods!normalise\_tags}
+Trim, lowercase, deduplicate, and bound report tags.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+normalise_tags(cls, value: list[str]) -> list[str]
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{value}] \texttt{list[str]\allowbreak{}}, required.
+\end{arglist}
+\apifield{Value}\texttt{list[str]\allowbreak{}}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}reports.\allowbreak{}py:42}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/reports.py#L42}{online})

@@ -1,0 +1,25 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{reports\_export}}
+\label{func:feedback_intelligence_agent.cli.reports_export}\index{Functions!reports\_export}
+
+Export one saved insight report for stakeholder handoff.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+reports_export(report_id: Annotated[str, typer.Argument(help='Report identifier.')], export_format: Annotated[ReportExportFormat, typer.Option('--format', help='Export format.')] = ReportExportFormat.markdown, output: Annotated[Path | None, typer.Option(help='Optional file path to write.')] = None, store_path: Annotated[Path, typer.Option(help='Directory holding saved report JSON files.')] = Path('.artifacts/reports')) -> None
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{report\_\allowbreak{}id}] \texttt{Annotated[str,\allowbreak{} typer.\allowbreak{}Argument(help='Report identifier.\allowbreak{}')\allowbreak{}]\allowbreak{}}, required.
+  \item[\texttt{export\_\allowbreak{}format}] \texttt{Annotated[ReportExportFormat,\allowbreak{} typer.\allowbreak{}Option('-\allowbreak{}-\allowbreak{}format',\allowbreak{} help='Export format.\allowbreak{}')\allowbreak{}]\allowbreak{}}, default \texttt{ReportExportFormat.\allowbreak{}markdown}.
+  \item[\texttt{output}] \texttt{Annotated[Path \textbar{} None,\allowbreak{} typer.\allowbreak{}Option(help='Optional file path to write.\allowbreak{}')\allowbreak{}]\allowbreak{}}, default \texttt{None}.
+  \item[\texttt{store\_\allowbreak{}path}] \texttt{Annotated[Path,\allowbreak{} typer.\allowbreak{}Option(help='Directory holding saved report JSON files.\allowbreak{}')\allowbreak{}]\allowbreak{}}, default \texttt{Path('.\allowbreak{}artifacts/\allowbreak{}reports')\allowbreak{}}.
+\end{arglist}
+\apifield{Raises}\texttt{Exit}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}cli.\allowbreak{}py:562}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/cli.py#L562}{online}), module \cref{module:feedback_intelligence_agent.cli}

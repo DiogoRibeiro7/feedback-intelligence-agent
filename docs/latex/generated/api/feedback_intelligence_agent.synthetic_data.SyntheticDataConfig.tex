@@ -1,0 +1,27 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{SyntheticDataConfig}}
+\label{class:feedback_intelligence_agent.synthetic_data.SyntheticDataConfig}\index{Classes!SyntheticDataConfig}
+
+Configuration for synthetic feedback generation.
+\apifield{Attributes}
+\begin{arglist}
+  \item[\texttt{rows}] \texttt{int}, default \texttt{1000}. Number of feedback records to generate (must be positive).
+  \item[\texttt{seed}] \texttt{int}, default \texttt{42}. Seed for the local random generator; the same seed and parameters always produce a byte-identical CSV.
+  \item[\texttt{product\_\allowbreak{}areas}] \texttt{tuple[str,\allowbreak{} .\allowbreak{}.\allowbreak{}.\allowbreak{}]\allowbreak{}}, default \texttt{DEFAULT\_\allowbreak{}PRODUCT\_\allowbreak{}AREAS}. Product areas referenced by generated feedback text.
+  \item[\texttt{tenant\_\allowbreak{}ids}] \texttt{tuple[str,\allowbreak{} .\allowbreak{}.\allowbreak{}.\allowbreak{}]\allowbreak{}}, default \texttt{DEFAULT\_\allowbreak{}TENANT\_\allowbreak{}IDS}. Tenant IDs assigned to records.
+  \item[\texttt{customer\_\allowbreak{}segments}] \texttt{tuple[str,\allowbreak{} .\allowbreak{}.\allowbreak{}.\allowbreak{}]\allowbreak{}}, default \texttt{DEFAULT\_\allowbreak{}CUSTOMER\_\allowbreak{}SEGMENTS}. Customer segments assigned to records.
+  \item[\texttt{issue\_\allowbreak{}categories}] \texttt{tuple[str,\allowbreak{} .\allowbreak{}.\allowbreak{}.\allowbreak{}]\allowbreak{}}, default \texttt{DEFAULT\_\allowbreak{}ISSUE\_\allowbreak{}CATEGORIES}. Issue categories woven into the feedback text.
+  \item[\texttt{sentiment\_\allowbreak{}distribution}] \texttt{dict[str,\allowbreak{} float]\allowbreak{}}, default \texttt{field(default\_\allowbreak{}factory=lambda: dict(DEFAULT\_\allowbreak{}SENTIMENT\_\allowbreak{}DISTRIBUTION)\allowbreak{})\allowbreak{}}. Target proportion of each sentiment; values are normalised to sum to 1. Keys must be a subset of \texttt{SENTIMENTS}.
+  \item[\texttt{start\_\allowbreak{}date}] \texttt{datetime}, default \texttt{field(default\_\allowbreak{}factory=lambda: datetime(2026,\allowbreak{} 1,\allowbreak{} 1,\allowbreak{} 8,\allowbreak{} 0,\allowbreak{} 0)\allowbreak{})\allowbreak{}}. Earliest possible \texttt{created\_\allowbreak{}at} timestamp.
+  \item[\texttt{max\_\allowbreak{}day\_\allowbreak{}span}] \texttt{int}, default \texttt{180}. Records are spread across this many days after \texttt{start\_\allowbreak{}date}.
+  \item[\texttt{include\_\allowbreak{}sentiment\_\allowbreak{}column}] \texttt{bool}, default \texttt{True}. Whether to emit the optional \texttt{sentiment} column.
+  \item[\texttt{include\_\allowbreak{}tenant\_\allowbreak{}column}] \texttt{bool}, default \texttt{False}. Whether to emit the optional \texttt{tenant\_\allowbreak{}id} column.
+\end{arglist}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}synthetic\_\allowbreak{}data.\allowbreak{}py:143}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/synthetic_data.py#L143}{online}), dataclass, module \cref{module:feedback_intelligence_agent.synthetic_data}

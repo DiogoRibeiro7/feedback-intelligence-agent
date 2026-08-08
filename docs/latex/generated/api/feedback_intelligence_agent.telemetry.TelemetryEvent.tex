@@ -1,0 +1,31 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{TelemetryEvent}}
+\label{class:feedback_intelligence_agent.telemetry.TelemetryEvent}\index{Classes!TelemetryEvent}
+
+A single structured telemetry event.
+\apifield{Attributes}
+\begin{arglist}
+  \item[\texttt{name}] \texttt{str}, required. Stable event name, e.g. \texttt{retrieval\_\allowbreak{}finished}.
+  \item[\texttt{timestamp}] \texttt{str}, required. ISO-8601 UTC timestamp of when the event was emitted.
+  \item[\texttt{correlation\_\allowbreak{}id}] \texttt{str}, required. Identifier shared by all events of one logical operation.
+  \item[\texttt{duration\_\allowbreak{}ms}] \texttt{float \textbar{} None}, default \texttt{None}. Elapsed time in milliseconds for \texttt{*\_\allowbreak{}finished} events.
+  \item[\texttt{metadata}] \texttt{dict[str,\allowbreak{} Any]\allowbreak{}}, default \texttt{field(default\_\allowbreak{}factory=dict)\allowbreak{}}. Structured attributes describing the event.
+\end{arglist}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}telemetry.\allowbreak{}py:55}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/telemetry.py#L55}{online}), dataclass, module \cref{module:feedback_intelligence_agent.telemetry}
+
+\subsection{\texttt{to\_dict}}
+\label{method:feedback_intelligence_agent.telemetry.TelemetryEvent.to_dict}\index{Methods!to\_dict}
+Return a JSON-serialisable representation of the event.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+to_dict(self) -> dict[str, Any]
+\end{lstlisting}
+\apifield{Value}\texttt{dict[str,\allowbreak{} Any]\allowbreak{}}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}telemetry.\allowbreak{}py:72}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/telemetry.py#L72}{online})

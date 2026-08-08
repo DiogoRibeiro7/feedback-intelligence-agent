@@ -1,0 +1,24 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{write\_feedback\_csv}}
+\label{func:feedback_intelligence_agent.synthetic_data.write_feedback_csv}\index{Functions!write\_feedback\_csv}
+
+Generate synthetic feedback and write it to a CSV file.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+write_feedback_csv(config: SyntheticDataConfig, output: str | Path) -> Path
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{config}] \texttt{SyntheticDataConfig}, required. Generation parameters.
+  \item[\texttt{output}] \texttt{str \textbar{} Path}, required. Destination CSV path.
+\end{arglist}
+\apifield{Value}\texttt{Path}. The path the CSV was written to.
+\apifield{Details}Parent directories are created as needed. The file is written with UTF-8 encoding and \texttt{\textbackslash{}n} newlines, so the same seed and parameters produce a byte-identical file on any platform.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}synthetic\_\allowbreak{}data.\allowbreak{}py:299}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/synthetic_data.py#L299}{online}), module \cref{module:feedback_intelligence_agent.synthetic_data}

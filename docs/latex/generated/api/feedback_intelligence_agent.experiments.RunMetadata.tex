@@ -1,0 +1,22 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{RunMetadata}}
+\label{class:feedback_intelligence_agent.experiments.RunMetadata}\label{schema:RunMetadata}\index{Classes!RunMetadata}
+
+Environment-specific metadata captured alongside an experiment.
+\apifield{Inherits}\texttt{BaseModel}
+\apifield{Fields}
+\begin{arglist}
+  \item[\texttt{timestamp}] \texttt{str}, required
+  \item[\texttt{git\_\allowbreak{}commit}] \texttt{str \textbar{} None}, required
+  \item[\texttt{python\_\allowbreak{}version}] \texttt{str}, required
+  \item[\texttt{package\_\allowbreak{}version}] \texttt{str}, required
+  \item[\texttt{config}] \texttt{ExperimentConfig}, required
+\end{arglist}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}experiments.\allowbreak{}py:120}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/experiments.py#L120}{online}), pydantic model, module \cref{module:feedback_intelligence_agent.experiments}

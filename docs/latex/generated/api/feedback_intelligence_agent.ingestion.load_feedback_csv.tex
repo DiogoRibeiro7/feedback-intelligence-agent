@@ -1,0 +1,29 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{load\_feedback\_csv}}
+\label{func:feedback_intelligence_agent.ingestion.load_feedback_csv}\index{Functions!load\_feedback\_csv}
+
+Load feedback records from a CSV file, validating the data contract first.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+load_feedback_csv(path: str | Path, *, strict: bool = True, telemetry: Telemetry | None = None) -> list[FeedbackRecord]
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{path}] \texttt{str \textbar{} Path}, required. Path to a CSV file containing the required feedback columns.
+  \item[\texttt{strict}] \texttt{bool}, default \texttt{True}, keyword-only. When True (default), any contract violation aborts ingestion. When False, invalid rows are skipped and the valid rows are returned.
+  \item[\texttt{telemetry}] \texttt{Telemetry \textbar{} None}, default \texttt{None}, keyword-only. Optional telemetry emitter; emits \texttt{ingestion\_\allowbreak{}started} and \texttt{ingestion\_\allowbreak{}finished} events around the load.
+\end{arglist}
+\apifield{Value}\texttt{list[FeedbackRecord]\allowbreak{}}. Validated feedback records.
+\apifield{Raises}
+\begin{arglist}
+  \item[\texttt{FeedbackIngestionError}] In strict mode, if required columns are missing or any row violates the data contract.
+  \item[\texttt{FileNotFoundError}] If the file does not exist.
+\end{arglist}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}ingestion.\allowbreak{}py:22}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/ingestion.py#L22}{online}), module \cref{module:feedback_intelligence_agent.ingestion}

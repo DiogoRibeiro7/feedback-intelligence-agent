@@ -1,0 +1,206 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_architecture.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\section{Coupling}
+
+Fan-in counts the internal modules that import a module; fan-out counts the internal modules it imports. High fan-in with low fan-out identifies shared foundations; high fan-out identifies composition roots.
+
+\begin{longtable}{>{\raggedright\arraybackslash\small}p{0.20\textwidth} >{\raggedright\arraybackslash\small}p{0.15\textwidth} >{\raggedright\arraybackslash\small}p{0.08\textwidth} >{\raggedright\arraybackslash\small}p{0.08\textwidth} >{\raggedright\arraybackslash\small}p{0.35\textwidth}}
+\caption{Internal coupling and external package usage per module.}\label{tab:module-coupling}\\
+\toprule
+Module & Layer & Fan-in & Fan-out & External packages \\
+\midrule
+\endfirsthead
+\toprule
+Module & Layer & Fan-in & Fan-out & External packages \\
+\midrule
+\endhead
+\midrule
+\multicolumn{5}{r}{\footnotesize continued on next page}\\
+\endfoot
+\bottomrule
+\endlastfoot
+\texttt{schemas} & foundation & 26 & 1 & \texttt{pydantic} \\
+\texttt{telemetry} & infrastructure & 10 & 0 & \texttt{contextlib}, \texttt{opentelemetry} \\
+\texttt{factory} & application & 6 & 21 & -- \\
+\texttt{vector\_\allowbreak{}store} & data & 6 & 1 & \texttt{numpy}, \texttt{pydantic} \\
+\texttt{config} & foundation & 6 & 0 & \texttt{pydantic}, \texttt{pydantic\_\allowbreak{}settings} \\
+\texttt{embeddings} & domain & 6 & 0 & \texttt{numpy} \\
+\texttt{agent} & application & 5 & 12 & -- \\
+\texttt{ingestion} & data & 5 & 3 & -- \\
+\texttt{chunking} & domain & 5 & 2 & -- \\
+\texttt{llm} & infrastructure & 5 & 2 & \texttt{anthropic}, \texttt{boto3}, \texttt{botocore}, \texttt{httpx} \\
+\texttt{citations} & domain & 5 & 1 & -- \\
+\texttt{data\_\allowbreak{}contracts} & data & 5 & 1 & \texttt{pandas}, \texttt{pydantic} \\
+\texttt{human\_\allowbreak{}feedback} & application & 5 & 1 & \texttt{pydantic} \\
+\texttt{reports} & application & 5 & 1 & \texttt{pydantic} \\
+\texttt{jobs} & application & 4 & 7 & \texttt{pydantic} \\
+\texttt{active\_\allowbreak{}learning} & application & 4 & 1 & \texttt{pydantic} \\
+\texttt{evaluation} & application & 3 & 5 & \texttt{pydantic} \\
+\texttt{retrieval} & domain & 3 & 4 & -- \\
+\texttt{hallucination} & domain & 3 & 2 & \texttt{pydantic} \\
+\texttt{memory} & domain & 3 & 1 & \texttt{pydantic} \\
+\texttt{privacy} & domain & 3 & 1 & -- \\
+\texttt{query\_\allowbreak{}expansion} & domain & 3 & 0 & -- \\
+\texttt{prompts} & domain & 2 & 3 & -- \\
+\texttt{\_\allowbreak{}\_\allowbreak{}init\_\allowbreak{}\_\allowbreak{}} & interface & 2 & 2 & -- \\
+\texttt{tools} & domain & 2 & 2 & \texttt{pydantic} \\
+\texttt{email\_\allowbreak{}summaries} & application & 2 & 1 & \texttt{pydantic} \\
+\texttt{guardrails} & domain & 2 & 0 & \texttt{pydantic} \\
+\texttt{prompt\_\allowbreak{}registry} & domain & 2 & 0 & -- \\
+\texttt{experiments} & application & 1 & 9 & \texttt{mlflow}, \texttt{platform}, \texttt{pydantic}, \texttt{yaml} \\
+\texttt{benchmarking} & application & 1 & 8 & \texttt{pydantic} \\
+\texttt{index\_\allowbreak{}updates} & data & 1 & 6 & \texttt{pydantic} \\
+\texttt{lakehouse} & data & 1 & 4 & \texttt{pydantic} \\
+\texttt{streaming\_\allowbreak{}ingestion} & data & 1 & 4 & \texttt{boto3}, \texttt{confluent\_\allowbreak{}kafka}, \texttt{pydantic} \\
+\texttt{lexical\_\allowbreak{}search} & domain & 1 & 2 & -- \\
+\texttt{resilience} & infrastructure & 1 & 2 & \texttt{concurrent} \\
+\texttt{qdrant\_\allowbreak{}store} & data & 1 & 1 & \texttt{numpy}, \texttt{qdrant\_\allowbreak{}client} \\
+\texttt{reranking} & domain & 1 & 1 & -- \\
+\texttt{synthetic\_\allowbreak{}data} & domain & 1 & 1 & -- \\
+\texttt{auth} & infrastructure & 1 & 0 & \texttt{pydantic} \\
+\texttt{output\_\allowbreak{}parser} & domain & 1 & 0 & \texttt{pydantic} \\
+\texttt{rate\_\allowbreak{}limit} & infrastructure & 1 & 0 & \texttt{pydantic} \\
+\texttt{cli} & interface & 0 & 21 & \texttt{typer}, \texttt{uvicorn} \\
+\texttt{api} & interface & 0 & 13 & \texttt{fastapi} \\
+\end{longtable}
+
+\section{Deferred imports}
+
+Deferred imports are the mechanism this package uses to break cycles and to keep optional extras out of the default import path.
+
+\begin{longtable}{>{\raggedright\arraybackslash\small}p{0.20\textwidth} >{\raggedright\arraybackslash\small}p{0.26\textwidth} >{\raggedright\arraybackslash\small}p{0.26\textwidth} >{\raggedright\arraybackslash\small}p{0.20\textwidth}}
+\caption{Modules that defer imports, and the optional distributions they use.}\label{tab:deferred-imports}\\
+\toprule
+Module & Function-local imports & TYPE\_CHECKING imports & Optional packages \\
+\midrule
+\endfirsthead
+\toprule
+Module & Function-local imports & TYPE\_CHECKING imports & Optional packages \\
+\midrule
+\endhead
+\midrule
+\multicolumn{4}{r}{\footnotesize continued on next page}\\
+\endfoot
+\bottomrule
+\endlastfoot
+\texttt{experiments} & -- & -- & \texttt{mlflow} \\
+\texttt{factory} & \texttt{active\_\allowbreak{}learning}, \texttt{human\_\allowbreak{}feedback}, \texttt{jobs}, \texttt{qdrant\_\allowbreak{}store}, \texttt{reports} & \texttt{active\_\allowbreak{}learning}, \texttt{human\_\allowbreak{}feedback}, \texttt{jobs}, \texttt{reports} & -- \\
+\texttt{llm} & -- & -- & \texttt{anthropic}, \texttt{boto3} \\
+\texttt{qdrant\_\allowbreak{}store} & -- & -- & \texttt{qdrant\_\allowbreak{}client} \\
+\texttt{streaming\_\allowbreak{}ingestion} & -- & -- & \texttt{boto3}, \texttt{confluent\_\allowbreak{}kafka} \\
+\texttt{telemetry} & -- & -- & \texttt{opentelemetry} \\
+\end{longtable}
+
+\section{Circular dependencies}
+
+No cycle exists among module-level imports: the eager import graph is a directed acyclic graph.
+
+Counting deferred imports (function-local imports and imports guarded by \texttt{TYPE\_CHECKING}) as edges, the following components become cyclic:
+
+\begin{itemize}[nosep]
+  \item \texttt{factory}, \texttt{jobs}
+\end{itemize}
+
+These are not runtime cycles. The deferred import style is the mechanism that keeps them out of the eager graph; see the dependency-direction discussion in this chapter. Reporting them is deliberate: they mark the places where the eager graph is acyclic only because of an import placement decision.
+
+\section{Complete internal import graph}
+
+Every internal import edge, with the context that determines whether it can participate in a runtime cycle. The names each edge imports are in the source; the per-component tables in \cref{ch:components} give the same edges grouped by component.
+
+\begin{longtable}{>{\raggedright\arraybackslash\small}p{0.14\textwidth} >{\raggedright\arraybackslash\small}p{0.14\textwidth} >{\raggedright\arraybackslash\small}p{0.08\textwidth} >{\raggedright\arraybackslash\small}p{0.14\textwidth} >{\raggedright\arraybackslash\small}p{0.14\textwidth} >{\raggedright\arraybackslash\small}p{0.08\textwidth}}
+\caption{Every internal import edge of the package.}\label{tab:module-edges}\\
+\toprule
+Source & Imports & Context & Source & Imports & Context \\
+\midrule
+\endfirsthead
+\toprule
+Source & Imports & Context & Source & Imports & Context \\
+\midrule
+\endhead
+\midrule
+\multicolumn{6}{r}{\footnotesize continued on next page}\\
+\endfoot
+\bottomrule
+\endlastfoot
+\texttt{\_\allowbreak{}\_\allowbreak{}init\_\allowbreak{}\_\allowbreak{}} & \texttt{agent} & eager & \texttt{factory} & \texttt{active\_\allowbreak{}learning} & lazy \\
+\texttt{\_\allowbreak{}\_\allowbreak{}init\_\allowbreak{}\_\allowbreak{}} & \texttt{config} & eager & \texttt{factory} & \texttt{active\_\allowbreak{}learning} & typing \\
+\texttt{active\_\allowbreak{}learning} & \texttt{human\_\allowbreak{}feedback} & eager & \texttt{factory} & \texttt{agent} & eager \\
+\texttt{agent} & \texttt{citations} & eager & \texttt{factory} & \texttt{chunking} & eager \\
+\texttt{agent} & \texttt{guardrails} & eager & \texttt{factory} & \texttt{config} & eager \\
+\texttt{agent} & \texttt{hallucination} & eager & \texttt{factory} & \texttt{embeddings} & eager \\
+\texttt{agent} & \texttt{llm} & eager & \texttt{factory} & \texttt{hallucination} & eager \\
+\texttt{agent} & \texttt{memory} & eager & \texttt{factory} & \texttt{human\_\allowbreak{}feedback} & lazy \\
+\texttt{agent} & \texttt{output\_\allowbreak{}parser} & eager & \texttt{factory} & \texttt{human\_\allowbreak{}feedback} & typing \\
+\texttt{agent} & \texttt{prompts} & eager & \texttt{factory} & \texttt{ingestion} & eager \\
+\texttt{agent} & \texttt{reranking} & eager & \texttt{factory} & \texttt{jobs} & lazy \\
+\texttt{agent} & \texttt{retrieval} & eager & \texttt{factory} & \texttt{jobs} & typing \\
+\texttt{agent} & \texttt{schemas} & eager & \texttt{factory} & \texttt{lexical\_\allowbreak{}search} & eager \\
+\texttt{agent} & \texttt{telemetry} & eager & \texttt{factory} & \texttt{llm} & eager \\
+\texttt{agent} & \texttt{tools} & eager & \texttt{factory} & \texttt{memory} & eager \\
+\texttt{api} & \texttt{\_\allowbreak{}\_\allowbreak{}init\_\allowbreak{}\_\allowbreak{}} & eager & \texttt{factory} & \texttt{qdrant\_\allowbreak{}store} & lazy \\
+\texttt{api} & \texttt{active\_\allowbreak{}learning} & eager & \texttt{factory} & \texttt{query\_\allowbreak{}expansion} & eager \\
+\texttt{api} & \texttt{auth} & eager & \texttt{factory} & \texttt{reports} & lazy \\
+\texttt{api} & \texttt{config} & eager & \texttt{factory} & \texttt{reports} & typing \\
+\texttt{api} & \texttt{email\_\allowbreak{}summaries} & eager & \texttt{factory} & \texttt{resilience} & eager \\
+\texttt{api} & \texttt{factory} & eager & \texttt{factory} & \texttt{retrieval} & eager \\
+\texttt{api} & \texttt{human\_\allowbreak{}feedback} & eager & \texttt{factory} & \texttt{schemas} & eager \\
+\texttt{api} & \texttt{jobs} & eager & \texttt{factory} & \texttt{telemetry} & eager \\
+\texttt{api} & \texttt{memory} & eager & \texttt{factory} & \texttt{tools} & eager \\
+\texttt{api} & \texttt{rate\_\allowbreak{}limit} & eager & \texttt{factory} & \texttt{vector\_\allowbreak{}store} & eager \\
+\texttt{api} & \texttt{reports} & eager & \texttt{hallucination} & \texttt{llm} & eager \\
+\texttt{api} & \texttt{schemas} & eager & \texttt{hallucination} & \texttt{schemas} & eager \\
+\texttt{api} & \texttt{telemetry} & eager & \texttt{human\_\allowbreak{}feedback} & \texttt{schemas} & eager \\
+\texttt{benchmarking} & \texttt{agent} & eager & \texttt{index\_\allowbreak{}updates} & \texttt{chunking} & eager \\
+\texttt{benchmarking} & \texttt{chunking} & eager & \texttt{index\_\allowbreak{}updates} & \texttt{embeddings} & eager \\
+\texttt{benchmarking} & \texttt{config} & eager & \texttt{index\_\allowbreak{}updates} & \texttt{factory} & eager \\
+\texttt{benchmarking} & \texttt{embeddings} & eager & \texttt{index\_\allowbreak{}updates} & \texttt{schemas} & eager \\
+\texttt{benchmarking} & \texttt{evaluation} & eager & \texttt{index\_\allowbreak{}updates} & \texttt{telemetry} & eager \\
+\texttt{benchmarking} & \texttt{factory} & eager & \texttt{index\_\allowbreak{}updates} & \texttt{vector\_\allowbreak{}store} & eager \\
+\texttt{benchmarking} & \texttt{ingestion} & eager & \texttt{ingestion} & \texttt{data\_\allowbreak{}contracts} & eager \\
+\texttt{benchmarking} & \texttt{vector\_\allowbreak{}store} & eager & \texttt{ingestion} & \texttt{schemas} & eager \\
+\texttt{chunking} & \texttt{privacy} & eager & \texttt{ingestion} & \texttt{telemetry} & eager \\
+\texttt{chunking} & \texttt{schemas} & eager & \texttt{jobs} & \texttt{chunking} & eager \\
+\texttt{citations} & \texttt{schemas} & eager & \texttt{jobs} & \texttt{data\_\allowbreak{}contracts} & eager \\
+\texttt{cli} & \texttt{active\_\allowbreak{}learning} & eager & \texttt{jobs} & \texttt{embeddings} & eager \\
+\texttt{cli} & \texttt{benchmarking} & eager & \texttt{jobs} & \texttt{factory} & eager \\
+\texttt{cli} & \texttt{citations} & eager & \texttt{jobs} & \texttt{ingestion} & eager \\
+\texttt{cli} & \texttt{config} & eager & \texttt{jobs} & \texttt{telemetry} & eager \\
+\texttt{cli} & \texttt{data\_\allowbreak{}contracts} & eager & \texttt{jobs} & \texttt{vector\_\allowbreak{}store} & eager \\
+\texttt{cli} & \texttt{email\_\allowbreak{}summaries} & eager & \texttt{lakehouse} & \texttt{data\_\allowbreak{}contracts} & eager \\
+\texttt{cli} & \texttt{evaluation} & eager & \texttt{lakehouse} & \texttt{privacy} & eager \\
+\texttt{cli} & \texttt{experiments} & eager & \texttt{lakehouse} & \texttt{schemas} & eager \\
+\texttt{cli} & \texttt{factory} & eager & \texttt{lakehouse} & \texttt{telemetry} & eager \\
+\texttt{cli} & \texttt{human\_\allowbreak{}feedback} & eager & \texttt{lexical\_\allowbreak{}search} & \texttt{query\_\allowbreak{}expansion} & eager \\
+\texttt{cli} & \texttt{index\_\allowbreak{}updates} & eager & \texttt{lexical\_\allowbreak{}search} & \texttt{schemas} & eager \\
+\texttt{cli} & \texttt{ingestion} & eager & \texttt{llm} & \texttt{citations} & eager \\
+\texttt{cli} & \texttt{jobs} & eager & \texttt{llm} & \texttt{schemas} & eager \\
+\texttt{cli} & \texttt{lakehouse} & eager & \texttt{memory} & \texttt{llm} & eager \\
+\texttt{cli} & \texttt{prompt\_\allowbreak{}registry} & eager & \texttt{privacy} & \texttt{schemas} & eager \\
+\texttt{cli} & \texttt{prompts} & eager & \texttt{prompts} & \texttt{citations} & eager \\
+\texttt{cli} & \texttt{reports} & eager & \texttt{prompts} & \texttt{prompt\_\allowbreak{}registry} & eager \\
+\texttt{cli} & \texttt{schemas} & eager & \texttt{prompts} & \texttt{schemas} & eager \\
+\texttt{cli} & \texttt{streaming\_\allowbreak{}ingestion} & eager & \texttt{qdrant\_\allowbreak{}store} & \texttt{schemas} & eager \\
+\texttt{cli} & \texttt{synthetic\_\allowbreak{}data} & eager & \texttt{reports} & \texttt{schemas} & eager \\
+\texttt{cli} & \texttt{telemetry} & eager & \texttt{reranking} & \texttt{schemas} & eager \\
+\texttt{data\_\allowbreak{}contracts} & \texttt{schemas} & eager & \texttt{resilience} & \texttt{llm} & eager \\
+\texttt{email\_\allowbreak{}summaries} & \texttt{reports} & eager & \texttt{resilience} & \texttt{schemas} & eager \\
+\texttt{evaluation} & \texttt{agent} & eager & \texttt{retrieval} & \texttt{embeddings} & eager \\
+\texttt{evaluation} & \texttt{hallucination} & eager & \texttt{retrieval} & \texttt{query\_\allowbreak{}expansion} & eager \\
+\texttt{evaluation} & \texttt{retrieval} & eager & \texttt{retrieval} & \texttt{schemas} & eager \\
+\texttt{evaluation} & \texttt{schemas} & eager & \texttt{retrieval} & \texttt{vector\_\allowbreak{}store} & eager \\
+\texttt{evaluation} & \texttt{telemetry} & eager & \texttt{schemas} & \texttt{guardrails} & eager \\
+\texttt{experiments} & \texttt{\_\allowbreak{}\_\allowbreak{}init\_\allowbreak{}\_\allowbreak{}} & eager & \texttt{streaming\_\allowbreak{}ingestion} & \texttt{data\_\allowbreak{}contracts} & eager \\
+\texttt{experiments} & \texttt{agent} & eager & \texttt{streaming\_\allowbreak{}ingestion} & \texttt{privacy} & eager \\
+\texttt{experiments} & \texttt{chunking} & eager & \texttt{streaming\_\allowbreak{}ingestion} & \texttt{schemas} & eager \\
+\texttt{experiments} & \texttt{config} & eager & \texttt{streaming\_\allowbreak{}ingestion} & \texttt{telemetry} & eager \\
+\texttt{experiments} & \texttt{embeddings} & eager & \texttt{synthetic\_\allowbreak{}data} & \texttt{schemas} & eager \\
+\texttt{experiments} & \texttt{evaluation} & eager & \texttt{tools} & \texttt{citations} & eager \\
+\texttt{experiments} & \texttt{factory} & eager & \texttt{tools} & \texttt{schemas} & eager \\
+\texttt{experiments} & \texttt{ingestion} & eager & \texttt{vector\_\allowbreak{}store} & \texttt{schemas} & eager \\
+\texttt{experiments} & \texttt{vector\_\allowbreak{}store} & eager &  &  &  \\
+\end{longtable}

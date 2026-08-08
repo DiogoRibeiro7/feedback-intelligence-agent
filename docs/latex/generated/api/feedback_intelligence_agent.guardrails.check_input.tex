@@ -1,0 +1,23 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{check\_input}}
+\label{func:feedback_intelligence_agent.guardrails.check_input}\index{Functions!check\_input}
+
+Run all input guardrail rules against a user question (pre-retrieval gate).
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+check_input(question: str) -> GuardrailDecision
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{question}] \texttt{str}, required.
+\end{arglist}
+\apifield{Value}\texttt{GuardrailDecision}
+\apifield{Details}Returns an \texttt{allowed=False} decision with a safe \texttt{suggested\_\allowbreak{}response} when the question is empty or matches a documented unsafe pattern.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}guardrails.\allowbreak{}py:165}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/guardrails.py#L165}{online}), module \cref{module:feedback_intelligence_agent.guardrails}

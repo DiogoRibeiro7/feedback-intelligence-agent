@@ -1,0 +1,36 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{ToolRouter}}
+\label{class:feedback_intelligence_agent.tools.ToolRouter}\index{Classes!ToolRouter}
+
+Deterministic keyword router that selects at most one tool per query.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+ToolRouter(self, registry: ToolRegistry) -> None
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{registry}] \texttt{ToolRegistry}, required.
+\end{arglist}
+\apifield{Details}Explicit tool requests (\texttt{use the \textless{}name\textgreater{} tool}) are honoured when the tool exists and refused gracefully when it does not. Otherwise, the ordered \texttt{TOOL\_\allowbreak{}ROUTES} keyword rules decide; queries matching no rule fall through to the plain RAG flow.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}tools.\allowbreak{}py:511}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/tools.py#L511}{online}), class, module \cref{module:feedback_intelligence_agent.tools}
+
+\subsection{\texttt{select}}
+\label{method:feedback_intelligence_agent.tools.ToolRouter.select}\index{Methods!select}
+Select a tool for the question, refusing unknown explicit requests.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+select(self, question: str) -> ToolSelection
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{question}] \texttt{str}, required.
+\end{arglist}
+\apifield{Value}\texttt{ToolSelection}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}tools.\allowbreak{}py:524}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/tools.py#L524}{online})

@@ -1,0 +1,47 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{BM25Retriever}}
+\label{class:feedback_intelligence_agent.lexical_search.BM25Retriever}\index{Classes!BM25Retriever}
+
+In-memory Okapi BM25 retriever over document chunks.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+BM25Retriever(self, chunks: Sequence[DocumentChunk], *, texts: Sequence[str] | None = None, k1: float = 1.5, b: float = 0.75, query_expander: QueryExpander | None = None) -> None
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{chunks}] \texttt{Sequence[DocumentChunk]\allowbreak{}}, required.
+  \item[\texttt{texts}] \texttt{Sequence[str]\allowbreak{} \textbar{} None}, default \texttt{None}, keyword-only.
+  \item[\texttt{k1}] \texttt{float}, default \texttt{1.\allowbreak{}5}, keyword-only.
+  \item[\texttt{b}] \texttt{float}, default \texttt{0.\allowbreak{}75}, keyword-only.
+  \item[\texttt{query\_\allowbreak{}expander}] \texttt{QueryExpander \textbar{} None}, default \texttt{None}, keyword-only.
+\end{arglist}
+\apifield{Raises}\texttt{ValueError}
+\apifield{Properties}
+\begin{arglist}
+  \item[\texttt{size}] Number of indexed chunks.
+\end{arglist}
+\apifield{Details}The index is built once at construction time. \texttt{texts} allows indexing an enriched representation (for example chunk text plus metadata) while the returned \texttt{SearchResult} objects keep the original chunks.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}lexical\_\allowbreak{}search.\allowbreak{}py:26}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/lexical_search.py#L26}{online}), class, module \cref{module:feedback_intelligence_agent.lexical_search}
+
+\subsection{\texttt{search}}
+\label{method:feedback_intelligence_agent.lexical_search.BM25Retriever.search}\index{Methods!search}
+Return chunks with a positive BM25 score for the question, best first.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+search(self, question: str, *, top_k: int = 4) -> list[SearchResult]
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{question}] \texttt{str}, required.
+  \item[\texttt{top\_\allowbreak{}k}] \texttt{int}, default \texttt{4}, keyword-only.
+\end{arglist}
+\apifield{Value}\texttt{list[SearchResult]\allowbreak{}}
+\apifield{Raises}\texttt{ValueError}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}lexical\_\allowbreak{}search.\allowbreak{}py:73}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/lexical_search.py#L73}{online})
