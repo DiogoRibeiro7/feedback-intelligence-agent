@@ -853,7 +853,7 @@ def main(argv: list[str] | None = None) -> int:
     inventory = build_inventory(arguments.repo_root)
     output = arguments.repo_root / arguments.output
     output.parent.mkdir(parents=True, exist_ok=True)
-    output.write_text(json.dumps(inventory, indent=2) + "\n", encoding="utf-8")
+    output.write_text(json.dumps(inventory, indent=2) + "\n", encoding="utf-8", newline="\n")
     print(
         f"repository-inventory: {inventory['files']['total']} files, "
         f"{len(inventory['ci_workflows'])} workflows, {len(inventory['tests'])} test modules "

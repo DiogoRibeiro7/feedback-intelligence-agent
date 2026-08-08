@@ -43,8 +43,7 @@ _SECTION_HEADINGS = (
 
 _SECTION_RE = re.compile(rf"^({'|'.join(_SECTION_HEADINGS)}):\s*$")
 _FIELD_RE = re.compile(
-    r"^(?P<name>\*{0,2}[A-Za-z_][\w.\[\], |]*)\s*(?:\((?P<type>[^)]*)\))?:\s*"
-    r"(?P<text>.*)$"
+    r"^(?P<name>\*{0,2}[A-Za-z_][\w.\[\], |]*)\s*(?:\((?P<type>[^)]*)\))?:\s*" r"(?P<text>.*)$"
 )
 
 
@@ -1049,7 +1048,9 @@ def main(argv: list[str] | None = None) -> int:
     index = build_api_index(arguments.repo_root)
     output = arguments.repo_root / arguments.output
     output.parent.mkdir(parents=True, exist_ok=True)
-    output.write_text(json.dumps(index, indent=2, sort_keys=False) + "\n", encoding="utf-8")
+    output.write_text(
+        json.dumps(index, indent=2, sort_keys=False) + "\n", encoding="utf-8", newline="\n"
+    )
     print(
         f"api-index: {len(index['modules'])} modules, {len(index['classes'])} classes, "
         f"{len(index['functions'])} functions, {len(index['commands'])} commands, "

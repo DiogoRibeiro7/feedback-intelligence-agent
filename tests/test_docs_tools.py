@@ -21,7 +21,13 @@ if sys.version_info < (3, 11):  # pragma: no cover - environment guard
         allow_module_level=True,
     )
 
-from tools import check_latex_log, extract_api, extract_dependencies, latex_utils  # noqa: E402
+from tools import (  # noqa: E402
+    check_latex_log,
+    digest,
+    extract_api,
+    extract_dependencies,
+    latex_utils,
+)
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 PACKAGE_DIR = REPO_ROOT / "src" / "feedback_intelligence_agent"
@@ -491,6 +497,38 @@ def test_latex_log_analysis_reports_a_clean_build(tmp_path: Path) -> None:
     assert report.ok is True
     assert report.pages == 10
     assert report.errors == []
+
+
+def test_content_digest_ignores_line_ending_style(tmp_path: Path) -> None:
+    """The manifest must verify on every platform.
+
+    Git converts line endings on checkout, so a digest taken over raw bytes
+    makes every artifact look changed when the repository is checked out on a
+    different platform from the one that generated it.
+    """
+    unix = tmp_path / "unix.tex"
+    windows = tmp_path / "windows.tex"
+    unix.write_bytes(b"\\section{a}\nbody\n")
+    windows.write_bytes(b"\\section{a}\r\nbody\r\n")
+    assert digest.content_digest(unix) == digest.content_digest(windows)
+
+
+def test_content_digest_still_distinguishes_different_content(tmp_path: Path) -> None:
+    """Normalising newlines must not make different content collide."""
+    first = tmp_path / "a.tex"
+    second = tmp_path / "b.tex"
+    first.write_bytes(b"alpha\n")
+    second.write_bytes(b"beta\n")
+    assert digest.content_digest(first) != digest.content_digest(second)
+
+
+def test_generated_fragments_are_written_with_unix_line_endings() -> None:
+    """Generation must be byte-identical across platforms, not just per-platform."""
+    _require_generated_docs()
+    sample = sorted((REPO_ROOT / "docs" / "latex" / "generated" / "api").glob("*.tex"))[:20]
+    assert sample, "no generated API fragments found"
+    for path in sample:
+        assert b"\r\n" not in path.read_bytes(), f"{path.name} was written with CRLF"
 
 
 def test_latex_log_analysis_detects_file_line_error_format(tmp_path: Path) -> None:

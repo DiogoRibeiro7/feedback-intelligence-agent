@@ -359,7 +359,7 @@ def main(argv: list[str] | None = None) -> int:
     graph = build_dependency_graph(arguments.repo_root)
     output = arguments.repo_root / arguments.output
     output.parent.mkdir(parents=True, exist_ok=True)
-    output.write_text(json.dumps(graph, indent=2) + "\n", encoding="utf-8")
+    output.write_text(json.dumps(graph, indent=2) + "\n", encoding="utf-8", newline="\n")
     runtime_cycles = len(graph["cycles"]["runtime"])
     print(
         f"module-dependencies: {graph['module_count']} modules, {graph['edge_count']} edges, "

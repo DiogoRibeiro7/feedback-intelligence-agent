@@ -48,7 +48,11 @@ LAYER_DESCRIPTIONS: dict[str, str] = {
 def _write(path: Path, body: str, *, written: list[Path]) -> None:
     """Write a generated fragment and record it in the manifest list."""
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(f"{file_header('render_architecture.py')}\n{body.rstrip()}\n", encoding="utf-8")
+    path.write_text(
+        f"{file_header('render_architecture.py')}\n{body.rstrip()}\n",
+        encoding="utf-8",
+        newline="\n",
+    )
     written.append(path)
 
 

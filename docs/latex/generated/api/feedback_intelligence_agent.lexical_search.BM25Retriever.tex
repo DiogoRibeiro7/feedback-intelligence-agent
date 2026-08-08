@@ -28,7 +28,7 @@ BM25Retriever(self, chunks: Sequence[DocumentChunk], *, texts: Sequence[str] | N
   \item[\texttt{size}] Number of indexed chunks.
 \end{arglist}
 \apifield{Details}The index is built once at construction time. \texttt{texts} allows indexing an enriched representation (for example chunk text plus metadata) while the returned \texttt{SearchResult} objects keep the original chunks.
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}lexical\_\allowbreak{}search.\allowbreak{}py:26}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/lexical_search.py#L26}{online}), class, module \cref{module:feedback_intelligence_agent.lexical_search}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}lexical\_\allowbreak{}search.\allowbreak{}py:26}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/249253f371fc682b42be23d75ec314d58837767d/src/feedback_intelligence_agent/lexical_search.py#L26}{online}), class, module \cref{module:feedback_intelligence_agent.lexical_search}
 
 \subsection{\texttt{search}}
 \label{method:feedback_intelligence_agent.lexical_search.BM25Retriever.search}\index{Methods!search}
@@ -44,4 +44,4 @@ search(self, question: str, *, top_k: int = 4) -> list[SearchResult]
 \end{arglist}
 \apifield{Value}\texttt{list[SearchResult]\allowbreak{}}
 \apifield{Raises}\texttt{ValueError}
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}lexical\_\allowbreak{}search.\allowbreak{}py:73}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/lexical_search.py#L73}{online})
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}lexical\_\allowbreak{}search.\allowbreak{}py:73}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/249253f371fc682b42be23d75ec314d58837767d/src/feedback_intelligence_agent/lexical_search.py#L73}{online})

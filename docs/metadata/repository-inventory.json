@@ -29,9 +29,9 @@
     ],
     "date_released": "2026-08-08",
     "python_requires": ">=3.10,<3.13",
-    "revision": "b6cbc710ffdfa5f26f700c999d594c67588c1e16",
-    "revision_short": "b6cbc710ffdf",
-    "revision_date": "2026-08-06T15:17:03+01:00",
+    "revision": "249253f371fc682b42be23d75ec314d58837767d",
+    "revision_short": "249253f371fc",
+    "revision_date": "2026-08-08T14:08:29+01:00",
     "packages": [
       {
         "include": "feedback_intelligence_agent",
@@ -43,7 +43,7 @@
     }
   },
   "files": {
-    "total": 206,
+    "total": 207,
     "excluded_generated_documentation": 314,
     "by_category": {
       "build-configuration": 1,
@@ -57,7 +57,7 @@
       "deployment": 3,
       "documentation": 13,
       "documentation-latex": 48,
-      "documentation-tool": 11,
+      "documentation-tool": 12,
       "editor-configuration": 1,
       "example-data": 4,
       "frontend": 13,
@@ -99,8 +99,8 @@
         "lines": 2606
       },
       "Python": {
-        "files": 96,
-        "lines": 26215
+        "files": 97,
+        "lines": 26298
       },
       "TOML": {
         "files": 2,
@@ -688,7 +688,7 @@
         "category": "documentation-latex",
         "language": "LaTeX",
         "lines": 30,
-        "bytes": 1340
+        "bytes": 1310
       },
       {
         "path": "docs/latex/preamble.tex",
@@ -754,32 +754,39 @@
         "bytes": 6249
       },
       {
+        "path": "docs/tools/digest.py",
+        "category": "documentation-tool",
+        "language": "Python",
+        "lines": 30,
+        "bytes": 1183
+      },
+      {
         "path": "docs/tools/extract_api.py",
         "category": "documentation-tool",
         "language": "Python",
-        "lines": 1062,
-        "bytes": 37737
+        "lines": 1063,
+        "bytes": 38824
       },
       {
         "path": "docs/tools/extract_dependencies.py",
         "category": "documentation-tool",
         "language": "Python",
         "lines": 372,
-        "bytes": 13067
+        "bytes": 13453
       },
       {
         "path": "docs/tools/generate_docs.py",
         "category": "documentation-tool",
         "language": "Python",
-        "lines": 256,
-        "bytes": 9665
+        "lines": 261,
+        "bytes": 10298
       },
       {
         "path": "docs/tools/inspect_repository.py",
         "category": "documentation-tool",
         "language": "Python",
         "lines": 866,
-        "bytes": 31981
+        "bytes": 32861
       },
       {
         "path": "docs/tools/latex_utils.py",
@@ -792,29 +799,29 @@
         "path": "docs/tools/render_architecture.py",
         "category": "documentation-tool",
         "language": "Python",
-        "lines": 470,
-        "bytes": 19829
+        "lines": 474,
+        "bytes": 20348
       },
       {
         "path": "docs/tools/render_engineering.py",
         "category": "documentation-tool",
         "language": "Python",
-        "lines": 929,
-        "bytes": 37427
+        "lines": 931,
+        "bytes": 38386
       },
       {
         "path": "docs/tools/render_reference.py",
         "category": "documentation-tool",
         "language": "Python",
-        "lines": 1010,
-        "bytes": 39713
+        "lines": 1012,
+        "bytes": 40753
       },
       {
         "path": "docs/tools/validate_docs.py",
         "category": "documentation-tool",
         "language": "Python",
-        "lines": 512,
-        "bytes": 19739
+        "lines": 513,
+        "bytes": 19740
       },
       {
         "path": "examples/experiment_config.yaml",
@@ -1352,8 +1359,8 @@
         "path": "tests/test_docs_tools.py",
         "category": "python-test",
         "language": "Python",
-        "lines": 607,
-        "bytes": 25632
+        "lines": 645,
+        "bytes": 27069
       },
       {
         "path": "tests/test_email_summaries.py",
@@ -2811,7 +2818,7 @@
       "path": "tests/test_docs_tools.py",
       "module_under_test": "docs_tools",
       "category": "unit",
-      "test_functions": 50,
+      "test_functions": 53,
       "parametrized_cases": 2
     },
     {

@@ -21,7 +21,7 @@ KinesisFeedbackStream(self, *, stream_name: str, shard_iterator: str, client: Ki
   \item[\texttt{client}] \texttt{KinesisClientProtocol \textbar{} None}, default \texttt{None}, keyword-only.
   \item[\texttt{region\_\allowbreak{}name}] \texttt{str \textbar{} None}, default \texttt{None}, keyword-only.
 \end{arglist}
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}streaming\_\allowbreak{}ingestion.\allowbreak{}py:252}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/streaming_ingestion.py#L252}{online}), class, module \cref{module:feedback_intelligence_agent.streaming_ingestion}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}streaming\_\allowbreak{}ingestion.\allowbreak{}py:252}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/249253f371fc682b42be23d75ec314d58837767d/src/feedback_intelligence_agent/streaming_ingestion.py#L252}{online}), class, module \cref{module:feedback_intelligence_agent.streaming_ingestion}
 
 \subsection{\texttt{poll}}
 \label{method:feedback_intelligence_agent.streaming_ingestion.KinesisFeedbackStream.poll}\index{Methods!poll}
@@ -36,7 +36,7 @@ poll(self, max_messages: int) -> list[StreamEnvelope]
 \end{arglist}
 \apifield{Value}\texttt{list[StreamEnvelope]\allowbreak{}}
 \apifield{Raises}\texttt{ValueError}, \texttt{StreamIngestionError}
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}streaming\_\allowbreak{}ingestion.\allowbreak{}py:274}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/streaming_ingestion.py#L274}{online})
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}streaming\_\allowbreak{}ingestion.\allowbreak{}py:274}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/249253f371fc682b42be23d75ec314d58837767d/src/feedback_intelligence_agent/streaming_ingestion.py#L274}{online})
 
 \subsection{\texttt{ack}}
 \label{method:feedback_intelligence_agent.streaming_ingestion.KinesisFeedbackStream.ack}\index{Methods!ack}
@@ -49,4 +49,4 @@ ack(self, envelope: StreamEnvelope) -> None
 \begin{arglist}
   \item[\texttt{envelope}] \texttt{StreamEnvelope}, required.
 \end{arglist}
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}streaming\_\allowbreak{}ingestion.\allowbreak{}py:290}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/streaming_ingestion.py#L290}{online})
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}streaming\_\allowbreak{}ingestion.\allowbreak{}py:290}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/249253f371fc682b42be23d75ec314d58837767d/src/feedback_intelligence_agent/streaming_ingestion.py#L290}{online})

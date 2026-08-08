@@ -16,7 +16,7 @@ In-memory circuit-breaker state for one provider instance.
   \item[\texttt{state}] \texttt{CircuitState}, default \texttt{'closed'}
   \item[\texttt{opened\_\allowbreak{}at}] \texttt{float \textbar{} None}, default \texttt{None}
 \end{arglist}
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}resilience.\allowbreak{}py:43}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/resilience.py#L43}{online}), dataclass, module \cref{module:feedback_intelligence_agent.resilience}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}resilience.\allowbreak{}py:43}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/249253f371fc682b42be23d75ec314d58837767d/src/feedback_intelligence_agent/resilience.py#L43}{online}), dataclass, module \cref{module:feedback_intelligence_agent.resilience}
 
 \subsection{\texttt{before\_call}}
 \label{method:feedback_intelligence_agent.resilience.CircuitBreaker.before_call}\index{Methods!before\_call}
@@ -31,7 +31,7 @@ before_call(self, *, now: float, recovery_seconds: float) -> None
   \item[\texttt{recovery\_\allowbreak{}seconds}] \texttt{float}, required, keyword-only.
 \end{arglist}
 \apifield{Raises}\texttt{LLMProviderError}
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}resilience.\allowbreak{}py:50}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/resilience.py#L50}{online})
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}resilience.\allowbreak{}py:50}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/249253f371fc682b42be23d75ec314d58837767d/src/feedback_intelligence_agent/resilience.py#L50}{online})
 
 \subsection{\texttt{record\_success}}
 \label{method:feedback_intelligence_agent.resilience.CircuitBreaker.record_success}\index{Methods!record\_success}
@@ -40,7 +40,7 @@ Close the circuit after any successful provider call.
 \begin{lstlisting}[style=usage, language=Python]
 record_success(self) -> None
 \end{lstlisting}
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}resilience.\allowbreak{}py:60}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/resilience.py#L60}{online})
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}resilience.\allowbreak{}py:60}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/249253f371fc682b42be23d75ec314d58837767d/src/feedback_intelligence_agent/resilience.py#L60}{online})
 
 \subsection{\texttt{record\_failure}}
 \label{method:feedback_intelligence_agent.resilience.CircuitBreaker.record_failure}\index{Methods!record\_failure}
@@ -54,4 +54,4 @@ record_failure(self, *, now: float, threshold: int) -> None
   \item[\texttt{now}] \texttt{float}, required, keyword-only.
   \item[\texttt{threshold}] \texttt{int}, required, keyword-only.
 \end{arglist}
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}resilience.\allowbreak{}py:66}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/resilience.py#L66}{online})
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}resilience.\allowbreak{}py:66}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/249253f371fc682b42be23d75ec314d58837767d/src/feedback_intelligence_agent/resilience.py#L66}{online})

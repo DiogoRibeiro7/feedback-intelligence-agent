@@ -46,7 +46,9 @@ def endpoint_key(endpoint: dict[str, Any]) -> str:
 def _write(path: Path, body: str, *, written: list[Path]) -> None:
     """Write a generated LaTeX fragment and record it in the manifest list."""
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(f"{file_header('render_reference.py')}\n{body.rstrip()}\n", encoding="utf-8")
+    path.write_text(
+        f"{file_header('render_reference.py')}\n{body.rstrip()}\n", encoding="utf-8", newline="\n"
+    )
     written.append(path)
 
 

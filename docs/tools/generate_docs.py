@@ -23,7 +23,6 @@ wall clock, so two runs over the same revision produce byte-identical output.
 from __future__ import annotations
 
 import argparse
-import hashlib
 import json
 from pathlib import Path
 from typing import Any
@@ -37,6 +36,7 @@ from tools import (
     render_engineering,
     render_reference,
 )
+from tools.digest import content_digest
 from tools.latex_utils import escape_latex, file_header
 
 METADATA_ROOT = Path("docs/metadata")
@@ -92,8 +92,8 @@ def render_document_metadata(inventory: dict[str, Any]) -> str:
 
 
 def _digest(path: Path) -> str:
-    """Return the SHA-256 digest of a file's bytes."""
-    return hashlib.sha256(path.read_bytes()).hexdigest()
+    """Return the platform-independent content digest of a file."""
+    return content_digest(path)
 
 
 def write_manifest(repo_root: Path, generated: list[Path], inventory: dict[str, Any]) -> Path:
@@ -136,7 +136,7 @@ def write_manifest(repo_root: Path, generated: list[Path], inventory: dict[str, 
         ],
     }
     output = repo_root / METADATA_ROOT / "documentation-manifest.json"
-    output.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
+    output.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8", newline="\n")
     return output
 
 
@@ -162,20 +162,24 @@ def generate(repo_root: Path, revision: str | None = None) -> dict[str, Any]:
             revision the documentation itself records, so that the comparison
             isolates content drift from the revision simply having moved on.
     """
+    # Every generated file is written with explicit LF endings. Without this,
+    # Python translates newlines to the platform default, so a tree generated
+    # on Windows differs byte-for-byte from one generated on Linux and the
+    # manifest digests disagree across platforms.
     inventory = inspect_repository.build_inventory(repo_root, revision)
     (repo_root / METADATA_ROOT).mkdir(parents=True, exist_ok=True)
     (repo_root / METADATA_ROOT / "repository-inventory.json").write_text(
-        json.dumps(inventory, indent=2) + "\n", encoding="utf-8"
+        json.dumps(inventory, indent=2) + "\n", encoding="utf-8", newline="\n"
     )
 
     model = extract_api.build_api_index(repo_root)
     (repo_root / METADATA_ROOT / "api-index.json").write_text(
-        json.dumps(model, indent=2) + "\n", encoding="utf-8"
+        json.dumps(model, indent=2) + "\n", encoding="utf-8", newline="\n"
     )
 
     graph = extract_dependencies.build_dependency_graph(repo_root)
     (repo_root / METADATA_ROOT / "module-dependencies.json").write_text(
-        json.dumps(graph, indent=2) + "\n", encoding="utf-8"
+        json.dumps(graph, indent=2) + "\n", encoding="utf-8", newline="\n"
     )
 
     _clean_generated(repo_root)
@@ -189,6 +193,7 @@ def generate(repo_root: Path, revision: str | None = None) -> dict[str, Any]:
     metadata_tex.write_text(
         f"{file_header('generate_docs.py')}\n{render_document_metadata(inventory)}\n",
         encoding="utf-8",
+        newline="\n",
     )
     generated.append(metadata_tex)
 

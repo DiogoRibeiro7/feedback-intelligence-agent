@@ -13,13 +13,14 @@ LaTeX toolchain.
 from __future__ import annotations
 
 import argparse
-import hashlib
 import json
 import re
 import subprocess
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
+
+from tools.digest import content_digest
 
 LATEX_ROOT = Path("docs/latex")
 GENERATED_ROOT = LATEX_ROOT / "generated"
@@ -389,7 +390,7 @@ def check_manifest(repo_root: Path) -> Check:
         if not path.exists():
             offenders.append(f"{entry['path']}: missing")
             continue
-        digest = hashlib.sha256(path.read_bytes()).hexdigest()
+        digest = content_digest(path)
         if digest != entry["sha256"]:
             offenders.append(f"{entry['path']}: digest mismatch")
     return Check(

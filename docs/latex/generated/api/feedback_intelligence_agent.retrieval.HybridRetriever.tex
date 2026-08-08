@@ -23,7 +23,7 @@ HybridRetriever(self, dense: Retriever, lexical: Retriever, *, dense_weight: flo
 \end{arglist}
 \apifield{Raises}\texttt{ValueError}
 \apifield{Details}Each underlying retriever is queried for an enlarged candidate pool. Scores are min-max normalized per result list so the two scales are comparable, then combined as a weighted sum. Documents appearing in both lists are de-duplicated by chunk ID and receive contributions from both retrievers.
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}retrieval.\allowbreak{}py:50}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/retrieval.py#L50}{online}), class, module \cref{module:feedback_intelligence_agent.retrieval}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}retrieval.\allowbreak{}py:50}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/249253f371fc682b42be23d75ec314d58837767d/src/feedback_intelligence_agent/retrieval.py#L50}{online}), class, module \cref{module:feedback_intelligence_agent.retrieval}
 
 \subsection{\texttt{search}}
 \label{method:feedback_intelligence_agent.retrieval.HybridRetriever.search}\index{Methods!search}
@@ -39,4 +39,4 @@ search(self, question: str, *, top_k: int = 4) -> list[SearchResult]
 \end{arglist}
 \apifield{Value}\texttt{list[SearchResult]\allowbreak{}}
 \apifield{Raises}\texttt{ValueError}
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}retrieval.\allowbreak{}py:78}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/retrieval.py#L78}{online})
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}retrieval.\allowbreak{}py:78}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/249253f371fc682b42be23d75ec314d58837767d/src/feedback_intelligence_agent/retrieval.py#L78}{online})

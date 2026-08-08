@@ -19,7 +19,7 @@ JsonJobStore(self, root: str | Path) -> None
   \item[\texttt{root}] \texttt{str \textbar{} Path}, required.
 \end{arglist}
 \apifield{Details}Files are written as \texttt{\{root\}/\allowbreak{}\{job\_\allowbreak{}id\}.\allowbreak{}json} with indented JSON, so jobs are easy to inspect and survive process restarts. A lock guards in-process concurrent writes.
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}jobs.\allowbreak{}py:168}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/jobs.py#L168}{online}), class, module \cref{module:feedback_intelligence_agent.jobs}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}jobs.\allowbreak{}py:168}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/249253f371fc682b42be23d75ec314d58837767d/src/feedback_intelligence_agent/jobs.py#L168}{online}), class, module \cref{module:feedback_intelligence_agent.jobs}
 
 \subsection{\texttt{create}}
 \label{method:feedback_intelligence_agent.jobs.JsonJobStore.create}\index{Methods!create}
@@ -33,7 +33,7 @@ create(self, request: JobRequest) -> JobResult
   \item[\texttt{request}] \texttt{JobRequest}, required.
 \end{arglist}
 \apifield{Value}\texttt{JobResult}
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}jobs.\allowbreak{}py:188}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/jobs.py#L188}{online})
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}jobs.\allowbreak{}py:188}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/249253f371fc682b42be23d75ec314d58837767d/src/feedback_intelligence_agent/jobs.py#L188}{online})
 
 \subsection{\texttt{get}}
 \label{method:feedback_intelligence_agent.jobs.JsonJobStore.get}\index{Methods!get}
@@ -47,7 +47,7 @@ get(self, job_id: str) -> JobResult | None
   \item[\texttt{job\_\allowbreak{}id}] \texttt{str}, required.
 \end{arglist}
 \apifield{Value}\texttt{JobResult \textbar{} None}
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}jobs.\allowbreak{}py:194}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/jobs.py#L194}{online})
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}jobs.\allowbreak{}py:194}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/249253f371fc682b42be23d75ec314d58837767d/src/feedback_intelligence_agent/jobs.py#L194}{online})
 
 \subsection{\texttt{update}}
 \label{method:feedback_intelligence_agent.jobs.JsonJobStore.update}\index{Methods!update}
@@ -61,4 +61,4 @@ update(self, result: JobResult) -> None
   \item[\texttt{result}] \texttt{JobResult}, required.
 \end{arglist}
 \apifield{Raises}\texttt{JobNotFoundError}
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}jobs.\allowbreak{}py:201}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/b6cbc710ffdfa5f26f700c999d594c67588c1e16/src/feedback_intelligence_agent/jobs.py#L201}{online})
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}jobs.\allowbreak{}py:201}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/249253f371fc682b42be23d75ec314d58837767d/src/feedback_intelligence_agent/jobs.py#L201}{online})
