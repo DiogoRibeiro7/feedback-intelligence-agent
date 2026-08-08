@@ -61,8 +61,13 @@ jobs:
     name: Documentation
     runs-on: ubuntu-latest
     steps:
+      # Full history: the drift check regenerates as of the revision the
+      # committed documentation records, which is an ancestor of HEAD and is
+      # therefore absent from the default shallow clone.
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Install Poetry
         run: pipx install poetry==2.2.1

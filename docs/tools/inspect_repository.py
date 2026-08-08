@@ -27,6 +27,8 @@ from typing import Any
 import tomllib
 import yaml
 
+from tools.digest import normalise_newlines
+
 #: Path prefixes mapped to the role a file plays in the repository.
 _CATEGORY_RULES: tuple[tuple[str, str], ...] = (
     ("src/", "python-source"),
@@ -232,6 +234,20 @@ def classify(path: str) -> str:
     return "other"
 
 
+def _content_size(path: Path) -> int:
+    """Return a file's size with line endings normalised.
+
+    The size on disk depends on the checkout: git rewrites line endings, so
+    the same file is larger on a Windows working tree than on a Linux one.
+    Recording the normalised size keeps the inventory identical across
+    platforms, which the documentation drift check depends on.
+    """
+    try:
+        return len(normalise_newlines(path.read_bytes()))
+    except OSError:  # pragma: no cover - unreadable file
+        return 0
+
+
 def _count_lines(path: Path) -> int | None:
     """Count text lines, returning ``None`` for binary or unreadable files."""
     try:
@@ -264,7 +280,7 @@ def build_file_index(repo_root: Path) -> list[FileEntry]:
                 category=classify(relative),
                 language=_EXTENSION_LANGUAGES.get(suffix),
                 lines=_count_lines(path) if suffix in _EXTENSION_LANGUAGES else None,
-                bytes=path.stat().st_size,
+                bytes=_content_size(path),
             )
         )
     return entries

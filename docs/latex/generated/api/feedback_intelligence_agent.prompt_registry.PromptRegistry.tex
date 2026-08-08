@@ -14,7 +14,7 @@ In-memory registry mapping prompt names to their versioned templates.
 \begin{lstlisting}[style=usage, language=Python]
 PromptRegistry(self) -> None
 \end{lstlisting}
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}prompt\_\allowbreak{}registry.\allowbreak{}py:99}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/249253f371fc682b42be23d75ec314d58837767d/src/feedback_intelligence_agent/prompt_registry.py#L99}{online}), class, module \cref{module:feedback_intelligence_agent.prompt_registry}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}prompt\_\allowbreak{}registry.\allowbreak{}py:99}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/936886da072fa7025a57c5517b9c90772bedae09/src/feedback_intelligence_agent/prompt_registry.py#L99}{online}), class, module \cref{module:feedback_intelligence_agent.prompt_registry}
 
 \subsection{\texttt{register}}
 \label{method:feedback_intelligence_agent.prompt_registry.PromptRegistry.register}\index{Methods!register}
@@ -29,7 +29,7 @@ register(self, template: PromptTemplate) -> PromptTemplate
 \end{arglist}
 \apifield{Value}\texttt{PromptTemplate}
 \apifield{Raises}\texttt{ValueError}
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}prompt\_\allowbreak{}registry.\allowbreak{}py:106}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/249253f371fc682b42be23d75ec314d58837767d/src/feedback_intelligence_agent/prompt_registry.py#L106}{online})
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}prompt\_\allowbreak{}registry.\allowbreak{}py:106}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/936886da072fa7025a57c5517b9c90772bedae09/src/feedback_intelligence_agent/prompt_registry.py#L106}{online})
 
 \subsection{\texttt{get}}
 \label{method:feedback_intelligence_agent.prompt_registry.PromptRegistry.get}\index{Methods!get}
@@ -45,7 +45,7 @@ get(self, name: str, version: str = LATEST_VERSION) -> PromptTemplate
 \end{arglist}
 \apifield{Value}\texttt{PromptTemplate}
 \apifield{Raises}\texttt{PromptNotFoundError}
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}prompt\_\allowbreak{}registry.\allowbreak{}py:118}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/249253f371fc682b42be23d75ec314d58837767d/src/feedback_intelligence_agent/prompt_registry.py#L118}{online})
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}prompt\_\allowbreak{}registry.\allowbreak{}py:118}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/936886da072fa7025a57c5517b9c90772bedae09/src/feedback_intelligence_agent/prompt_registry.py#L118}{online})
 
 \subsection{\texttt{names}}
 \label{method:feedback_intelligence_agent.prompt_registry.PromptRegistry.names}\index{Methods!names}
@@ -55,7 +55,7 @@ Return all registered prompt names, sorted alphabetically.
 names(self) -> tuple[str, ...]
 \end{lstlisting}
 \apifield{Value}\texttt{tuple[str,\allowbreak{} .\allowbreak{}.\allowbreak{}.\allowbreak{}]\allowbreak{}}
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}prompt\_\allowbreak{}registry.\allowbreak{}py:134}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/249253f371fc682b42be23d75ec314d58837767d/src/feedback_intelligence_agent/prompt_registry.py#L134}{online})
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}prompt\_\allowbreak{}registry.\allowbreak{}py:134}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/936886da072fa7025a57c5517b9c90772bedae09/src/feedback_intelligence_agent/prompt_registry.py#L134}{online})
 
 \subsection{\texttt{versions}}
 \label{method:feedback_intelligence_agent.prompt_registry.PromptRegistry.versions}\index{Methods!versions}
@@ -69,7 +69,7 @@ versions(self, name: str) -> tuple[str, ...]
   \item[\texttt{name}] \texttt{str}, required.
 \end{arglist}
 \apifield{Value}\texttt{tuple[str,\allowbreak{} .\allowbreak{}.\allowbreak{}.\allowbreak{}]\allowbreak{}}
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}prompt\_\allowbreak{}registry.\allowbreak{}py:138}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/249253f371fc682b42be23d75ec314d58837767d/src/feedback_intelligence_agent/prompt_registry.py#L138}{online})
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}prompt\_\allowbreak{}registry.\allowbreak{}py:138}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/936886da072fa7025a57c5517b9c90772bedae09/src/feedback_intelligence_agent/prompt_registry.py#L138}{online})
 
 \subsection{\texttt{list\_templates}}
 \label{method:feedback_intelligence_agent.prompt_registry.PromptRegistry.list_templates}\index{Methods!list\_templates}
@@ -84,7 +84,7 @@ list_templates(self, name: str | None = None) -> tuple[PromptTemplate, ...]
 \end{arglist}
 \apifield{Value}\texttt{tuple[PromptTemplate,\allowbreak{} .\allowbreak{}.\allowbreak{}.\allowbreak{}]\allowbreak{}}
 \apifield{Raises}\texttt{PromptNotFoundError}
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}prompt\_\allowbreak{}registry.\allowbreak{}py:142}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/249253f371fc682b42be23d75ec314d58837767d/src/feedback_intelligence_agent/prompt_registry.py#L142}{online})
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}prompt\_\allowbreak{}registry.\allowbreak{}py:142}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/936886da072fa7025a57c5517b9c90772bedae09/src/feedback_intelligence_agent/prompt_registry.py#L142}{online})
 
 \subsection{\texttt{render}}
 \label{method:feedback_intelligence_agent.prompt_registry.PromptRegistry.render}\index{Methods!render}
@@ -100,4 +100,4 @@ render(self, name: str, version: str = LATEST_VERSION, **variables: str) -> str
   \item[\texttt{**variables}] \texttt{str}.
 \end{arglist}
 \apifield{Value}\texttt{str}
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}prompt\_\allowbreak{}registry.\allowbreak{}py:157}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/249253f371fc682b42be23d75ec314d58837767d/src/feedback_intelligence_agent/prompt_registry.py#L157}{online})
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}prompt\_\allowbreak{}registry.\allowbreak{}py:157}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/936886da072fa7025a57c5517b9c90772bedae09/src/feedback_intelligence_agent/prompt_registry.py#L157}{online})

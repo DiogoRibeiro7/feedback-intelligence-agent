@@ -15,7 +15,7 @@ Thread-safe, dict-backed job store.
 InMemoryJobStore(self) -> None
 \end{lstlisting}
 \apifield{Details}A lock guards every mutation so the store is safe to share across FastAPI \texttt{BackgroundTasks} (which may run on a worker thread) and request handlers. Stored results are deep-copied on the way in and out, so callers cannot mutate persisted state by accident.
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}jobs.\allowbreak{}py:132}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/249253f371fc682b42be23d75ec314d58837767d/src/feedback_intelligence_agent/jobs.py#L132}{online}), class, module \cref{module:feedback_intelligence_agent.jobs}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}jobs.\allowbreak{}py:132}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/936886da072fa7025a57c5517b9c90772bedae09/src/feedback_intelligence_agent/jobs.py#L132}{online}), class, module \cref{module:feedback_intelligence_agent.jobs}
 
 \subsection{\texttt{create}}
 \label{method:feedback_intelligence_agent.jobs.InMemoryJobStore.create}\index{Methods!create}
@@ -29,7 +29,7 @@ create(self, request: JobRequest) -> JobResult
   \item[\texttt{request}] \texttt{JobRequest}, required.
 \end{arglist}
 \apifield{Value}\texttt{JobResult}
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}jobs.\allowbreak{}py:146}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/249253f371fc682b42be23d75ec314d58837767d/src/feedback_intelligence_agent/jobs.py#L146}{online})
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}jobs.\allowbreak{}py:146}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/936886da072fa7025a57c5517b9c90772bedae09/src/feedback_intelligence_agent/jobs.py#L146}{online})
 
 \subsection{\texttt{get}}
 \label{method:feedback_intelligence_agent.jobs.InMemoryJobStore.get}\index{Methods!get}
@@ -43,7 +43,7 @@ get(self, job_id: str) -> JobResult | None
   \item[\texttt{job\_\allowbreak{}id}] \texttt{str}, required.
 \end{arglist}
 \apifield{Value}\texttt{JobResult \textbar{} None}
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}jobs.\allowbreak{}py:153}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/249253f371fc682b42be23d75ec314d58837767d/src/feedback_intelligence_agent/jobs.py#L153}{online})
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}jobs.\allowbreak{}py:153}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/936886da072fa7025a57c5517b9c90772bedae09/src/feedback_intelligence_agent/jobs.py#L153}{online})
 
 \subsection{\texttt{update}}
 \label{method:feedback_intelligence_agent.jobs.InMemoryJobStore.update}\index{Methods!update}
@@ -57,4 +57,4 @@ update(self, result: JobResult) -> None
   \item[\texttt{result}] \texttt{JobResult}, required.
 \end{arglist}
 \apifield{Raises}\texttt{JobNotFoundError}
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}jobs.\allowbreak{}py:159}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/249253f371fc682b42be23d75ec314d58837767d/src/feedback_intelligence_agent/jobs.py#L159}{online})
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}jobs.\allowbreak{}py:159}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/936886da072fa7025a57c5517b9c90772bedae09/src/feedback_intelligence_agent/jobs.py#L159}{online})

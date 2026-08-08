@@ -22,7 +22,7 @@ KafkaFeedbackStream(self, *, topic: str, bootstrap_servers: str, group_id: str, 
   \item[\texttt{consumer}] \texttt{KafkaConsumerProtocol \textbar{} None}, default \texttt{None}, keyword-only.
   \item[\texttt{poll\_\allowbreak{}timeout\_\allowbreak{}seconds}] \texttt{float}, default \texttt{1.\allowbreak{}0}, keyword-only.
 \end{arglist}
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}streaming\_\allowbreak{}ingestion.\allowbreak{}py:188}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/249253f371fc682b42be23d75ec314d58837767d/src/feedback_intelligence_agent/streaming_ingestion.py#L188}{online}), class, module \cref{module:feedback_intelligence_agent.streaming_ingestion}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}streaming\_\allowbreak{}ingestion.\allowbreak{}py:188}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/936886da072fa7025a57c5517b9c90772bedae09/src/feedback_intelligence_agent/streaming_ingestion.py#L188}{online}), class, module \cref{module:feedback_intelligence_agent.streaming_ingestion}
 
 \subsection{\texttt{poll}}
 \label{method:feedback_intelligence_agent.streaming_ingestion.KafkaFeedbackStream.poll}\index{Methods!poll}
@@ -37,7 +37,7 @@ poll(self, max_messages: int) -> list[StreamEnvelope]
 \end{arglist}
 \apifield{Value}\texttt{list[StreamEnvelope]\allowbreak{}}
 \apifield{Raises}\texttt{ValueError}, \texttt{StreamIngestionError}
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}streaming\_\allowbreak{}ingestion.\allowbreak{}py:222}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/249253f371fc682b42be23d75ec314d58837767d/src/feedback_intelligence_agent/streaming_ingestion.py#L222}{online})
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}streaming\_\allowbreak{}ingestion.\allowbreak{}py:222}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/936886da072fa7025a57c5517b9c90772bedae09/src/feedback_intelligence_agent/streaming_ingestion.py#L222}{online})
 
 \subsection{\texttt{ack}}
 \label{method:feedback_intelligence_agent.streaming_ingestion.KafkaFeedbackStream.ack}\index{Methods!ack}
@@ -50,4 +50,4 @@ ack(self, envelope: StreamEnvelope) -> None
 \begin{arglist}
   \item[\texttt{envelope}] \texttt{StreamEnvelope}, required.
 \end{arglist}
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}streaming\_\allowbreak{}ingestion.\allowbreak{}py:237}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/249253f371fc682b42be23d75ec314d58837767d/src/feedback_intelligence_agent/streaming_ingestion.py#L237}{online})
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}streaming\_\allowbreak{}ingestion.\allowbreak{}py:237}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/936886da072fa7025a57c5517b9c90772bedae09/src/feedback_intelligence_agent/streaming_ingestion.py#L237}{online})

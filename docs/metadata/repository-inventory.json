@@ -29,9 +29,9 @@
     ],
     "date_released": "2026-08-08",
     "python_requires": ">=3.10,<3.13",
-    "revision": "249253f371fc682b42be23d75ec314d58837767d",
-    "revision_short": "249253f371fc",
-    "revision_date": "2026-08-08T14:08:29+01:00",
+    "revision": "936886da072fa7025a57c5517b9c90772bedae09",
+    "revision_short": "936886da072f",
+    "revision_date": "2026-08-08T22:57:35+01:00",
     "packages": [
       {
         "include": "feedback_intelligence_agent",
@@ -100,7 +100,7 @@
       },
       "Python": {
         "files": 97,
-        "lines": 26298
+        "lines": 26359
       },
       "TOML": {
         "files": 2,
@@ -112,7 +112,7 @@
       },
       "YAML": {
         "files": 16,
-        "lines": 680
+        "lines": 685
       }
     },
     "entries": [
@@ -128,7 +128,7 @@
         "category": "configuration-template",
         "language": null,
         "lines": null,
-        "bytes": 2913
+        "bytes": 2906
       },
       {
         "path": ".gitattributes",
@@ -197,8 +197,8 @@
         "path": ".github/workflows/ci.yml",
         "category": "ci-workflow",
         "language": "YAML",
-        "lines": 104,
-        "bytes": 2962
+        "lines": 109,
+        "bytes": 3208
       },
       {
         "path": ".github/workflows/dependency-review.yml",
@@ -338,28 +338,28 @@
         "category": "deployment",
         "language": "YAML",
         "lines": 56,
-        "bytes": 2127
+        "bytes": 2071
       },
       {
         "path": "deploy/ecs-fargate-task-definition.json",
         "category": "deployment",
         "language": "JSON",
         "lines": 61,
-        "bytes": 2109
+        "bytes": 2048
       },
       {
         "path": "deploy/fly.toml",
         "category": "deployment",
         "language": "TOML",
         "lines": 52,
-        "bytes": 1537
+        "bytes": 1485
       },
       {
         "path": "docker-compose.yml",
         "category": "container",
         "language": "YAML",
         "lines": 40,
-        "bytes": 1312
+        "bytes": 1272
       },
       {
         "path": "docs/README.md",
@@ -387,7 +387,7 @@
         "category": "documentation",
         "language": "Markdown",
         "lines": 163,
-        "bytes": 7338
+        "bytes": 7216
       },
       {
         "path": "docs/evaluation.md",
@@ -534,7 +534,7 @@
         "category": "documentation-latex",
         "language": "LaTeX",
         "lines": 55,
-        "bytes": 3138
+        "bytes": 3083
       },
       {
         "path": "docs/latex/diagrams/architecture/runtime.tex",
@@ -562,7 +562,7 @@
         "category": "documentation-latex",
         "language": "LaTeX",
         "lines": 54,
-        "bytes": 3161
+        "bytes": 3107
       },
       {
         "path": "docs/latex/engineering/build.tex",
@@ -765,56 +765,56 @@
         "category": "documentation-tool",
         "language": "Python",
         "lines": 1063,
-        "bytes": 38824
+        "bytes": 37761
       },
       {
         "path": "docs/tools/extract_dependencies.py",
         "category": "documentation-tool",
         "language": "Python",
         "lines": 372,
-        "bytes": 13453
+        "bytes": 13081
       },
       {
         "path": "docs/tools/generate_docs.py",
         "category": "documentation-tool",
         "language": "Python",
-        "lines": 261,
-        "bytes": 10298
+        "lines": 273,
+        "bytes": 10777
       },
       {
         "path": "docs/tools/inspect_repository.py",
         "category": "documentation-tool",
         "language": "Python",
-        "lines": 866,
-        "bytes": 32861
+        "lines": 882,
+        "bytes": 32574
       },
       {
         "path": "docs/tools/latex_utils.py",
         "category": "documentation-tool",
         "language": "Python",
         "lines": 297,
-        "bytes": 11158
+        "bytes": 10861
       },
       {
         "path": "docs/tools/render_architecture.py",
         "category": "documentation-tool",
         "language": "Python",
         "lines": 474,
-        "bytes": 20348
+        "bytes": 19874
       },
       {
         "path": "docs/tools/render_engineering.py",
         "category": "documentation-tool",
         "language": "Python",
         "lines": 931,
-        "bytes": 38386
+        "bytes": 37455
       },
       {
         "path": "docs/tools/render_reference.py",
         "category": "documentation-tool",
         "language": "Python",
         "lines": 1012,
-        "bytes": 40753
+        "bytes": 39741
       },
       {
         "path": "docs/tools/validate_docs.py",
@@ -877,35 +877,35 @@
         "category": "frontend",
         "language": "Markdown",
         "lines": 95,
-        "bytes": 3786
+        "bytes": 3711
       },
       {
         "path": "frontend/index.html",
         "category": "frontend",
         "language": "HTML",
         "lines": 110,
-        "bytes": 3744
+        "bytes": 3701
       },
       {
         "path": "frontend/package-lock.json",
         "category": "frontend",
         "language": "JSON",
         "lines": 887,
-        "bytes": 29040
+        "bytes": 28155
       },
       {
         "path": "frontend/package.json",
         "category": "frontend",
         "language": "JSON",
         "lines": 16,
-        "bytes": 433
+        "bytes": 418
       },
       {
         "path": "frontend/src/api.ts",
         "category": "frontend",
         "language": "TypeScript",
         "lines": 257,
-        "bytes": 6906
+        "bytes": 6756
       },
       {
         "path": "frontend/src/main.ts",
@@ -947,14 +947,14 @@
         "category": "dependency-lock",
         "language": null,
         "lines": null,
-        "bytes": 555079
+        "bytes": 549658
       },
       {
         "path": "pyproject.toml",
         "category": "build-configuration",
         "language": "TOML",
         "lines": 109,
-        "bytes": 3558
+        "bytes": 3449
       },
       {
         "path": "scripts/benchmark.py",
@@ -975,7 +975,7 @@
         "category": "python-source",
         "language": "Python",
         "lines": 7,
-        "bytes": 244
+        "bytes": 237
       },
       {
         "path": "src/feedback_intelligence_agent/active_learning.py",
@@ -989,14 +989,14 @@
         "category": "python-source",
         "language": "Python",
         "lines": 564,
-        "bytes": 24185
+        "bytes": 23621
       },
       {
         "path": "src/feedback_intelligence_agent/api.py",
         "category": "python-source",
         "language": "Python",
         "lines": 597,
-        "bytes": 23435
+        "bytes": 22838
       },
       {
         "path": "src/feedback_intelligence_agent/auth.py",
@@ -1031,14 +1031,14 @@
         "category": "python-source",
         "language": "Python",
         "lines": 1007,
-        "bytes": 40009
+        "bytes": 39002
       },
       {
         "path": "src/feedback_intelligence_agent/config.py",
         "category": "python-source",
         "language": "Python",
         "lines": 113,
-        "bytes": 5186
+        "bytes": 5073
       },
       {
         "path": "src/feedback_intelligence_agent/data_contracts.py",
@@ -1080,7 +1080,7 @@
         "category": "python-source",
         "language": "Python",
         "lines": 349,
-        "bytes": 14466
+        "bytes": 14117
       },
       {
         "path": "src/feedback_intelligence_agent/guardrails.py",
@@ -1185,7 +1185,7 @@
         "category": "python-source",
         "language": "Python",
         "lines": 196,
-        "bytes": 7517
+        "bytes": 7321
       },
       {
         "path": "src/feedback_intelligence_agent/query_expansion.py",
@@ -1311,7 +1311,7 @@
         "category": "python-test",
         "language": "Python",
         "lines": 932,
-        "bytes": 35659
+        "bytes": 34727
       },
       {
         "path": "tests/test_auth.py",
@@ -1339,7 +1339,7 @@
         "category": "python-test",
         "language": "Python",
         "lines": 228,
-        "bytes": 9101
+        "bytes": 8873
       },
       {
         "path": "tests/test_cli.py",
@@ -1359,8 +1359,8 @@
         "path": "tests/test_docs_tools.py",
         "category": "python-test",
         "language": "Python",
-        "lines": 645,
-        "bytes": 27069
+        "lines": 678,
+        "bytes": 28548
       },
       {
         "path": "tests/test_email_summaries.py",
@@ -1395,7 +1395,7 @@
         "category": "python-test",
         "language": "Python",
         "lines": 293,
-        "bytes": 10825
+        "bytes": 10532
       },
       {
         "path": "tests/test_hallucination.py",
@@ -1479,7 +1479,7 @@
         "category": "python-test",
         "language": "Python",
         "lines": 141,
-        "bytes": 4943
+        "bytes": 4802
       },
       {
         "path": "tests/test_prompt_snapshot.py",
@@ -1493,7 +1493,7 @@
         "category": "python-test",
         "language": "Python",
         "lines": 287,
-        "bytes": 11028
+        "bytes": 10741
       },
       {
         "path": "tests/test_query_expansion.py",
@@ -1556,7 +1556,7 @@
         "category": "python-test",
         "language": "Python",
         "lines": 374,
-        "bytes": 14788
+        "bytes": 14414
       },
       {
         "path": "tests/test_tools.py",
@@ -2818,7 +2818,7 @@
       "path": "tests/test_docs_tools.py",
       "module_under_test": "docs_tools",
       "category": "unit",
-      "test_functions": 53,
+      "test_functions": 55,
       "parametrized_cases": 2
     },
     {

@@ -11,7 +11,7 @@
 
 Protocol implemented by report persistence backends.
 \apifield{Inherits}\texttt{Protocol}
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}reports.\allowbreak{}py:96}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/249253f371fc682b42be23d75ec314d58837767d/src/feedback_intelligence_agent/reports.py#L96}{online}), protocol, module \cref{module:feedback_intelligence_agent.reports}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}reports.\allowbreak{}py:96}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/936886da072fa7025a57c5517b9c90772bedae09/src/feedback_intelligence_agent/reports.py#L96}{online}), protocol, module \cref{module:feedback_intelligence_agent.reports}
 
 \subsection{\texttt{save}}
 \label{method:feedback_intelligence_agent.reports.InsightReportStore.save}\index{Methods!save}
@@ -25,7 +25,7 @@ save(self, request: SaveInsightReportRequest) -> SavedInsightReport
   \item[\texttt{request}] \texttt{SaveInsightReportRequest}, required.
 \end{arglist}
 \apifield{Value}\texttt{SavedInsightReport}
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}reports.\allowbreak{}py:99}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/249253f371fc682b42be23d75ec314d58837767d/src/feedback_intelligence_agent/reports.py#L99}{online})
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}reports.\allowbreak{}py:99}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/936886da072fa7025a57c5517b9c90772bedae09/src/feedback_intelligence_agent/reports.py#L99}{online})
 
 \subsection{\texttt{get}}
 \label{method:feedback_intelligence_agent.reports.InsightReportStore.get}\index{Methods!get}
@@ -39,7 +39,7 @@ get(self, report_id: str) -> SavedInsightReport | None
   \item[\texttt{report\_\allowbreak{}id}] \texttt{str}, required.
 \end{arglist}
 \apifield{Value}\texttt{SavedInsightReport \textbar{} None}
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}reports.\allowbreak{}py:103}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/249253f371fc682b42be23d75ec314d58837767d/src/feedback_intelligence_agent/reports.py#L103}{online})
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}reports.\allowbreak{}py:103}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/936886da072fa7025a57c5517b9c90772bedae09/src/feedback_intelligence_agent/reports.py#L103}{online})
 
 \subsection{\texttt{list}}
 \label{method:feedback_intelligence_agent.reports.InsightReportStore.list}\index{Methods!list}
@@ -53,4 +53,4 @@ list(self, *, tenant_id: str | None = None) -> list[InsightReportSummary]
   \item[\texttt{tenant\_\allowbreak{}id}] \texttt{str \textbar{} None}, default \texttt{None}, keyword-only.
 \end{arglist}
 \apifield{Value}\texttt{list[InsightReportSummary]\allowbreak{}}
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}reports.\allowbreak{}py:107}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/249253f371fc682b42be23d75ec314d58837767d/src/feedback_intelligence_agent/reports.py#L107}{online})
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}reports.\allowbreak{}py:107}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/936886da072fa7025a57c5517b9c90772bedae09/src/feedback_intelligence_agent/reports.py#L107}{online})

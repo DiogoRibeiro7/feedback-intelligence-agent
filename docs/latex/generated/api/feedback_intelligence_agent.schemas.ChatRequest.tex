@@ -25,7 +25,7 @@ API request for the `/chat` endpoint.
   \item[\texttt{created\_\allowbreak{}before}] \texttt{datetime \textbar{} None}, default \texttt{None}
 \end{arglist}
 \apifield{Details}\texttt{conversation\_\allowbreak{}id} is optional: omit it to start a new conversation, or pass the identifier returned by a previous `/chat` call to continue with the stored turns as context.
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}schemas.\allowbreak{}py:231}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/249253f371fc682b42be23d75ec314d58837767d/src/feedback_intelligence_agent/schemas.py#L231}{online}), pydantic model, module \cref{module:feedback_intelligence_agent.schemas}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}schemas.\allowbreak{}py:231}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/936886da072fa7025a57c5517b9c90772bedae09/src/feedback_intelligence_agent/schemas.py#L231}{online}), pydantic model, module \cref{module:feedback_intelligence_agent.schemas}
 
 \subsection{\texttt{validate\_filter\_ranges}}
 \label{method:feedback_intelligence_agent.schemas.ChatRequest.validate_filter_ranges}\index{Methods!validate\_filter\_ranges}
@@ -35,7 +35,7 @@ Validate metadata filters at request parsing time.
 validate_filter_ranges(self) -> ChatRequest
 \end{lstlisting}
 \apifield{Value}\texttt{ChatRequest}
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}schemas.\allowbreak{}py:251}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/249253f371fc682b42be23d75ec314d58837767d/src/feedback_intelligence_agent/schemas.py#L251}{online})
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}schemas.\allowbreak{}py:251}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/936886da072fa7025a57c5517b9c90772bedae09/src/feedback_intelligence_agent/schemas.py#L251}{online})
 
 \subsection{\texttt{metadata\_filters}}
 \label{method:feedback_intelligence_agent.schemas.ChatRequest.metadata_filters}\index{Methods!metadata\_filters}
@@ -45,4 +45,4 @@ Return the request's metadata filters, or None when no filter is set.
 metadata_filters(self) -> MetadataFilters | None
 \end{lstlisting}
 \apifield{Value}\texttt{MetadataFilters \textbar{} None}
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}schemas.\allowbreak{}py:256}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/249253f371fc682b42be23d75ec314d58837767d/src/feedback_intelligence_agent/schemas.py#L256}{online})
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}schemas.\allowbreak{}py:256}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/936886da072fa7025a57c5517b9c90772bedae09/src/feedback_intelligence_agent/schemas.py#L256}{online})

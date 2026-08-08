@@ -24,7 +24,7 @@ FeedbackInsightAgent(self, query_engine: Retriever, llm: LLMProvider, *, telemet
   \item[\texttt{reranker}] \texttt{Reranker \textbar{} None}, default \texttt{None}, keyword-only. Optional candidate reranker; defaults to the deterministic local judge reranker.
   \item[\texttt{hallucination\_\allowbreak{}checker}] \texttt{EvidenceOverlapHallucinationChecker \textbar{} None}, default \texttt{None}, keyword-only. Optional evidence-support checker; defaults to deterministic lexical evidence overlap.
 \end{arglist}
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}agent.\allowbreak{}py:62}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/249253f371fc682b42be23d75ec314d58837767d/src/feedback_intelligence_agent/agent.py#L62}{online}), class, module \cref{module:feedback_intelligence_agent.agent}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}agent.\allowbreak{}py:62}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/936886da072fa7025a57c5517b9c90772bedae09/src/feedback_intelligence_agent/agent.py#L62}{online}), class, module \cref{module:feedback_intelligence_agent.agent}
 
 \subsection{\texttt{answer}}
 \label{method:feedback_intelligence_agent.agent.FeedbackInsightAgent.answer}\index{Methods!answer}
@@ -44,7 +44,7 @@ answer(self, question: str, *, top_k: int = 4, history: Sequence[ConversationTur
 \apifield{Details}Two deterministic guardrail gates protect the run: the input gate refuses unsafe questions before retrieval, and the context gate drops retrieved chunks carrying injection-style content before generation.
 
 When \texttt{history} (previous conversation turns) is supplied, follow-up questions are first rewritten into standalone questions using the last turn, and the rewritten question drives routing, retrieval, and generation. The full history is never sent to retrieval. Without \texttt{history} the single-turn behaviour is unchanged.
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}agent.\allowbreak{}py:101}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/249253f371fc682b42be23d75ec314d58837767d/src/feedback_intelligence_agent/agent.py#L101}{online})
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}agent.\allowbreak{}py:101}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/936886da072fa7025a57c5517b9c90772bedae09/src/feedback_intelligence_agent/agent.py#L101}{online})
 
 \subsection{\texttt{chat}}
 \label{method:feedback_intelligence_agent.agent.FeedbackInsightAgent.chat}\index{Methods!chat}
@@ -63,7 +63,7 @@ chat(self, message: str, *, store: ConversationStore, conversation_id: str | Non
 \end{arglist}
 \apifield{Value}\texttt{tuple[AgentAnswer,\allowbreak{} str]\allowbreak{}}. The agent answer and the conversation identifier (newly generated when none was supplied).
 \apifield{Details}Loads the conversation from \texttt{store} (or starts a new one when \texttt{conversation\_\allowbreak{}id} is \texttt{None}), answers with the previous turns as context, records the new turn (user message, answer, cited document IDs, route, and confidence), and saves the conversation back.
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}agent.\allowbreak{}py:263}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/249253f371fc682b42be23d75ec314d58837767d/src/feedback_intelligence_agent/agent.py#L263}{online})
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}agent.\allowbreak{}py:263}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/936886da072fa7025a57c5517b9c90772bedae09/src/feedback_intelligence_agent/agent.py#L263}{online})
 
 \subsection{\texttt{route}}
 \label{method:feedback_intelligence_agent.agent.FeedbackInsightAgent.route}\index{Methods!route}
@@ -77,4 +77,4 @@ route(self, question: str) -> str
   \item[\texttt{question}] \texttt{str}, required.
 \end{arglist}
 \apifield{Value}\texttt{str}
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}agent.\allowbreak{}py:435}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/249253f371fc682b42be23d75ec314d58837767d/src/feedback_intelligence_agent/agent.py#L435}{online})
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}agent.\allowbreak{}py:435}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/936886da072fa7025a57c5517b9c90772bedae09/src/feedback_intelligence_agent/agent.py#L435}{online})

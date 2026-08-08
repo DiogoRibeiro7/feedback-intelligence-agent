@@ -36,7 +36,7 @@ from tools import (
     render_engineering,
     render_reference,
 )
-from tools.digest import content_digest
+from tools.digest import content_digest, normalise_newlines
 from tools.latex_utils import escape_latex, file_header
 
 METADATA_ROOT = Path("docs/metadata")
@@ -96,18 +96,34 @@ def _digest(path: Path) -> str:
     return content_digest(path)
 
 
+def _manifest_entry(path: Path, repo_root: Path) -> dict[str, Any]:
+    """Describe one generated artifact in a platform-independent way.
+
+    The recorded size is the length of the content with line endings
+    normalised, not the size on disk, for the same reason the digest is taken
+    over normalised content: git rewrites line endings on checkout, so the
+    on-disk size of identical content differs between platforms.
+    """
+    return {
+        "path": path.relative_to(repo_root).as_posix(),
+        "bytes": len(normalise_newlines(path.read_bytes())),
+        "sha256": content_digest(path),
+    }
+
+
 def write_manifest(repo_root: Path, generated: list[Path], inventory: dict[str, Any]) -> Path:
     """Write the documentation manifest describing every generated artifact."""
+    # Sort by the POSIX path string rather than by Path. Path ordering is
+    # platform-dependent -- WindowsPath compares case-insensitively on the
+    # native separator -- which would reorder the manifest between platforms
+    # and make every entry look changed.
     entries = [
-        {
-            "path": path.relative_to(repo_root).as_posix(),
-            "bytes": path.stat().st_size,
-            "sha256": _digest(path),
-        }
-        for path in sorted(generated)
+        _manifest_entry(path, repo_root)
+        for path in sorted(generated, key=lambda item: item.relative_to(repo_root).as_posix())
     ]
     metadata_files = sorted(
         (repo_root / METADATA_ROOT).glob("*.json"),
+        key=lambda item: item.name,
     )
     manifest = {
         "generator": {
@@ -126,11 +142,7 @@ def write_manifest(repo_root: Path, generated: list[Path], inventory: dict[str, 
         },
         "generated_files": entries,
         "metadata_files": [
-            {
-                "path": path.relative_to(repo_root).as_posix(),
-                "bytes": path.stat().st_size,
-                "sha256": _digest(path),
-            }
+            _manifest_entry(path, repo_root)
             for path in metadata_files
             if path.name != "documentation-manifest.json"
         ],

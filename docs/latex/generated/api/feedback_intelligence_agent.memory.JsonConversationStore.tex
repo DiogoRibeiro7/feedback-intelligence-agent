@@ -19,7 +19,7 @@ JsonConversationStore(self, root: str | Path) -> None
   \item[\texttt{root}] \texttt{str \textbar{} Path}, required.
 \end{arglist}
 \apifield{Details}Files are written as \texttt{\{root\}/\allowbreak{}\{conversation\_\allowbreak{}id\}.\allowbreak{}json} with indented JSON, so conversations are easy to inspect, diff, and replay locally.
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}memory.\allowbreak{}py:185}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/249253f371fc682b42be23d75ec314d58837767d/src/feedback_intelligence_agent/memory.py#L185}{online}), class, module \cref{module:feedback_intelligence_agent.memory}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}memory.\allowbreak{}py:185}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/936886da072fa7025a57c5517b9c90772bedae09/src/feedback_intelligence_agent/memory.py#L185}{online}), class, module \cref{module:feedback_intelligence_agent.memory}
 
 \subsection{\texttt{get}}
 \label{method:feedback_intelligence_agent.memory.JsonConversationStore.get}\index{Methods!get}
@@ -33,7 +33,7 @@ get(self, conversation_id: str) -> ConversationMemory | None
   \item[\texttt{conversation\_\allowbreak{}id}] \texttt{str}, required.
 \end{arglist}
 \apifield{Value}\texttt{ConversationMemory \textbar{} None}
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}memory.\allowbreak{}py:201}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/249253f371fc682b42be23d75ec314d58837767d/src/feedback_intelligence_agent/memory.py#L201}{online})
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}memory.\allowbreak{}py:201}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/936886da072fa7025a57c5517b9c90772bedae09/src/feedback_intelligence_agent/memory.py#L201}{online})
 
 \subsection{\texttt{save}}
 \label{method:feedback_intelligence_agent.memory.JsonConversationStore.save}\index{Methods!save}
@@ -46,7 +46,7 @@ save(self, memory: ConversationMemory) -> None
 \begin{arglist}
   \item[\texttt{memory}] \texttt{ConversationMemory}, required.
 \end{arglist}
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}memory.\allowbreak{}py:208}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/249253f371fc682b42be23d75ec314d58837767d/src/feedback_intelligence_agent/memory.py#L208}{online})
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}memory.\allowbreak{}py:208}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/936886da072fa7025a57c5517b9c90772bedae09/src/feedback_intelligence_agent/memory.py#L208}{online})
 
 \subsection{\texttt{conversation\_ids}}
 \label{method:feedback_intelligence_agent.memory.JsonConversationStore.conversation_ids}\index{Methods!conversation\_ids}
@@ -56,4 +56,4 @@ Return the identifiers of all persisted conversations, sorted.
 conversation_ids(self) -> list[str]
 \end{lstlisting}
 \apifield{Value}\texttt{list[str]\allowbreak{}}
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}memory.\allowbreak{}py:213}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/249253f371fc682b42be23d75ec314d58837767d/src/feedback_intelligence_agent/memory.py#L213}{online})
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}memory.\allowbreak{}py:213}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/936886da072fa7025a57c5517b9c90772bedae09/src/feedback_intelligence_agent/memory.py#L213}{online})

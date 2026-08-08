@@ -26,6 +26,7 @@ from tools import (  # noqa: E402
     digest,
     extract_api,
     extract_dependencies,
+    inspect_repository,
     latex_utils,
 )
 
@@ -632,6 +633,38 @@ def test_generated_documentation_passes_every_validation_check() -> None:
 
     failures = [check for check in validate_docs.run_checks(REPO_ROOT) if not check.passed]
     assert failures == [], "\n".join(check.render() for check in failures)
+
+
+def test_manifest_is_ordered_by_posix_path() -> None:
+    """Ordering must not depend on the platform's path comparison.
+
+    Sorting Path objects orders case-insensitively on Windows and
+    case-sensitively elsewhere, which would reorder the whole manifest between
+    platforms and make every entry look as though it had drifted.
+    """
+    _require_generated_docs()
+    manifest = json.loads(
+        (METADATA_DIR / "documentation-manifest.json").read_text(encoding="utf-8")
+    )
+    for key in ("generated_files", "metadata_files"):
+        paths = [entry["path"] for entry in manifest[key]]
+        assert paths == sorted(paths), f"{key} is not ordered by POSIX path"
+
+
+def test_recorded_sizes_ignore_line_ending_style(tmp_path: Path) -> None:
+    """Recorded sizes must reflect content, not the checkout's line endings.
+
+    Asserted against controlled files rather than the committed inventory,
+    which is only current as of the last ``make docs`` run; keeping the
+    committed model current is the drift check's job, not this test's.
+    """
+    unix = tmp_path / "unix.py"
+    windows = tmp_path / "windows.py"
+    unix.write_bytes(b"one\ntwo\nthree\n")
+    windows.write_bytes(b"one\r\ntwo\r\nthree\r\n")
+    assert windows.stat().st_size != unix.stat().st_size
+    assert inspect_repository._content_size(windows) == inspect_repository._content_size(unix)
+    assert inspect_repository._content_size(unix) == len(b"one\ntwo\nthree\n")
 
 
 def test_metadata_files_are_valid_json_and_describe_one_revision() -> None:

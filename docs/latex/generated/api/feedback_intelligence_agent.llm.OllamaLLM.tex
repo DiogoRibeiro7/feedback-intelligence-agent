@@ -27,7 +27,7 @@ OllamaLLM(self, *, base_url: str = 'http://localhost:11434', model: str = 'llama
   \item[\texttt{capabilities}] default \texttt{ProviderCapabilities(supports\_\allowbreak{}streaming=True,\allowbreak{} supports\_\allowbreak{}tool\_\allowbreak{}calling=False,\allowbreak{} supports\_\allowbreak{}json\_\allowbreak{}mode=True,\allowbreak{} max\_\allowbreak{}context\_\allowbreak{}tokens=None)\allowbreak{}}
 \end{arglist}
 \apifield{Details}Talks to a local Ollama server (default \texttt{http:/\allowbreak{}/\allowbreak{}localhost:11434}) through its \texttt{/\allowbreak{}api/\allowbreak{}chat} endpoint with \texttt{httpx}. No API key is required.
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}llm.\allowbreak{}py:599}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/249253f371fc682b42be23d75ec314d58837767d/src/feedback_intelligence_agent/llm.py#L599}{online}), class, module \cref{module:feedback_intelligence_agent.llm}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}llm.\allowbreak{}py:599}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/936886da072fa7025a57c5517b9c90772bedae09/src/feedback_intelligence_agent/llm.py#L599}{online}), class, module \cref{module:feedback_intelligence_agent.llm}
 
 \subsection{\texttt{generate}}
 \label{method:feedback_intelligence_agent.llm.OllamaLLM.generate}\index{Methods!generate}
@@ -44,4 +44,4 @@ generate(self, prompt: str, *, question: str, results: list[SearchResult]) -> st
 \end{arglist}
 \apifield{Value}\texttt{str}
 \apifield{Raises}\texttt{LLMProviderError}
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}llm.\allowbreak{}py:631}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/249253f371fc682b42be23d75ec314d58837767d/src/feedback_intelligence_agent/llm.py#L631}{online})
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}llm.\allowbreak{}py:631}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/936886da072fa7025a57c5517b9c90772bedae09/src/feedback_intelligence_agent/llm.py#L631}{online})

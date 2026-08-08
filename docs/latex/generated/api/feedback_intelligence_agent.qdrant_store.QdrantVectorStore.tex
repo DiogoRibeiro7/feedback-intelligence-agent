@@ -28,7 +28,7 @@ QdrantVectorStore(self, dim: int, *, url: str = 'http://localhost:6333', collect
   \item[\texttt{chunks}] Return all indexed chunks, reconstructed from point payloads.
 \end{arglist}
 \apifield{Details}The collection is created on demand using \texttt{Distance.\allowbreak{}COSINE} so the scoring orientation matches the in-memory store: higher scores mean more similar.
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}qdrant\_\allowbreak{}store.\allowbreak{}py:56}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/249253f371fc682b42be23d75ec314d58837767d/src/feedback_intelligence_agent/qdrant_store.py#L56}{online}), class, module \cref{module:feedback_intelligence_agent.qdrant_store}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}qdrant\_\allowbreak{}store.\allowbreak{}py:56}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/936886da072fa7025a57c5517b9c90772bedae09/src/feedback_intelligence_agent/qdrant_store.py#L56}{online}), class, module \cref{module:feedback_intelligence_agent.qdrant_store}
 
 \subsection{\texttt{add}}
 \label{method:feedback_intelligence_agent.qdrant_store.QdrantVectorStore.add}\index{Methods!add}
@@ -43,7 +43,7 @@ add(self, chunks: list[DocumentChunk], vectors: npt.NDArray[np.float64]) -> None
   \item[\texttt{vectors}] \texttt{npt.\allowbreak{}NDArray[np.\allowbreak{}float64]\allowbreak{}}, required.
 \end{arglist}
 \apifield{Raises}\texttt{ValueError}
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}qdrant\_\allowbreak{}store.\allowbreak{}py:129}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/249253f371fc682b42be23d75ec314d58837767d/src/feedback_intelligence_agent/qdrant_store.py#L129}{online})
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}qdrant\_\allowbreak{}store.\allowbreak{}py:129}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/936886da072fa7025a57c5517b9c90772bedae09/src/feedback_intelligence_agent/qdrant_store.py#L129}{online})
 
 \subsection{\texttt{search}}
 \label{method:feedback_intelligence_agent.qdrant_store.QdrantVectorStore.search}\index{Methods!search}
@@ -59,4 +59,4 @@ search(self, query_vector: npt.NDArray[np.float64], *, top_k: int = 4) -> list[S
 \end{arglist}
 \apifield{Value}\texttt{list[SearchResult]\allowbreak{}}
 \apifield{Raises}\texttt{ValueError}
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}qdrant\_\allowbreak{}store.\allowbreak{}py:151}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/249253f371fc682b42be23d75ec314d58837767d/src/feedback_intelligence_agent/qdrant_store.py#L151}{online})
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}qdrant\_\allowbreak{}store.\allowbreak{}py:151}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/936886da072fa7025a57c5517b9c90772bedae09/src/feedback_intelligence_agent/qdrant_store.py#L151}{online})

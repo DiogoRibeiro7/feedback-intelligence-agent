@@ -17,7 +17,7 @@ Local, deterministic follow-up rewriter with two transparent rules.
 \apifield{Details}1. **Pronoun resolution**: standalone pronouns (\texttt{it}, \texttt{they}, \texttt{them}, trailing \texttt{this}/\texttt{that}/...) are replaced with the salient entities of the previous user message. 2. **Ellipsis expansion**: elliptical openers ("What about X?", "And X?") and very short questions get the previous turn's missing entities appended ("... regarding enterprise onboarding").
 
 Standalone questions are returned unchanged, so single-turn behaviour is never affected. No model call is involved.
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}memory.\allowbreak{}py:257}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/249253f371fc682b42be23d75ec314d58837767d/src/feedback_intelligence_agent/memory.py#L257}{online}), class, module \cref{module:feedback_intelligence_agent.memory}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}memory.\allowbreak{}py:257}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/936886da072fa7025a57c5517b9c90772bedae09/src/feedback_intelligence_agent/memory.py#L257}{online}), class, module \cref{module:feedback_intelligence_agent.memory}
 
 \subsection{\texttt{rewrite}}
 \label{method:feedback_intelligence_agent.memory.DeterministicQueryRewriter.rewrite}\index{Methods!rewrite}
@@ -32,4 +32,4 @@ rewrite(self, question: str, previous_turn: ConversationTurn | None) -> QueryRew
   \item[\texttt{previous\_\allowbreak{}turn}] \texttt{ConversationTurn \textbar{} None}, required.
 \end{arglist}
 \apifield{Value}\texttt{QueryRewrite}
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}memory.\allowbreak{}py:273}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/249253f371fc682b42be23d75ec314d58837767d/src/feedback_intelligence_agent/memory.py#L273}{online})
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}memory.\allowbreak{}py:273}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/936886da072fa7025a57c5517b9c90772bedae09/src/feedback_intelligence_agent/memory.py#L273}{online})
