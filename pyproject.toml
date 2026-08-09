@@ -15,7 +15,7 @@ pandas = "^2.2.0"
 pydantic = "^2.7.0"
 pydantic-settings = "^2.3.0"
 python-dotenv = "^1.0.1"
-typer = { version = "^0.12.3", extras = ["all"] }
+typer = { version = ">=0.12.3,<0.28.0", extras = ["all"] }
 uvicorn = { version = "^0.30.0", extras = ["standard"] }
 click = ">=8.1.7,<8.5"
 pyyaml = "^6.0.3"
