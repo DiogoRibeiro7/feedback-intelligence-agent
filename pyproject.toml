@@ -37,10 +37,10 @@ qdrant = ["qdrant-client"]
 streaming = ["boto3", "confluent-kafka"]
 
 [tool.poetry.group.dev.dependencies]
-mypy = "^1.10.0"
+mypy = ">=1.10,<3.0"
 pytest = "^9.1.0"
 pytest-cov = "^7.0.0"
-ruff = "^0.5.0"
+ruff = ">=0.5,<0.17"
 pandas-stubs = "^2.2.2"
 types-pyyaml = "^6.0.12.20260518"
 
