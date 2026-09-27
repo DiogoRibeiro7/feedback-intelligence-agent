@@ -174,14 +174,19 @@ def _confined_index_path(requested: str | None, configured: Path) -> str:
     """Keep API-selected index files inside the configured artifact directory."""
     root = configured.parent.resolve()
     candidate = Path(requested) if requested else configured
-    if candidate.parent not in (Path("."), configured.parent, root) or not re.fullmatch(
-        r"[A-Za-z0-9][A-Za-z0-9._-]*\.json", candidate.name
-    ):
+    name = candidate.name
+    safe_name = (
+        name.isascii()
+        and name.endswith(".json")
+        and name[0].isalnum()
+        and all(character.isalnum() or character in "._-" for character in name)
+    )
+    if candidate.parent not in (Path("."), configured.parent, root) or not safe_name:
         raise HTTPException(
             status_code=400,
             detail="index_path must be inside the configured index directory",
         )
-    resolved = (root / candidate.name).resolve()
+    resolved = (root / name).resolve()
     if not resolved.is_relative_to(root):
         raise HTTPException(
             status_code=400,

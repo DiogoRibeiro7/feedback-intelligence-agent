@@ -100,7 +100,7 @@
       },
       "Python": {
         "files": 97,
-        "lines": 26593
+        "lines": 26598
       },
       "TOML": {
         "files": 2,
@@ -995,8 +995,8 @@
         "path": "src/feedback_intelligence_agent/api.py",
         "category": "python-source",
         "language": "Python",
-        "lines": 619,
-        "bytes": 23793
+        "lines": 624,
+        "bytes": 23932
       },
       {
         "path": "src/feedback_intelligence_agent/auth.py",
