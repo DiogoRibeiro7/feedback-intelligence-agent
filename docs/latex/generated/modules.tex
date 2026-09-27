@@ -23,7 +23,7 @@ Module & Lines & Objects & Summary \\
 \texttt{feedback\_\allowbreak{}intelligence\_\allowbreak{}agent} & 7 & 0 & Feedback Intelligence Agent package. \\
 \texttt{active\_\allowbreak{}learning} & 215 & 8 & Workflow state for active-learning follow-up items. \\
 \texttt{agent} & 564 & 3 & Agent orchestration for the feedback intelligence agent. \\
-\texttt{api} & 644 & 1 & FastAPI application. \\
+\texttt{api} & 639 & 1 & FastAPI application. \\
 \texttt{auth} & 121 & 8 & Optional API-key authorization for the FastAPI service. \\
 \texttt{benchmarking} & 286 & 13 & Latency and throughput benchmarks for the RAG pipeline. \\
 \texttt{chunking} & 93 & 3 & Text chunking utilities. \\
@@ -57,7 +57,7 @@ Module & Lines & Objects & Summary \\
 \texttt{reranking} & 137 & 2 & Local candidate reranking for retrieved feedback chunks. \\
 \texttt{resilience} & 148 & 4 & Retry, timeout, and circuit-breaker wrappers for LLM providers. \\
 \texttt{retrieval} & 113 & 4 & Retrieval helpers. \\
-\texttt{safe\_\allowbreak{}paths} & 21 & 1 & Constrain JSON record identifiers to one file under a configured store root. \\
+\texttt{safe\_\allowbreak{}paths} & 23 & 1 & Constrain JSON record identifiers to one file under a configured store root. \\
 \texttt{schemas} & 311 & 16 & Typed domain schemas used across the project. \\
 \texttt{streaming\_\allowbreak{}ingestion} & 524 & 12 & Streaming ingestion primitives for feedback events. \\
 \texttt{synthetic\_\allowbreak{}data} & 318 & 8 & Synthetic customer feedback dataset generation. \\
@@ -100,7 +100,7 @@ Agent orchestration for the feedback intelligence agent.
 \label{module:feedback_intelligence_agent.api}\index{Modules!api}
 
 FastAPI application.
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}api.\allowbreak{}py}, 644 lines
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}api.\allowbreak{}py}, 639 lines
 \apifield{Imports}\texttt{active\_\allowbreak{}learning}, \texttt{auth}, \texttt{config}, \texttt{email\_\allowbreak{}summaries}, \texttt{factory}, \texttt{human\_\allowbreak{}feedback}, \texttt{jobs}, \texttt{memory}, \texttt{rate\_\allowbreak{}limit}, \texttt{reports}, \texttt{schemas}, \texttt{telemetry}
 \apifield{Functions}\cref{func:feedback_intelligence_agent.api.create_app}
 
@@ -480,7 +480,7 @@ Retrieval helpers.
 \label{module:feedback_intelligence_agent.safe_paths}\index{Modules!safe\_paths}
 
 Constrain JSON record identifiers to one file under a configured store root.
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}safe\_\allowbreak{}paths.\allowbreak{}py}, 21 lines
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}safe\_\allowbreak{}paths.\allowbreak{}py}, 23 lines
 \apifield{Functions}\cref{func:feedback_intelligence_agent.safe_paths.json_record_path}
 
 \apibreak

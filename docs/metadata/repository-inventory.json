@@ -100,7 +100,7 @@
       },
       "Python": {
         "files": 99,
-        "lines": 26704
+        "lines": 26701
       },
       "TOML": {
         "files": 2,
@@ -995,8 +995,8 @@
         "path": "src/feedback_intelligence_agent/api.py",
         "category": "python-source",
         "language": "Python",
-        "lines": 644,
-        "bytes": 24831
+        "lines": 639,
+        "bytes": 24669
       },
       {
         "path": "src/feedback_intelligence_agent/auth.py",
@@ -1233,8 +1233,8 @@
         "path": "src/feedback_intelligence_agent/safe_paths.py",
         "category": "python-source",
         "language": "Python",
-        "lines": 21,
-        "bytes": 787
+        "lines": 23,
+        "bytes": 955
       },
       {
         "path": "src/feedback_intelligence_agent/schemas.py",

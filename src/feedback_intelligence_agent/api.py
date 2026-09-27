@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import os
 import re
 import time
 from collections.abc import Awaitable, Callable, Iterator
@@ -197,20 +198,14 @@ def _confined_index_path(requested: str | None, configured: Path) -> str:
 
 def _confined_input_path(requested: str, configured: Path) -> str:
     """Allow API ingestion to read CSV files under the configured data directory."""
-    root = configured.parent.resolve()
-    candidate = Path(requested)
-    if not candidate.is_absolute():
-        candidate = Path.cwd() / candidate
-    if candidate.suffix.lower() != ".csv" or not candidate.is_relative_to(root):
+    root = os.path.realpath(configured.parent)
+    candidate = os.path.realpath(os.path.join(Path.cwd(), requested))
+    prefix = root if root.endswith(os.sep) else root + os.sep
+    if not candidate.startswith(prefix) or Path(candidate).suffix.lower() != ".csv":
         raise HTTPException(
             status_code=400, detail="input_path must be a CSV in the data directory"
         )
-    resolved = candidate.resolve()
-    if not resolved.is_relative_to(root):
-        raise HTTPException(
-            status_code=400, detail="input_path must be a CSV in the data directory"
-        )
-    return str(resolved)
+    return candidate
 
 
 def _rate_limit_headers(decision: RateLimitDecision) -> dict[str, str]:

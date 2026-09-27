@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import os
 from pathlib import Path
 
 
@@ -14,8 +15,9 @@ def json_record_path(root: Path, identifier: str) -> Path:
         and all(character.isalnum() or character in "._-" for character in identifier)
     ):
         raise ValueError("invalid record identifier")
-    directory = root.resolve()
-    destination = (directory / f"{identifier}.json").resolve()
-    if destination.parent != directory:
+    directory = os.path.realpath(root)
+    destination = os.path.realpath(os.path.join(directory, f"{identifier}.json"))
+    prefix = directory if directory.endswith(os.sep) else directory + os.sep
+    if not destination.startswith(prefix) or os.path.dirname(destination) != directory:
         raise ValueError("record path must stay inside its store directory")
-    return destination
+    return Path(destination)
