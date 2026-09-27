@@ -935,6 +935,19 @@ def test_api_rejects_index_paths_through_symlink(
     assert not (outside_dir / "index.json").exists()
 
 
+@pytest.mark.parametrize("route", ["/index", "/ingestion/jobs"])
+def test_api_rejects_index_file_symlinks(client: TestClient, tmp_path: Path, route: str) -> None:
+    outside = tmp_path.parent / "outside-index.json"
+    link = tmp_path / "linked-index.json"
+    link.symlink_to(outside)
+    response = client.post(
+        route,
+        json={"input_path": "data/sample_feedback.csv", "index_path": str(link)},
+    )
+    assert response.status_code == 400
+    assert not outside.exists()
+
+
 def test_submit_ingestion_job_failure_is_clean(client: TestClient, tmp_path: Path) -> None:
     submit = client.post(
         "/ingestion/jobs",

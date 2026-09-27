@@ -100,7 +100,7 @@
       },
       "Python": {
         "files": 97,
-        "lines": 26573
+        "lines": 26593
       },
       "TOML": {
         "files": 2,
@@ -995,8 +995,8 @@
         "path": "src/feedback_intelligence_agent/api.py",
         "category": "python-source",
         "language": "Python",
-        "lines": 612,
-        "bytes": 23476
+        "lines": 619,
+        "bytes": 23793
       },
       {
         "path": "src/feedback_intelligence_agent/auth.py",
@@ -1310,8 +1310,8 @@
         "path": "tests/test_api.py",
         "category": "python-test",
         "language": "Python",
-        "lines": 962,
-        "bytes": 35854
+        "lines": 975,
+        "bytes": 36345
       },
       {
         "path": "tests/test_auth.py",
@@ -2781,8 +2781,8 @@
       "path": "tests/test_api.py",
       "module_under_test": "api",
       "category": "integration (HTTP)",
-      "test_functions": 49,
-      "parametrized_cases": 2
+      "test_functions": 50,
+      "parametrized_cases": 3
     },
     {
       "path": "tests/test_auth.py",
