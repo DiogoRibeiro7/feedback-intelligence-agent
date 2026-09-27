@@ -1038,6 +1038,48 @@ def build_api_index(repo_root: Path) -> dict[str, Any]:
     }
 
 
+def write_api_index(index: dict[str, Any], output: Path) -> None:
+    """Write the API index and its public-class sections as valid JSON files."""
+    output.parent.mkdir(parents=True, exist_ok=True)
+    for old_part in output.parent.glob(f"{output.stem}-classes-*.json"):
+        old_part.unlink()
+
+    parts: list[str] = []
+    classes: list[dict[str, Any]] = []
+
+    def flush() -> None:
+        if not classes:
+            return
+        name = f"{output.stem}-classes-{len(parts) + 1:03d}.json"
+        (output.parent / name).write_text(
+            json.dumps({"classes": classes}, indent=2) + "\n", encoding="utf-8", newline="\n"
+        )
+        parts.append(name)
+        classes.clear()
+
+    for item in index["classes"]:
+        candidate = [*classes, item]
+        if classes and len(json.dumps({"classes": candidate}, indent=2)) > 300_000:
+            flush()
+        classes.append(item)
+    flush()
+
+    core = {**index, "classes": [], "class_parts": parts}
+    output.write_text(json.dumps(core, indent=2) + "\n", encoding="utf-8", newline="\n")
+
+
+def load_api_index(repo_root: Path) -> dict[str, Any]:
+    """Load the generated index, joining its ordered public-class sections."""
+    output = repo_root / "docs/metadata/api-index.json"
+    index: dict[str, Any] = json.loads(output.read_text(encoding="utf-8"))
+    for name in index.pop("class_parts", []):
+        if not isinstance(name, str) or not re.fullmatch(r"api-index-classes-\d{3}\.json", name):
+            raise ValueError("Invalid API index class section")
+        part = json.loads((output.parent / name).read_text(encoding="utf-8"))
+        index["classes"].extend(part["classes"])
+    return index
+
+
 def main(argv: list[str] | None = None) -> int:
     """Write the API index JSON for the repository."""
     parser = argparse.ArgumentParser(description=__doc__)
@@ -1047,10 +1089,7 @@ def main(argv: list[str] | None = None) -> int:
 
     index = build_api_index(arguments.repo_root)
     output = arguments.repo_root / arguments.output
-    output.parent.mkdir(parents=True, exist_ok=True)
-    output.write_text(
-        json.dumps(index, indent=2, sort_keys=False) + "\n", encoding="utf-8", newline="\n"
-    )
+    write_api_index(index, output)
     print(
         f"api-index: {len(index['modules'])} modules, {len(index['classes'])} classes, "
         f"{len(index['functions'])} functions, {len(index['commands'])} commands, "

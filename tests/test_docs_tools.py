@@ -400,6 +400,23 @@ def test_settings_defaults_never_contain_a_credential_value() -> None:
             assert item["default"] in (None, "None")
 
 
+def test_partitioned_api_index_round_trip_and_stale_part_cleanup(tmp_path: Path) -> None:
+    index = {
+        "package": "example",
+        "classes": [{"name": f"C{number}", "description": "x" * 6_000} for number in range(80)],
+        "functions": [{"name": "run"}],
+    }
+    output = tmp_path / "docs/metadata/api-index.json"
+    extract_api.write_api_index(index, output)
+    core = json.loads(output.read_text(encoding="utf-8"))
+    assert len(core["class_parts"]) > 1
+    assert extract_api.load_api_index(tmp_path) == index
+
+    extract_api.write_api_index({**index, "classes": []}, output)
+    assert not list(output.parent.glob("api-index-classes-*.json"))
+    assert extract_api.load_api_index(tmp_path) == {**index, "classes": []}
+
+
 def test_build_api_index_covers_the_public_surface() -> None:
     """Known public objects appear in the model with the right classification."""
     index = extract_api.build_api_index(REPO_ROOT)

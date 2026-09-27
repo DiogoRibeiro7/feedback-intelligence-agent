@@ -9,7 +9,7 @@
   "project_version": "0.5.0",
   "counts": {
     "generated_latex_files": 311,
-    "metadata_files": 3
+    "metadata_files": 5
   },
   "generated_files": [
     {
@@ -75,7 +75,7 @@
     {
       "path": "docs/latex/generated/api/feedback_intelligence_agent.api.create_app.tex",
       "bytes": 1004,
-      "sha256": "4310828d1a44cb3f39f4b87c039c789a936099a20a1d96aac9b7e1e459a21db3"
+      "sha256": "16ce4426fcd9eb2bda7e98a2e05dd89183d65fb30379611341ea408439fde5d0"
     },
     {
       "path": "docs/latex/generated/api/feedback_intelligence_agent.auth.ApiAuthConfigurationError.tex",
@@ -1520,22 +1520,22 @@
     {
       "path": "docs/latex/generated/engineering/repository-structure.tex",
       "bytes": 7705,
-      "sha256": "fd6352e5f28848ca81870accb7ab6937062b942596af40b0755c863b53374d0a"
+      "sha256": "5a654adfb27c613ae023641cb4e7b2a6823bdc6f5882bd82b8237b384193af8d"
     },
     {
       "path": "docs/latex/generated/engineering/testing.tex",
       "bytes": 7848,
-      "sha256": "699fa67d3793227fdebc40d15bc579e19ad247b964d2229d92659064998b68bc"
+      "sha256": "a1e3a8ceea0ec6c77851f69d942d5063a576d4ab6f4864878f968c58470018cd"
     },
     {
       "path": "docs/latex/generated/engineering/traceability.tex",
       "bytes": 25488,
-      "sha256": "85d89aaf512e143d0b10fabd39ed2c67673e88885d81d88f8ac39190bd3b6e6c"
+      "sha256": "c156b5ff3d850e77cb43b14339dda0f174a5a6a46051408dcfaf8a73d2ceab4e"
     },
     {
       "path": "docs/latex/generated/http-api.tex",
       "bytes": 21121,
-      "sha256": "37c39598b3d01d2d643e10420485d693f9b0cc1f6aca40f17cf10a2c7877011b"
+      "sha256": "64a92536925d572edd6ba6167d9a5f477be8ccc911128e11c6e06d69d31e7190"
     },
     {
       "path": "docs/latex/generated/indexes.tex",
@@ -1545,7 +1545,7 @@
     {
       "path": "docs/latex/generated/modules.tex",
       "bytes": 59008,
-      "sha256": "2cfb197322b8c495af09efae46e5b19f67a1e0eccc04a03502eec51c02f9557a"
+      "sha256": "f0e2f534efb732b4bc24422cadcace11ea7bab181a38cdf78deec005a04fca3b"
     },
     {
       "path": "docs/latex/generated/project-metadata.tex",
@@ -1570,9 +1570,19 @@
   ],
   "metadata_files": [
     {
+      "path": "docs/metadata/api-index-classes-001.json",
+      "bytes": 299392,
+      "sha256": "470df22f380da010870068dcd6a94da09cc76de1e880360cf0c3ff9a5ccb3098"
+    },
+    {
+      "path": "docs/metadata/api-index-classes-002.json",
+      "bytes": 230808,
+      "sha256": "b056615cf3fb8ae344c2d84a7619ad7b1d0cc9755660c70977dea7ca7e4c6966"
+    },
+    {
       "path": "docs/metadata/api-index.json",
-      "bytes": 923747,
-      "sha256": "bfb15b594cbe830e9b7b6996b43decb26623ea8b788b56b5f8a7e6c543355cad"
+      "bytes": 393742,
+      "sha256": "28260fb85ca4c8c1752e6d978de1ab8681d6f7d49777c5b22d0d16d4810f5a66"
     },
     {
       "path": "docs/metadata/module-dependencies.json",
@@ -1582,7 +1592,7 @@
     {
       "path": "docs/metadata/repository-inventory.json",
       "bytes": 86831,
-      "sha256": "4de5e9bb76eab790425a204b3b0ed86b3112ee39ad274854372bbc08495b6ff2"
+      "sha256": "05bfc1d311b4a26528d23e89c5ca1d726d50d2e9ccdd5747a9575464dbf9cbe3"
     }
   ]
 }

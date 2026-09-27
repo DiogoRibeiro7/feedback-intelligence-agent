@@ -44,7 +44,7 @@
   },
   "files": {
     "total": 207,
-    "excluded_generated_documentation": 314,
+    "excluded_generated_documentation": 316,
     "by_category": {
       "build-configuration": 1,
       "build-interface": 1,
@@ -96,11 +96,11 @@
       },
       "Markdown": {
         "files": 15,
-        "lines": 2616
+        "lines": 2619
       },
       "Python": {
         "files": 97,
-        "lines": 26470
+        "lines": 26573
       },
       "TOML": {
         "files": 2,
@@ -302,8 +302,8 @@
         "path": "README.md",
         "category": "documentation",
         "language": "Markdown",
-        "lines": 1160,
-        "bytes": 52842
+        "lines": 1162,
+        "bytes": 52979
       },
       {
         "path": "ROADMAP.md",
@@ -365,8 +365,8 @@
         "path": "docs/README.md",
         "category": "documentation",
         "language": "Markdown",
-        "lines": 172,
-        "bytes": 7792
+        "lines": 173,
+        "bytes": 7880
       },
       {
         "path": "docs/architecture.md",
@@ -764,8 +764,8 @@
         "path": "docs/tools/extract_api.py",
         "category": "documentation-tool",
         "language": "Python",
-        "lines": 1063,
-        "bytes": 37761
+        "lines": 1102,
+        "bytes": 39306
       },
       {
         "path": "docs/tools/extract_dependencies.py",
@@ -778,8 +778,8 @@
         "path": "docs/tools/generate_docs.py",
         "category": "documentation-tool",
         "language": "Python",
-        "lines": 273,
-        "bytes": 10777
+        "lines": 271,
+        "bytes": 10718
       },
       {
         "path": "docs/tools/inspect_repository.py",
@@ -799,29 +799,29 @@
         "path": "docs/tools/render_architecture.py",
         "category": "documentation-tool",
         "language": "Python",
-        "lines": 474,
-        "bytes": 19874
+        "lines": 475,
+        "bytes": 19857
       },
       {
         "path": "docs/tools/render_engineering.py",
         "category": "documentation-tool",
         "language": "Python",
-        "lines": 931,
-        "bytes": 37455
+        "lines": 932,
+        "bytes": 37438
       },
       {
         "path": "docs/tools/render_reference.py",
         "category": "documentation-tool",
         "language": "Python",
-        "lines": 1012,
-        "bytes": 39741
+        "lines": 1013,
+        "bytes": 39724
       },
       {
         "path": "docs/tools/validate_docs.py",
         "category": "documentation-tool",
         "language": "Python",
-        "lines": 513,
-        "bytes": 19740
+        "lines": 514,
+        "bytes": 19758
       },
       {
         "path": "examples/experiment_config.yaml",
@@ -995,8 +995,8 @@
         "path": "src/feedback_intelligence_agent/api.py",
         "category": "python-source",
         "language": "Python",
-        "lines": 597,
-        "bytes": 22838
+        "lines": 612,
+        "bytes": 23476
       },
       {
         "path": "src/feedback_intelligence_agent/auth.py",
@@ -1310,8 +1310,8 @@
         "path": "tests/test_api.py",
         "category": "python-test",
         "language": "Python",
-        "lines": 932,
-        "bytes": 34727
+        "lines": 962,
+        "bytes": 35854
       },
       {
         "path": "tests/test_auth.py",
@@ -1359,8 +1359,8 @@
         "path": "tests/test_docs_tools.py",
         "category": "python-test",
         "language": "Python",
-        "lines": 678,
-        "bytes": 28548
+        "lines": 695,
+        "bytes": 29295
       },
       {
         "path": "tests/test_email_summaries.py",
@@ -2781,8 +2781,8 @@
       "path": "tests/test_api.py",
       "module_under_test": "api",
       "category": "integration (HTTP)",
-      "test_functions": 47,
-      "parametrized_cases": 0
+      "test_functions": 49,
+      "parametrized_cases": 2
     },
     {
       "path": "tests/test_auth.py",
@@ -2830,7 +2830,7 @@
       "path": "tests/test_docs_tools.py",
       "module_under_test": "docs_tools",
       "category": "unit",
-      "test_functions": 55,
+      "test_functions": 56,
       "parametrized_cases": 2
     },
     {

@@ -905,6 +905,36 @@ def test_submit_ingestion_job_runs_and_succeeds(client: TestClient, tmp_path: Pa
     assert index_path.exists()
 
 
+@pytest.mark.parametrize("route", ["/index", "/ingestion/jobs"])
+def test_api_rejects_index_paths_outside_artifact_directory(
+    client: TestClient, tmp_path: Path, route: str
+) -> None:
+    outside = tmp_path.parent / "outside-index.json"
+    response = client.post(
+        route,
+        json={"input_path": "data/sample_feedback.csv", "index_path": str(outside)},
+    )
+    assert response.status_code == 400
+    assert "configured index directory" in response.json()["detail"]
+    assert not outside.exists()
+
+
+@pytest.mark.parametrize("route", ["/index", "/ingestion/jobs"])
+def test_api_rejects_index_paths_through_symlink(
+    client: TestClient, tmp_path: Path, route: str
+) -> None:
+    outside_dir = tmp_path.parent / "outside-artifacts"
+    outside_dir.mkdir(exist_ok=True)
+    link = tmp_path / "linked-artifacts"
+    link.symlink_to(outside_dir, target_is_directory=True)
+    response = client.post(
+        route,
+        json={"input_path": "data/sample_feedback.csv", "index_path": str(link / "index.json")},
+    )
+    assert response.status_code == 400
+    assert not (outside_dir / "index.json").exists()
+
+
 def test_submit_ingestion_job_failure_is_clean(client: TestClient, tmp_path: Path) -> None:
     submit = client.post(
         "/ingestion/jobs",

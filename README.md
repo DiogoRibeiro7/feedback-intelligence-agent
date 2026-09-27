@@ -234,6 +234,8 @@ Vector-index, accepted-stream CSV, and dead-letter writes raise
 `dataexcept.FileWriteError` on filesystem failures. These exceptions expose the
 file path (or data source) and preserve the original exception in `original`
 and `__cause__`. Missing feedback CSVs still raise `FileNotFoundError`.
+API requests can place vector indexes only within the configured index directory;
+the local CLI retains its explicit output-path option.
 
 ## PII redaction
 

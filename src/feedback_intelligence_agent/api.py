@@ -6,6 +6,7 @@ import json
 import re
 import time
 from collections.abc import Awaitable, Callable, Iterator
+from pathlib import Path
 from typing import Annotated, Any
 
 from fastapi import BackgroundTasks, Depends, FastAPI, Header, HTTPException, Request
@@ -167,6 +168,19 @@ def _rate_limit_key(
     if api_key is not None and api_key.strip():
         return f"api-key:{api_key.strip()}"
     return f"ip:{client_host or 'unknown'}"
+
+
+def _confined_index_path(requested: str | None, configured: Path) -> str:
+    """Keep API-selected index files inside the configured artifact directory."""
+    root = configured.parent.resolve()
+    candidate = Path(requested) if requested else configured
+    resolved = candidate.resolve()
+    if not resolved.is_relative_to(root):
+        raise HTTPException(
+            status_code=400,
+            detail="index_path must be inside the configured index directory",
+        )
+    return str(resolved)
 
 
 def _rate_limit_headers(decision: RateLimitDecision) -> dict[str, str]:
@@ -544,7 +558,7 @@ def create_app() -> FastAPI:
     @app.post("/index", dependencies=[admin_access])
     def index(request: IndexRequest) -> dict[str, str | int]:
         """Rebuild the local vector index from a CSV path."""
-        index_path = request.index_path or str(settings.index_path)
+        index_path = _confined_index_path(request.index_path, settings.index_path)
         try:
             vector_store = build_index(
                 request.input_path,
@@ -572,6 +586,7 @@ def create_app() -> FastAPI:
         ``BackgroundTasks``, and returns the job id immediately. Poll
         ``GET /ingestion/jobs/{job_id}`` for the terminal status.
         """
+        request.index_path = _confined_index_path(request.index_path, settings.index_path)
         job = job_store.create(request)
         background_tasks.add_task(
             run_ingestion_job,
