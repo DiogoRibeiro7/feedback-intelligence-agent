@@ -3,6 +3,8 @@ from __future__ import annotations
 from pathlib import Path
 
 import pytest
+from dataexcept import DataLoadingError, FileReadError
+from pandas.errors import ParserError
 from typer.testing import CliRunner
 
 from feedback_intelligence_agent.cli import app
@@ -153,6 +155,32 @@ def test_unknown_sentiment_value_is_warning(tmp_path: Path) -> None:
 def test_missing_file_raises(tmp_path: Path) -> None:
     with pytest.raises(FileNotFoundError):
         validate_feedback_csv(tmp_path / "missing.csv")
+
+
+def test_csv_read_and_parse_failures_keep_the_source(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    csv_path = write_csv(tmp_path, [HEADER, *VALID_ROWS])
+
+    def fail_read(*args: object, **kwargs: object) -> None:
+        raise PermissionError("read denied")
+
+    monkeypatch.setattr("feedback_intelligence_agent.data_contracts.pd.read_csv", fail_read)
+    with pytest.raises(FileReadError) as read_error:
+        validate_feedback_csv(csv_path)
+    assert read_error.value.path == str(csv_path)
+    assert isinstance(read_error.value.original, PermissionError)
+    assert read_error.value.original is read_error.value.__cause__
+
+    def fail_parse(*args: object, **kwargs: object) -> None:
+        raise ParserError("bad CSV quoting")
+
+    monkeypatch.setattr("feedback_intelligence_agent.data_contracts.pd.read_csv", fail_parse)
+    with pytest.raises(DataLoadingError) as parse_error:
+        validate_feedback_csv(csv_path)
+    assert parse_error.value.source == str(csv_path)
+    assert isinstance(parse_error.value.original, ParserError)
+    assert parse_error.value.original is parse_error.value.__cause__
 
 
 def test_report_summary_mentions_counts(tmp_path: Path) -> None:

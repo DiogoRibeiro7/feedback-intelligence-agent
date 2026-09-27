@@ -27,7 +27,7 @@ Module & Layer & Fan-in & Fan-out & External packages \\
 \texttt{schemas} & foundation & 26 & 1 & \texttt{pydantic} \\
 \texttt{telemetry} & infrastructure & 10 & 0 & \texttt{contextlib}, \texttt{opentelemetry} \\
 \texttt{factory} & application & 6 & 21 & -- \\
-\texttt{vector\_\allowbreak{}store} & data & 6 & 1 & \texttt{numpy}, \texttt{pydantic} \\
+\texttt{vector\_\allowbreak{}store} & data & 6 & 1 & \texttt{dataexcept}, \texttt{numpy}, \texttt{pydantic} \\
 \texttt{config} & foundation & 6 & 0 & \texttt{pydantic}, \texttt{pydantic\_\allowbreak{}settings} \\
 \texttt{embeddings} & domain & 6 & 0 & \texttt{numpy} \\
 \texttt{agent} & application & 5 & 12 & -- \\
@@ -35,12 +35,12 @@ Module & Layer & Fan-in & Fan-out & External packages \\
 \texttt{chunking} & domain & 5 & 2 & -- \\
 \texttt{llm} & infrastructure & 5 & 2 & \texttt{anthropic}, \texttt{boto3}, \texttt{botocore}, \texttt{httpx} \\
 \texttt{citations} & domain & 5 & 1 & -- \\
-\texttt{data\_\allowbreak{}contracts} & data & 5 & 1 & \texttt{pandas}, \texttt{pydantic} \\
+\texttt{data\_\allowbreak{}contracts} & data & 5 & 1 & \texttt{dataexcept}, \texttt{pandas}, \texttt{pydantic} \\
 \texttt{human\_\allowbreak{}feedback} & application & 5 & 1 & \texttt{pydantic} \\
 \texttt{reports} & application & 5 & 1 & \texttt{pydantic} \\
-\texttt{jobs} & application & 4 & 7 & \texttt{pydantic} \\
+\texttt{jobs} & application & 4 & 7 & \texttt{dataexcept}, \texttt{pydantic} \\
 \texttt{active\_\allowbreak{}learning} & application & 4 & 1 & \texttt{pydantic} \\
-\texttt{evaluation} & application & 3 & 5 & \texttt{pydantic} \\
+\texttt{evaluation} & application & 3 & 5 & \texttt{dataexcept}, \texttt{pydantic} \\
 \texttt{retrieval} & domain & 3 & 4 & -- \\
 \texttt{hallucination} & domain & 3 & 2 & \texttt{pydantic} \\
 \texttt{memory} & domain & 3 & 1 & \texttt{pydantic} \\
@@ -56,7 +56,7 @@ Module & Layer & Fan-in & Fan-out & External packages \\
 \texttt{benchmarking} & application & 1 & 8 & \texttt{pydantic} \\
 \texttt{index\_\allowbreak{}updates} & data & 1 & 6 & \texttt{pydantic} \\
 \texttt{lakehouse} & data & 1 & 4 & \texttt{pydantic} \\
-\texttt{streaming\_\allowbreak{}ingestion} & data & 1 & 4 & \texttt{boto3}, \texttt{confluent\_\allowbreak{}kafka}, \texttt{pydantic} \\
+\texttt{streaming\_\allowbreak{}ingestion} & data & 1 & 4 & \texttt{boto3}, \texttt{confluent\_\allowbreak{}kafka}, \texttt{dataexcept}, \texttt{pydantic} \\
 \texttt{lexical\_\allowbreak{}search} & domain & 1 & 2 & -- \\
 \texttt{resilience} & infrastructure & 1 & 2 & \texttt{concurrent} \\
 \texttt{qdrant\_\allowbreak{}store} & data & 1 & 1 & \texttt{numpy}, \texttt{qdrant\_\allowbreak{}client} \\

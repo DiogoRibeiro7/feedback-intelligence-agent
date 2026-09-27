@@ -244,6 +244,7 @@
       "layer": "data",
       "fan_out": 1,
       "external_dependencies": [
+        "dataexcept",
         "pandas",
         "pydantic"
       ],
@@ -287,6 +288,7 @@
       "layer": "application",
       "fan_out": 5,
       "external_dependencies": [
+        "dataexcept",
         "pydantic"
       ],
       "optional_dependencies": [],
@@ -411,6 +413,7 @@
       "layer": "application",
       "fan_out": 7,
       "external_dependencies": [
+        "dataexcept",
         "pydantic"
       ],
       "optional_dependencies": [],
@@ -646,6 +649,7 @@
       "external_dependencies": [
         "boto3",
         "confluent_kafka",
+        "dataexcept",
         "pydantic"
       ],
       "optional_dependencies": [
@@ -706,6 +710,7 @@
       "layer": "data",
       "fan_out": 1,
       "external_dependencies": [
+        "dataexcept",
         "numpy",
         "pydantic"
       ],

@@ -225,6 +225,16 @@ poetry run feedback-agent validate-data data/sample_feedback.csv --strict
 
 The command prints a JSON report with total, valid, and invalid row counts plus row-level errors and warnings. In strict mode (`--strict`, also the default during indexing) any contract violation fails the run; in non-strict mode invalid rows are skipped and the valid rows are kept.
 
+Filesystem failures during CSV, evaluation JSONL, and stream JSONL reads raise
+`dataexcept.FileReadError`. Invalid CSV parsing raises
+`dataexcept.DataLoadingError`; feedback contract violations retain their
+row-level reports, and invalid JSONL records retain their line-number errors.
+The local vector index also uses `DataLoadingError` for invalid persisted JSON.
+Vector-index, accepted-stream CSV, and dead-letter writes raise
+`dataexcept.FileWriteError` on filesystem failures. These exceptions expose the
+file path (or data source) and preserve the original exception in `original`
+and `__cause__`. Missing feedback CSVs still raise `FileNotFoundError`.
+
 ## PII redaction
 
 `privacy.py` redacts emails, phone numbers, and obvious access tokens from

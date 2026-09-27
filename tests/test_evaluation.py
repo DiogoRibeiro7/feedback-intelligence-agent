@@ -4,6 +4,7 @@ import json
 from pathlib import Path
 
 import pytest
+from dataexcept import FileReadError
 
 from feedback_intelligence_agent.agent import FeedbackInsightAgent
 from feedback_intelligence_agent.embeddings import HashingEmbeddingModel
@@ -188,6 +189,15 @@ def test_load_evaluation_cases_reports_line_number(tmp_path: Path) -> None:
     path.write_text('{"question": "ok", "relevant_document_ids": []}\nnot json\n', encoding="utf-8")
     with pytest.raises(ValueError, match="line 2"):
         load_evaluation_cases(path)
+
+
+def test_load_evaluation_cases_missing_file_has_path(tmp_path: Path) -> None:
+    path = tmp_path / "missing.jsonl"
+    with pytest.raises(FileReadError) as raised:
+        load_evaluation_cases(path)
+    assert raised.value.path == str(path)
+    assert isinstance(raised.value.original, FileNotFoundError)
+    assert raised.value.original is raised.value.__cause__
 
 
 # ---------------------------------------------------------------------------

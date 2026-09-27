@@ -102,9 +102,9 @@ Security & \texttt{.\allowbreak{}github/\allowbreak{}workflows/\allowbreak{}secu
 \endfoot
 \bottomrule
 \endlastfoot
-1 & Checkout & \texttt{actions/\allowbreak{}checkout@v4} & -- \\
+1 & Checkout & \texttt{actions/\allowbreak{}checkout@v7} & -- \\
 2 & Install Poetry & -- & \texttt{pipx install poetry==2.\allowbreak{}2.\allowbreak{}1} \\
-3 & Set up Python & \texttt{actions/\allowbreak{}setup-\allowbreak{}python@v5} & -- \\
+3 & Set up Python & \texttt{actions/\allowbreak{}setup-\allowbreak{}python@v7} & -- \\
 4 & Install dependencies & -- & \texttt{poetry install -\allowbreak{}-\allowbreak{}with dev} \\
 5 & Lint & -- & \texttt{poetry run ruff check .\allowbreak{}} \\
 6 & Format check & -- & \texttt{poetry run ruff format -\allowbreak{}-\allowbreak{}check .\allowbreak{}} \\
@@ -136,9 +136,9 @@ Security & \texttt{.\allowbreak{}github/\allowbreak{}workflows/\allowbreak{}secu
 \endfoot
 \bottomrule
 \endlastfoot
-1 & Checkout & \texttt{actions/\allowbreak{}checkout@v4} & -- \\
+1 & Checkout & \texttt{actions/\allowbreak{}checkout@v7} & -- \\
 2 & Install Poetry & -- & \texttt{pipx install poetry==2.\allowbreak{}2.\allowbreak{}1} \\
-3 & Set up Python & \texttt{actions/\allowbreak{}setup-\allowbreak{}python@v5} & -- \\
+3 & Set up Python & \texttt{actions/\allowbreak{}setup-\allowbreak{}python@v7} & -- \\
 4 & Install dependencies & -- & \texttt{poetry install -\allowbreak{}-\allowbreak{}with dev} \\
 5 & Type check documentation toolchain & -- & \texttt{poetry run mypy -\allowbreak{}-\allowbreak{}python-\allowbreak{}version 3.\allowbreak{}11 docs/\allowbreak{}tools} \\
 6 & Test documentation toolchain & -- & \texttt{poetry run pytest tests/\allowbreak{}test\_\allowbreak{}docs\_\allowbreak{}tools.\allowbreak{}py} \\
@@ -182,8 +182,8 @@ Security & \texttt{.\allowbreak{}github/\allowbreak{}workflows/\allowbreak{}secu
 \endfoot
 \bottomrule
 \endlastfoot
-1 & Checkout & \texttt{actions/\allowbreak{}checkout@v4} & -- \\
-2 & Review dependency changes & \texttt{actions/\allowbreak{}dependency-\allowbreak{}review-\allowbreak{}action@v4} & -- \\
+1 & Checkout & \texttt{actions/\allowbreak{}checkout@v7} & -- \\
+2 & Review dependency changes & \texttt{actions/\allowbreak{}dependency-\allowbreak{}review-\allowbreak{}action@v5} & -- \\
 \end{longtable}
 
 \section{Workflow: Docker}
@@ -222,7 +222,7 @@ Security & \texttt{.\allowbreak{}github/\allowbreak{}workflows/\allowbreak{}secu
 \endfoot
 \bottomrule
 \endlastfoot
-1 & Checkout & \texttt{actions/\allowbreak{}checkout@v4} & -- \\
+1 & Checkout & \texttt{actions/\allowbreak{}checkout@v7} & -- \\
 2 & Build image & -- & \texttt{docker build -\allowbreak{}t feedback-\allowbreak{}intelligence-\allowbreak{}agent:ci .\allowbreak{}} \\
 3 & Smoke test container & -- & \texttt{docker run -\allowbreak{}-\allowbreak{}rm -\allowbreak{}-\allowbreak{}entrypoint python feedback-\allowbreak{}intelligence-\allowbreak{}agent:ci -\allowbreak{}c "import feedback\_\allowbreak{}intelligence\_\allowbreak{}agent; print(feedback\_\allowbreak{}intelligence\_\allowbreak{}agent.\allowbreak{}\_\allowbreak{}\_\allowbreak{}name\_\allowbreak{}\_\allowbreak{})\allowbreak{}"} \\
 \end{longtable}
@@ -263,8 +263,8 @@ Security & \texttt{.\allowbreak{}github/\allowbreak{}workflows/\allowbreak{}secu
 \endfoot
 \bottomrule
 \endlastfoot
-1 & Checkout & \texttt{actions/\allowbreak{}checkout@v4} & -- \\
-2 & Set up Node & \texttt{actions/\allowbreak{}setup-\allowbreak{}node@v4} & -- \\
+1 & Checkout & \texttt{actions/\allowbreak{}checkout@v7} & -- \\
+2 & Set up Node & \texttt{actions/\allowbreak{}setup-\allowbreak{}node@v7} & -- \\
 3 & Install dependencies & -- & \texttt{npm ci} \\
 4 & Audit dependencies & -- & \texttt{npm audit} \\
 5 & Build & -- & \texttt{npm run build} \\
@@ -306,10 +306,10 @@ Security & \texttt{.\allowbreak{}github/\allowbreak{}workflows/\allowbreak{}secu
 \endfoot
 \bottomrule
 \endlastfoot
-1 & Checkout & \texttt{actions/\allowbreak{}checkout@v4} & -- \\
+1 & Checkout & \texttt{actions/\allowbreak{}checkout@v7} & -- \\
 2 & Install Poetry & -- & \texttt{pipx install poetry==2.\allowbreak{}2.\allowbreak{}1} \\
-3 & Set up Python & \texttt{actions/\allowbreak{}setup-\allowbreak{}python@v5} & -- \\
-4 & Set up Node & \texttt{actions/\allowbreak{}setup-\allowbreak{}node@v4} & -- \\
+3 & Set up Python & \texttt{actions/\allowbreak{}setup-\allowbreak{}python@v7} & -- \\
+4 & Set up Node & \texttt{actions/\allowbreak{}setup-\allowbreak{}node@v7} & -- \\
 5 & Install Python dependencies & -- & \texttt{poetry install -\allowbreak{}-\allowbreak{}with dev} \\
 6 & Install frontend dependencies & -- & \texttt{npm ci} \\
 7 & Validate Zenodo metadata & -- & \texttt{python -\allowbreak{}m json.\allowbreak{}tool .\allowbreak{}zenodo.\allowbreak{}json} \\
@@ -317,8 +317,8 @@ Security & \texttt{.\allowbreak{}github/\allowbreak{}workflows/\allowbreak{}secu
 9 & Run deterministic demo & -- & \texttt{poetry run python scripts/\allowbreak{}run\_\allowbreak{}demo.\allowbreak{}py} \\
 10 & Build Python package & -- & \texttt{poetry build} \\
 11 & Build frontend & -- & \texttt{npm run build} \\
-12 & Upload Python distributions & \texttt{actions/\allowbreak{}upload-\allowbreak{}artifact@v4} & -- \\
-13 & Upload frontend build & \texttt{actions/\allowbreak{}upload-\allowbreak{}artifact@v4} & -- \\
+12 & Upload Python distributions & \texttt{actions/\allowbreak{}upload-\allowbreak{}artifact@v7} & -- \\
+13 & Upload frontend build & \texttt{actions/\allowbreak{}upload-\allowbreak{}artifact@v7} & -- \\
 \end{longtable}
 
 \section{Workflow: Security}
@@ -360,7 +360,7 @@ Security & \texttt{.\allowbreak{}github/\allowbreak{}workflows/\allowbreak{}secu
 \endfoot
 \bottomrule
 \endlastfoot
-1 & Checkout & \texttt{actions/\allowbreak{}checkout@v4} & -- \\
+1 & Checkout & \texttt{actions/\allowbreak{}checkout@v7} & -- \\
 2 & Initialize CodeQL & \texttt{github/\allowbreak{}codeql-\allowbreak{}action/\allowbreak{}init@v3} & -- \\
 3 & Perform CodeQL analysis & \texttt{github/\allowbreak{}codeql-\allowbreak{}action/\allowbreak{}analyze@v3} & -- \\
 \end{longtable}

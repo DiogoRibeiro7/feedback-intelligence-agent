@@ -8,7 +8,8 @@ from typing import Protocol, runtime_checkable
 
 import numpy as np
 import numpy.typing as npt
-from pydantic import BaseModel, Field
+from dataexcept import DataLoadingError, FileReadError, FileWriteError, wrapping
+from pydantic import BaseModel, Field, ValidationError
 
 from feedback_intelligence_agent.schemas import DocumentChunk, SearchResult
 
@@ -153,19 +154,24 @@ class InMemoryVectorStore:
     def save(self, path: str | Path) -> None:
         """Persist the vector store as JSON."""
         output_path = Path(path)
-        output_path.parent.mkdir(parents=True, exist_ok=True)
+        with wrapping(OSError, FileWriteError, path=str(output_path.parent)):
+            output_path.parent.mkdir(parents=True, exist_ok=True)
         payload = PersistedVectorStore(
             dim=self.dim,
             chunks=self._chunks,
             vectors=self._vectors.tolist(),
         )
-        output_path.write_text(payload.model_dump_json(indent=2), encoding="utf-8")
+        with wrapping((OSError, UnicodeError), FileWriteError, path=str(output_path)):
+            output_path.write_text(payload.model_dump_json(indent=2), encoding="utf-8")
 
     @classmethod
     def load(cls, path: str | Path) -> InMemoryVectorStore:
         """Load a vector store from JSON."""
         input_path = Path(path)
-        payload = PersistedVectorStore.model_validate_json(input_path.read_text(encoding="utf-8"))
+        with wrapping((OSError, UnicodeError), FileReadError, path=str(input_path)):
+            contents = input_path.read_text(encoding="utf-8")
+        with wrapping(ValidationError, DataLoadingError, source=str(input_path)):
+            payload = PersistedVectorStore.model_validate_json(contents)
         store = cls(dim=payload.dim)
         if payload.chunks:
             vectors = np.asarray(payload.vectors, dtype=np.float64)

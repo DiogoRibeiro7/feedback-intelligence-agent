@@ -119,8 +119,7 @@ class ResilientLLMProvider:
             return response
         assert last_error is not None
         raise LLMProviderError(
-            f"{self.provider_name} failed after {self.policy.max_attempts} attempt(s): "
-            f"{last_error}"
+            f"{self.provider_name} failed after {self.policy.max_attempts} attempt(s): {last_error}"
         ) from last_error
 
     def _call_with_timeout(

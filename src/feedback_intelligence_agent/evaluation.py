@@ -16,6 +16,7 @@ import re
 import time
 from pathlib import Path
 
+from dataexcept import FileReadError, wrapping
 from pydantic import BaseModel, Field
 
 from feedback_intelligence_agent.agent import FeedbackInsightAgent
@@ -246,9 +247,9 @@ def load_evaluation_cases(path: str | Path) -> list[EvaluationCase]:
     """Load JSONL evaluation cases, reporting the line number on failure."""
     input_path = Path(path)
     cases: list[EvaluationCase] = []
-    for line_number, line in enumerate(
-        input_path.read_text(encoding="utf-8").splitlines(), start=1
-    ):
+    with wrapping((OSError, UnicodeError), FileReadError, path=str(input_path)):
+        lines = input_path.read_text(encoding="utf-8").splitlines()
+    for line_number, line in enumerate(lines, start=1):
         if not line.strip():
             continue
         try:

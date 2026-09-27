@@ -12,6 +12,7 @@ from pathlib import Path
 from typing import Any, Literal
 
 import pandas as pd
+from dataexcept import DataLoadingError, FileReadError, wrapping
 from pydantic import BaseModel, Field, ValidationError
 
 from feedback_intelligence_agent.schemas import FeedbackChannel, FeedbackRecord
@@ -132,13 +133,19 @@ def validate_feedback_csv(
 
     Raises:
         FileNotFoundError: If the file does not exist.
+        FileReadError: If an existing file cannot be read.
+        DataLoadingError: If the CSV cannot be parsed.
         DataContractError: In strict mode, if the dataset has any validation error.
     """
     csv_path = Path(path)
     if not csv_path.exists():
         raise FileNotFoundError(f"Feedback CSV not found: {csv_path}")
 
-    frame = pd.read_csv(csv_path, dtype=str, keep_default_na=False)
+    with (
+        wrapping((OSError, UnicodeError), FileReadError, path=str(csv_path)),
+        wrapping(pd.errors.ParserError, DataLoadingError, source=str(csv_path)),
+    ):
+        frame = pd.read_csv(csv_path, dtype=str, keep_default_na=False)
     errors: list[ValidationIssue] = []
     warnings: list[ValidationIssue] = []
     records: list[FeedbackRecord] = []

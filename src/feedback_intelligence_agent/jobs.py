@@ -30,6 +30,7 @@ from enum import Enum
 from pathlib import Path
 from typing import Protocol
 
+from dataexcept import DataExceptError
 from pydantic import BaseModel, Field
 
 from feedback_intelligence_agent.chunking import feedback_to_chunks
@@ -260,7 +261,13 @@ def run_ingestion_job(
         vector_store = InMemoryVectorStore(dim=embedding_dim)
         vector_store.add(chunks, vectors)
         vector_store.save(index_path)
-    except (FeedbackIngestionError, DataContractError, FileNotFoundError, ValueError):
+    except (
+        FeedbackIngestionError,
+        DataContractError,
+        DataExceptError,
+        FileNotFoundError,
+        ValueError,
+    ):
         get_logger().exception("ingestion_job_failed", extra={"job_id": job_id})
         result.status = JobStatus.failed
         result.error = _CLEAN_INGESTION_ERROR

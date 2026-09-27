@@ -29,9 +29,9 @@
     ],
     "date_released": "2026-08-08",
     "python_requires": ">=3.10,<3.13",
-    "revision": "936886da072fa7025a57c5517b9c90772bedae09",
-    "revision_short": "936886da072f",
-    "revision_date": "2026-08-08T22:57:35+01:00",
+    "revision": "edc9d78403eeed9f7d6ee5aef6b8d9b1b5780ef4",
+    "revision_short": "edc9d78403ee",
+    "revision_date": "2026-08-09T21:46:40+01:00",
     "packages": [
       {
         "include": "feedback_intelligence_agent",
@@ -84,7 +84,7 @@
       },
       "JSON": {
         "files": 5,
-        "lines": 1018
+        "lines": 1317
       },
       "JSON Lines": {
         "files": 3,
@@ -96,15 +96,15 @@
       },
       "Markdown": {
         "files": 15,
-        "lines": 2606
+        "lines": 2616
       },
       "Python": {
         "files": 97,
-        "lines": 26359
+        "lines": 26470
       },
       "TOML": {
         "files": 2,
-        "lines": 161
+        "lines": 164
       },
       "TypeScript": {
         "files": 4,
@@ -302,8 +302,8 @@
         "path": "README.md",
         "category": "documentation",
         "language": "Markdown",
-        "lines": 1150,
-        "bytes": 52183
+        "lines": 1160,
+        "bytes": 52842
       },
       {
         "path": "ROADMAP.md",
@@ -688,7 +688,7 @@
         "category": "documentation-latex",
         "language": "LaTeX",
         "lines": 30,
-        "bytes": 1310
+        "bytes": 1266
       },
       {
         "path": "docs/latex/preamble.tex",
@@ -890,15 +890,15 @@
         "path": "frontend/package-lock.json",
         "category": "frontend",
         "language": "JSON",
-        "lines": 887,
-        "bytes": 28155
+        "lines": 1186,
+        "bytes": 37052
       },
       {
         "path": "frontend/package.json",
         "category": "frontend",
         "language": "JSON",
         "lines": 16,
-        "bytes": 418
+        "bytes": 417
       },
       {
         "path": "frontend/src/api.ts",
@@ -947,14 +947,14 @@
         "category": "dependency-lock",
         "language": null,
         "lines": null,
-        "bytes": 549658
+        "bytes": 569847
       },
       {
         "path": "pyproject.toml",
         "category": "build-configuration",
         "language": "TOML",
-        "lines": 109,
-        "bytes": 3449
+        "lines": 112,
+        "bytes": 3607
       },
       {
         "path": "scripts/benchmark.py",
@@ -1002,8 +1002,8 @@
         "path": "src/feedback_intelligence_agent/auth.py",
         "category": "python-source",
         "language": "Python",
-        "lines": 122,
-        "bytes": 3155
+        "lines": 121,
+        "bytes": 3139
       },
       {
         "path": "src/feedback_intelligence_agent/benchmarking.py",
@@ -1044,8 +1044,8 @@
         "path": "src/feedback_intelligence_agent/data_contracts.py",
         "category": "python-source",
         "language": "Python",
-        "lines": 237,
-        "bytes": 8684
+        "lines": 244,
+        "bytes": 9044
       },
       {
         "path": "src/feedback_intelligence_agent/email_summaries.py",
@@ -1065,8 +1065,8 @@
         "path": "src/feedback_intelligence_agent/evaluation.py",
         "category": "python-source",
         "language": "Python",
-        "lines": 416,
-        "bytes": 14975
+        "lines": 417,
+        "bytes": 15111
       },
       {
         "path": "src/feedback_intelligence_agent/experiments.py",
@@ -1121,8 +1121,8 @@
         "path": "src/feedback_intelligence_agent/jobs.py",
         "category": "python-source",
         "language": "Python",
-        "lines": 281,
-        "bytes": 10369
+        "lines": 288,
+        "bytes": 10472
       },
       {
         "path": "src/feedback_intelligence_agent/lakehouse.py",
@@ -1142,8 +1142,8 @@
         "path": "src/feedback_intelligence_agent/llm.py",
         "category": "python-source",
         "language": "Python",
-        "lines": 658,
-        "bytes": 24998
+        "lines": 657,
+        "bytes": 24975
       },
       {
         "path": "src/feedback_intelligence_agent/memory.py",
@@ -1219,8 +1219,8 @@
         "path": "src/feedback_intelligence_agent/resilience.py",
         "category": "python-source",
         "language": "Python",
-        "lines": 149,
-        "bytes": 5522
+        "lines": 148,
+        "bytes": 5506
       },
       {
         "path": "src/feedback_intelligence_agent/retrieval.py",
@@ -1240,8 +1240,8 @@
         "path": "src/feedback_intelligence_agent/streaming_ingestion.py",
         "category": "python-source",
         "language": "Python",
-        "lines": 515,
-        "bytes": 18222
+        "lines": 524,
+        "bytes": 18707
       },
       {
         "path": "src/feedback_intelligence_agent/synthetic_data.py",
@@ -1268,8 +1268,8 @@
         "path": "src/feedback_intelligence_agent/vector_store.py",
         "category": "python-source",
         "language": "Python",
-        "lines": 182,
-        "bytes": 6643
+        "lines": 188,
+        "bytes": 7117
       },
       {
         "path": "tests/conftest.py",
@@ -1345,15 +1345,15 @@
         "path": "tests/test_cli.py",
         "category": "python-test",
         "language": "Python",
-        "lines": 698,
-        "bytes": 21734
+        "lines": 699,
+        "bytes": 21797
       },
       {
         "path": "tests/test_data_contracts.py",
         "category": "python-test",
         "language": "Python",
-        "lines": 215,
-        "bytes": 7773
+        "lines": 243,
+        "bytes": 9003
       },
       {
         "path": "tests/test_docs_tools.py",
@@ -1373,15 +1373,15 @@
         "path": "tests/test_embeddings_and_store.py",
         "category": "python-test",
         "language": "Python",
-        "lines": 64,
-        "bytes": 2245
+        "lines": 91,
+        "bytes": 3377
       },
       {
         "path": "tests/test_evaluation.py",
         "category": "python-test",
         "language": "Python",
-        "lines": 278,
-        "bytes": 10212
+        "lines": 288,
+        "bytes": 10617
       },
       {
         "path": "tests/test_experiments.py",
@@ -1541,8 +1541,8 @@
         "path": "tests/test_streaming_ingestion.py",
         "category": "python-test",
         "language": "Python",
-        "lines": 293,
-        "bytes": 9240
+        "lines": 311,
+        "bytes": 9980
       },
       {
         "path": "tests/test_synthetic_data.py",
@@ -1672,25 +1672,31 @@
     "runtime": [
       {
         "name": "click",
-        "constraint": ">=8.1.7,<8.2",
+        "constraint": ">=8.1.7,<8.5",
+        "optional": false,
+        "extras": []
+      },
+      {
+        "name": "dataexcept",
+        "constraint": ">=1.7,<2",
         "optional": false,
         "extras": []
       },
       {
         "name": "fastapi",
-        "constraint": "^0.137.0",
+        "constraint": ">=0.137,<0.142",
         "optional": false,
         "extras": []
       },
       {
         "name": "httpx",
-        "constraint": "^0.27.0",
+        "constraint": ">=0.27,<0.29",
         "optional": false,
         "extras": []
       },
       {
         "name": "numpy",
-        "constraint": "^1.26.0",
+        "constraint": ">=1.26,<3.0",
         "optional": false,
         "extras": []
       },
@@ -1732,7 +1738,7 @@
       },
       {
         "name": "typer",
-        "constraint": "^0.12.3",
+        "constraint": ">=0.12.3,<0.28.0",
         "optional": false,
         "extras": [
           "all"
@@ -1740,7 +1746,7 @@
       },
       {
         "name": "uvicorn",
-        "constraint": "^0.30.0",
+        "constraint": ">=0.30,<0.53",
         "optional": false,
         "extras": [
           "standard"
@@ -1794,7 +1800,13 @@
     "development": [
       {
         "name": "mypy",
-        "constraint": "^1.10.0",
+        "constraint": ">=1.10,<3.0",
+        "optional": false,
+        "extras": []
+      },
+      {
+        "name": "numpy",
+        "constraint": ">=1.26,<2.2",
         "optional": false,
         "extras": []
       },
@@ -1818,7 +1830,7 @@
       },
       {
         "name": "ruff",
-        "constraint": "^0.5.0",
+        "constraint": ">=0.5,<0.17",
         "optional": false,
         "extras": []
       },
@@ -1854,7 +1866,7 @@
     "lock_file": {
       "path": "poetry.lock",
       "present": true,
-      "locked_packages": 142
+      "locked_packages": 144
     },
     "frontend": {
       "name": "feedback-intelligence-agent-frontend",
@@ -1865,8 +1877,8 @@
       },
       "dependencies": {},
       "dev_dependencies": {
-        "typescript": "^5.4.5",
-        "vite": "^8.0.16"
+        "typescript": "^7.0.2",
+        "vite": "^8.2.0"
       }
     }
   },
@@ -2175,7 +2187,7 @@
           "steps": [
             {
               "name": "Checkout",
-              "uses": "actions/checkout@v4",
+              "uses": "actions/checkout@v7",
               "run": "",
               "working_directory": ""
             },
@@ -2187,7 +2199,7 @@
             },
             {
               "name": "Set up Python",
-              "uses": "actions/setup-python@v5",
+              "uses": "actions/setup-python@v7",
               "run": "",
               "working_directory": ""
             },
@@ -2244,7 +2256,7 @@
           "steps": [
             {
               "name": "Checkout",
-              "uses": "actions/checkout@v4",
+              "uses": "actions/checkout@v7",
               "run": "",
               "working_directory": ""
             },
@@ -2256,7 +2268,7 @@
             },
             {
               "name": "Set up Python",
-              "uses": "actions/setup-python@v5",
+              "uses": "actions/setup-python@v7",
               "run": "",
               "working_directory": ""
             },
@@ -2320,13 +2332,13 @@
           "steps": [
             {
               "name": "Checkout",
-              "uses": "actions/checkout@v4",
+              "uses": "actions/checkout@v7",
               "run": "",
               "working_directory": ""
             },
             {
               "name": "Review dependency changes",
-              "uses": "actions/dependency-review-action@v4",
+              "uses": "actions/dependency-review-action@v5",
               "run": "",
               "working_directory": ""
             }
@@ -2388,7 +2400,7 @@
           "steps": [
             {
               "name": "Checkout",
-              "uses": "actions/checkout@v4",
+              "uses": "actions/checkout@v7",
               "run": "",
               "working_directory": ""
             },
@@ -2450,13 +2462,13 @@
           "steps": [
             {
               "name": "Checkout",
-              "uses": "actions/checkout@v4",
+              "uses": "actions/checkout@v7",
               "run": "",
               "working_directory": ""
             },
             {
               "name": "Set up Node",
-              "uses": "actions/setup-node@v4",
+              "uses": "actions/setup-node@v7",
               "run": "",
               "working_directory": ""
             },
@@ -2507,7 +2519,7 @@
           "steps": [
             {
               "name": "Checkout",
-              "uses": "actions/checkout@v4",
+              "uses": "actions/checkout@v7",
               "run": "",
               "working_directory": ""
             },
@@ -2519,13 +2531,13 @@
             },
             {
               "name": "Set up Python",
-              "uses": "actions/setup-python@v5",
+              "uses": "actions/setup-python@v7",
               "run": "",
               "working_directory": ""
             },
             {
               "name": "Set up Node",
-              "uses": "actions/setup-node@v4",
+              "uses": "actions/setup-node@v7",
               "run": "",
               "working_directory": ""
             },
@@ -2573,13 +2585,13 @@
             },
             {
               "name": "Upload Python distributions",
-              "uses": "actions/upload-artifact@v4",
+              "uses": "actions/upload-artifact@v7",
               "run": "",
               "working_directory": ""
             },
             {
               "name": "Upload frontend build",
-              "uses": "actions/upload-artifact@v4",
+              "uses": "actions/upload-artifact@v7",
               "run": "",
               "working_directory": ""
             }
@@ -2631,7 +2643,7 @@
           "steps": [
             {
               "name": "Checkout",
-              "uses": "actions/checkout@v4",
+              "uses": "actions/checkout@v7",
               "run": "",
               "working_directory": ""
             },
@@ -2811,7 +2823,7 @@
       "path": "tests/test_data_contracts.py",
       "module_under_test": "data_contracts",
       "category": "data validation",
-      "test_functions": 18,
+      "test_functions": 19,
       "parametrized_cases": 0
     },
     {
@@ -2832,14 +2844,14 @@
       "path": "tests/test_embeddings_and_store.py",
       "module_under_test": "embeddings, vector_store",
       "category": "numerical / retrieval",
-      "test_functions": 3,
+      "test_functions": 4,
       "parametrized_cases": 0
     },
     {
       "path": "tests/test_evaluation.py",
       "module_under_test": "evaluation",
       "category": "numerical / metric",
-      "test_functions": 26,
+      "test_functions": 27,
       "parametrized_cases": 0
     },
     {
@@ -3000,7 +3012,7 @@
       "path": "tests/test_streaming_ingestion.py",
       "module_under_test": "streaming_ingestion",
       "category": "unit",
-      "test_functions": 11,
+      "test_functions": 13,
       "parametrized_cases": 0
     },
     {

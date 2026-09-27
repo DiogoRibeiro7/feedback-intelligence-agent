@@ -24,16 +24,16 @@ Module & Lines & Objects & Summary \\
 \texttt{active\_\allowbreak{}learning} & 214 & 8 & Workflow state for active-learning follow-up items. \\
 \texttt{agent} & 564 & 3 & Agent orchestration for the feedback intelligence agent. \\
 \texttt{api} & 597 & 1 & FastAPI application. \\
-\texttt{auth} & 122 & 8 & Optional API-key authorization for the FastAPI service. \\
+\texttt{auth} & 121 & 8 & Optional API-key authorization for the FastAPI service. \\
 \texttt{benchmarking} & 286 & 13 & Latency and throughput benchmarks for the RAG pipeline. \\
 \texttt{chunking} & 93 & 3 & Text chunking utilities. \\
 \texttt{citations} & 65 & 4 & Citation construction shared by the agent and the deterministic LLM provider. \\
 \texttt{cli} & 1007 & 29 & Command-line interface for the feedback intelligence agent. \\
 \texttt{config} & 113 & 4 & Application configuration. \\
-\texttt{data\_\allowbreak{}contracts} & 237 & 7 & Data contracts and dataset validation for customer feedback CSV files. \\
+\texttt{data\_\allowbreak{}contracts} & 244 & 7 & Data contracts and dataset validation for customer feedback CSV files. \\
 \texttt{email\_\allowbreak{}summaries} & 178 & 6 & Email summaries for saved insight reports. \\
 \texttt{embeddings} & 78 & 3 & Embedding models. \\
-\texttt{evaluation} & 416 & 18 & Offline evaluation for retrieval quality and answer quality. \\
+\texttt{evaluation} & 417 & 18 & Offline evaluation for retrieval quality and answer quality. \\
 \texttt{experiments} & 346 & 14 & Repeatable experiment runner for comparing RAG configurations. \\
 \texttt{factory} & 349 & 13 & Factories for constructing the application components. \\
 \texttt{guardrails} & 220 & 8 & Deterministic safety guardrails for the feedback intelligence agent. \\
@@ -41,10 +41,10 @@ Module & Lines & Objects & Summary \\
 \texttt{human\_\allowbreak{}feedback} & 407 & 14 & Human review feedback on generated agent answers. \\
 \texttt{index\_\allowbreak{}updates} & 115 & 2 & Incremental index update helpers. \\
 \texttt{ingestion} & 58 & 2 & Feedback ingestion utilities. \\
-\texttt{jobs} & 281 & 9 & Asynchronous ingestion jobs with status tracking. \\
+\texttt{jobs} & 288 & 9 & Asynchronous ingestion jobs with status tracking. \\
 \texttt{lakehouse} & 398 & 7 & Local lakehouse-style feedback exports. \\
 \texttt{lexical\_\allowbreak{}search} & 113 & 3 & Lexical BM25 search implemented from scratch. \\
-\texttt{llm} & 658 & 11 & LLM provider abstraction. \\
+\texttt{llm} & 657 & 11 & LLM provider abstraction. \\
 \texttt{memory} & 344 & 11 & Conversation memory and follow-up query rewriting. \\
 \texttt{output\_\allowbreak{}parser} & 181 & 4 & Structured LLM output parsing and deterministic repair. \\
 \texttt{privacy} & 59 & 6 & Deterministic PII redaction helpers. \\
@@ -55,14 +55,14 @@ Module & Lines & Objects & Summary \\
 \texttt{rate\_\allowbreak{}limit} & 76 & 2 & Small in-memory fixed-window rate limiter for API deployments. \\
 \texttt{reports} & 278 & 8 & Saved insight reports for product and analyst workflows. \\
 \texttt{reranking} & 137 & 2 & Local candidate reranking for retrieved feedback chunks. \\
-\texttt{resilience} & 149 & 4 & Retry, timeout, and circuit-breaker wrappers for LLM providers. \\
+\texttt{resilience} & 148 & 4 & Retry, timeout, and circuit-breaker wrappers for LLM providers. \\
 \texttt{retrieval} & 113 & 4 & Retrieval helpers. \\
 \texttt{schemas} & 311 & 16 & Typed domain schemas used across the project. \\
-\texttt{streaming\_\allowbreak{}ingestion} & 515 & 12 & Streaming ingestion primitives for feedback events. \\
+\texttt{streaming\_\allowbreak{}ingestion} & 524 & 12 & Streaming ingestion primitives for feedback events. \\
 \texttt{synthetic\_\allowbreak{}data} & 318 & 8 & Synthetic customer feedback dataset generation. \\
 \texttt{telemetry} & 352 & 13 & Structured logging and OpenTelemetry-style telemetry. \\
 \texttt{tools} & 565 & 21 & Deterministic tool-use framework for the feedback intelligence agent. \\
-\texttt{vector\_\allowbreak{}store} & 182 & 3 & A small vector store with JSON persistence. \\
+\texttt{vector\_\allowbreak{}store} & 188 & 3 & A small vector store with JSON persistence. \\
 \end{longtable}
 
 \apibreak
@@ -108,7 +108,7 @@ FastAPI application.
 \label{module:feedback_intelligence_agent.auth}\index{Modules!auth}
 
 Optional API-key authorization for the FastAPI service.
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}auth.\allowbreak{}py}, 122 lines
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}auth.\allowbreak{}py}, 121 lines
 \apifield{Classes}\cref{class:feedback_intelligence_agent.auth.ApiRole}, \cref{class:feedback_intelligence_agent.auth.ApiPrincipal}, \cref{class:feedback_intelligence_agent.auth.ApiAuthError}, \cref{class:feedback_intelligence_agent.auth.ApiAuthConfigurationError}, \cref{class:feedback_intelligence_agent.auth.ApiAuthenticationError}, \cref{class:feedback_intelligence_agent.auth.ApiPermissionError}
 \apifield{Functions}\cref{func:feedback_intelligence_agent.auth.resolve_api_principal}, \cref{func:feedback_intelligence_agent.auth.require_api_role}
 
@@ -173,7 +173,7 @@ Application configuration.
 \label{module:feedback_intelligence_agent.data_contracts}\index{Modules!data\_contracts}
 
 Data contracts and dataset validation for customer feedback CSV files.
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}data\_\allowbreak{}contracts.\allowbreak{}py}, 237 lines
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}data\_\allowbreak{}contracts.\allowbreak{}py}, 244 lines
 \apifield{Imports}\texttt{schemas}
 \apifield{Classes}\cref{class:feedback_intelligence_agent.data_contracts.ValidationIssue}, \cref{class:feedback_intelligence_agent.data_contracts.ValidationReport}, \cref{class:feedback_intelligence_agent.data_contracts.DataContractError}
 \apifield{Functions}\cref{func:feedback_intelligence_agent.data_contracts.validate_feedback_csv}
@@ -205,7 +205,7 @@ Embedding models.
 \label{module:feedback_intelligence_agent.evaluation}\index{Modules!evaluation}
 
 Offline evaluation for retrieval quality and answer quality.
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}evaluation.\allowbreak{}py}, 416 lines
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}evaluation.\allowbreak{}py}, 417 lines
 \apifield{Imports}\texttt{agent}, \texttt{hallucination}, \texttt{retrieval}, \texttt{schemas}, \texttt{telemetry}
 \apifield{Classes}\cref{class:feedback_intelligence_agent.evaluation.RetrievalMetrics}, \cref{class:feedback_intelligence_agent.evaluation.AnswerMetrics}, \cref{class:feedback_intelligence_agent.evaluation.CaseResult}, \cref{class:feedback_intelligence_agent.evaluation.EvaluationReport}
 \apifield{Functions}\cref{func:feedback_intelligence_agent.evaluation.precision_at_k}, \cref{func:feedback_intelligence_agent.evaluation.recall_at_k}, \cref{func:feedback_intelligence_agent.evaluation.reciprocal_rank}, \cref{func:feedback_intelligence_agent.evaluation.context_hit}, \cref{func:feedback_intelligence_agent.evaluation.keyword_coverage}, \cref{func:feedback_intelligence_agent.evaluation.groundedness_score}, \cref{func:feedback_intelligence_agent.evaluation.is_refusal}, \cref{func:feedback_intelligence_agent.evaluation.refusal_correct}, \cref{func:feedback_intelligence_agent.evaluation.load_evaluation_cases}, \cref{func:feedback_intelligence_agent.evaluation.evaluate_case_detailed}, \cref{func:feedback_intelligence_agent.evaluation.evaluate_case}, \cref{func:feedback_intelligence_agent.evaluation.evaluate_system}, \cref{func:feedback_intelligence_agent.evaluation.aggregate_report}
@@ -303,7 +303,7 @@ Feedback ingestion utilities.
 \label{module:feedback_intelligence_agent.jobs}\index{Modules!jobs}
 
 Asynchronous ingestion jobs with status tracking.
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}jobs.\allowbreak{}py}, 281 lines
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}jobs.\allowbreak{}py}, 288 lines
 \apifield{Exports}\texttt{InMemoryJobStore}, \texttt{JobNotFoundError}, \texttt{JobRequest}, \texttt{JobResult}, \texttt{JobStatus}, \texttt{JobStore}, \texttt{JsonJobStore}, \texttt{new\_\allowbreak{}job\_\allowbreak{}id}, \texttt{run\_\allowbreak{}ingestion\_\allowbreak{}job}
 \apifield{Imports}\texttt{chunking}, \texttt{data\_\allowbreak{}contracts}, \texttt{embeddings}, \texttt{factory}, \texttt{ingestion}, \texttt{telemetry}, \texttt{vector\_\allowbreak{}store}
 \apifield{Classes}\cref{class:feedback_intelligence_agent.jobs.JobStatus}, \cref{class:feedback_intelligence_agent.jobs.JobRequest}, \cref{class:feedback_intelligence_agent.jobs.JobResult}, \cref{class:feedback_intelligence_agent.jobs.JobStore}, \cref{class:feedback_intelligence_agent.jobs.JobNotFoundError}, \cref{class:feedback_intelligence_agent.jobs.InMemoryJobStore}, \cref{class:feedback_intelligence_agent.jobs.JsonJobStore}
@@ -345,7 +345,7 @@ Lexical BM25 search implemented from scratch.
 \label{module:feedback_intelligence_agent.llm}\index{Modules!llm}
 
 LLM provider abstraction.
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}llm.\allowbreak{}py}, 658 lines
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}llm.\allowbreak{}py}, 657 lines
 \apifield{Imports}\texttt{citations}, \texttt{schemas}
 \apifield{Classes}\cref{class:feedback_intelligence_agent.llm.LLMProviderError}, \cref{class:feedback_intelligence_agent.llm.ProviderCapabilities}, \cref{class:feedback_intelligence_agent.llm.LLMProvider}, \cref{class:feedback_intelligence_agent.llm.BedrockRuntimeClient}, \cref{class:feedback_intelligence_agent.llm.BedrockExceptionTypes}, \cref{class:feedback_intelligence_agent.llm.DeterministicLLM}, \cref{class:feedback_intelligence_agent.llm.OpenAIChatLLM}, \cref{class:feedback_intelligence_agent.llm.OpenAIResponsesLLM}, \cref{class:feedback_intelligence_agent.llm.AnthropicLLM}, \cref{class:feedback_intelligence_agent.llm.BedrockConverseLLM}, \cref{class:feedback_intelligence_agent.llm.OllamaLLM}
 \apifield{Details}The deterministic local provider is the default and keeps the project fully runnable without API keys. Optional remote providers (OpenAI-compatible, Anthropic, AWS Bedrock, Ollama) plug into the same \texttt{LLMProvider} protocol and are selected through configuration (see \texttt{factory.\allowbreak{}build\_\allowbreak{}llm}).
@@ -459,7 +459,7 @@ Local candidate reranking for retrieved feedback chunks.
 \label{module:feedback_intelligence_agent.resilience}\index{Modules!resilience}
 
 Retry, timeout, and circuit-breaker wrappers for LLM providers.
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}resilience.\allowbreak{}py}, 149 lines
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}resilience.\allowbreak{}py}, 148 lines
 \apifield{Imports}\texttt{llm}, \texttt{schemas}
 \apifield{Classes}\cref{class:feedback_intelligence_agent.resilience.ResiliencePolicy}, \cref{class:feedback_intelligence_agent.resilience.CircuitBreaker}, \cref{class:feedback_intelligence_agent.resilience.ResilientLLMProvider}
 \apifield{Constants}\texttt{CircuitState}
@@ -488,7 +488,7 @@ Typed domain schemas used across the project.
 \label{module:feedback_intelligence_agent.streaming_ingestion}\index{Modules!streaming\_ingestion}
 
 Streaming ingestion primitives for feedback events.
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}streaming\_\allowbreak{}ingestion.\allowbreak{}py}, 515 lines
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}streaming\_\allowbreak{}ingestion.\allowbreak{}py}, 524 lines
 \apifield{Exports}\texttt{FeedbackStream}, \texttt{InMemoryFeedbackStream}, \texttt{JsonlFeedbackStream}, \texttt{KafkaFeedbackStream}, \texttt{KinesisFeedbackStream}, \texttt{StreamEnvelope}, \texttt{StreamIngestionError}, \texttt{StreamIngestionIssue}, \texttt{StreamIngestionResult}, \texttt{StreamOffset}, \texttt{consume\_\allowbreak{}feedback\_\allowbreak{}stream}, \texttt{write\_\allowbreak{}stream\_\allowbreak{}records\_\allowbreak{}csv}
 \apifield{Imports}\texttt{data\_\allowbreak{}contracts}, \texttt{privacy}, \texttt{schemas}, \texttt{telemetry}
 \apifield{Classes}\cref{class:feedback_intelligence_agent.streaming_ingestion.StreamIngestionError}, \cref{class:feedback_intelligence_agent.streaming_ingestion.StreamOffset}, \cref{class:feedback_intelligence_agent.streaming_ingestion.StreamEnvelope}, \cref{class:feedback_intelligence_agent.streaming_ingestion.StreamIngestionIssue}, \cref{class:feedback_intelligence_agent.streaming_ingestion.StreamIngestionResult}, \cref{class:feedback_intelligence_agent.streaming_ingestion.FeedbackStream}, \cref{class:feedback_intelligence_agent.streaming_ingestion.InMemoryFeedbackStream}, \cref{class:feedback_intelligence_agent.streaming_ingestion.JsonlFeedbackStream}, \cref{class:feedback_intelligence_agent.streaming_ingestion.KafkaFeedbackStream}, \cref{class:feedback_intelligence_agent.streaming_ingestion.KinesisFeedbackStream}
@@ -544,6 +544,6 @@ No function-calling API is involved: routing and execution are keyword and rule 
 \label{module:feedback_intelligence_agent.vector_store}\index{Modules!vector\_store}
 
 A small vector store with JSON persistence.
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}vector\_\allowbreak{}store.\allowbreak{}py}, 182 lines
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}vector\_\allowbreak{}store.\allowbreak{}py}, 188 lines
 \apifield{Imports}\texttt{schemas}
 \apifield{Classes}\cref{class:feedback_intelligence_agent.vector_store.VectorStore}, \cref{class:feedback_intelligence_agent.vector_store.PersistedVectorStore}, \cref{class:feedback_intelligence_agent.vector_store.InMemoryVectorStore}

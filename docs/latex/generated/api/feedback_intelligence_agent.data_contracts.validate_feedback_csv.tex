@@ -24,5 +24,7 @@ validate_feedback_csv(path: str | Path, *, strict: bool = False) -> tuple[Valida
 \begin{arglist}
   \item[\texttt{FileNotFoundError}] If the file does not exist.
   \item[\texttt{DataContractError}] In strict mode, if the dataset has any validation error.
+  \item[\texttt{FileReadError}] If an existing file cannot be read.
+  \item[\texttt{DataLoadingError}] If the CSV cannot be parsed.
 \end{arglist}
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}data\_\allowbreak{}contracts.\allowbreak{}py:119}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/936886da072fa7025a57c5517b9c90772bedae09/src/feedback_intelligence_agent/data_contracts.py#L119}{online}), module \cref{module:feedback_intelligence_agent.data_contracts}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}data\_\allowbreak{}contracts.\allowbreak{}py:120}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/edc9d78403eeed9f7d6ee5aef6b8d9b1b5780ef4/src/feedback_intelligence_agent/data_contracts.py#L120}{online}), module \cref{module:feedback_intelligence_agent.data_contracts}
