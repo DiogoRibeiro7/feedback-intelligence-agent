@@ -21,9 +21,9 @@ Module & Lines & Objects & Summary \\
 \bottomrule
 \endlastfoot
 \texttt{feedback\_\allowbreak{}intelligence\_\allowbreak{}agent} & 7 & 0 & Feedback Intelligence Agent package. \\
-\texttt{active\_\allowbreak{}learning} & 214 & 8 & Workflow state for active-learning follow-up items. \\
+\texttt{active\_\allowbreak{}learning} & 215 & 8 & Workflow state for active-learning follow-up items. \\
 \texttt{agent} & 564 & 3 & Agent orchestration for the feedback intelligence agent. \\
-\texttt{api} & 624 & 1 & FastAPI application. \\
+\texttt{api} & 644 & 1 & FastAPI application. \\
 \texttt{auth} & 121 & 8 & Optional API-key authorization for the FastAPI service. \\
 \texttt{benchmarking} & 286 & 13 & Latency and throughput benchmarks for the RAG pipeline. \\
 \texttt{chunking} & 93 & 3 & Text chunking utilities. \\
@@ -38,14 +38,14 @@ Module & Lines & Objects & Summary \\
 \texttt{factory} & 349 & 13 & Factories for constructing the application components. \\
 \texttt{guardrails} & 220 & 8 & Deterministic safety guardrails for the feedback intelligence agent. \\
 \texttt{hallucination} & 285 & 9 & Hallucination checks for evidence-grounded answers. \\
-\texttt{human\_\allowbreak{}feedback} & 407 & 14 & Human review feedback on generated agent answers. \\
+\texttt{human\_\allowbreak{}feedback} & 408 & 14 & Human review feedback on generated agent answers. \\
 \texttt{index\_\allowbreak{}updates} & 115 & 2 & Incremental index update helpers. \\
 \texttt{ingestion} & 58 & 2 & Feedback ingestion utilities. \\
-\texttt{jobs} & 288 & 9 & Asynchronous ingestion jobs with status tracking. \\
+\texttt{jobs} & 293 & 9 & Asynchronous ingestion jobs with status tracking. \\
 \texttt{lakehouse} & 398 & 7 & Local lakehouse-style feedback exports. \\
 \texttt{lexical\_\allowbreak{}search} & 113 & 3 & Lexical BM25 search implemented from scratch. \\
 \texttt{llm} & 657 & 11 & LLM provider abstraction. \\
-\texttt{memory} & 344 & 11 & Conversation memory and follow-up query rewriting. \\
+\texttt{memory} & 345 & 11 & Conversation memory and follow-up query rewriting. \\
 \texttt{output\_\allowbreak{}parser} & 181 & 4 & Structured LLM output parsing and deterministic repair. \\
 \texttt{privacy} & 59 & 6 & Deterministic PII redaction helpers. \\
 \texttt{prompt\_\allowbreak{}registry} & 159 & 6 & Versioned prompt registry. \\
@@ -53,10 +53,11 @@ Module & Lines & Objects & Summary \\
 \texttt{qdrant\_\allowbreak{}store} & 196 & 2 & Optional Qdrant-backed vector store. \\
 \texttt{query\_\allowbreak{}expansion} & 93 & 5 & Deterministic query expansion for product-specific terminology. \\
 \texttt{rate\_\allowbreak{}limit} & 76 & 2 & Small in-memory fixed-window rate limiter for API deployments. \\
-\texttt{reports} & 278 & 8 & Saved insight reports for product and analyst workflows. \\
+\texttt{reports} & 279 & 8 & Saved insight reports for product and analyst workflows. \\
 \texttt{reranking} & 137 & 2 & Local candidate reranking for retrieved feedback chunks. \\
 \texttt{resilience} & 148 & 4 & Retry, timeout, and circuit-breaker wrappers for LLM providers. \\
 \texttt{retrieval} & 113 & 4 & Retrieval helpers. \\
+\texttt{safe\_\allowbreak{}paths} & 21 & 1 & Constrain JSON record identifiers to one file under a configured store root. \\
 \texttt{schemas} & 311 & 16 & Typed domain schemas used across the project. \\
 \texttt{streaming\_\allowbreak{}ingestion} & 524 & 12 & Streaming ingestion primitives for feedback events. \\
 \texttt{synthetic\_\allowbreak{}data} & 318 & 8 & Synthetic customer feedback dataset generation. \\
@@ -79,8 +80,8 @@ Feedback Intelligence Agent package.
 \label{module:feedback_intelligence_agent.active_learning}\index{Modules!active\_learning}
 
 Workflow state for active-learning follow-up items.
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}active\_\allowbreak{}learning.\allowbreak{}py}, 214 lines
-\apifield{Imports}\texttt{human\_\allowbreak{}feedback}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}active\_\allowbreak{}learning.\allowbreak{}py}, 215 lines
+\apifield{Imports}\texttt{human\_\allowbreak{}feedback}, \texttt{safe\_\allowbreak{}paths}
 \apifield{Classes}\cref{class:feedback_intelligence_agent.active_learning.ActiveLearningStatus}, \cref{class:feedback_intelligence_agent.active_learning.UpdateActiveLearningStateRequest}, \cref{class:feedback_intelligence_agent.active_learning.ActiveLearningState}, \cref{class:feedback_intelligence_agent.active_learning.ActiveLearningStateStore}, \cref{class:feedback_intelligence_agent.active_learning.InMemoryActiveLearningStateStore}, \cref{class:feedback_intelligence_agent.active_learning.JsonActiveLearningStateStore}
 \apifield{Functions}\cref{func:feedback_intelligence_agent.active_learning.apply_active_learning_states}, \cref{func:feedback_intelligence_agent.active_learning.validate_feedback_id}
 
@@ -99,7 +100,7 @@ Agent orchestration for the feedback intelligence agent.
 \label{module:feedback_intelligence_agent.api}\index{Modules!api}
 
 FastAPI application.
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}api.\allowbreak{}py}, 624 lines
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}api.\allowbreak{}py}, 644 lines
 \apifield{Imports}\texttt{active\_\allowbreak{}learning}, \texttt{auth}, \texttt{config}, \texttt{email\_\allowbreak{}summaries}, \texttt{factory}, \texttt{human\_\allowbreak{}feedback}, \texttt{jobs}, \texttt{memory}, \texttt{rate\_\allowbreak{}limit}, \texttt{reports}, \texttt{schemas}, \texttt{telemetry}
 \apifield{Functions}\cref{func:feedback_intelligence_agent.api.create_app}
 
@@ -271,8 +272,8 @@ Hallucination checks for evidence-grounded answers.
 \label{module:feedback_intelligence_agent.human_feedback}\index{Modules!human\_feedback}
 
 Human review feedback on generated agent answers.
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}human\_\allowbreak{}feedback.\allowbreak{}py}, 407 lines
-\apifield{Imports}\texttt{schemas}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}human\_\allowbreak{}feedback.\allowbreak{}py}, 408 lines
+\apifield{Imports}\texttt{safe\_\allowbreak{}paths}, \texttt{schemas}
 \apifield{Classes}\cref{class:feedback_intelligence_agent.human_feedback.HumanFeedbackRating}, \cref{class:feedback_intelligence_agent.human_feedback.SubmitHumanFeedbackRequest}, \cref{class:feedback_intelligence_agent.human_feedback.HumanFeedbackRecord}, \cref{class:feedback_intelligence_agent.human_feedback.HumanFeedbackSummary}, \cref{class:feedback_intelligence_agent.human_feedback.HumanFeedbackGroupStats}, \cref{class:feedback_intelligence_agent.human_feedback.HumanFeedbackAnalytics}, \cref{class:feedback_intelligence_agent.human_feedback.ActiveLearningQueueItem}, \cref{class:feedback_intelligence_agent.human_feedback.ActiveLearningQueue}, \cref{class:feedback_intelligence_agent.human_feedback.HumanFeedbackStore}, \cref{class:feedback_intelligence_agent.human_feedback.InMemoryHumanFeedbackStore}, \cref{class:feedback_intelligence_agent.human_feedback.JsonHumanFeedbackStore}
 \apifield{Functions}\cref{func:feedback_intelligence_agent.human_feedback.new_human_feedback_id}, \cref{func:feedback_intelligence_agent.human_feedback.summarise_human_feedback}, \cref{func:feedback_intelligence_agent.human_feedback.build_active_learning_queue}
 
@@ -303,9 +304,9 @@ Feedback ingestion utilities.
 \label{module:feedback_intelligence_agent.jobs}\index{Modules!jobs}
 
 Asynchronous ingestion jobs with status tracking.
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}jobs.\allowbreak{}py}, 288 lines
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}jobs.\allowbreak{}py}, 293 lines
 \apifield{Exports}\texttt{InMemoryJobStore}, \texttt{JobNotFoundError}, \texttt{JobRequest}, \texttt{JobResult}, \texttt{JobStatus}, \texttt{JobStore}, \texttt{JsonJobStore}, \texttt{new\_\allowbreak{}job\_\allowbreak{}id}, \texttt{run\_\allowbreak{}ingestion\_\allowbreak{}job}
-\apifield{Imports}\texttt{chunking}, \texttt{data\_\allowbreak{}contracts}, \texttt{embeddings}, \texttt{factory}, \texttt{ingestion}, \texttt{telemetry}, \texttt{vector\_\allowbreak{}store}
+\apifield{Imports}\texttt{chunking}, \texttt{data\_\allowbreak{}contracts}, \texttt{embeddings}, \texttt{factory}, \texttt{ingestion}, \texttt{safe\_\allowbreak{}paths}, \texttt{telemetry}, \texttt{vector\_\allowbreak{}store}
 \apifield{Classes}\cref{class:feedback_intelligence_agent.jobs.JobStatus}, \cref{class:feedback_intelligence_agent.jobs.JobRequest}, \cref{class:feedback_intelligence_agent.jobs.JobResult}, \cref{class:feedback_intelligence_agent.jobs.JobStore}, \cref{class:feedback_intelligence_agent.jobs.JobNotFoundError}, \cref{class:feedback_intelligence_agent.jobs.InMemoryJobStore}, \cref{class:feedback_intelligence_agent.jobs.JsonJobStore}
 \apifield{Functions}\cref{func:feedback_intelligence_agent.jobs.new_job_id}, \cref{func:feedback_intelligence_agent.jobs.run_ingestion_job}
 \apifield{Details}This module decouples ingestion from the request/response cycle. A client submits an ingestion request, receives a job identifier immediately, and polls for the terminal status (\texttt{succeeded} / \texttt{failed}) without blocking on the embedding and indexing work.
@@ -355,8 +356,8 @@ LLM provider abstraction.
 \label{module:feedback_intelligence_agent.memory}\index{Modules!memory}
 
 Conversation memory and follow-up query rewriting.
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}memory.\allowbreak{}py}, 344 lines
-\apifield{Imports}\texttt{llm}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}memory.\allowbreak{}py}, 345 lines
+\apifield{Imports}\texttt{llm}, \texttt{safe\_\allowbreak{}paths}
 \apifield{Classes}\cref{class:feedback_intelligence_agent.memory.ConversationTurn}, \cref{class:feedback_intelligence_agent.memory.ConversationMemory}, \cref{class:feedback_intelligence_agent.memory.ConversationStore}, \cref{class:feedback_intelligence_agent.memory.InMemoryConversationStore}, \cref{class:feedback_intelligence_agent.memory.JsonConversationStore}, \cref{class:feedback_intelligence_agent.memory.QueryRewrite}, \cref{class:feedback_intelligence_agent.memory.QueryRewriter}, \cref{class:feedback_intelligence_agent.memory.DeterministicQueryRewriter}, \cref{class:feedback_intelligence_agent.memory.LLMQueryRewriter}
 \apifield{Functions}\cref{func:feedback_intelligence_agent.memory.new_conversation_id}, \cref{func:feedback_intelligence_agent.memory.extract_entities}
 \apifield{Details}The module provides three building blocks:
@@ -440,8 +441,8 @@ Small in-memory fixed-window rate limiter for API deployments.
 \label{module:feedback_intelligence_agent.reports}\index{Modules!reports}
 
 Saved insight reports for product and analyst workflows.
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}reports.\allowbreak{}py}, 278 lines
-\apifield{Imports}\texttt{schemas}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}reports.\allowbreak{}py}, 279 lines
+\apifield{Imports}\texttt{safe\_\allowbreak{}paths}, \texttt{schemas}
 \apifield{Classes}\cref{class:feedback_intelligence_agent.reports.SaveInsightReportRequest}, \cref{class:feedback_intelligence_agent.reports.SavedInsightReport}, \cref{class:feedback_intelligence_agent.reports.InsightReportSummary}, \cref{class:feedback_intelligence_agent.reports.InsightReportStore}, \cref{class:feedback_intelligence_agent.reports.InMemoryInsightReportStore}, \cref{class:feedback_intelligence_agent.reports.JsonInsightReportStore}
 \apifield{Functions}\cref{func:feedback_intelligence_agent.reports.new_report_id}, \cref{func:feedback_intelligence_agent.reports.render_report_markdown}
 
@@ -473,6 +474,14 @@ Retrieval helpers.
 \apifield{Imports}\texttt{embeddings}, \texttt{query\_\allowbreak{}expansion}, \texttt{schemas}, \texttt{vector\_\allowbreak{}store}
 \apifield{Classes}\cref{class:feedback_intelligence_agent.retrieval.Retriever}, \cref{class:feedback_intelligence_agent.retrieval.QueryEngine}, \cref{class:feedback_intelligence_agent.retrieval.HybridRetriever}
 \apifield{Functions}\cref{func:feedback_intelligence_agent.retrieval.min_max_normalize}
+
+\apibreak
+\section{\texttt{safe\_paths}}
+\label{module:feedback_intelligence_agent.safe_paths}\index{Modules!safe\_paths}
+
+Constrain JSON record identifiers to one file under a configured store root.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}safe\_\allowbreak{}paths.\allowbreak{}py}, 21 lines
+\apifield{Functions}\cref{func:feedback_intelligence_agent.safe_paths.json_record_path}
 
 \apibreak
 \section{\texttt{schemas}}

@@ -82,6 +82,7 @@ MODULE_LAYERS: dict[str, str] = {
     "auth": "infrastructure",
     "rate_limit": "infrastructure",
     "config": "foundation",
+    "safe_paths": "foundation",
     "schemas": "foundation",
 }
 

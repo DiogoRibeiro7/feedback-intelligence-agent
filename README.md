@@ -701,6 +701,10 @@ Ingestion is decoupled from the request/response cycle so large datasets do not
 block API clients. A client submits a job, gets a job id back immediately, and
 polls for the terminal status while the load -> chunk -> embed -> persist
 pipeline runs in the background (FastAPI `BackgroundTasks`, no Celery/Redis).
+Both indexing API routes accept CSV inputs within the directory containing
+`FEEDBACK_AGENT_DATA_PATH`; set that path to place a different data directory
+under API control. JSON-backed stores confine record files to their configured
+directories and reject identifiers or symlinks that escape them.
 
 Job models live in `jobs.py`: `JobStatus` (`pending` -> `running` ->
 `succeeded`/`failed`), `JobRequest`, `JobResult`, and a `JobStore` abstraction

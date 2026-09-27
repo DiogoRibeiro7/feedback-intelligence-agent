@@ -12,6 +12,7 @@ from typing import Protocol
 
 from pydantic import BaseModel, Field, field_validator
 
+from feedback_intelligence_agent.safe_paths import json_record_path
 from feedback_intelligence_agent.schemas import AgentAnswer
 
 _REPORT_ID_PATTERN = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._-]{0,63}$")
@@ -146,7 +147,7 @@ class JsonInsightReportStore:
         self.root.mkdir(parents=True, exist_ok=True)
 
     def _path(self, report_id: str) -> Path:
-        return self.root / f"{_validate_report_id(report_id)}.json"
+        return json_record_path(self.root, _validate_report_id(report_id))
 
     def save(self, request: SaveInsightReportRequest) -> SavedInsightReport:
         """Persist a report as indented JSON."""
@@ -264,7 +265,7 @@ def _sort_summaries(summaries: Iterable[InsightReportSummary]) -> list[InsightRe
 
 
 def _validate_report_id(report_id: str) -> str:
-    if not _REPORT_ID_PATTERN.match(report_id):
+    if not _REPORT_ID_PATTERN.fullmatch(report_id):
         raise ValueError(
             f"invalid report_id {report_id!r}: expected 1-64 characters "
             "from [A-Za-z0-9._-] starting with a letter or digit"

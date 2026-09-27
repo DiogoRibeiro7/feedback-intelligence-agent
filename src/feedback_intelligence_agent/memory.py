@@ -28,6 +28,7 @@ from typing import Any, Protocol
 from pydantic import BaseModel, Field
 
 from feedback_intelligence_agent.llm import LLMProvider
+from feedback_intelligence_agent.safe_paths import json_record_path
 
 _CONVERSATION_ID_PATTERN = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._-]{0,63}$")
 
@@ -151,7 +152,7 @@ def _validate_conversation_id(conversation_id: str) -> str:
     IDs are restricted to a filesystem-safe alphabet so the JSON store can use
     them directly as file names without path traversal risks.
     """
-    if not _CONVERSATION_ID_PATTERN.match(conversation_id):
+    if not _CONVERSATION_ID_PATTERN.fullmatch(conversation_id):
         raise ValueError(
             f"invalid conversation_id {conversation_id!r}: expected 1-64 characters "
             "from [A-Za-z0-9._-] starting with a letter or digit"
@@ -196,7 +197,7 @@ class JsonConversationStore:
 
     def _path(self, conversation_id: str) -> Path:
         """Return the JSON file path for a validated conversation ID."""
-        return self.root / f"{_validate_conversation_id(conversation_id)}.json"
+        return json_record_path(self.root, _validate_conversation_id(conversation_id))
 
     def get(self, conversation_id: str) -> ConversationMemory | None:
         """Load a conversation from its JSON file, or ``None`` when missing."""

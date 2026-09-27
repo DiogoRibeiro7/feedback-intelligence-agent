@@ -54,7 +54,7 @@ Return human feedback summaries.
 \begin{arglist}
   \item[\texttt{tenant\_\allowbreak{}id}] \texttt{str \textbar{} None}, query, default \texttt{None}.
 \end{arglist}
-\apifield{Source}\texttt{list\_\allowbreak{}answer\_\allowbreak{}feedback}, \texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}api.\allowbreak{}py:475}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/edc9d78403eeed9f7d6ee5aef6b8d9b1b5780ef4/src/feedback_intelligence_agent/api.py#L475}{online})
+\apifield{Source}\texttt{list\_\allowbreak{}answer\_\allowbreak{}feedback}, \texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}api.\allowbreak{}py:493}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/edc9d78403eeed9f7d6ee5aef6b8d9b1b5780ef4/src/feedback_intelligence_agent/api.py#L493}{online})
 
 \apibreak
 \section{\texttt{POST /answer-feedback}}
@@ -62,7 +62,7 @@ Return human feedback summaries.
 
 Persist a human judgement on a generated answer.
 \apifield{Contract}status 201, role writer, request \texttt{SubmitHumanFeedbackRequest}, response \texttt{HumanFeedbackRecord}
-\apifield{Source}\texttt{submit\_\allowbreak{}answer\_\allowbreak{}feedback}, \texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}api.\allowbreak{}py:464}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/edc9d78403eeed9f7d6ee5aef6b8d9b1b5780ef4/src/feedback_intelligence_agent/api.py#L464}{online})
+\apifield{Source}\texttt{submit\_\allowbreak{}answer\_\allowbreak{}feedback}, \texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}api.\allowbreak{}py:482}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/edc9d78403eeed9f7d6ee5aef6b8d9b1b5780ef4/src/feedback_intelligence_agent/api.py#L482}{online})
 
 \apibreak
 \section{\texttt{GET /answer-feedback/active-learning}}
@@ -76,7 +76,7 @@ Return reviewed answers that should be queued for improvement work.
   \item[\texttt{max\_\allowbreak{}items}] \texttt{int}, query, default \texttt{20}.
   \item[\texttt{low\_\allowbreak{}confidence\_\allowbreak{}threshold}] \texttt{float}, query, default \texttt{0.\allowbreak{}65}.
 \end{arglist}
-\apifield{Source}\texttt{answer\_\allowbreak{}feedback\_\allowbreak{}active\_\allowbreak{}learning}, \texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}api.\allowbreak{}py:493}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/edc9d78403eeed9f7d6ee5aef6b8d9b1b5780ef4/src/feedback_intelligence_agent/api.py#L493}{online})
+\apifield{Source}\texttt{answer\_\allowbreak{}feedback\_\allowbreak{}active\_\allowbreak{}learning}, \texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}api.\allowbreak{}py:511}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/edc9d78403eeed9f7d6ee5aef6b8d9b1b5780ef4/src/feedback_intelligence_agent/api.py#L511}{online})
 
 \apibreak
 \section{\texttt{GET /answer-feedback/active-learning/states}}
@@ -88,7 +88,7 @@ Return persisted active-learning workflow states.
 \begin{arglist}
   \item[\texttt{status}] \texttt{ActiveLearningStatus \textbar{} None}, query, default \texttt{None}.
 \end{arglist}
-\apifield{Source}\texttt{list\_\allowbreak{}active\_\allowbreak{}learning\_\allowbreak{}states}, \texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}api.\allowbreak{}py:514}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/edc9d78403eeed9f7d6ee5aef6b8d9b1b5780ef4/src/feedback_intelligence_agent/api.py#L514}{online})
+\apifield{Source}\texttt{list\_\allowbreak{}active\_\allowbreak{}learning\_\allowbreak{}states}, \texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}api.\allowbreak{}py:532}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/edc9d78403eeed9f7d6ee5aef6b8d9b1b5780ef4/src/feedback_intelligence_agent/api.py#L532}{online})
 
 \apibreak
 \section{\texttt{GET /answer-feedback/active-learning/\{feedback\_id\}}}
@@ -100,7 +100,7 @@ Return workflow state for one active-learning queue item.
 \begin{arglist}
   \item[\texttt{feedback\_\allowbreak{}id}] \texttt{str}, path, required.
 \end{arglist}
-\apifield{Source}\texttt{get\_\allowbreak{}active\_\allowbreak{}learning\_\allowbreak{}state}, \texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}api.\allowbreak{}py:525}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/edc9d78403eeed9f7d6ee5aef6b8d9b1b5780ef4/src/feedback_intelligence_agent/api.py#L525}{online})
+\apifield{Source}\texttt{get\_\allowbreak{}active\_\allowbreak{}learning\_\allowbreak{}state}, \texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}api.\allowbreak{}py:543}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/edc9d78403eeed9f7d6ee5aef6b8d9b1b5780ef4/src/feedback_intelligence_agent/api.py#L543}{online})
 
 \apibreak
 \section{\texttt{PATCH /answer-feedback/active-learning/\{feedback\_id\}}}
@@ -112,7 +112,7 @@ Assign or transition one active-learning queue item.
 \begin{arglist}
   \item[\texttt{feedback\_\allowbreak{}id}] \texttt{str}, path, required.
 \end{arglist}
-\apifield{Source}\texttt{update\_\allowbreak{}active\_\allowbreak{}learning\_\allowbreak{}state}, \texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}api.\allowbreak{}py:540}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/edc9d78403eeed9f7d6ee5aef6b8d9b1b5780ef4/src/feedback_intelligence_agent/api.py#L540}{online})
+\apifield{Source}\texttt{update\_\allowbreak{}active\_\allowbreak{}learning\_\allowbreak{}state}, \texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}api.\allowbreak{}py:558}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/edc9d78403eeed9f7d6ee5aef6b8d9b1b5780ef4/src/feedback_intelligence_agent/api.py#L558}{online})
 
 \apibreak
 \section{\texttt{GET /answer-feedback/analytics}}
@@ -124,7 +124,7 @@ Return aggregate human answer feedback metrics.
 \begin{arglist}
   \item[\texttt{tenant\_\allowbreak{}id}] \texttt{str \textbar{} None}, query, default \texttt{None}.
 \end{arglist}
-\apifield{Source}\texttt{answer\_\allowbreak{}feedback\_\allowbreak{}analytics}, \texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}api.\allowbreak{}py:484}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/edc9d78403eeed9f7d6ee5aef6b8d9b1b5780ef4/src/feedback_intelligence_agent/api.py#L484}{online})
+\apifield{Source}\texttt{answer\_\allowbreak{}feedback\_\allowbreak{}analytics}, \texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}api.\allowbreak{}py:502}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/edc9d78403eeed9f7d6ee5aef6b8d9b1b5780ef4/src/feedback_intelligence_agent/api.py#L502}{online})
 
 \apibreak
 \section{\texttt{GET /answer-feedback/\{feedback\_id\}}}
@@ -136,7 +136,7 @@ Return one human feedback record.
 \begin{arglist}
   \item[\texttt{feedback\_\allowbreak{}id}] \texttt{str}, path, required.
 \end{arglist}
-\apifield{Source}\texttt{get\_\allowbreak{}answer\_\allowbreak{}feedback}, \texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}api.\allowbreak{}py:560}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/edc9d78403eeed9f7d6ee5aef6b8d9b1b5780ef4/src/feedback_intelligence_agent/api.py#L560}{online})
+\apifield{Source}\texttt{get\_\allowbreak{}answer\_\allowbreak{}feedback}, \texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}api.\allowbreak{}py:578}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/edc9d78403eeed9f7d6ee5aef6b8d9b1b5780ef4/src/feedback_intelligence_agent/api.py#L578}{online})
 
 \apibreak
 \section{\texttt{POST /chat}}
@@ -145,7 +145,7 @@ Return one human feedback record.
 Answer a message within a stored conversation.
 \apifield{Contract}status 200, role writer, request \texttt{ChatRequest}, response \texttt{ChatResponse}
 \apifield{Details}Omit \texttt{conversation\_\allowbreak{}id} to start a new conversation; pass it back to continue the same conversation with previous turns as context.
-\apifield{Source}\texttt{chat}, \texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}api.\allowbreak{}py:343}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/edc9d78403eeed9f7d6ee5aef6b8d9b1b5780ef4/src/feedback_intelligence_agent/api.py#L343}{online})
+\apifield{Source}\texttt{chat}, \texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}api.\allowbreak{}py:361}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/edc9d78403eeed9f7d6ee5aef6b8d9b1b5780ef4/src/feedback_intelligence_agent/api.py#L361}{online})
 
 \apibreak
 \section{\texttt{GET /conversations/\{conversation\_id\}}}
@@ -157,7 +157,7 @@ Return the stored turns of one conversation.
 \begin{arglist}
   \item[\texttt{conversation\_\allowbreak{}id}] \texttt{str}, path, required.
 \end{arglist}
-\apifield{Source}\texttt{get\_\allowbreak{}conversation}, \texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}api.\allowbreak{}py:369}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/edc9d78403eeed9f7d6ee5aef6b8d9b1b5780ef4/src/feedback_intelligence_agent/api.py#L369}{online})
+\apifield{Source}\texttt{get\_\allowbreak{}conversation}, \texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}api.\allowbreak{}py:387}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/edc9d78403eeed9f7d6ee5aef6b8d9b1b5780ef4/src/feedback_intelligence_agent/api.py#L387}{online})
 
 \apibreak
 \section{\texttt{GET /health}}
@@ -166,7 +166,7 @@ Return the stored turns of one conversation.
 Return service liveness.
 \apifield{Contract}status 200, role open
 \apifield{Details}Liveness probe: confirms the process is up and able to serve requests. It performs no dependency checks, so an orchestrator can use it to decide whether to restart the container.
-\apifield{Source}\texttt{health}, \texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}api.\allowbreak{}py:270}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/edc9d78403eeed9f7d6ee5aef6b8d9b1b5780ef4/src/feedback_intelligence_agent/api.py#L270}{online})
+\apifield{Source}\texttt{health}, \texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}api.\allowbreak{}py:288}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/edc9d78403eeed9f7d6ee5aef6b8d9b1b5780ef4/src/feedback_intelligence_agent/api.py#L288}{online})
 
 \apibreak
 \section{\texttt{POST /index}}
@@ -174,7 +174,7 @@ Return service liveness.
 
 Rebuild the local vector index from a CSV path.
 \apifield{Contract}status 200, role admin, request \texttt{IndexRequest}
-\apifield{Source}\texttt{index}, \texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}api.\allowbreak{}py:571}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/edc9d78403eeed9f7d6ee5aef6b8d9b1b5780ef4/src/feedback_intelligence_agent/api.py#L571}{online})
+\apifield{Source}\texttt{index}, \texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}api.\allowbreak{}py:589}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/edc9d78403eeed9f7d6ee5aef6b8d9b1b5780ef4/src/feedback_intelligence_agent/api.py#L589}{online})
 
 \apibreak
 \section{\texttt{POST /ingestion/jobs}}
@@ -183,7 +183,7 @@ Rebuild the local vector index from a CSV path.
 Submit an asynchronous ingestion job.
 \apifield{Contract}status 202, role admin, request \texttt{JobRequest}, response \texttt{JobSubmitResponse}
 \apifield{Details}Creates a \texttt{pending} job, schedules the ingestion pipeline (load + validate CSV, chunk, embed, persist the vector store) via \texttt{BackgroundTasks}, and returns the job id immediately. Poll \texttt{GET /\allowbreak{}ingestion/\allowbreak{}jobs/\allowbreak{}\{job\_\allowbreak{}id\}} for the terminal status.
-\apifield{Source}\texttt{submit\_\allowbreak{}ingestion\_\allowbreak{}job}, \texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}api.\allowbreak{}py:591}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/edc9d78403eeed9f7d6ee5aef6b8d9b1b5780ef4/src/feedback_intelligence_agent/api.py#L591}{online})
+\apifield{Source}\texttt{submit\_\allowbreak{}ingestion\_\allowbreak{}job}, \texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}api.\allowbreak{}py:610}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/edc9d78403eeed9f7d6ee5aef6b8d9b1b5780ef4/src/feedback_intelligence_agent/api.py#L610}{online})
 
 \apibreak
 \section{\texttt{GET /ingestion/jobs/\{job\_id\}}}
@@ -195,7 +195,7 @@ Return the status and result of an ingestion job; 404 if unknown.
 \begin{arglist}
   \item[\texttt{job\_\allowbreak{}id}] \texttt{str}, path, required.
 \end{arglist}
-\apifield{Source}\texttt{get\_\allowbreak{}ingestion\_\allowbreak{}job}, \texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}api.\allowbreak{}py:617}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/edc9d78403eeed9f7d6ee5aef6b8d9b1b5780ef4/src/feedback_intelligence_agent/api.py#L617}{online})
+\apifield{Source}\texttt{get\_\allowbreak{}ingestion\_\allowbreak{}job}, \texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}api.\allowbreak{}py:637}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/edc9d78403eeed9f7d6ee5aef6b8d9b1b5780ef4/src/feedback_intelligence_agent/api.py#L637}{online})
 
 \apibreak
 \section{\texttt{POST /query}}
@@ -203,7 +203,7 @@ Return the status and result of an ingestion job; 404 if unknown.
 
 Answer a question using the feedback insight agent.
 \apifield{Contract}status 200, role reader, request \texttt{QueryRequest}, response \texttt{QueryResponse}
-\apifield{Source}\texttt{query}, \texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}api.\allowbreak{}py:292}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/edc9d78403eeed9f7d6ee5aef6b8d9b1b5780ef4/src/feedback_intelligence_agent/api.py#L292}{online})
+\apifield{Source}\texttt{query}, \texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}api.\allowbreak{}py:310}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/edc9d78403eeed9f7d6ee5aef6b8d9b1b5780ef4/src/feedback_intelligence_agent/api.py#L310}{online})
 
 \apibreak
 \section{\texttt{POST /query/stream}}
@@ -214,7 +214,7 @@ Answer a question as a Server-Sent Events stream.
 \apifield{Details}Emits \texttt{content} events whose JSON \texttt{text} fields concatenate to the same answer `/query` would return, followed by one final \texttt{metadata} event carrying citations, sources, retrieval scores, the provider name, and the answer latency in milliseconds.
 
 Providers without true token streaming (such as the deterministic local provider) are supported by replaying the final answer in small chunks, so the endpoint works without external LLM APIs.
-\apifield{Source}\texttt{query\_\allowbreak{}stream}, \texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}api.\allowbreak{}py:306}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/edc9d78403eeed9f7d6ee5aef6b8d9b1b5780ef4/src/feedback_intelligence_agent/api.py#L306}{online})
+\apifield{Source}\texttt{query\_\allowbreak{}stream}, \texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}api.\allowbreak{}py:324}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/edc9d78403eeed9f7d6ee5aef6b8d9b1b5780ef4/src/feedback_intelligence_agent/api.py#L324}{online})
 
 \apibreak
 \section{\texttt{GET /ready}}
@@ -223,7 +223,7 @@ Providers without true token streaming (such as the deterministic local provider
 Return service readiness.
 \apifield{Contract}status 200, role open
 \apifield{Details}Readiness probe: the agent, conversation store, and job store were all constructed during application startup (above). Reaching this handler proves the app object is fully built and able to serve traffic, so it reports \texttt{ready} without faking external dependency checks.
-\apifield{Source}\texttt{ready}, \texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}api.\allowbreak{}py:280}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/edc9d78403eeed9f7d6ee5aef6b8d9b1b5780ef4/src/feedback_intelligence_agent/api.py#L280}{online})
+\apifield{Source}\texttt{ready}, \texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}api.\allowbreak{}py:298}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/edc9d78403eeed9f7d6ee5aef6b8d9b1b5780ef4/src/feedback_intelligence_agent/api.py#L298}{online})
 
 \apibreak
 \section{\texttt{GET /reports}}
@@ -235,7 +235,7 @@ Return saved insight report summaries.
 \begin{arglist}
   \item[\texttt{tenant\_\allowbreak{}id}] \texttt{str \textbar{} None}, query, default \texttt{None}.
 \end{arglist}
-\apifield{Source}\texttt{list\_\allowbreak{}reports}, \texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}api.\allowbreak{}py:390}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/edc9d78403eeed9f7d6ee5aef6b8d9b1b5780ef4/src/feedback_intelligence_agent/api.py#L390}{online})
+\apifield{Source}\texttt{list\_\allowbreak{}reports}, \texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}api.\allowbreak{}py:408}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/edc9d78403eeed9f7d6ee5aef6b8d9b1b5780ef4/src/feedback_intelligence_agent/api.py#L408}{online})
 
 \apibreak
 \section{\texttt{POST /reports}}
@@ -243,7 +243,7 @@ Return saved insight report summaries.
 
 Persist a generated insight answer as a saved report.
 \apifield{Contract}status 201, role writer, request \texttt{SaveInsightReportRequest}, response \texttt{SavedInsightReport}
-\apifield{Source}\texttt{save\_\allowbreak{}report}, \texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}api.\allowbreak{}py:385}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/edc9d78403eeed9f7d6ee5aef6b8d9b1b5780ef4/src/feedback_intelligence_agent/api.py#L385}{online})
+\apifield{Source}\texttt{save\_\allowbreak{}report}, \texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}api.\allowbreak{}py:403}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/edc9d78403eeed9f7d6ee5aef6b8d9b1b5780ef4/src/feedback_intelligence_agent/api.py#L403}{online})
 
 \apibreak
 \section{\texttt{POST /reports/email-summary}}
@@ -251,7 +251,7 @@ Persist a generated insight answer as a saved report.
 
 Render or send an email digest for saved insight reports.
 \apifield{Contract}status 200, role writer, request \texttt{EmailSummaryRequest}, response \texttt{EmailSummaryDelivery}
-\apifield{Source}\texttt{email\_\allowbreak{}report\_\allowbreak{}summary}, \texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}api.\allowbreak{}py:399}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/edc9d78403eeed9f7d6ee5aef6b8d9b1b5780ef4/src/feedback_intelligence_agent/api.py#L399}{online})
+\apifield{Source}\texttt{email\_\allowbreak{}report\_\allowbreak{}summary}, \texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}api.\allowbreak{}py:417}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/edc9d78403eeed9f7d6ee5aef6b8d9b1b5780ef4/src/feedback_intelligence_agent/api.py#L417}{online})
 
 \apibreak
 \section{\texttt{GET /reports/\{report\_id\}}}
@@ -263,7 +263,7 @@ Return one saved insight report.
 \begin{arglist}
   \item[\texttt{report\_\allowbreak{}id}] \texttt{str}, path, required.
 \end{arglist}
-\apifield{Source}\texttt{get\_\allowbreak{}report}, \texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}api.\allowbreak{}py:448}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/edc9d78403eeed9f7d6ee5aef6b8d9b1b5780ef4/src/feedback_intelligence_agent/api.py#L448}{online})
+\apifield{Source}\texttt{get\_\allowbreak{}report}, \texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}api.\allowbreak{}py:466}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/edc9d78403eeed9f7d6ee5aef6b8d9b1b5780ef4/src/feedback_intelligence_agent/api.py#L466}{online})
 
 \apibreak
 \section{\texttt{GET /reports/\{report\_id\}/markdown}}
@@ -275,4 +275,4 @@ Return one saved insight report as Markdown.
 \begin{arglist}
   \item[\texttt{report\_\allowbreak{}id}] \texttt{str}, path, required.
 \end{arglist}
-\apifield{Source}\texttt{export\_\allowbreak{}report\_\allowbreak{}markdown}, \texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}api.\allowbreak{}py:430}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/edc9d78403eeed9f7d6ee5aef6b8d9b1b5780ef4/src/feedback_intelligence_agent/api.py#L430}{online})
+\apifield{Source}\texttt{export\_\allowbreak{}report\_\allowbreak{}markdown}, \texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}api.\allowbreak{}py:448}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/edc9d78403eeed9f7d6ee5aef6b8d9b1b5780ef4/src/feedback_intelligence_agent/api.py#L448}{online})

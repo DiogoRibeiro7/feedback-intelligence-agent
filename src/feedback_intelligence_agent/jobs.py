@@ -38,6 +38,7 @@ from feedback_intelligence_agent.data_contracts import DataContractError
 from feedback_intelligence_agent.embeddings import HashingEmbeddingModel
 from feedback_intelligence_agent.factory import chunk_to_embedding_text
 from feedback_intelligence_agent.ingestion import FeedbackIngestionError, load_feedback_csv
+from feedback_intelligence_agent.safe_paths import json_record_path
 from feedback_intelligence_agent.telemetry import Telemetry, get_logger
 from feedback_intelligence_agent.vector_store import InMemoryVectorStore
 
@@ -182,9 +183,10 @@ class JsonJobStore:
 
     def _path(self, job_id: str) -> Path:
         """Return the JSON file path for a job identifier."""
-        if not job_id:
-            raise JobNotFoundError(job_id)
-        return self.root / f"{job_id}.json"
+        try:
+            return json_record_path(self.root, job_id)
+        except ValueError as exc:
+            raise JobNotFoundError(job_id) from exc
 
     def create(self, request: JobRequest) -> JobResult:
         """Create and persist a new ``pending`` job."""
@@ -194,7 +196,10 @@ class JsonJobStore:
 
     def get(self, job_id: str) -> JobResult | None:
         """Load a job from its JSON file, or ``None`` when missing."""
-        path = self._path(job_id)
+        try:
+            path = self._path(job_id)
+        except JobNotFoundError:
+            return None
         if not path.exists():
             return None
         return JobResult.model_validate_json(path.read_text(encoding="utf-8"))

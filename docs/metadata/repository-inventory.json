@@ -43,8 +43,8 @@
     }
   },
   "files": {
-    "total": 207,
-    "excluded_generated_documentation": 316,
+    "total": 209,
+    "excluded_generated_documentation": 317,
     "by_category": {
       "build-configuration": 1,
       "build-interface": 1,
@@ -63,8 +63,8 @@
       "frontend": 13,
       "license": 1,
       "python-script": 2,
-      "python-source": 43,
-      "python-test": 40,
+      "python-source": 44,
+      "python-test": 41,
       "repository-configuration": 2,
       "repository-governance": 8,
       "test-fixture": 2
@@ -96,11 +96,11 @@
       },
       "Markdown": {
         "files": 15,
-        "lines": 2619
+        "lines": 2623
       },
       "Python": {
-        "files": 97,
-        "lines": 26598
+        "files": 99,
+        "lines": 26704
       },
       "TOML": {
         "files": 2,
@@ -302,8 +302,8 @@
         "path": "README.md",
         "category": "documentation",
         "language": "Markdown",
-        "lines": 1162,
-        "bytes": 52979
+        "lines": 1166,
+        "bytes": 53276
       },
       {
         "path": "ROADMAP.md",
@@ -771,8 +771,8 @@
         "path": "docs/tools/extract_dependencies.py",
         "category": "documentation-tool",
         "language": "Python",
-        "lines": 372,
-        "bytes": 13081
+        "lines": 373,
+        "bytes": 13113
       },
       {
         "path": "docs/tools/generate_docs.py",
@@ -981,8 +981,8 @@
         "path": "src/feedback_intelligence_agent/active_learning.py",
         "category": "python-source",
         "language": "Python",
-        "lines": 214,
-        "bytes": 7697
+        "lines": 215,
+        "bytes": 7776
       },
       {
         "path": "src/feedback_intelligence_agent/agent.py",
@@ -995,8 +995,8 @@
         "path": "src/feedback_intelligence_agent/api.py",
         "category": "python-source",
         "language": "Python",
-        "lines": 624,
-        "bytes": 23932
+        "lines": 644,
+        "bytes": 24831
       },
       {
         "path": "src/feedback_intelligence_agent/auth.py",
@@ -1100,8 +1100,8 @@
         "path": "src/feedback_intelligence_agent/human_feedback.py",
         "category": "python-source",
         "language": "Python",
-        "lines": 407,
-        "bytes": 13739
+        "lines": 408,
+        "bytes": 13818
       },
       {
         "path": "src/feedback_intelligence_agent/index_updates.py",
@@ -1121,8 +1121,8 @@
         "path": "src/feedback_intelligence_agent/jobs.py",
         "category": "python-source",
         "language": "Python",
-        "lines": 288,
-        "bytes": 10472
+        "lines": 293,
+        "bytes": 10658
       },
       {
         "path": "src/feedback_intelligence_agent/lakehouse.py",
@@ -1149,8 +1149,8 @@
         "path": "src/feedback_intelligence_agent/memory.py",
         "category": "python-source",
         "language": "Python",
-        "lines": 344,
-        "bytes": 12830
+        "lines": 345,
+        "bytes": 12909
       },
       {
         "path": "src/feedback_intelligence_agent/output_parser.py",
@@ -1205,8 +1205,8 @@
         "path": "src/feedback_intelligence_agent/reports.py",
         "category": "python-source",
         "language": "Python",
-        "lines": 278,
-        "bytes": 9315
+        "lines": 279,
+        "bytes": 9394
       },
       {
         "path": "src/feedback_intelligence_agent/reranking.py",
@@ -1228,6 +1228,13 @@
         "language": "Python",
         "lines": 113,
         "bytes": 4473
+      },
+      {
+        "path": "src/feedback_intelligence_agent/safe_paths.py",
+        "category": "python-source",
+        "language": "Python",
+        "lines": 21,
+        "bytes": 787
       },
       {
         "path": "src/feedback_intelligence_agent/schemas.py",
@@ -1310,8 +1317,8 @@
         "path": "tests/test_api.py",
         "category": "python-test",
         "language": "Python",
-        "lines": 975,
-        "bytes": 36345
+        "lines": 1001,
+        "bytes": 37308
       },
       {
         "path": "tests/test_auth.py",
@@ -1536,6 +1543,13 @@
         "language": "Python",
         "lines": 136,
         "bytes": 4459
+      },
+      {
+        "path": "tests/test_safe_paths.py",
+        "category": "python-test",
+        "language": "Python",
+        "lines": 29,
+        "bytes": 1040
       },
       {
         "path": "tests/test_streaming_ingestion.py",
@@ -2781,8 +2795,8 @@
       "path": "tests/test_api.py",
       "module_under_test": "api",
       "category": "integration (HTTP)",
-      "test_functions": 50,
-      "parametrized_cases": 3
+      "test_functions": 52,
+      "parametrized_cases": 5
     },
     {
       "path": "tests/test_auth.py",
@@ -3007,6 +3021,13 @@
       "category": "retrieval regression",
       "test_functions": 5,
       "parametrized_cases": 2
+    },
+    {
+      "path": "tests/test_safe_paths.py",
+      "module_under_test": "safe_paths",
+      "category": "unit",
+      "test_functions": 3,
+      "parametrized_cases": 1
     },
     {
       "path": "tests/test_streaming_ingestion.py",

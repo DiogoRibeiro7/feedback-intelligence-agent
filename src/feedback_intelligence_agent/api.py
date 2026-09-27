@@ -195,6 +195,24 @@ def _confined_index_path(requested: str | None, configured: Path) -> str:
     return str(resolved)
 
 
+def _confined_input_path(requested: str, configured: Path) -> str:
+    """Allow API ingestion to read CSV files under the configured data directory."""
+    root = configured.parent.resolve()
+    candidate = Path(requested)
+    if not candidate.is_absolute():
+        candidate = Path.cwd() / candidate
+    if candidate.suffix.lower() != ".csv" or not candidate.is_relative_to(root):
+        raise HTTPException(
+            status_code=400, detail="input_path must be a CSV in the data directory"
+        )
+    resolved = candidate.resolve()
+    if not resolved.is_relative_to(root):
+        raise HTTPException(
+            status_code=400, detail="input_path must be a CSV in the data directory"
+        )
+    return str(resolved)
+
+
 def _rate_limit_headers(decision: RateLimitDecision) -> dict[str, str]:
     """Return response headers describing the current rate-limit window."""
     return {
@@ -571,9 +589,10 @@ def create_app() -> FastAPI:
     def index(request: IndexRequest) -> dict[str, str | int]:
         """Rebuild the local vector index from a CSV path."""
         index_path = _confined_index_path(request.index_path, settings.index_path)
+        input_path = _confined_input_path(request.input_path, settings.data_path)
         try:
             vector_store = build_index(
-                request.input_path,
+                input_path,
                 index_path,
                 embedding_dim=settings.embedding_dim,
             )
@@ -599,6 +618,7 @@ def create_app() -> FastAPI:
         ``GET /ingestion/jobs/{job_id}`` for the terminal status.
         """
         request.index_path = _confined_index_path(request.index_path, settings.index_path)
+        request.input_path = _confined_input_path(request.input_path, settings.data_path)
         job = job_store.create(request)
         background_tasks.add_task(
             run_ingestion_job,

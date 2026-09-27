@@ -948,10 +948,10 @@ def test_api_rejects_index_file_symlinks(client: TestClient, tmp_path: Path, rou
     assert not outside.exists()
 
 
-def test_submit_ingestion_job_failure_is_clean(client: TestClient, tmp_path: Path) -> None:
+def test_submit_ingestion_job_failure_is_clean(client: TestClient) -> None:
     submit = client.post(
         "/ingestion/jobs",
-        json={"input_path": str(tmp_path / "missing.csv")},
+        json={"input_path": "data/missing.csv"},
     )
     assert submit.status_code == 202
     job_id = submit.json()["job_id"]
@@ -963,6 +963,32 @@ def test_submit_ingestion_job_failure_is_clean(client: TestClient, tmp_path: Pat
     assert result["error"]
     assert "missing.csv" not in result["error"]
     assert "Traceback" not in result["error"]
+
+
+@pytest.mark.parametrize("route", ["/index", "/ingestion/jobs"])
+def test_api_rejects_input_outside_configured_data_directory(
+    client: TestClient, tmp_path: Path, route: str
+) -> None:
+    outside = tmp_path / "private.csv"
+    outside.write_text("private", encoding="utf-8")
+    response = client.post(route, json={"input_path": str(outside)})
+    assert response.status_code == 400
+    assert "data directory" in response.json()["detail"]
+
+
+@pytest.mark.parametrize("route", ["/index", "/ingestion/jobs"])
+def test_api_rejects_input_symlink_outside_configured_data_directory(
+    client: TestClient, tmp_path: Path, route: str
+) -> None:
+    outside = tmp_path / "private.csv"
+    outside.write_text("private", encoding="utf-8")
+    link = Path("data") / "unsafe-feedback.csv"
+    try:
+        link.symlink_to(outside)
+        response = client.post(route, json={"input_path": str(link)})
+        assert response.status_code == 400
+    finally:
+        link.unlink(missing_ok=True)
 
 
 def test_get_unknown_job_returns_404(client: TestClient) -> None:

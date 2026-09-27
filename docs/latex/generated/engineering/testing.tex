@@ -7,7 +7,7 @@
 
 \section{Test suite at a glance}
 
-The suite contains 39 test modules and 500 test functions, all executed by a single pytest invocation.
+The suite contains 40 test modules and 505 test functions, all executed by a single pytest invocation.
 
 \begin{longtable}{>{\raggedright\arraybackslash\small}p{0.45\textwidth} >{\small}r >{\small}r}
 \caption{Test modules and functions by category.}\label{tab:test-categories}\\
@@ -27,13 +27,13 @@ Category & Modules & Test functions \\
 behavioural regression & 1 & 8 \\
 data validation & 1 & 19 \\
 integration (CLI) & 1 & 23 \\
-integration (HTTP) & 1 & 50 \\
+integration (HTTP) & 1 & 52 \\
 numerical / metric & 1 & 27 \\
 numerical / retrieval & 2 & 17 \\
 performance measurement & 1 & 16 \\
 retrieval regression & 1 & 5 \\
 snapshot regression & 1 & 3 \\
-unit & 29 & 332 \\
+unit & 30 & 335 \\
 \end{longtable}
 
 \section{Execution}
@@ -63,7 +63,7 @@ Test module & Primary subject & Category & Tests & Parametrised \\
 \endlastfoot
 \texttt{tests/\allowbreak{}test\_\allowbreak{}active\_\allowbreak{}learning.\allowbreak{}py} & \texttt{active\_\allowbreak{}learning} & unit & 4 & 0 \\
 \texttt{tests/\allowbreak{}test\_\allowbreak{}agent.\allowbreak{}py} & \texttt{agent} & unit & 9 & 0 \\
-\texttt{tests/\allowbreak{}test\_\allowbreak{}api.\allowbreak{}py} & \texttt{api} & integration (HTTP) & 50 & 3 \\
+\texttt{tests/\allowbreak{}test\_\allowbreak{}api.\allowbreak{}py} & \texttt{api} & integration (HTTP) & 52 & 5 \\
 \texttt{tests/\allowbreak{}test\_\allowbreak{}auth.\allowbreak{}py} & \texttt{auth} & unit & 6 & 0 \\
 \texttt{tests/\allowbreak{}test\_\allowbreak{}benchmarking.\allowbreak{}py} & \texttt{benchmarking} & performance measurement & 16 & 0 \\
 \texttt{tests/\allowbreak{}test\_\allowbreak{}chunking.\allowbreak{}py} & \texttt{chunking} & unit & 6 & 0 \\
@@ -96,6 +96,7 @@ Test module & Primary subject & Category & Tests & Parametrised \\
 \texttt{tests/\allowbreak{}test\_\allowbreak{}reranking.\allowbreak{}py} & \texttt{reranking} & unit & 3 & 0 \\
 \texttt{tests/\allowbreak{}test\_\allowbreak{}resilience.\allowbreak{}py} & \texttt{resilience} & unit & 5 & 0 \\
 \texttt{tests/\allowbreak{}test\_\allowbreak{}retrieval\_\allowbreak{}regressions.\allowbreak{}py} & \texttt{retrieval,\allowbreak{} reranking} & retrieval regression & 5 & 2 \\
+\texttt{tests/\allowbreak{}test\_\allowbreak{}safe\_\allowbreak{}paths.\allowbreak{}py} & \texttt{safe\_\allowbreak{}paths} & unit & 3 & 1 \\
 \texttt{tests/\allowbreak{}test\_\allowbreak{}streaming\_\allowbreak{}ingestion.\allowbreak{}py} & \texttt{streaming\_\allowbreak{}ingestion} & unit & 13 & 0 \\
 \texttt{tests/\allowbreak{}test\_\allowbreak{}synthetic\_\allowbreak{}data.\allowbreak{}py} & \texttt{synthetic\_\allowbreak{}data} & unit & 13 & 0 \\
 \texttt{tests/\allowbreak{}test\_\allowbreak{}telemetry.\allowbreak{}py} & \texttt{telemetry} & unit & 17 & 0 \\
