@@ -185,9 +185,7 @@ def generate(repo_root: Path, revision: str | None = None) -> dict[str, Any]:
     )
 
     model = extract_api.build_api_index(repo_root)
-    (repo_root / METADATA_ROOT / "api-index.json").write_text(
-        json.dumps(model, indent=2) + "\n", encoding="utf-8", newline="\n"
-    )
+    extract_api.write_api_index(model, repo_root / METADATA_ROOT / "api-index.json")
 
     graph = extract_dependencies.build_dependency_graph(repo_root)
     (repo_root / METADATA_ROOT / "module-dependencies.json").write_text(

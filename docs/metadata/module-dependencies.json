@@ -1,7 +1,7 @@
 {
   "package": "feedback_intelligence_agent",
-  "module_count": 43,
-  "edge_count": 151,
+  "module_count": 44,
+  "edge_count": 156,
   "layer_order": [
     "interface",
     "application",
@@ -65,6 +65,7 @@
     ],
     "foundation": [
       "config",
+      "safe_paths",
       "schemas"
     ]
   },
@@ -120,7 +121,7 @@
       "qualified_name": "feedback_intelligence_agent.active_learning",
       "source": "src/feedback_intelligence_agent/active_learning.py",
       "layer": "application",
-      "fan_out": 1,
+      "fan_out": 2,
       "external_dependencies": [
         "pydantic"
       ],
@@ -244,6 +245,7 @@
       "layer": "data",
       "fan_out": 1,
       "external_dependencies": [
+        "dataexcept",
         "pandas",
         "pydantic"
       ],
@@ -287,6 +289,7 @@
       "layer": "application",
       "fan_out": 5,
       "external_dependencies": [
+        "dataexcept",
         "pydantic"
       ],
       "optional_dependencies": [],
@@ -369,7 +372,7 @@
       "qualified_name": "feedback_intelligence_agent.human_feedback",
       "source": "src/feedback_intelligence_agent/human_feedback.py",
       "layer": "application",
-      "fan_out": 1,
+      "fan_out": 2,
       "external_dependencies": [
         "pydantic"
       ],
@@ -409,8 +412,9 @@
       "qualified_name": "feedback_intelligence_agent.jobs",
       "source": "src/feedback_intelligence_agent/jobs.py",
       "layer": "application",
-      "fan_out": 7,
+      "fan_out": 8,
       "external_dependencies": [
+        "dataexcept",
         "pydantic"
       ],
       "optional_dependencies": [],
@@ -469,7 +473,7 @@
       "qualified_name": "feedback_intelligence_agent.memory",
       "source": "src/feedback_intelligence_agent/memory.py",
       "layer": "domain",
-      "fan_out": 1,
+      "fan_out": 2,
       "external_dependencies": [
         "pydantic"
       ],
@@ -576,7 +580,7 @@
       "qualified_name": "feedback_intelligence_agent.reports",
       "source": "src/feedback_intelligence_agent/reports.py",
       "layer": "application",
-      "fan_out": 1,
+      "fan_out": 2,
       "external_dependencies": [
         "pydantic"
       ],
@@ -624,6 +628,18 @@
       "fan_in": 3
     },
     {
+      "name": "safe_paths",
+      "qualified_name": "feedback_intelligence_agent.safe_paths",
+      "source": "src/feedback_intelligence_agent/safe_paths.py",
+      "layer": "foundation",
+      "fan_out": 0,
+      "external_dependencies": [],
+      "optional_dependencies": [],
+      "lazy_imports": [],
+      "typing_only_imports": [],
+      "fan_in": 5
+    },
+    {
       "name": "schemas",
       "qualified_name": "feedback_intelligence_agent.schemas",
       "source": "src/feedback_intelligence_agent/schemas.py",
@@ -646,6 +662,7 @@
       "external_dependencies": [
         "boto3",
         "confluent_kafka",
+        "dataexcept",
         "pydantic"
       ],
       "optional_dependencies": [
@@ -706,6 +723,7 @@
       "layer": "data",
       "fan_out": 1,
       "external_dependencies": [
+        "dataexcept",
         "numpy",
         "pydantic"
       ],
@@ -733,6 +751,12 @@
       "target": "human_feedback",
       "context": "eager",
       "names": "ActiveLearningQueue"
+    },
+    {
+      "source": "active_learning",
+      "target": "safe_paths",
+      "context": "eager",
+      "names": "json_record_path"
     },
     {
       "source": "agent",
@@ -1336,6 +1360,12 @@
     },
     {
       "source": "human_feedback",
+      "target": "safe_paths",
+      "context": "eager",
+      "names": "json_record_path"
+    },
+    {
+      "source": "human_feedback",
       "target": "schemas",
       "context": "eager",
       "names": "AgentAnswer"
@@ -1426,6 +1456,12 @@
     },
     {
       "source": "jobs",
+      "target": "safe_paths",
+      "context": "eager",
+      "names": "json_record_path"
+    },
+    {
+      "source": "jobs",
       "target": "telemetry",
       "context": "eager",
       "names": "Telemetry, get_logger"
@@ -1491,6 +1527,12 @@
       "names": "LLMProvider"
     },
     {
+      "source": "memory",
+      "target": "safe_paths",
+      "context": "eager",
+      "names": "json_record_path"
+    },
+    {
       "source": "privacy",
       "target": "schemas",
       "context": "eager",
@@ -1519,6 +1561,12 @@
       "target": "schemas",
       "context": "eager",
       "names": "DocumentChunk, SearchResult"
+    },
+    {
+      "source": "reports",
+      "target": "safe_paths",
+      "context": "eager",
+      "names": "json_record_path"
     },
     {
       "source": "reports",

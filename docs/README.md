@@ -80,6 +80,7 @@ docs/
 ├── metadata/                  the normalized documentation model (GENERATED)
 │   ├── repository-inventory.json
 │   ├── api-index.json
+│   ├── api-index-classes-*.json  public class sections referenced by the index
 │   ├── module-dependencies.json
 │   └── documentation-manifest.json
 │

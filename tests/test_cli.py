@@ -9,7 +9,8 @@ from feedback_intelligence_agent.cli import app
 from feedback_intelligence_agent.vector_store import InMemoryVectorStore
 
 runner = CliRunner()
-stdout_runner = CliRunner(mix_stderr=False)
+# Typer's test runner exposes stdout separately without a mix_stderr argument.
+stdout_runner = CliRunner()
 
 
 def test_chat_command_single_message_then_followup(tmp_path: Path) -> None:

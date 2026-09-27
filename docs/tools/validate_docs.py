@@ -20,6 +20,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 
+from tools import extract_api
 from tools.digest import content_digest
 
 LATEX_ROOT = Path("docs/latex")
@@ -473,7 +474,7 @@ def run_checks(repo_root: Path) -> list[Check]:
         )
         return checks
 
-    model = json.loads(api_index.read_text(encoding="utf-8"))
+    model = extract_api.load_api_index(repo_root)
     files = _latex_files(repo_root)
     checks.extend(
         [

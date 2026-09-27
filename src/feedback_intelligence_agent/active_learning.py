@@ -12,6 +12,7 @@ from typing import Protocol
 from pydantic import BaseModel, Field, field_validator
 
 from feedback_intelligence_agent.human_feedback import ActiveLearningQueue
+from feedback_intelligence_agent.safe_paths import json_record_path
 
 _FEEDBACK_ID_PATTERN = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._-]{0,63}$")
 
@@ -115,7 +116,7 @@ class JsonActiveLearningStateStore:
         self.root.mkdir(parents=True, exist_ok=True)
 
     def _path(self, feedback_id: str) -> Path:
-        return self.root / f"{validate_feedback_id(feedback_id)}.json"
+        return json_record_path(self.root, validate_feedback_id(feedback_id))
 
     def get(self, feedback_id: str) -> ActiveLearningState | None:
         """Load one state record from disk, or None when missing."""
@@ -164,7 +165,7 @@ def apply_active_learning_states(
 
 def validate_feedback_id(feedback_id: str) -> str:
     """Validate a URL-safe feedback identifier."""
-    if not _FEEDBACK_ID_PATTERN.match(feedback_id):
+    if not _FEEDBACK_ID_PATTERN.fullmatch(feedback_id):
         raise ValueError(
             f"invalid feedback_id {feedback_id!r}: expected 1-64 characters "
             "from [A-Za-z0-9._-] starting with a letter or digit"

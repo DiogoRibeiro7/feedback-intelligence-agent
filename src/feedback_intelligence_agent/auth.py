@@ -97,8 +97,7 @@ def require_api_role(
     )
     if _ROLE_RANK[principal.role] < _ROLE_RANK[required_role]:
         raise ApiPermissionError(
-            f"API key role {principal.role.value!r} cannot access "
-            f"{required_role.value!r} endpoints"
+            f"API key role {principal.role.value!r} cannot access {required_role.value!r} endpoints"
         )
     return principal
 

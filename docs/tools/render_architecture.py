@@ -16,6 +16,7 @@ import json
 from pathlib import Path
 from typing import Any
 
+from tools import extract_api
 from tools.latex_utils import (
     escape_inline_code,
     escape_latex,
@@ -464,7 +465,7 @@ def main(argv: list[str] | None = None) -> int:
     graph = json.loads(
         (repo_root / "docs/metadata/module-dependencies.json").read_text(encoding="utf-8")
     )
-    model = json.loads((repo_root / "docs/metadata/api-index.json").read_text(encoding="utf-8"))
+    model = extract_api.load_api_index(repo_root)
     written = render_all(repo_root, graph, model)
     print(f"architecture: {len(written)} LaTeX fragments -> {GENERATED_ROOT.as_posix()}")
     return 0

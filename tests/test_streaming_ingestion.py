@@ -4,6 +4,7 @@ import json
 from pathlib import Path
 
 import pytest
+from dataexcept import FileReadError, FileWriteError
 from typer.testing import CliRunner
 
 from feedback_intelligence_agent.cli import app
@@ -94,6 +95,23 @@ def test_jsonl_stream_rejects_invalid_json(tmp_path: Path) -> None:
 
     with pytest.raises(StreamIngestionError, match="Invalid JSON"):
         JsonlFeedbackStream(path)
+
+
+def test_jsonl_stream_missing_file_has_path(tmp_path: Path) -> None:
+    path = tmp_path / "missing.jsonl"
+    with pytest.raises(FileReadError) as raised:
+        JsonlFeedbackStream(path)
+    assert raised.value.path == str(path)
+    assert raised.value.original is raised.value.__cause__
+
+
+def test_stream_csv_write_failure_has_path(tmp_path: Path) -> None:
+    parent_file = tmp_path / "parent-file"
+    parent_file.write_text("occupied", encoding="utf-8")
+    with pytest.raises(FileWriteError) as raised:
+        write_stream_records_csv([], parent_file / "records.csv")
+    assert raised.value.path == str(parent_file)
+    assert raised.value.original is raised.value.__cause__
 
 
 def test_write_stream_records_csv_round_trip(tmp_path: Path) -> None:

@@ -1,0 +1,24 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{json\_record\_path}}
+\label{func:feedback_intelligence_agent.safe_paths.json_record_path}\index{Functions!json\_record\_path}
+
+Return a store file, rejecting traversal and symlinks outside the root.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+json_record_path(root: Path, identifier: str) -> Path
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{root}] \texttt{Path}, required.
+  \item[\texttt{identifier}] \texttt{str}, required.
+\end{arglist}
+\apifield{Value}\texttt{Path}
+\apifield{Raises}\texttt{ValueError}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}safe\_\allowbreak{}paths.\allowbreak{}py:9}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/edc9d78403eeed9f7d6ee5aef6b8d9b1b5780ef4/src/feedback_intelligence_agent/safe_paths.py#L9}{online}), module \cref{module:feedback_intelligence_agent.safe_paths}

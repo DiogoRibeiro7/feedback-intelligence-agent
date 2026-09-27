@@ -382,8 +382,7 @@ class OpenAIResponsesLLM:
         except httpx.HTTPStatusError as exc:
             if exc.response.status_code == 401:
                 raise LLMProviderError(
-                    "OpenAI Responses API authentication failed (HTTP 401). "
-                    "Check OPENAI_API_KEY."
+                    "OpenAI Responses API authentication failed (HTTP 401). Check OPENAI_API_KEY."
                 ) from exc
             raise LLMProviderError(
                 "OpenAI Responses API request to "

@@ -15,6 +15,7 @@ from pathlib import Path
 from types import ModuleType
 from typing import Any, Protocol, cast
 
+from dataexcept import FileReadError, FileWriteError, wrapping
 from pydantic import BaseModel, Field, ValidationError
 
 from feedback_intelligence_agent.data_contracts import REQUIRED_COLUMNS, ValidationIssue
@@ -132,9 +133,9 @@ class JsonlFeedbackStream(InMemoryFeedbackStream):
         """Load JSON objects from a JSONL file."""
         self.path = Path(path)
         payloads: list[dict[str, Any]] = []
-        for line_number, line in enumerate(
-            self.path.read_text(encoding="utf-8").splitlines(), start=1
-        ):
+        with wrapping((OSError, UnicodeError), FileReadError, path=str(self.path)):
+            lines = self.path.read_text(encoding="utf-8").splitlines()
+        for line_number, line in enumerate(lines, start=1):
             if not line.strip():
                 continue
             try:
@@ -346,9 +347,13 @@ def consume_feedback_stream(
 def write_stream_records_csv(records: list[FeedbackRecord], path: str | Path) -> Path:
     """Write validated stream records to a CSV compatible with batch ingestion."""
     output = Path(path)
-    output.parent.mkdir(parents=True, exist_ok=True)
+    with wrapping(OSError, FileWriteError, path=str(output.parent)):
+        output.parent.mkdir(parents=True, exist_ok=True)
     fieldnames = ["tenant_id", *REQUIRED_COLUMNS]
-    with output.open("w", newline="", encoding="utf-8") as handle:
+    with (
+        wrapping((OSError, UnicodeError), FileWriteError, path=str(output)),
+        output.open("w", newline="", encoding="utf-8") as handle,
+    ):
         writer = csv.DictWriter(handle, fieldnames=fieldnames)
         writer.writeheader()
         for record in records:
@@ -427,8 +432,12 @@ def _accepted_envelopes(
 def _write_dead_letters(path: str | Path, issues: list[StreamIngestionIssue]) -> None:
     """Append rejected messages to a JSONL dead-letter file."""
     output = Path(path)
-    output.parent.mkdir(parents=True, exist_ok=True)
-    with output.open("a", encoding="utf-8") as handle:
+    with wrapping(OSError, FileWriteError, path=str(output.parent)):
+        output.parent.mkdir(parents=True, exist_ok=True)
+    with (
+        wrapping((OSError, UnicodeError), FileWriteError, path=str(output)),
+        output.open("a", encoding="utf-8") as handle,
+    ):
         for issue in issues:
             handle.write(issue.model_dump_json() + "\n")
 

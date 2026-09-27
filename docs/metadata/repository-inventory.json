@@ -29,9 +29,9 @@
     ],
     "date_released": "2026-08-08",
     "python_requires": ">=3.10,<3.13",
-    "revision": "936886da072fa7025a57c5517b9c90772bedae09",
-    "revision_short": "936886da072f",
-    "revision_date": "2026-08-08T22:57:35+01:00",
+    "revision": "edc9d78403eeed9f7d6ee5aef6b8d9b1b5780ef4",
+    "revision_short": "edc9d78403ee",
+    "revision_date": "2026-08-09T21:46:40+01:00",
     "packages": [
       {
         "include": "feedback_intelligence_agent",
@@ -43,8 +43,8 @@
     }
   },
   "files": {
-    "total": 207,
-    "excluded_generated_documentation": 314,
+    "total": 209,
+    "excluded_generated_documentation": 317,
     "by_category": {
       "build-configuration": 1,
       "build-interface": 1,
@@ -63,8 +63,8 @@
       "frontend": 13,
       "license": 1,
       "python-script": 2,
-      "python-source": 43,
-      "python-test": 40,
+      "python-source": 44,
+      "python-test": 41,
       "repository-configuration": 2,
       "repository-governance": 8,
       "test-fixture": 2
@@ -84,7 +84,7 @@
       },
       "JSON": {
         "files": 5,
-        "lines": 1018
+        "lines": 1317
       },
       "JSON Lines": {
         "files": 3,
@@ -96,15 +96,15 @@
       },
       "Markdown": {
         "files": 15,
-        "lines": 2606
+        "lines": 2623
       },
       "Python": {
-        "files": 97,
-        "lines": 26359
+        "files": 99,
+        "lines": 26701
       },
       "TOML": {
         "files": 2,
-        "lines": 161
+        "lines": 164
       },
       "TypeScript": {
         "files": 4,
@@ -302,8 +302,8 @@
         "path": "README.md",
         "category": "documentation",
         "language": "Markdown",
-        "lines": 1150,
-        "bytes": 52183
+        "lines": 1166,
+        "bytes": 53276
       },
       {
         "path": "ROADMAP.md",
@@ -365,8 +365,8 @@
         "path": "docs/README.md",
         "category": "documentation",
         "language": "Markdown",
-        "lines": 172,
-        "bytes": 7792
+        "lines": 173,
+        "bytes": 7880
       },
       {
         "path": "docs/architecture.md",
@@ -764,22 +764,22 @@
         "path": "docs/tools/extract_api.py",
         "category": "documentation-tool",
         "language": "Python",
-        "lines": 1063,
-        "bytes": 37761
+        "lines": 1102,
+        "bytes": 39306
       },
       {
         "path": "docs/tools/extract_dependencies.py",
         "category": "documentation-tool",
         "language": "Python",
-        "lines": 372,
-        "bytes": 13081
+        "lines": 373,
+        "bytes": 13113
       },
       {
         "path": "docs/tools/generate_docs.py",
         "category": "documentation-tool",
         "language": "Python",
-        "lines": 273,
-        "bytes": 10777
+        "lines": 271,
+        "bytes": 10718
       },
       {
         "path": "docs/tools/inspect_repository.py",
@@ -799,29 +799,29 @@
         "path": "docs/tools/render_architecture.py",
         "category": "documentation-tool",
         "language": "Python",
-        "lines": 474,
-        "bytes": 19874
+        "lines": 475,
+        "bytes": 19857
       },
       {
         "path": "docs/tools/render_engineering.py",
         "category": "documentation-tool",
         "language": "Python",
-        "lines": 931,
-        "bytes": 37455
+        "lines": 932,
+        "bytes": 37438
       },
       {
         "path": "docs/tools/render_reference.py",
         "category": "documentation-tool",
         "language": "Python",
-        "lines": 1012,
-        "bytes": 39741
+        "lines": 1013,
+        "bytes": 39724
       },
       {
         "path": "docs/tools/validate_docs.py",
         "category": "documentation-tool",
         "language": "Python",
-        "lines": 513,
-        "bytes": 19740
+        "lines": 514,
+        "bytes": 19758
       },
       {
         "path": "examples/experiment_config.yaml",
@@ -890,15 +890,15 @@
         "path": "frontend/package-lock.json",
         "category": "frontend",
         "language": "JSON",
-        "lines": 887,
-        "bytes": 28155
+        "lines": 1186,
+        "bytes": 37052
       },
       {
         "path": "frontend/package.json",
         "category": "frontend",
         "language": "JSON",
         "lines": 16,
-        "bytes": 418
+        "bytes": 417
       },
       {
         "path": "frontend/src/api.ts",
@@ -947,14 +947,14 @@
         "category": "dependency-lock",
         "language": null,
         "lines": null,
-        "bytes": 549658
+        "bytes": 569847
       },
       {
         "path": "pyproject.toml",
         "category": "build-configuration",
         "language": "TOML",
-        "lines": 109,
-        "bytes": 3449
+        "lines": 112,
+        "bytes": 3607
       },
       {
         "path": "scripts/benchmark.py",
@@ -981,8 +981,8 @@
         "path": "src/feedback_intelligence_agent/active_learning.py",
         "category": "python-source",
         "language": "Python",
-        "lines": 214,
-        "bytes": 7697
+        "lines": 215,
+        "bytes": 7776
       },
       {
         "path": "src/feedback_intelligence_agent/agent.py",
@@ -995,15 +995,15 @@
         "path": "src/feedback_intelligence_agent/api.py",
         "category": "python-source",
         "language": "Python",
-        "lines": 597,
-        "bytes": 22838
+        "lines": 639,
+        "bytes": 24669
       },
       {
         "path": "src/feedback_intelligence_agent/auth.py",
         "category": "python-source",
         "language": "Python",
-        "lines": 122,
-        "bytes": 3155
+        "lines": 121,
+        "bytes": 3139
       },
       {
         "path": "src/feedback_intelligence_agent/benchmarking.py",
@@ -1044,8 +1044,8 @@
         "path": "src/feedback_intelligence_agent/data_contracts.py",
         "category": "python-source",
         "language": "Python",
-        "lines": 237,
-        "bytes": 8684
+        "lines": 244,
+        "bytes": 9044
       },
       {
         "path": "src/feedback_intelligence_agent/email_summaries.py",
@@ -1065,8 +1065,8 @@
         "path": "src/feedback_intelligence_agent/evaluation.py",
         "category": "python-source",
         "language": "Python",
-        "lines": 416,
-        "bytes": 14975
+        "lines": 417,
+        "bytes": 15111
       },
       {
         "path": "src/feedback_intelligence_agent/experiments.py",
@@ -1100,8 +1100,8 @@
         "path": "src/feedback_intelligence_agent/human_feedback.py",
         "category": "python-source",
         "language": "Python",
-        "lines": 407,
-        "bytes": 13739
+        "lines": 408,
+        "bytes": 13818
       },
       {
         "path": "src/feedback_intelligence_agent/index_updates.py",
@@ -1121,8 +1121,8 @@
         "path": "src/feedback_intelligence_agent/jobs.py",
         "category": "python-source",
         "language": "Python",
-        "lines": 281,
-        "bytes": 10369
+        "lines": 293,
+        "bytes": 10658
       },
       {
         "path": "src/feedback_intelligence_agent/lakehouse.py",
@@ -1142,15 +1142,15 @@
         "path": "src/feedback_intelligence_agent/llm.py",
         "category": "python-source",
         "language": "Python",
-        "lines": 658,
-        "bytes": 24998
+        "lines": 657,
+        "bytes": 24975
       },
       {
         "path": "src/feedback_intelligence_agent/memory.py",
         "category": "python-source",
         "language": "Python",
-        "lines": 344,
-        "bytes": 12830
+        "lines": 345,
+        "bytes": 12909
       },
       {
         "path": "src/feedback_intelligence_agent/output_parser.py",
@@ -1205,8 +1205,8 @@
         "path": "src/feedback_intelligence_agent/reports.py",
         "category": "python-source",
         "language": "Python",
-        "lines": 278,
-        "bytes": 9315
+        "lines": 279,
+        "bytes": 9394
       },
       {
         "path": "src/feedback_intelligence_agent/reranking.py",
@@ -1219,8 +1219,8 @@
         "path": "src/feedback_intelligence_agent/resilience.py",
         "category": "python-source",
         "language": "Python",
-        "lines": 149,
-        "bytes": 5522
+        "lines": 148,
+        "bytes": 5506
       },
       {
         "path": "src/feedback_intelligence_agent/retrieval.py",
@@ -1228,6 +1228,13 @@
         "language": "Python",
         "lines": 113,
         "bytes": 4473
+      },
+      {
+        "path": "src/feedback_intelligence_agent/safe_paths.py",
+        "category": "python-source",
+        "language": "Python",
+        "lines": 23,
+        "bytes": 955
       },
       {
         "path": "src/feedback_intelligence_agent/schemas.py",
@@ -1240,8 +1247,8 @@
         "path": "src/feedback_intelligence_agent/streaming_ingestion.py",
         "category": "python-source",
         "language": "Python",
-        "lines": 515,
-        "bytes": 18222
+        "lines": 524,
+        "bytes": 18707
       },
       {
         "path": "src/feedback_intelligence_agent/synthetic_data.py",
@@ -1268,8 +1275,8 @@
         "path": "src/feedback_intelligence_agent/vector_store.py",
         "category": "python-source",
         "language": "Python",
-        "lines": 182,
-        "bytes": 6643
+        "lines": 188,
+        "bytes": 7117
       },
       {
         "path": "tests/conftest.py",
@@ -1310,8 +1317,8 @@
         "path": "tests/test_api.py",
         "category": "python-test",
         "language": "Python",
-        "lines": 932,
-        "bytes": 34727
+        "lines": 1001,
+        "bytes": 37308
       },
       {
         "path": "tests/test_auth.py",
@@ -1345,22 +1352,22 @@
         "path": "tests/test_cli.py",
         "category": "python-test",
         "language": "Python",
-        "lines": 698,
-        "bytes": 21734
+        "lines": 699,
+        "bytes": 21797
       },
       {
         "path": "tests/test_data_contracts.py",
         "category": "python-test",
         "language": "Python",
-        "lines": 215,
-        "bytes": 7773
+        "lines": 243,
+        "bytes": 9003
       },
       {
         "path": "tests/test_docs_tools.py",
         "category": "python-test",
         "language": "Python",
-        "lines": 678,
-        "bytes": 28548
+        "lines": 695,
+        "bytes": 29295
       },
       {
         "path": "tests/test_email_summaries.py",
@@ -1373,15 +1380,15 @@
         "path": "tests/test_embeddings_and_store.py",
         "category": "python-test",
         "language": "Python",
-        "lines": 64,
-        "bytes": 2245
+        "lines": 91,
+        "bytes": 3377
       },
       {
         "path": "tests/test_evaluation.py",
         "category": "python-test",
         "language": "Python",
-        "lines": 278,
-        "bytes": 10212
+        "lines": 288,
+        "bytes": 10617
       },
       {
         "path": "tests/test_experiments.py",
@@ -1538,11 +1545,18 @@
         "bytes": 4459
       },
       {
+        "path": "tests/test_safe_paths.py",
+        "category": "python-test",
+        "language": "Python",
+        "lines": 29,
+        "bytes": 1040
+      },
+      {
         "path": "tests/test_streaming_ingestion.py",
         "category": "python-test",
         "language": "Python",
-        "lines": 293,
-        "bytes": 9240
+        "lines": 311,
+        "bytes": 9980
       },
       {
         "path": "tests/test_synthetic_data.py",
@@ -1672,25 +1686,31 @@
     "runtime": [
       {
         "name": "click",
-        "constraint": ">=8.1.7,<8.2",
+        "constraint": ">=8.1.7,<8.5",
+        "optional": false,
+        "extras": []
+      },
+      {
+        "name": "dataexcept",
+        "constraint": ">=1.7,<2",
         "optional": false,
         "extras": []
       },
       {
         "name": "fastapi",
-        "constraint": "^0.137.0",
+        "constraint": ">=0.137,<0.142",
         "optional": false,
         "extras": []
       },
       {
         "name": "httpx",
-        "constraint": "^0.27.0",
+        "constraint": ">=0.27,<0.29",
         "optional": false,
         "extras": []
       },
       {
         "name": "numpy",
-        "constraint": "^1.26.0",
+        "constraint": ">=1.26,<3.0",
         "optional": false,
         "extras": []
       },
@@ -1732,7 +1752,7 @@
       },
       {
         "name": "typer",
-        "constraint": "^0.12.3",
+        "constraint": ">=0.12.3,<0.28.0",
         "optional": false,
         "extras": [
           "all"
@@ -1740,7 +1760,7 @@
       },
       {
         "name": "uvicorn",
-        "constraint": "^0.30.0",
+        "constraint": ">=0.30,<0.53",
         "optional": false,
         "extras": [
           "standard"
@@ -1794,7 +1814,13 @@
     "development": [
       {
         "name": "mypy",
-        "constraint": "^1.10.0",
+        "constraint": ">=1.10,<3.0",
+        "optional": false,
+        "extras": []
+      },
+      {
+        "name": "numpy",
+        "constraint": ">=1.26,<2.2",
         "optional": false,
         "extras": []
       },
@@ -1818,7 +1844,7 @@
       },
       {
         "name": "ruff",
-        "constraint": "^0.5.0",
+        "constraint": ">=0.5,<0.17",
         "optional": false,
         "extras": []
       },
@@ -1854,7 +1880,7 @@
     "lock_file": {
       "path": "poetry.lock",
       "present": true,
-      "locked_packages": 142
+      "locked_packages": 144
     },
     "frontend": {
       "name": "feedback-intelligence-agent-frontend",
@@ -1865,8 +1891,8 @@
       },
       "dependencies": {},
       "dev_dependencies": {
-        "typescript": "^5.4.5",
-        "vite": "^8.0.16"
+        "typescript": "^7.0.2",
+        "vite": "^8.2.0"
       }
     }
   },
@@ -2175,7 +2201,7 @@
           "steps": [
             {
               "name": "Checkout",
-              "uses": "actions/checkout@v4",
+              "uses": "actions/checkout@v7",
               "run": "",
               "working_directory": ""
             },
@@ -2187,7 +2213,7 @@
             },
             {
               "name": "Set up Python",
-              "uses": "actions/setup-python@v5",
+              "uses": "actions/setup-python@v7",
               "run": "",
               "working_directory": ""
             },
@@ -2244,7 +2270,7 @@
           "steps": [
             {
               "name": "Checkout",
-              "uses": "actions/checkout@v4",
+              "uses": "actions/checkout@v7",
               "run": "",
               "working_directory": ""
             },
@@ -2256,7 +2282,7 @@
             },
             {
               "name": "Set up Python",
-              "uses": "actions/setup-python@v5",
+              "uses": "actions/setup-python@v7",
               "run": "",
               "working_directory": ""
             },
@@ -2320,13 +2346,13 @@
           "steps": [
             {
               "name": "Checkout",
-              "uses": "actions/checkout@v4",
+              "uses": "actions/checkout@v7",
               "run": "",
               "working_directory": ""
             },
             {
               "name": "Review dependency changes",
-              "uses": "actions/dependency-review-action@v4",
+              "uses": "actions/dependency-review-action@v5",
               "run": "",
               "working_directory": ""
             }
@@ -2388,7 +2414,7 @@
           "steps": [
             {
               "name": "Checkout",
-              "uses": "actions/checkout@v4",
+              "uses": "actions/checkout@v7",
               "run": "",
               "working_directory": ""
             },
@@ -2450,13 +2476,13 @@
           "steps": [
             {
               "name": "Checkout",
-              "uses": "actions/checkout@v4",
+              "uses": "actions/checkout@v7",
               "run": "",
               "working_directory": ""
             },
             {
               "name": "Set up Node",
-              "uses": "actions/setup-node@v4",
+              "uses": "actions/setup-node@v7",
               "run": "",
               "working_directory": ""
             },
@@ -2507,7 +2533,7 @@
           "steps": [
             {
               "name": "Checkout",
-              "uses": "actions/checkout@v4",
+              "uses": "actions/checkout@v7",
               "run": "",
               "working_directory": ""
             },
@@ -2519,13 +2545,13 @@
             },
             {
               "name": "Set up Python",
-              "uses": "actions/setup-python@v5",
+              "uses": "actions/setup-python@v7",
               "run": "",
               "working_directory": ""
             },
             {
               "name": "Set up Node",
-              "uses": "actions/setup-node@v4",
+              "uses": "actions/setup-node@v7",
               "run": "",
               "working_directory": ""
             },
@@ -2573,13 +2599,13 @@
             },
             {
               "name": "Upload Python distributions",
-              "uses": "actions/upload-artifact@v4",
+              "uses": "actions/upload-artifact@v7",
               "run": "",
               "working_directory": ""
             },
             {
               "name": "Upload frontend build",
-              "uses": "actions/upload-artifact@v4",
+              "uses": "actions/upload-artifact@v7",
               "run": "",
               "working_directory": ""
             }
@@ -2631,7 +2657,7 @@
           "steps": [
             {
               "name": "Checkout",
-              "uses": "actions/checkout@v4",
+              "uses": "actions/checkout@v7",
               "run": "",
               "working_directory": ""
             },
@@ -2769,8 +2795,8 @@
       "path": "tests/test_api.py",
       "module_under_test": "api",
       "category": "integration (HTTP)",
-      "test_functions": 47,
-      "parametrized_cases": 0
+      "test_functions": 52,
+      "parametrized_cases": 5
     },
     {
       "path": "tests/test_auth.py",
@@ -2811,14 +2837,14 @@
       "path": "tests/test_data_contracts.py",
       "module_under_test": "data_contracts",
       "category": "data validation",
-      "test_functions": 18,
+      "test_functions": 19,
       "parametrized_cases": 0
     },
     {
       "path": "tests/test_docs_tools.py",
       "module_under_test": "docs_tools",
       "category": "unit",
-      "test_functions": 55,
+      "test_functions": 56,
       "parametrized_cases": 2
     },
     {
@@ -2832,14 +2858,14 @@
       "path": "tests/test_embeddings_and_store.py",
       "module_under_test": "embeddings, vector_store",
       "category": "numerical / retrieval",
-      "test_functions": 3,
+      "test_functions": 4,
       "parametrized_cases": 0
     },
     {
       "path": "tests/test_evaluation.py",
       "module_under_test": "evaluation",
       "category": "numerical / metric",
-      "test_functions": 26,
+      "test_functions": 27,
       "parametrized_cases": 0
     },
     {
@@ -2997,10 +3023,17 @@
       "parametrized_cases": 2
     },
     {
+      "path": "tests/test_safe_paths.py",
+      "module_under_test": "safe_paths",
+      "category": "unit",
+      "test_functions": 3,
+      "parametrized_cases": 1
+    },
+    {
       "path": "tests/test_streaming_ingestion.py",
       "module_under_test": "streaming_ingestion",
       "category": "unit",
-      "test_functions": 11,
+      "test_functions": 13,
       "parametrized_cases": 0
     },
     {

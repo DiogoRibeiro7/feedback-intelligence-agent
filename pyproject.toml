@@ -8,6 +8,7 @@ packages = [{ include = "feedback_intelligence_agent", from = "src" }]
 
 [tool.poetry.dependencies]
 python = ">=3.10,<3.13"
+dataexcept = ">=1.7,<2"
 fastapi = ">=0.137,<0.142"
 httpx = ">=0.27,<0.29"
 numpy = ">=1.26,<3.0"
@@ -37,6 +38,8 @@ qdrant = ["qdrant-client"]
 streaming = ["boto3", "confluent-kafka"]
 
 [tool.poetry.group.dev.dependencies]
+# NumPy 2.2+ stubs use syntax unavailable to the Python 3.10 mypy target.
+numpy = ">=1.26,<2.2"
 mypy = ">=1.10,<3.0"
 pytest = "^9.1.0"
 pytest-cov = "^7.0.0"
