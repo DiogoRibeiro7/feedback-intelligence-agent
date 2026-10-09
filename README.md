@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="assets/project-logo.png" alt="feedback-intelligence-agent project logo" width="160" height="160">
+</p>
+
 # Feedback Intelligence Agent
 
 [![CI](https://github.com/DiogoRibeiro7/feedback-intelligence-agent/actions/workflows/ci.yml/badge.svg)](https://github.com/DiogoRibeiro7/feedback-intelligence-agent/actions/workflows/ci.yml)

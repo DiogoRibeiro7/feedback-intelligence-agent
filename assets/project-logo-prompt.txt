@@ -1,0 +1,7 @@
+Tool: built-in image generation
+
+Use case: logo-brand.
+Asset type: square README project logo for feedback-intelligence-agent.
+Project purpose: Production-style RAG system: a customer feedback intelligence agent with FastAPI, evaluation, observability, and CI
+Design direction: Three overlapping terracotta, cobalt and pale-yellow speech fragments create the silhouette of a listening ear in their shared negative space. Tactile letterpress illustration on cream, carefully balanced offsets, strong curves and a little ink texture. Human customer-listening identity without a robot or brain.
+Composition: create one finished square artwork with a strong silhouette, readable at 160 pixels, and comfortable margins. This is the logo itself, not a presentation or product mockup. No text, words, letters, numbers, captions or watermark anywhere in the image. Do not use a generic navy-and-gold metallic badge.
