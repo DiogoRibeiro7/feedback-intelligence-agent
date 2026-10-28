@@ -82,7 +82,7 @@ Component & Responsibility & Depends on & Depended on by \\
 \endfoot
 \bottomrule
 \endlastfoot
-\cref{module:feedback_intelligence_agent.chunking} & Text chunking utilities. & \texttt{privacy}, \texttt{schemas} & \texttt{benchmarking}, \texttt{experiments}, \texttt{factory}, \texttt{index\_\allowbreak{}updates}, \texttt{jobs} \\
+\cref{module:feedback_intelligence_agent.chunking} & Text chunking utilities. & \texttt{privacy}, \texttt{schemas}, \texttt{source\_\allowbreak{}ids} & \texttt{benchmarking}, \texttt{experiments}, \texttt{factory}, \texttt{index\_\allowbreak{}updates}, \texttt{jobs} \\
 \cref{module:feedback_intelligence_agent.citations} & Citation construction shared by the agent and the deterministic LLM provider. & \texttt{schemas} & \texttt{agent}, \texttt{cli}, \texttt{llm}, \texttt{prompts}, \texttt{tools} \\
 \cref{module:feedback_intelligence_agent.embeddings} & Embedding models. & -- & \texttt{benchmarking}, \texttt{experiments}, \texttt{factory}, \texttt{index\_\allowbreak{}updates}, \texttt{jobs}, \texttt{retrieval} \\
 \cref{module:feedback_intelligence_agent.guardrails} & Deterministic safety guardrails for the feedback intelligence agent. & -- & \texttt{agent}, \texttt{schemas} \\
@@ -96,6 +96,7 @@ Component & Responsibility & Depends on & Depended on by \\
 \cref{module:feedback_intelligence_agent.query_expansion} & Deterministic query expansion for product-specific terminology. & -- & \texttt{factory}, \texttt{lexical\_\allowbreak{}search}, \texttt{retrieval} \\
 \cref{module:feedback_intelligence_agent.reranking} & Local candidate reranking for retrieved feedback chunks. & \texttt{schemas} & \texttt{agent} \\
 \cref{module:feedback_intelligence_agent.retrieval} & Retrieval helpers. & \texttt{embeddings}, \texttt{query\_\allowbreak{}expansion}, \texttt{schemas}, \texttt{vector\_\allowbreak{}store} & \texttt{agent}, \texttt{evaluation}, \texttt{factory} \\
+\cref{module:feedback_intelligence_agent.source_ids} & Collision-free source identifiers and migration of legacy chunk identities. & \texttt{schemas} & \texttt{chunking}, \texttt{qdrant\_\allowbreak{}store}, \texttt{vector\_\allowbreak{}store} \\
 \cref{module:feedback_intelligence_agent.synthetic_data} & Synthetic customer feedback dataset generation. & \texttt{schemas} & \texttt{cli} \\
 \cref{module:feedback_intelligence_agent.tools} & Deterministic tool-use framework for the feedback intelligence agent. & \texttt{citations}, \texttt{schemas} & \texttt{agent}, \texttt{factory} \\
 \end{longtable}
@@ -124,9 +125,9 @@ Component & Responsibility & Depends on & Depended on by \\
 \cref{module:feedback_intelligence_agent.index_updates} & Incremental index update helpers. & \texttt{chunking}, \texttt{embeddings}, \texttt{factory}, \texttt{schemas}, \texttt{telemetry}, \texttt{vector\_\allowbreak{}store} & \texttt{cli} \\
 \cref{module:feedback_intelligence_agent.ingestion} & Feedback ingestion utilities. & \texttt{data\_\allowbreak{}contracts}, \texttt{schemas}, \texttt{telemetry} & \texttt{benchmarking}, \texttt{cli}, \texttt{experiments}, \texttt{factory}, \texttt{jobs} \\
 \cref{module:feedback_intelligence_agent.lakehouse} & Local lakehouse-style feedback exports. & \texttt{data\_\allowbreak{}contracts}, \texttt{privacy}, \texttt{schemas}, \texttt{telemetry} & \texttt{cli} \\
-\cref{module:feedback_intelligence_agent.qdrant_store} & Optional Qdrant-backed vector store. & \texttt{schemas} & \texttt{factory} \\
+\cref{module:feedback_intelligence_agent.qdrant_store} & Optional Qdrant-backed vector store. & \texttt{schemas}, \texttt{source\_\allowbreak{}ids} & \texttt{factory} \\
 \cref{module:feedback_intelligence_agent.streaming_ingestion} & Streaming ingestion primitives for feedback events. & \texttt{data\_\allowbreak{}contracts}, \texttt{privacy}, \texttt{schemas}, \texttt{telemetry} & \texttt{cli} \\
-\cref{module:feedback_intelligence_agent.vector_store} & A small vector store with JSON persistence. & \texttt{schemas} & \texttt{benchmarking}, \texttt{experiments}, \texttt{factory}, \texttt{index\_\allowbreak{}updates}, \texttt{jobs}, \texttt{retrieval} \\
+\cref{module:feedback_intelligence_agent.vector_store} & A small vector store with JSON persistence. & \texttt{schemas}, \texttt{source\_\allowbreak{}ids} & \texttt{benchmarking}, \texttt{experiments}, \texttt{factory}, \texttt{index\_\allowbreak{}updates}, \texttt{jobs}, \texttt{retrieval} \\
 \end{longtable}
 
 \section{Infrastructure layer}
@@ -178,5 +179,5 @@ Component & Responsibility & Depends on & Depended on by \\
 \endlastfoot
 \cref{module:feedback_intelligence_agent.config} & Application configuration. & -- & \texttt{\_\allowbreak{}\_\allowbreak{}init\_\allowbreak{}\_\allowbreak{}}, \texttt{api}, \texttt{benchmarking}, \texttt{cli}, \texttt{experiments}, \texttt{factory} \\
 \cref{module:feedback_intelligence_agent.safe_paths} & Constrain JSON record identifiers to one file under a configured store root. & -- & \texttt{active\_\allowbreak{}learning}, \texttt{human\_\allowbreak{}feedback}, \texttt{jobs}, \texttt{memory}, \texttt{reports} \\
-\cref{module:feedback_intelligence_agent.schemas} & Typed domain schemas used across the project. & \texttt{guardrails} & \texttt{agent}, \texttt{api}, \texttt{chunking}, \texttt{citations}, \texttt{cli}, \texttt{data\_\allowbreak{}contracts}, \texttt{evaluation}, \texttt{factory}, \texttt{hallucination}, \texttt{human\_\allowbreak{}feedback}, \texttt{index\_\allowbreak{}updates}, \texttt{ingestion}, \texttt{lakehouse}, \texttt{lexical\_\allowbreak{}search}, \texttt{llm}, \texttt{privacy}, \texttt{prompts}, \texttt{qdrant\_\allowbreak{}store}, \texttt{reports}, \texttt{reranking}, \texttt{resilience}, \texttt{retrieval}, \texttt{streaming\_\allowbreak{}ingestion}, \texttt{synthetic\_\allowbreak{}data}, \texttt{tools}, \texttt{vector\_\allowbreak{}store} \\
+\cref{module:feedback_intelligence_agent.schemas} & Typed domain schemas used across the project. & \texttt{guardrails} & \texttt{agent}, \texttt{api}, \texttt{chunking}, \texttt{citations}, \texttt{cli}, \texttt{data\_\allowbreak{}contracts}, \texttt{evaluation}, \texttt{factory}, \texttt{hallucination}, \texttt{human\_\allowbreak{}feedback}, \texttt{index\_\allowbreak{}updates}, \texttt{ingestion}, \texttt{lakehouse}, \texttt{lexical\_\allowbreak{}search}, \texttt{llm}, \texttt{privacy}, \texttt{prompts}, \texttt{qdrant\_\allowbreak{}store}, \texttt{reports}, \texttt{reranking}, \texttt{resilience}, \texttt{retrieval}, \texttt{source\_\allowbreak{}ids}, \texttt{streaming\_\allowbreak{}ingestion}, \texttt{synthetic\_\allowbreak{}data}, \texttt{tools}, \texttt{vector\_\allowbreak{}store} \\
 \end{longtable}

@@ -920,6 +920,7 @@ def test_api_rejects_index_paths_outside_artifact_directory(
 
 
 @pytest.mark.parametrize("route", ["/index", "/ingestion/jobs"])
+@pytest.mark.usefixtures("symlink_supported")
 def test_api_rejects_index_paths_through_symlink(
     client: TestClient, tmp_path: Path, route: str
 ) -> None:
@@ -936,6 +937,7 @@ def test_api_rejects_index_paths_through_symlink(
 
 
 @pytest.mark.parametrize("route", ["/index", "/ingestion/jobs"])
+@pytest.mark.usefixtures("symlink_supported")
 def test_api_rejects_index_file_symlinks(client: TestClient, tmp_path: Path, route: str) -> None:
     outside = tmp_path.parent / "outside-index.json"
     link = tmp_path / "linked-index.json"
@@ -977,6 +979,7 @@ def test_api_rejects_input_outside_configured_data_directory(
 
 
 @pytest.mark.parametrize("route", ["/index", "/ingestion/jobs"])
+@pytest.mark.usefixtures("symlink_supported")
 def test_api_rejects_input_symlink_outside_configured_data_directory(
     client: TestClient, tmp_path: Path, route: str
 ) -> None:

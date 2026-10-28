@@ -58,6 +58,7 @@ MODULE_LAYERS: dict[str, str] = {
     "reranking": "domain",
     "embeddings": "domain",
     "chunking": "domain",
+    "source_ids": "domain",
     "query_expansion": "domain",
     "citations": "domain",
     "prompts": "domain",

@@ -63,3 +63,13 @@ This roadmap is designed to evolve the repository from a compact portfolio proje
 
 - [x] Add optional role-based API-key access control.
 - [x] Add optional in-process API rate limiting.
+
+## Phase 9 — Data integrity and tenant boundaries
+
+- [x] Preserve tenant-scoped records and update counts during incremental indexing.
+- [x] Validate vector replacements before changing existing index state.
+- [x] Make documentation checkout and symlink test behavior explicit on Windows.
+- [x] Use collision-free source identifiers, with a migration path for existing indexes.
+- [ ] Apply metadata filters before limiting retrieval candidates, including tenant filters.
+- [ ] Bind tenant access and conversation history to authenticated caller identities.
+- [ ] Make JSON index persistence atomic and serialize concurrent updates.

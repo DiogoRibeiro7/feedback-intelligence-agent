@@ -2,7 +2,7 @@
 
 The default JSON index can be updated without rebuilding from the full dataset:
 validated feedback records are chunked, embedded, and merged into the persisted
-vector store by ``feedback_id``. Existing chunks for the same source document are
+vector store by tenant-scoped source ID. Existing chunks for the same source document are
 replaced before new chunks are appended.
 """
 
@@ -12,7 +12,7 @@ from pathlib import Path
 
 from pydantic import BaseModel, Field
 
-from feedback_intelligence_agent.chunking import feedback_to_chunks
+from feedback_intelligence_agent.chunking import feedback_to_chunks, scoped_source_id
 from feedback_intelligence_agent.embeddings import HashingEmbeddingModel
 from feedback_intelligence_agent.factory import chunk_to_embedding_text
 from feedback_intelligence_agent.schemas import FeedbackRecord
@@ -82,7 +82,9 @@ def update_json_index(
             removed_chunks = store.upsert_sources(chunks, vectors)
         output_path.parent.mkdir(parents=True, exist_ok=True)
         store.save(output_path)
-        updated_records = sum(1 for record in deduped if record.feedback_id in existing_source_ids)
+        updated_records = sum(
+            1 for record in deduped if scoped_source_id(record) in existing_source_ids
+        )
         inserted_records = len(deduped) - updated_records
         result = IncrementalIndexResult(
             index_path=str(output_path),
@@ -105,11 +107,8 @@ def update_json_index(
 
 
 def _dedupe_records(records: list[FeedbackRecord]) -> list[FeedbackRecord]:
-    """Deduplicate records by feedback ID, preserving the last event for each ID."""
-    by_id: dict[str, FeedbackRecord] = {}
-    order: list[str] = []
+    """Keep the last event per tenant and feedback ID, in first-seen key order."""
+    by_id: dict[tuple[str, str], FeedbackRecord] = {}
     for record in records:
-        if record.feedback_id not in by_id:
-            order.append(record.feedback_id)
-        by_id[record.feedback_id] = record
-    return [by_id[feedback_id] for feedback_id in order]
+        by_id[(record.tenant_id, record.feedback_id)] = record
+    return list(by_id.values())

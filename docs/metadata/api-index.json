@@ -169,14 +169,15 @@
     {
       "name": "feedback_intelligence_agent.chunking",
       "source": "src/feedback_intelligence_agent/chunking.py",
-      "line_count": 93,
+      "line_count": 92,
       "public": true,
       "summary": "Text chunking utilities.",
       "description": "",
       "exports": [],
       "imports_internal": [
         "privacy",
-        "schemas"
+        "schemas",
+        "source_ids"
       ],
       "class_names": [],
       "function_names": [
@@ -572,10 +573,10 @@
     {
       "name": "feedback_intelligence_agent.index_updates",
       "source": "src/feedback_intelligence_agent/index_updates.py",
-      "line_count": 115,
+      "line_count": 114,
       "public": true,
       "summary": "Incremental index update helpers.",
-      "description": "The default JSON index can be updated without rebuilding from the full dataset:\nvalidated feedback records are chunked, embedded, and merged into the persisted\nvector store by ``feedback_id``. Existing chunks for the same source document are\nreplaced before new chunks are appended.",
+      "description": "The default JSON index can be updated without rebuilding from the full dataset:\nvalidated feedback records are chunked, embedded, and merged into the persisted\nvector store by tenant-scoped source ID. Existing chunks for the same source document are\nreplaced before new chunks are appended.",
       "exports": [],
       "imports_internal": [
         "chunking",
@@ -867,13 +868,14 @@
     {
       "name": "feedback_intelligence_agent.qdrant_store",
       "source": "src/feedback_intelligence_agent/qdrant_store.py",
-      "line_count": 196,
+      "line_count": 217,
       "public": true,
       "summary": "Optional Qdrant-backed vector store.",
       "description": "The store mirrors the semantics of the default ``InMemoryVectorStore`` but\npersists vectors in a running Qdrant instance instead of a local JSON file.\nIt satisfies the same ``VectorStore`` protocol, so the retrieval layer treats both\nstores identically.\n\n``qdrant-client`` is an *optional* dependency (poetry extra ``qdrant``) and is\nimported lazily, with an actionable error if it is not installed. This keeps the\ndefault install lean and the deterministic local path free of any external\nservice.",
       "exports": [],
       "imports_internal": [
-        "schemas"
+        "schemas",
+        "source_ids"
       ],
       "class_names": [
         "QdrantStoreError",
@@ -1056,6 +1058,26 @@
       "constant_names": []
     },
     {
+      "name": "feedback_intelligence_agent.source_ids",
+      "source": "src/feedback_intelligence_agent/source_ids.py",
+      "line_count": 76,
+      "public": true,
+      "summary": "Collision-free source identifiers and migration of legacy chunk identities.",
+      "description": "",
+      "exports": [],
+      "imports_internal": [
+        "schemas"
+      ],
+      "class_names": [
+        "SourceIdMigrationError"
+      ],
+      "function_names": [
+        "encode_source_id",
+        "migrate_legacy_chunks"
+      ],
+      "constant_names": []
+    },
+    {
       "name": "feedback_intelligence_agent.streaming_ingestion",
       "source": "src/feedback_intelligence_agent/streaming_ingestion.py",
       "line_count": 524,
@@ -1207,13 +1229,14 @@
     {
       "name": "feedback_intelligence_agent.vector_store",
       "source": "src/feedback_intelligence_agent/vector_store.py",
-      "line_count": 188,
+      "line_count": 231,
       "public": true,
       "summary": "A small vector store with JSON persistence.",
       "description": "",
       "exports": [],
       "imports_internal": [
-        "schemas"
+        "schemas",
+        "source_ids"
       ],
       "class_names": [
         "VectorStore",
@@ -1700,7 +1723,7 @@
       "module": "feedback_intelligence_agent.chunking",
       "signature": "chunk_text(text: str, *, max_words: int = 80, overlap_words: int = 16) -> list[str]",
       "source": "src/feedback_intelligence_agent/chunking.py",
-      "line": 18,
+      "line": 17,
       "public": true,
       "is_async": false,
       "decorators": [],
@@ -1750,7 +1773,7 @@
       "module": "feedback_intelligence_agent.chunking",
       "signature": "feedback_to_chunks(records: Iterable[FeedbackRecord], *, max_words: int = 80, overlap_words: int = 16) -> list[DocumentChunk]",
       "source": "src/feedback_intelligence_agent/chunking.py",
-      "line": 55,
+      "line": 54,
       "public": true,
       "is_async": false,
       "decorators": [],
@@ -1795,11 +1818,11 @@
       "module": "feedback_intelligence_agent.chunking",
       "signature": "scoped_source_id(record: FeedbackRecord) -> str",
       "source": "src/feedback_intelligence_agent/chunking.py",
-      "line": 11,
+      "line": 12,
       "public": true,
       "is_async": false,
       "decorators": [],
-      "summary": "Return a tenant-safe source ID while preserving legacy default IDs.",
+      "summary": "Return an unambiguous source ID with percent-encoded identity components.",
       "description": "",
       "parameters": [
         {
@@ -5938,6 +5961,80 @@
       "see_also": []
     },
     {
+      "name": "encode_source_id",
+      "qualified_name": "feedback_intelligence_agent.source_ids.encode_source_id",
+      "kind": "function",
+      "module": "feedback_intelligence_agent.source_ids",
+      "signature": "encode_source_id(tenant_id: str, feedback_id: str) -> str",
+      "source": "src/feedback_intelligence_agent/source_ids.py",
+      "line": 14,
+      "public": true,
+      "is_async": false,
+      "decorators": [],
+      "summary": "Encode each identity component, reserving a colon for the tenant separator.",
+      "description": "The default tenant has no prefix. Percent signs are escaped along with\ncolons, so a literal escape sequence cannot impersonate an encoded ID.\nOrdinary IDs such as ``fb-1`` and ``acme:fb-1`` remain unchanged.",
+      "parameters": [
+        {
+          "name": "tenant_id",
+          "annotation": "str",
+          "default": null,
+          "kind": "positional-or-keyword",
+          "description": ""
+        },
+        {
+          "name": "feedback_id",
+          "annotation": "str",
+          "default": null,
+          "kind": "positional-or-keyword",
+          "description": ""
+        }
+      ],
+      "returns": {
+        "annotation": "str",
+        "description": ""
+      },
+      "raises": [],
+      "examples": "",
+      "notes": "",
+      "see_also": []
+    },
+    {
+      "name": "migrate_legacy_chunks",
+      "qualified_name": "feedback_intelligence_agent.source_ids.migrate_legacy_chunks",
+      "kind": "function",
+      "module": "feedback_intelligence_agent.source_ids",
+      "signature": "migrate_legacy_chunks(chunks: list[DocumentChunk]) -> list[DocumentChunk]",
+      "source": "src/feedback_intelligence_agent/source_ids.py",
+      "line": 27,
+      "public": true,
+      "is_async": false,
+      "decorators": [],
+      "summary": "Rebuild version-1 source and chunk IDs without changing text or metadata.",
+      "description": "Metadata distinguishes records whose old identifiers collided. Older\ndefault-tenant chunks without identity metadata use their raw source ID\nas the feedback ID. Chunk positions are retained, as is list order, so\nvectors remain aligned without recomputing embeddings.",
+      "parameters": [
+        {
+          "name": "chunks",
+          "annotation": "list[DocumentChunk]",
+          "default": null,
+          "kind": "positional-or-keyword",
+          "description": ""
+        }
+      ],
+      "returns": {
+        "annotation": "list[DocumentChunk]",
+        "description": ""
+      },
+      "raises": [
+        {
+          "exception": "SourceIdMigrationError",
+          "description": "If identities disagree, chunk positions cannot be recovered, or migration would produce duplicate chunk IDs."
+        }
+      ],
+      "examples": "",
+      "notes": "",
+      "see_also": []
+    },
+    {
       "name": "consume_feedback_stream",
       "qualified_name": "feedback_intelligence_agent.streaming_ingestion.consume_feedback_stream",
       "kind": "function",
@@ -8272,7 +8369,7 @@
         "Protocol"
       ],
       "source": "src/feedback_intelligence_agent/vector_store.py",
-      "line": 18,
+      "line": 19,
       "public": true,
       "decorators": [
         "runtime_checkable"
@@ -8297,7 +8394,7 @@
           "module": "feedback_intelligence_agent.vector_store",
           "signature": "add(self, chunks: list[DocumentChunk], vectors: npt.NDArray[np.float64]) -> None",
           "source": "src/feedback_intelligence_agent/vector_store.py",
-          "line": 37,
+          "line": 38,
           "public": true,
           "is_async": false,
           "decorators": [],
@@ -8342,7 +8439,7 @@
           "module": "feedback_intelligence_agent.vector_store",
           "signature": "search(self, query_vector: npt.NDArray[np.float64], *, top_k: int = 4) -> list[SearchResult]",
           "source": "src/feedback_intelligence_agent/vector_store.py",
-          "line": 40,
+          "line": 41,
           "public": true,
           "is_async": false,
           "decorators": [],
@@ -8389,7 +8486,7 @@
           "module": "feedback_intelligence_agent.vector_store",
           "signature": "size(self) -> int",
           "source": "src/feedback_intelligence_agent/vector_store.py",
-          "line": 30,
+          "line": 31,
           "public": true,
           "is_async": false,
           "decorators": [
@@ -8422,7 +8519,7 @@
           "module": "feedback_intelligence_agent.vector_store",
           "signature": "chunks(self) -> list[DocumentChunk]",
           "source": "src/feedback_intelligence_agent/vector_store.py",
-          "line": 34,
+          "line": 35,
           "public": true,
           "is_async": false,
           "decorators": [

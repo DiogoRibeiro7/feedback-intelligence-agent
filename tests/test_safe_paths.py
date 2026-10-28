@@ -13,6 +13,7 @@ def test_record_path_rejects_unsafe_identifier(tmp_path: Path, identifier: str) 
         json_record_path(tmp_path, identifier)
 
 
+@pytest.mark.usefixtures("symlink_supported")
 def test_record_path_rejects_symlink_to_outside_directory(tmp_path: Path) -> None:
     root = tmp_path / "records"
     root.mkdir()

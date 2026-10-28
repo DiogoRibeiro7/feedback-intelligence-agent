@@ -1,7 +1,7 @@
 {
   "package": "feedback_intelligence_agent",
-  "module_count": 44,
-  "edge_count": 156,
+  "module_count": 45,
+  "edge_count": 160,
   "layer_order": [
     "interface",
     "application",
@@ -44,6 +44,7 @@
       "query_expansion",
       "reranking",
       "retrieval",
+      "source_ids",
       "synthetic_data",
       "tools"
     ],
@@ -189,7 +190,7 @@
       "qualified_name": "feedback_intelligence_agent.chunking",
       "source": "src/feedback_intelligence_agent/chunking.py",
       "layer": "domain",
-      "fan_out": 2,
+      "fan_out": 3,
       "external_dependencies": [],
       "optional_dependencies": [],
       "lazy_imports": [],
@@ -537,7 +538,7 @@
       "qualified_name": "feedback_intelligence_agent.qdrant_store",
       "source": "src/feedback_intelligence_agent/qdrant_store.py",
       "layer": "data",
-      "fan_out": 1,
+      "fan_out": 2,
       "external_dependencies": [
         "numpy",
         "qdrant_client"
@@ -651,7 +652,19 @@
       "optional_dependencies": [],
       "lazy_imports": [],
       "typing_only_imports": [],
-      "fan_in": 26
+      "fan_in": 27
+    },
+    {
+      "name": "source_ids",
+      "qualified_name": "feedback_intelligence_agent.source_ids",
+      "source": "src/feedback_intelligence_agent/source_ids.py",
+      "layer": "domain",
+      "fan_out": 1,
+      "external_dependencies": [],
+      "optional_dependencies": [],
+      "lazy_imports": [],
+      "typing_only_imports": [],
+      "fan_in": 3
     },
     {
       "name": "streaming_ingestion",
@@ -721,7 +734,7 @@
       "qualified_name": "feedback_intelligence_agent.vector_store",
       "source": "src/feedback_intelligence_agent/vector_store.py",
       "layer": "data",
-      "fan_out": 1,
+      "fan_out": 2,
       "external_dependencies": [
         "dataexcept",
         "numpy",
@@ -967,6 +980,12 @@
       "target": "schemas",
       "context": "eager",
       "names": "DocumentChunk, FeedbackRecord"
+    },
+    {
+      "source": "chunking",
+      "target": "source_ids",
+      "context": "eager",
+      "names": "encode_source_id"
     },
     {
       "source": "citations",
@@ -1374,7 +1393,7 @@
       "source": "index_updates",
       "target": "chunking",
       "context": "eager",
-      "names": "feedback_to_chunks"
+      "names": "feedback_to_chunks, scoped_source_id"
     },
     {
       "source": "index_updates",
@@ -1563,6 +1582,12 @@
       "names": "DocumentChunk, SearchResult"
     },
     {
+      "source": "qdrant_store",
+      "target": "source_ids",
+      "context": "eager",
+      "names": "SourceIdMigrationError, migrate_legacy_chunks"
+    },
+    {
       "source": "reports",
       "target": "safe_paths",
       "context": "eager",
@@ -1623,6 +1648,12 @@
       "names": "GuardrailDecision"
     },
     {
+      "source": "source_ids",
+      "target": "schemas",
+      "context": "eager",
+      "names": "DocumentChunk"
+    },
+    {
       "source": "streaming_ingestion",
       "target": "data_contracts",
       "context": "eager",
@@ -1669,6 +1700,12 @@
       "target": "schemas",
       "context": "eager",
       "names": "DocumentChunk, SearchResult"
+    },
+    {
+      "source": "vector_store",
+      "target": "source_ids",
+      "context": "eager",
+      "names": "SourceIdMigrationError, migrate_legacy_chunks"
     }
   ],
   "cycles": {
@@ -1684,7 +1721,7 @@
   "most_depended_upon": [
     {
       "module": "schemas",
-      "fan_in": 26,
+      "fan_in": 27,
       "fan_out": 1
     },
     {
@@ -1710,7 +1747,7 @@
     {
       "module": "vector_store",
       "fan_in": 6,
-      "fan_out": 1
+      "fan_out": 2
     },
     {
       "module": "agent",
@@ -1720,7 +1757,7 @@
     {
       "module": "chunking",
       "fan_in": 5,
-      "fan_out": 2
+      "fan_out": 3
     },
     {
       "module": "citations",

@@ -12,8 +12,9 @@ from feedback_intelligence_agent.telemetry import InMemoryTelemetrySink, Telemet
 from feedback_intelligence_agent.vector_store import InMemoryVectorStore
 
 
-def make_record(feedback_id: str, text: str) -> FeedbackRecord:
+def make_record(feedback_id: str, text: str, *, tenant_id: str = "default") -> FeedbackRecord:
     return FeedbackRecord(
+        tenant_id=tenant_id,
         feedback_id=feedback_id,
         customer_segment="enterprise",
         channel=FeedbackChannel.support_ticket,
@@ -57,21 +58,23 @@ def test_update_json_index_redacts_pii_before_persistence(tmp_path: Path) -> Non
     assert "[REDACTED_TOKEN]" in stored_text
 
 
+@pytest.mark.parametrize("tenant_id", ["default", "acme"])
 def test_update_json_index_replaces_existing_source_without_rebuilding_all(
     tmp_path: Path,
+    tenant_id: str,
 ) -> None:
     index_path = tmp_path / "vector_store.json"
     update_json_index(
         [
-            make_record("fb-1", "old onboarding checklist"),
-            make_record("fb-2", "pricing renewal finance"),
+            make_record("fb-1", "old onboarding checklist", tenant_id=tenant_id),
+            make_record("fb-2", "pricing renewal finance", tenant_id=tenant_id),
         ],
         index_path,
         embedding_dim=128,
     )
 
     result = update_json_index(
-        [make_record("fb-1", "new export dashboard failure")],
+        [make_record("fb-1", "new export dashboard failure", tenant_id=tenant_id)],
         index_path,
         embedding_dim=128,
     )
@@ -82,13 +85,14 @@ def test_update_json_index_replaces_existing_source_without_rebuilding_all(
     assert result.removed_chunks == 1
     assert result.total_chunks == 2
     store = InMemoryVectorStore.load(index_path)
-    assert {chunk.source_id for chunk in store.chunks} == {"fb-1", "fb-2"}
+    prefix = "" if tenant_id == "default" else f"{tenant_id}:"
+    assert {chunk.source_id for chunk in store.chunks} == {f"{prefix}fb-1", f"{prefix}fb-2"}
     assert "old onboarding" not in " ".join(chunk.text for chunk in store.chunks)
     result_chunks = store.search(
         query_vector=HashingEmbeddingModel(dim=128).embed(["export dashboard"])[0],
         top_k=1,
     )
-    assert result_chunks[0].chunk.source_id == "fb-1"
+    assert result_chunks[0].chunk.source_id == f"{prefix}fb-1"
 
 
 def test_update_json_index_deduplicates_input_records_last_wins(tmp_path: Path) -> None:
@@ -123,6 +127,78 @@ def test_update_json_index_emits_telemetry(tmp_path: Path) -> None:
     assert result.total_chunks == 1
     assert sink.event_names() == ["index_update_started", "index_update_finished"]
     assert sink.events[-1].metadata["inserted_records"] == 1
+
+
+@pytest.mark.parametrize("first_tenant", ["default", "acme"])
+def test_update_json_index_preserves_shared_ids_across_tenants(
+    tmp_path: Path, first_tenant: str
+) -> None:
+    index_path = tmp_path / "vector_store.json"
+    result = update_json_index(
+        [
+            make_record("shared", "first tenant original", tenant_id=first_tenant),
+            make_record("shared", "second tenant feedback", tenant_id="cobalt"),
+            make_record("shared", "first tenant corrected", tenant_id=first_tenant),
+        ],
+        index_path,
+        embedding_dim=64,
+    )
+
+    assert result.input_records == 3
+    assert result.inserted_records == 2
+    assert result.updated_records == 0
+    assert result.skipped_records == 1
+    store = InMemoryVectorStore.load(index_path)
+    assert [(chunk.metadata["tenant_id"], chunk.text) for chunk in store.chunks] == [
+        (first_tenant, "first tenant corrected"),
+        ("cobalt", "second tenant feedback"),
+    ]
+
+
+def test_update_json_index_counts_tenant_updates_and_preserves_other_tenants(
+    tmp_path: Path,
+) -> None:
+    index_path = tmp_path / "vector_store.json"
+    for tenant in ("default", "acme", "cobalt"):
+        update_json_index(
+            [make_record("shared", "original feedback spans several chunks", tenant_id=tenant)],
+            index_path,
+            embedding_dim=64,
+            chunk_size=3,
+            chunk_overlap=1,
+        )
+    untouched = [
+        chunk
+        for chunk in InMemoryVectorStore.load(index_path).chunks
+        if chunk.metadata["tenant_id"] != "acme"
+    ]
+    sink = InMemoryTelemetrySink()
+
+    result = update_json_index(
+        [
+            make_record("shared", "corrected feedback", tenant_id="acme"),
+            make_record("new", "new feedback", tenant_id="acme"),
+        ],
+        index_path,
+        embedding_dim=64,
+        chunk_size=3,
+        chunk_overlap=1,
+        telemetry=Telemetry(sink=sink),
+    )
+
+    assert result.inserted_records == 1
+    assert result.updated_records == 1
+    assert result.removed_chunks == 2
+    assert result.added_chunks == 2
+    assert result.total_chunks == 6
+    assert sink.events[-1].metadata["inserted_records"] == 1
+    assert sink.events[-1].metadata["updated_records"] == 1
+    chunks = InMemoryVectorStore.load(index_path).chunks
+    assert [chunk for chunk in chunks if chunk.metadata["tenant_id"] != "acme"] == untouched
+    assert [(chunk.source_id, chunk.text) for chunk in chunks if chunk not in untouched] == [
+        ("acme:shared", "corrected feedback"),
+        ("acme:new", "new feedback"),
+    ]
 
 
 def test_update_json_index_rejects_dimension_mismatch(tmp_path: Path) -> None:

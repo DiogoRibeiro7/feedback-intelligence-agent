@@ -1,2 +1,7 @@
 # Prompt snapshots are byte-exact golden files; never apply EOL conversion.
 tests/snapshots/*.txt -text
+
+# Generated documentation is validated byte-for-byte on every platform.
+docs/latex/generated/** text eol=lf
+docs/latex/metadata.tex text eol=lf
+docs/metadata/*.json text eol=lf

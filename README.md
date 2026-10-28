@@ -777,9 +777,48 @@ same contract path as production consumers.
 
 Incremental updates live in `index_updates.py`. Validated feedback records are
 redacted, chunked, embedded, and merged into the persisted JSON vector index by
-`feedback_id`; existing chunks for the same source document are replaced before
-new chunks are appended. This supports append-only event streams and corrected
-feedback records without rebuilding the full index.
+tenant and `feedback_id`; identical feedback IDs in different tenants remain
+separate. Repeated records within a batch use the last event for each tenant and
+ID, and update counts distinguish existing tenant-scoped sources from inserts.
+Existing chunks for a source are replaced only after the incoming vectors have
+been validated. This supports append-only event streams and corrected feedback
+records without rebuilding the full index.
+
+Source IDs percent-encode each tenant and feedback ID component before joining
+them with a colon. Ordinary IDs remain `fb-1` (default tenant) or `acme:fb-1`.
+For example, the default-tenant feedback ID `acme:shared` becomes
+`acme%3Ashared`, while tenant `acme` with feedback ID `shared` remains
+`acme:shared`. Literal percent signs are escaped too, so `acme%3Ashared` as a
+raw feedback ID becomes `acme%253Ashared`. Original IDs remain in chunk metadata.
+
+JSON indexes now record `source_id_version: 2`. Loading an unversioned or
+version-1 index migrates its source and chunk IDs in memory from the stored
+tenant/feedback metadata; vectors, text, and chunk positions are retained.
+The original file changes only when the store is saved, including by
+`update-index`. Version-2 indexes are not encoded again when reloaded.
+An explicit migration to a separate file can also be performed in Python:
+
+```python
+from feedback_intelligence_agent.vector_store import InMemoryVectorStore
+
+store = InMemoryVectorStore.load(".artifacts/vector_store.json")
+store.save(".artifacts/vector_store.v2.json")
+```
+
+Older default-tenant chunks without identity metadata use their raw source ID
+as the feedback ID. Inconsistent metadata, unrecoverable chunk positions, and
+duplicate migrated chunk IDs fail with `DataLoadingError` before a file is
+written. Migration can separate colliding records still present in an index;
+records already overwritten by an earlier collision must be reingested from
+the original feedback data. Previously saved reports keep their historical
+citation identifiers.
+
+Qdrant payloads also record version 2. Existing collections are checked before
+use; legacy collections whose IDs need encoding raise `QdrantStoreError` with
+rebuild instructions. Set `FEEDBACK_AGENT_QDRANT_COLLECTION` to a new collection
+name and `FEEDBACK_AGENT_DATA_PATH` to the original dataset, then run a query
+to build that collection. The old collection is retained. Legacy collections
+whose identifiers are unchanged remain usable.
 
 Merge a CSV batch into the local JSON index:
 

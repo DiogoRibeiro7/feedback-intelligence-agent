@@ -4,6 +4,20 @@ All notable changes to this project are documented here.
 
 ## Unreleased
 
+### Fixed
+
+- Source and chunk IDs escape tenant/feedback components to prevent delimiter
+  collisions, with in-memory legacy JSON migration and a persisted version marker.
+- Qdrant refuses legacy collections requiring identifier migration before writes,
+  with instructions to rebuild in a new collection from the original dataset.
+- Incremental indexing preserves feedback IDs shared by different tenants and
+  correctly counts updates to non-default-tenant records in results and telemetry.
+- Invalid vector replacements leave existing chunks and search results intact.
+- Generated documentation retains LF line endings on Windows checkouts; symlink
+  tests explicitly skip when Windows denies the required creation privilege.
+- Frontend dependency audit findings resolved by refreshing the lockfile within
+  existing version ranges, including Vite 8.3.5 and patched transitive dependencies.
+
 ## 0.5.0 - 2026-08-08
 
 ### Added

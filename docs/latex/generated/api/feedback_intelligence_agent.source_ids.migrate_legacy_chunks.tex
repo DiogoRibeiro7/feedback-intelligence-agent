@@ -1,0 +1,27 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{migrate\_legacy\_chunks}}
+\label{func:feedback_intelligence_agent.source_ids.migrate_legacy_chunks}\index{Functions!migrate\_legacy\_chunks}
+
+Rebuild version-1 source and chunk IDs without changing text or metadata.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+migrate_legacy_chunks(chunks: list[DocumentChunk]) -> list[DocumentChunk]
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{chunks}] \texttt{list[DocumentChunk]\allowbreak{}}, required.
+\end{arglist}
+\apifield{Value}\texttt{list[DocumentChunk]\allowbreak{}}
+\apifield{Raises}
+\begin{arglist}
+  \item[\texttt{SourceIdMigrationError}] If identities disagree, chunk positions cannot be recovered, or migration would produce duplicate chunk IDs.
+\end{arglist}
+\apifield{Details}Metadata distinguishes records whose old identifiers collided. Older default-tenant chunks without identity metadata use their raw source ID as the feedback ID. Chunk positions are retained, as is list order, so vectors remain aligned without recomputing embeddings.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}source\_\allowbreak{}ids.\allowbreak{}py:27}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/edc9d78403eeed9f7d6ee5aef6b8d9b1b5780ef4/src/feedback_intelligence_agent/source_ids.py#L27}{online}), module \cref{module:feedback_intelligence_agent.source_ids}

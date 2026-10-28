@@ -3573,6 +3573,26 @@
       "notes": ""
     },
     {
+      "name": "SourceIdMigrationError",
+      "qualified_name": "feedback_intelligence_agent.source_ids.SourceIdMigrationError",
+      "kind": "exception",
+      "module": "feedback_intelligence_agent.source_ids",
+      "bases": [
+        "ValueError"
+      ],
+      "source": "src/feedback_intelligence_agent/source_ids.py",
+      "line": 10,
+      "public": true,
+      "decorators": [],
+      "summary": "Raised when legacy chunk identities cannot be migrated unambiguously.",
+      "description": "",
+      "attributes": [],
+      "methods": [],
+      "properties": [],
+      "constructor": null,
+      "notes": ""
+    },
+    {
       "name": "FeedbackStream",
       "qualified_name": "feedback_intelligence_agent.streaming_ingestion.FeedbackStream",
       "kind": "protocol",
@@ -6835,7 +6855,7 @@
       "module": "feedback_intelligence_agent.vector_store",
       "bases": [],
       "source": "src/feedback_intelligence_agent/vector_store.py",
-      "line": 54,
+      "line": 56,
       "public": true,
       "decorators": [],
       "summary": "Cosine-similarity vector store.",
@@ -6849,7 +6869,7 @@
           "module": "feedback_intelligence_agent.vector_store",
           "signature": "add(self, chunks: list[DocumentChunk], vectors: npt.NDArray[np.float64]) -> None",
           "source": "src/feedback_intelligence_agent/vector_store.py",
-          "line": 78,
+          "line": 80,
           "public": true,
           "is_async": false,
           "decorators": [],
@@ -6885,7 +6905,7 @@
           "raises": [
             {
               "exception": "ValueError",
-              "description": ""
+              "description": "If vector shape or dimension does not match the chunks and store."
             }
           ],
           "examples": "",
@@ -6899,7 +6919,7 @@
           "module": "feedback_intelligence_agent.vector_store",
           "signature": "remove_source_ids(self, source_ids: set[str]) -> int",
           "source": "src/feedback_intelligence_agent/vector_store.py",
-          "line": 92,
+          "line": 106,
           "public": true,
           "is_async": false,
           "decorators": [],
@@ -6937,12 +6957,12 @@
           "module": "feedback_intelligence_agent.vector_store",
           "signature": "upsert_sources(self, chunks: list[DocumentChunk], vectors: npt.NDArray[np.float64]) -> int",
           "source": "src/feedback_intelligence_agent/vector_store.py",
-          "line": 111,
+          "line": 125,
           "public": true,
           "is_async": false,
           "decorators": [],
           "summary": "Replace existing source documents and append the new chunks.",
-          "description": "The replacement key is ``DocumentChunk.source_id``. All old chunks for\nany incoming source are removed first, which handles changed text that\nproduces a different number of chunks.",
+          "description": "The replacement key is ``DocumentChunk.source_id``. All old chunks for\nany incoming source are replaced, which handles changed text that\nproduces a different number of chunks. Invalid vectors leave the\nexisting chunks and vectors unchanged.",
           "parameters": [
             {
               "name": "self",
@@ -6970,7 +6990,12 @@
             "annotation": "int",
             "description": "Number of chunks removed before adding the new chunks."
           },
-          "raises": [],
+          "raises": [
+            {
+              "exception": "ValueError",
+              "description": "If vector shape or dimension does not match the chunks and store."
+            }
+          ],
           "examples": "",
           "notes": "",
           "see_also": []
@@ -6982,7 +7007,7 @@
           "module": "feedback_intelligence_agent.vector_store",
           "signature": "search(self, query_vector: npt.NDArray[np.float64], *, top_k: int = 4) -> list[SearchResult]",
           "source": "src/feedback_intelligence_agent/vector_store.py",
-          "line": 129,
+          "line": 157,
           "public": true,
           "is_async": false,
           "decorators": [],
@@ -7032,7 +7057,7 @@
           "module": "feedback_intelligence_agent.vector_store",
           "signature": "save(self, path: str | Path) -> None",
           "source": "src/feedback_intelligence_agent/vector_store.py",
-          "line": 154,
+          "line": 182,
           "public": true,
           "is_async": false,
           "decorators": [],
@@ -7070,14 +7095,14 @@
           "module": "feedback_intelligence_agent.vector_store",
           "signature": "load(cls, path: str | Path) -> InMemoryVectorStore",
           "source": "src/feedback_intelligence_agent/vector_store.py",
-          "line": 168,
+          "line": 197,
           "public": true,
           "is_async": false,
           "decorators": [
             "classmethod"
           ],
-          "summary": "Load a vector store from JSON.",
-          "description": "",
+          "summary": "Load JSON and migrate legacy chunk IDs in memory without changing the file.",
+          "description": "Saving the returned store persists version-2 identifiers. Migration\nretains the original vectors and requires no embedding provider.",
           "parameters": [
             {
               "name": "cls",
@@ -7098,7 +7123,12 @@
             "annotation": "InMemoryVectorStore",
             "description": ""
           },
-          "raises": [],
+          "raises": [
+            {
+              "exception": "DataLoadingError",
+              "description": "If the payload or its legacy identities are invalid."
+            }
+          ],
           "examples": "",
           "notes": "",
           "see_also": []
@@ -7110,7 +7140,7 @@
           "module": "feedback_intelligence_agent.vector_store",
           "signature": "to_json(self) -> str",
           "source": "src/feedback_intelligence_agent/vector_store.py",
-          "line": 181,
+          "line": 224,
           "public": true,
           "is_async": false,
           "decorators": [],
@@ -7143,7 +7173,7 @@
           "module": "feedback_intelligence_agent.vector_store",
           "signature": "size(self) -> int",
           "source": "src/feedback_intelligence_agent/vector_store.py",
-          "line": 69,
+          "line": 71,
           "public": true,
           "is_async": false,
           "decorators": [
@@ -7176,7 +7206,7 @@
           "module": "feedback_intelligence_agent.vector_store",
           "signature": "chunks(self) -> list[DocumentChunk]",
           "source": "src/feedback_intelligence_agent/vector_store.py",
-          "line": 74,
+          "line": 76,
           "public": true,
           "is_async": false,
           "decorators": [
@@ -7210,7 +7240,7 @@
         "module": "feedback_intelligence_agent.vector_store",
         "signature": "__init__(self, dim: int) -> None",
         "source": "src/feedback_intelligence_agent/vector_store.py",
-        "line": 61,
+        "line": 63,
         "public": false,
         "is_async": false,
         "decorators": [],
@@ -7257,12 +7287,20 @@
         "BaseModel"
       ],
       "source": "src/feedback_intelligence_agent/vector_store.py",
-      "line": 46,
+      "line": 47,
       "public": true,
       "decorators": [],
       "summary": "Serializable representation of the vector store.",
       "description": "",
       "attributes": [
+        {
+          "name": "source_id_version",
+          "annotation": "Literal[1, 2]",
+          "default": "1",
+          "required": false,
+          "description": "",
+          "constraints": {}
+        },
         {
           "name": "dim",
           "annotation": "int",
@@ -7302,7 +7340,7 @@
         "Protocol"
       ],
       "source": "src/feedback_intelligence_agent/vector_store.py",
-      "line": 18,
+      "line": 19,
       "public": true,
       "decorators": [
         "runtime_checkable"
@@ -7327,7 +7365,7 @@
           "module": "feedback_intelligence_agent.vector_store",
           "signature": "add(self, chunks: list[DocumentChunk], vectors: npt.NDArray[np.float64]) -> None",
           "source": "src/feedback_intelligence_agent/vector_store.py",
-          "line": 37,
+          "line": 38,
           "public": true,
           "is_async": false,
           "decorators": [],
@@ -7372,7 +7410,7 @@
           "module": "feedback_intelligence_agent.vector_store",
           "signature": "search(self, query_vector: npt.NDArray[np.float64], *, top_k: int = 4) -> list[SearchResult]",
           "source": "src/feedback_intelligence_agent/vector_store.py",
-          "line": 40,
+          "line": 41,
           "public": true,
           "is_async": false,
           "decorators": [],
@@ -7419,7 +7457,7 @@
           "module": "feedback_intelligence_agent.vector_store",
           "signature": "size(self) -> int",
           "source": "src/feedback_intelligence_agent/vector_store.py",
-          "line": 30,
+          "line": 31,
           "public": true,
           "is_async": false,
           "decorators": [
@@ -7452,7 +7490,7 @@
           "module": "feedback_intelligence_agent.vector_store",
           "signature": "chunks(self) -> list[DocumentChunk]",
           "source": "src/feedback_intelligence_agent/vector_store.py",
-          "line": 34,
+          "line": 35,
           "public": true,
           "is_async": false,
           "decorators": [
