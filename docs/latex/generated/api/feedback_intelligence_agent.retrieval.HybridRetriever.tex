@@ -23,20 +23,21 @@ HybridRetriever(self, dense: Retriever, lexical: Retriever, *, dense_weight: flo
 \end{arglist}
 \apifield{Raises}\texttt{ValueError}
 \apifield{Details}Each underlying retriever is queried for an enlarged candidate pool. Scores are min-max normalized per result list so the two scales are comparable, then combined as a weighted sum. Documents appearing in both lists are de-duplicated by chunk ID and receive contributions from both retrievers.
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}retrieval.\allowbreak{}py:50}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/edc9d78403eeed9f7d6ee5aef6b8d9b1b5780ef4/src/feedback_intelligence_agent/retrieval.py#L50}{online}), class, module \cref{module:feedback_intelligence_agent.retrieval}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}retrieval.\allowbreak{}py:56}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/edc9d78403eeed9f7d6ee5aef6b8d9b1b5780ef4/src/feedback_intelligence_agent/retrieval.py#L56}{online}), class, module \cref{module:feedback_intelligence_agent.retrieval}
 
 \subsection{\texttt{search}}
 \label{method:feedback_intelligence_agent.retrieval.HybridRetriever.search}\index{Methods!search}
 Return de-duplicated chunks ranked by the combined hybrid score.
 \apifield{Usage}
 \begin{lstlisting}[style=usage, language=Python]
-search(self, question: str, *, top_k: int = 4) -> list[SearchResult]
+search(self, question: str, *, top_k: int = 4, filters: MetadataFilters | None = None) -> list[SearchResult]
 \end{lstlisting}
 \apifield{Arguments}
 \begin{arglist}
   \item[\texttt{question}] \texttt{str}, required.
   \item[\texttt{top\_\allowbreak{}k}] \texttt{int}, default \texttt{4}, keyword-only.
+  \item[\texttt{filters}] \texttt{MetadataFilters \textbar{} None}, default \texttt{None}, keyword-only.
 \end{arglist}
 \apifield{Value}\texttt{list[SearchResult]\allowbreak{}}
 \apifield{Raises}\texttt{ValueError}
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}retrieval.\allowbreak{}py:78}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/edc9d78403eeed9f7d6ee5aef6b8d9b1b5780ef4/src/feedback_intelligence_agent/retrieval.py#L78}{online})
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}retrieval.\allowbreak{}py:84}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/edc9d78403eeed9f7d6ee5aef6b8d9b1b5780ef4/src/feedback_intelligence_agent/retrieval.py#L84}{online})

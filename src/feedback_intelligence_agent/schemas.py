@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from datetime import datetime
+from datetime import datetime, timezone
 from enum import Enum
 from typing import Any, Literal
 
@@ -64,7 +64,7 @@ class SearchResult(BaseModel):
 
 
 class MetadataFilters(BaseModel):
-    """Optional filters applied to chunk metadata before final ranking."""
+    """Optional filters applied to chunk metadata before retrieval candidate limits."""
 
     tenant_id: str | None = Field(default=None, min_length=1)
     customer_segment: str | None = Field(default=None, min_length=1)
@@ -91,12 +91,11 @@ class MetadataFilters(BaseModel):
             and self.min_rating > self.max_rating
         ):
             raise ValueError("min_rating cannot be greater than max_rating")
-        if (
-            self.created_after is not None
-            and self.created_before is not None
-            and self.created_after > self.created_before
-        ):
-            raise ValueError("created_after cannot be later than created_before")
+        if self.created_after is not None and self.created_before is not None:
+            after = self.created_after.replace(tzinfo=self.created_after.tzinfo or timezone.utc)
+            before = self.created_before.replace(tzinfo=self.created_before.tzinfo or timezone.utc)
+            if after > before:
+                raise ValueError("created_after cannot be later than created_before")
         return self
 
     @property

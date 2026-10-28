@@ -8,7 +8,7 @@
   "revision_date": "2026-08-09T21:46:40+01:00",
   "project_version": "0.5.0",
   "counts": {
-    "generated_latex_files": 315,
+    "generated_latex_files": 316,
     "metadata_files": 5
   },
   "generated_files": [
@@ -19,8 +19,8 @@
     },
     {
       "path": "docs/latex/generated/api/_functions.tex",
-      "bytes": 9464,
-      "sha256": "41a6ad8e4a3942405ac0ee33fb68a321c32ac2c161a1f95abf57d23ce03c3b9c"
+      "bytes": 9560,
+      "sha256": "c26e53dd0eb5533cb3871c2fdf050ceabba3fbee7b9a0e55effd3c9099c1457e"
     },
     {
       "path": "docs/latex/generated/api/feedback_intelligence_agent.active_learning.ActiveLearningState.tex",
@@ -819,13 +819,13 @@
     },
     {
       "path": "docs/latex/generated/api/feedback_intelligence_agent.lexical_search.BM25Retriever.tex",
-      "bytes": 3053,
-      "sha256": "1d7ce662e4c4643524e2c1d6fbe3f77817f0d189dce0fac9a8fdb627127b5cc9"
+      "bytes": 3193,
+      "sha256": "fdfadc45a3438f039c9e32f2cb25d76ac297e42b21d7eb856a0f464259ebc3c6"
     },
     {
       "path": "docs/latex/generated/api/feedback_intelligence_agent.lexical_search.tokenize.tex",
       "bytes": 1153,
-      "sha256": "bddd83c2b245d300694e02c61e5e7130fcf3f5f5fc7b84abe5f9747bfbf5ad3a"
+      "sha256": "96add26e2afb4df580c0f1379688118010fa39b2f7a789bff7b7e5937c093135"
     },
     {
       "path": "docs/latex/generated/api/feedback_intelligence_agent.llm.AnthropicLLM.tex",
@@ -938,6 +938,11 @@
       "sha256": "e21d9838f0ec2abd2ef7c49accb72738e369bac43a1bad9a78164872d72ff553"
     },
     {
+      "path": "docs/latex/generated/api/feedback_intelligence_agent.metadata_filters.matches_metadata_filters.tex",
+      "bytes": 1664,
+      "sha256": "1af6d74b5439927c864309d8e5fee6cea94e91550cc1e04ee80bff2254315163"
+    },
+    {
       "path": "docs/latex/generated/api/feedback_intelligence_agent.output_parser.GeneratedAnswerPayload.tex",
       "bytes": 4161,
       "sha256": "06331bff366a2ea8b2c0e412a2106127fc6b11ec3d63748bed35eb3b55409379"
@@ -1000,12 +1005,12 @@
     {
       "path": "docs/latex/generated/api/feedback_intelligence_agent.qdrant_store.QdrantStoreError.tex",
       "bytes": 955,
-      "sha256": "4f5814414d7edfa9b20442b4b73a2138c01c800f362a3a93e6229ad201c3dfcb"
+      "sha256": "caf4f72f714079bce92270ea7687a86abe81cd997b5e3dd3565cda5ab0ac5258"
     },
     {
       "path": "docs/latex/generated/api/feedback_intelligence_agent.qdrant_store.QdrantVectorStore.tex",
-      "bytes": 4095,
-      "sha256": "14c4dd1ecf73cfcceeb51c306b27ccb955a9ffa937802d333a4f4993a6fdaf3d"
+      "bytes": 4471,
+      "sha256": "319a35e0c5367755dc0e6c7bf4f26bc9a2b4b200994d9e3049dfb71db69e0d22"
     },
     {
       "path": "docs/latex/generated/api/feedback_intelligence_agent.query_expansion.ProductTerminologyExpander.tex",
@@ -1099,23 +1104,23 @@
     },
     {
       "path": "docs/latex/generated/api/feedback_intelligence_agent.retrieval.HybridRetriever.tex",
-      "bytes": 2772,
-      "sha256": "bdc8e2c5a6b91e554bae7c6d5f3421381a358e4e776b5d770c6ec3d63ab8e91e"
+      "bytes": 2917,
+      "sha256": "dfe93a2eb3df773965219a022c8b1c2ca0bb10b762e4c583cef26800a0d41fc4"
     },
     {
       "path": "docs/latex/generated/api/feedback_intelligence_agent.retrieval.QueryEngine.tex",
-      "bytes": 2350,
-      "sha256": "223aba9e71027d3db22620662ad8a4e20e9d75b57ecad1d5e9e6b5e94e4eff11"
+      "bytes": 2495,
+      "sha256": "e4176af07dd1b44142513cba84bf2d1c8cb0fe6e50994adf7ba94bf1a105a573"
     },
     {
       "path": "docs/latex/generated/api/feedback_intelligence_agent.retrieval.Retriever.tex",
-      "bytes": 1804,
-      "sha256": "8ea874720b3624febfea3eae1a7e1e4e05a963944b4150b079aa407668b380b8"
+      "bytes": 1949,
+      "sha256": "86abceda362672c8c1a892776f23dabd55119fd4986c6fd3bdf71a44027c3a13"
     },
     {
       "path": "docs/latex/generated/api/feedback_intelligence_agent.retrieval.min_max_normalize.tex",
       "bytes": 1207,
-      "sha256": "fb0036991cf65b3ec30e8078624dda630780c1792a1baea6ac633192b2fb86f2"
+      "sha256": "42df69a320cbc0af0d962ffba2130c61773a42f1691d9aab8dcc927cd698daa1"
     },
     {
       "path": "docs/latex/generated/api/feedback_intelligence_agent.safe_paths.json_record_path.tex",
@@ -1125,22 +1130,22 @@
     {
       "path": "docs/latex/generated/api/feedback_intelligence_agent.schemas.AgentAnswer.tex",
       "bytes": 1997,
-      "sha256": "b5c4a6a107c574ab5ffb7fe3b2b708550b8b188d35b65a6d540d2f31faab0f9a"
+      "sha256": "19c8cccae32932bea2ab3d79e9847d5e1f3e44c76496b51f4986323f3c613425"
     },
     {
       "path": "docs/latex/generated/api/feedback_intelligence_agent.schemas.ChatRequest.tex",
       "bytes": 3714,
-      "sha256": "7b2f97cc620208f0e2661f3558984fbbd5fed993de2d4546fe8f8499f35321b9"
+      "sha256": "b743a7b0be9a41ed9f7269bd1495ab3b5f4b42d09988f943648cf1695290d4b6"
     },
     {
       "path": "docs/latex/generated/api/feedback_intelligence_agent.schemas.ChatResponse.tex",
       "bytes": 1092,
-      "sha256": "6e8ecfcdb2ac409b44f535788bf89c870965561f58265164475e6ddeddd93781"
+      "sha256": "b53c5ba7d633f7aec614cd43c8939d7d1436866ddcb0bb5da680d92aa73c8c61"
     },
     {
       "path": "docs/latex/generated/api/feedback_intelligence_agent.schemas.Citation.tex",
       "bytes": 1592,
-      "sha256": "7eab412c97b911ec61bc86eae593d1d22da0e1db25eaaa5bcfed856aaa8e270b"
+      "sha256": "a1ca2b0f912e9e021c4bb534feb9a085c15e95d612fad3591ae22a780b109dfa"
     },
     {
       "path": "docs/latex/generated/api/feedback_intelligence_agent.schemas.DocumentChunk.tex",
@@ -1150,7 +1155,7 @@
     {
       "path": "docs/latex/generated/api/feedback_intelligence_agent.schemas.EvaluationCase.tex",
       "bytes": 1968,
-      "sha256": "3a2049975cc73ecbf29e0ad4138ae675a06d99a7dab8f5fb69cc657e693ac20f"
+      "sha256": "504f361b1a2cd36a8d01f2c6ed16cd88e655f886526a1866847b788c3a4944f9"
     },
     {
       "path": "docs/latex/generated/api/feedback_intelligence_agent.schemas.FeedbackChannel.tex",
@@ -1165,27 +1170,27 @@
     {
       "path": "docs/latex/generated/api/feedback_intelligence_agent.schemas.IndexRequest.tex",
       "bytes": 1178,
-      "sha256": "688fe3189c505fe1219ae6fe70a26e700ebc6ae61e73300e2b7b40419b8e8d76"
+      "sha256": "d1ca1e1dafa93b4110a03d75ccc3aaf7451d313caad96c24eb884b61d53ef4e3"
     },
     {
       "path": "docs/latex/generated/api/feedback_intelligence_agent.schemas.JobSubmitResponse.tex",
       "bytes": 1367,
-      "sha256": "57b4ec052e6e17d8d34315e23fedf803ff0bf288c003fe3d6b70dc6d8f702400"
+      "sha256": "515b73a5e5850e4c4785108021883f41bbfe15055819a56863acd1bb9d53047c"
     },
     {
       "path": "docs/latex/generated/api/feedback_intelligence_agent.schemas.MetadataFilters.tex",
-      "bytes": 3513,
-      "sha256": "13561ae308894dbfe95964b7a16812fe7edc13c20d75447edced8397485e0625"
+      "bytes": 3526,
+      "sha256": "841998de66d0a676d4f38b174fef64cb84558c121e3ea7f5dec4c4882816c9db"
     },
     {
       "path": "docs/latex/generated/api/feedback_intelligence_agent.schemas.QueryRequest.tex",
       "bytes": 3412,
-      "sha256": "e5886c71de6711918eb71e4cd2b16efc4101c57d2777ba61e158667383af0aa1"
+      "sha256": "6e7172e1cdd4f3a90a2a6188abd55b03b914c9ef38717c5e60bc68141623e93a"
     },
     {
       "path": "docs/latex/generated/api/feedback_intelligence_agent.schemas.QueryResponse.tex",
       "bytes": 1026,
-      "sha256": "9ea396bdfe66d466aa64a27cdd2c91fb998c5afb3467abcd475272dec30da9d1"
+      "sha256": "ff8e5493ab2db3576bc66e88db0659c802b3a7c4ecaf18f6185eeff714cd87f1"
     },
     {
       "path": "docs/latex/generated/api/feedback_intelligence_agent.schemas.SearchResult.tex",
@@ -1195,12 +1200,12 @@
     {
       "path": "docs/latex/generated/api/feedback_intelligence_agent.schemas.StreamMetadata.tex",
       "bytes": 2123,
-      "sha256": "7f59340d40f9f8e605cce4371b314a7fc733c9b9e13813444aa35e70011c3c67"
+      "sha256": "fde03c856440018338448c0d472b4773bd14a4684207389f9098f83bd72dcc24"
     },
     {
       "path": "docs/latex/generated/api/feedback_intelligence_agent.schemas.ToolRunRecord.tex",
       "bytes": 1659,
-      "sha256": "98fcf0afdb34c4ac33256124dda17b10ab8202125010067d56703a8571a25b12"
+      "sha256": "2d63e47c10bcb17c818994cf358ec2d004db347507c3fe7c5ed2643dc72ee1dc"
     },
     {
       "path": "docs/latex/generated/api/feedback_intelligence_agent.source_ids.SourceIdMigrationError.tex",
@@ -1449,38 +1454,38 @@
     },
     {
       "path": "docs/latex/generated/api/feedback_intelligence_agent.vector_store.InMemoryVectorStore.tex",
-      "bytes": 8695,
-      "sha256": "f29464a9505d2a1522472e9a2187d93b9e5a419d543f93076b6c08e223a605d2"
+      "bytes": 8864,
+      "sha256": "27ab36e75623eb8be2637f859b21b2b804361c827e1c6da4a48850c920eeaf67"
     },
     {
       "path": "docs/latex/generated/api/feedback_intelligence_agent.vector_store.PersistedVectorStore.tex",
       "bytes": 1411,
-      "sha256": "b86c6269896b9419091a52d1c2f0dfaf8c648b7f4d87824e402a78c3825eb5f7"
+      "sha256": "1da12bf9eaea6776e5be346f5b4e9f51956491323bca297f335cb072506ba444"
     },
     {
       "path": "docs/latex/generated/api/feedback_intelligence_agent.vector_store.VectorStore.tex",
-      "bytes": 3427,
-      "sha256": "266f661d4bdc4f47145aea846e2e031dec6f9ae4ca51850e6788e8031b06f1a7"
+      "bytes": 3569,
+      "sha256": "622281d7cd53db71ed400f7843f9f996459e1ba1a6a50f03c8b6fbab9d47e33a"
     },
     {
       "path": "docs/latex/generated/architecture/components.tex",
-      "bytes": 16996,
-      "sha256": "f641ed8387a204bb9fd326e503c0c79f03f83f4c0f7bf040cd6bf51f03c8c166"
+      "bytes": 17491,
+      "sha256": "61881af601a27a34dfb96a3ee4cdf39eefe919ad6d4254af28b58ed95d0bf52a"
     },
     {
       "path": "docs/latex/generated/architecture/dependencies.tex",
-      "bytes": 16630,
-      "sha256": "5fc9af46bc75f47f7efcde41ec3d4bdc12d6dabd5636cc620c95c5daa001e090"
+      "bytes": 17109,
+      "sha256": "b3d79ed27ebaec3d850836c632bc3f654c0785d040aea52368f58b4771ad4b4c"
     },
     {
       "path": "docs/latex/generated/architecture/layer-diagram.tex",
-      "bytes": 2299,
-      "sha256": "1bcc2ac953eb58051433b4395ddf68c0c2121f099df02b20e9fced9d2a2f28c5"
+      "bytes": 2318,
+      "sha256": "ec091c52156b9256532a9fd3a0bbde7d02d7914f686066d5fa5a3d513fc9737a"
     },
     {
       "path": "docs/latex/generated/architecture/layer-violations.tex",
-      "bytes": 2216,
-      "sha256": "326aed66f56d1738ec65ab948f1a7788cd977e9c33d1c4e102ca82664c066a2d"
+      "bytes": 2426,
+      "sha256": "9bcdadbe25d30f3f1ae14c326caa802a20b151b1c8cc118dde1226ee51cbb968"
     },
     {
       "path": "docs/latex/generated/architecture/module-graph.tex",
@@ -1539,18 +1544,18 @@
     },
     {
       "path": "docs/latex/generated/engineering/repository-structure.tex",
-      "bytes": 7842,
-      "sha256": "231862be10b6babaeebe2fa2a81c4a4852d72d40a0f369a73602fb546f8761e1"
+      "bytes": 7877,
+      "sha256": "383ce9bd251e68f3fb9a3a5f5e285a432cdae7837c1d214997b94c76c6b7d904"
     },
     {
       "path": "docs/latex/generated/engineering/testing.tex",
-      "bytes": 8133,
-      "sha256": "63b86dc98b26a571b1d14505b743ad0ba5802df29f02c8995db18bbbb7a15bd8"
+      "bytes": 8291,
+      "sha256": "0345aad55872ac592bd8ef8ff7a3d725bf8daf0a1483d18000534629c4f1b504"
     },
     {
       "path": "docs/latex/generated/engineering/traceability.tex",
-      "bytes": 26056,
-      "sha256": "50cf6894977a246a0acf4e3500badcb90a56c4dcc3361e514bc7d6c77415755f"
+      "bytes": 26315,
+      "sha256": "59f30b73150ec169737dd1a53ef44ec16a887aac0025e261fcf3f453afac52fa"
     },
     {
       "path": "docs/latex/generated/http-api.tex",
@@ -1559,23 +1564,23 @@
     },
     {
       "path": "docs/latex/generated/indexes.tex",
-      "bytes": 47855,
-      "sha256": "0be0d85f9103d27494cad2b00ed7a79261bcc8ba34becf72883fb05b0cd6b892"
+      "bytes": 48116,
+      "sha256": "bb3e47d21281c3c04795dbefa2f027a7619bf8d85a958cc23f3d8143aa980d68"
     },
     {
       "path": "docs/latex/generated/modules.tex",
-      "bytes": 60631,
-      "sha256": "feb2ced02d48c65aa401768bdbfa71f554edbaded11e2178d1b4b785b255033f"
+      "bytes": 61451,
+      "sha256": "60c3cdad9886a7844e6a5c4bb6f35dfbc70c2fbafcf90321003e22d490035522"
     },
     {
       "path": "docs/latex/generated/project-metadata.tex",
       "bytes": 2827,
-      "sha256": "b371de1bf06d54a6bdf54b205edc2aeae21701f04ecd55dbf7524905ac870652"
+      "sha256": "884b82acd5a6a6fb6fcc257426fa53c6c8398237c1a494d9e295eebb18ba7f27"
     },
     {
       "path": "docs/latex/generated/schemas.tex",
-      "bytes": 12652,
-      "sha256": "77d70478ab7b43c26a4fa3d6dbcf2618715bc88e2a25c03a76ec0fae80aa50a7"
+      "bytes": 12665,
+      "sha256": "decba287f94726f0d93b1a742ee7b16b372df34fd08010d3c053e3b6b0d3e8fc"
     },
     {
       "path": "docs/latex/generated/types.tex",
@@ -1591,28 +1596,28 @@
   "metadata_files": [
     {
       "path": "docs/metadata/api-index-classes-001.json",
-      "bytes": 299392,
-      "sha256": "2b0910c7d10010a29c093d3a188985d53e56992ce90058634e581cbd7c9188ce"
+      "bytes": 291327,
+      "sha256": "c70978bb9c222f1fa1c6bc5b74dd914eea25750b365fbe36d5454a8d4bf155a1"
     },
     {
       "path": "docs/metadata/api-index-classes-002.json",
-      "bytes": 232306,
-      "sha256": "88ddfff76dba8021f21f70ca24e29cd5b017eaa816e02d7f4a3a5016141b4d32"
+      "bytes": 242427,
+      "sha256": "3e7135a752499a5f0b9a8afc6134c633ba3260acfd19c9f427e93ac2e2cdbeb8"
     },
     {
       "path": "docs/metadata/api-index.json",
-      "bytes": 399049,
-      "sha256": "6a24d961433767fa334f588e0dff9176c6c2cef28cdeb2725a31d6d85583fafc"
+      "bytes": 401902,
+      "sha256": "91ef20279a7b163df10460b90fecbf02a3193b419404627a76aef2ee604fd6a5"
     },
     {
       "path": "docs/metadata/module-dependencies.json",
-      "bytes": 44351,
-      "sha256": "6cacd661f5e73bc28db8ed55d1ac55bc1ef0621499c2b7d193ab291d2feb2e2c"
+      "bytes": 45553,
+      "sha256": "6239fd6bce83e7914500177535cdacd0c25c7480e54de9b9d1a50f4e16f84540"
     },
     {
       "path": "docs/metadata/repository-inventory.json",
-      "bytes": 88262,
-      "sha256": "d0b8e7ae7681469e9b1721a654824b9ad845c0620c32e7ee2ba193c04841b660"
+      "bytes": 88833,
+      "sha256": "68f875f99826ed96a0ed73b52fc925acbf89617e22a188e9afe1d4db17408f47"
     }
   ]
 }

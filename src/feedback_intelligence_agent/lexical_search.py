@@ -12,8 +12,9 @@ import re
 from collections import Counter
 from collections.abc import Sequence
 
+from feedback_intelligence_agent.metadata_filters import matches_metadata_filters
 from feedback_intelligence_agent.query_expansion import QueryExpander
-from feedback_intelligence_agent.schemas import DocumentChunk, SearchResult
+from feedback_intelligence_agent.schemas import DocumentChunk, MetadataFilters, SearchResult
 
 TOKEN_PATTERN = re.compile(r"[a-zA-Z0-9_]+")
 
@@ -70,8 +71,10 @@ class BM25Retriever:
         """Number of indexed chunks."""
         return len(self._chunks)
 
-    def search(self, question: str, *, top_k: int = 4) -> list[SearchResult]:
-        """Return chunks with a positive BM25 score for the question, best first."""
+    def search(
+        self, question: str, *, top_k: int = 4, filters: MetadataFilters | None = None
+    ) -> list[SearchResult]:
+        """Filter chunks before selecting positive BM25 results, best first."""
         if not question.strip():
             raise ValueError("question cannot be empty")
         if top_k <= 0:
@@ -89,6 +92,10 @@ class BM25Retriever:
         for index, (term_frequency, doc_length) in enumerate(
             zip(self._term_frequencies, self._doc_lengths, strict=True)
         ):
+            if filters is not None and not matches_metadata_filters(
+                self._chunks[index].metadata, filters
+            ):
+                continue
             score = self._score(query_terms, term_frequency, doc_length)
             if score > 0.0:
                 scored.append((score, index))

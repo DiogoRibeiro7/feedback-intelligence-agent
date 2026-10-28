@@ -11,7 +11,8 @@ import numpy.typing as npt
 from dataexcept import DataLoadingError, FileReadError, FileWriteError, wrapping
 from pydantic import BaseModel, Field, ValidationError
 
-from feedback_intelligence_agent.schemas import DocumentChunk, SearchResult
+from feedback_intelligence_agent.metadata_filters import matches_metadata_filters
+from feedback_intelligence_agent.schemas import DocumentChunk, MetadataFilters, SearchResult
 from feedback_intelligence_agent.source_ids import SourceIdMigrationError, migrate_legacy_chunks
 
 
@@ -39,9 +40,13 @@ class VectorStore(Protocol):
         """Add chunks and their (L2-normalised) vectors to the store."""
 
     def search(
-        self, query_vector: npt.NDArray[np.float64], *, top_k: int = 4
+        self,
+        query_vector: npt.NDArray[np.float64],
+        *,
+        top_k: int = 4,
+        filters: MetadataFilters | None = None,
     ) -> list[SearchResult]:
-        """Return the most similar chunks for a query vector, highest score first."""
+        """Filter eligible chunks before limiting results, highest score first."""
 
 
 class PersistedVectorStore(BaseModel):
@@ -155,9 +160,13 @@ class InMemoryVectorStore:
         return removed
 
     def search(
-        self, query_vector: npt.NDArray[np.float64], *, top_k: int = 4
+        self,
+        query_vector: npt.NDArray[np.float64],
+        *,
+        top_k: int = 4,
+        filters: MetadataFilters | None = None,
     ) -> list[SearchResult]:
-        """Return the most similar chunks for a query vector."""
+        """Return the most similar eligible chunks, filtering before top-k selection."""
         if top_k <= 0:
             raise ValueError("top_k must be positive")
         if query_vector.ndim == 2 and query_vector.shape[0] == 1:
@@ -169,13 +178,29 @@ class InMemoryVectorStore:
         if self.size == 0:
             return []
 
-        scores = self._vectors @ query_vector
-        candidate_count = min(top_k, self.size)
+        eligible_indices = np.arange(self.size)
+        eligible_vectors = self._vectors
+        if filters is not None and not filters.is_empty:
+            eligible_indices = np.asarray(
+                [
+                    index
+                    for index, chunk in enumerate(self._chunks)
+                    if matches_metadata_filters(chunk.metadata, filters)
+                ],
+                dtype=np.intp,
+            )
+            if not eligible_indices.size:
+                return []
+            eligible_vectors = self._vectors[eligible_indices]
+        scores = eligible_vectors @ query_vector
+        candidate_count = min(top_k, len(eligible_indices))
         candidate_indices = np.argpartition(scores, -candidate_count)[-candidate_count:]
         sorted_indices = candidate_indices[np.argsort(scores[candidate_indices])[::-1]]
 
         return [
-            SearchResult(chunk=self._chunks[int(index)], score=float(scores[int(index)]))
+            SearchResult(
+                chunk=self._chunks[int(eligible_indices[index])], score=float(scores[index])
+            )
             for index in sorted_indices
         ]
 

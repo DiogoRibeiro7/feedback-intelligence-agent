@@ -20,7 +20,8 @@ from typing import TYPE_CHECKING, Any
 import numpy as np
 import numpy.typing as npt
 
-from feedback_intelligence_agent.schemas import DocumentChunk, SearchResult
+from feedback_intelligence_agent.metadata_filters import matches_metadata_filters
+from feedback_intelligence_agent.schemas import DocumentChunk, MetadataFilters, SearchResult
 from feedback_intelligence_agent.source_ids import SourceIdMigrationError, migrate_legacy_chunks
 
 if TYPE_CHECKING:  # pragma: no cover - import only for static type checking.
@@ -153,9 +154,18 @@ class QdrantVectorStore:
         self._client.upsert(collection_name=self.collection_name, points=points)
 
     def search(
-        self, query_vector: npt.NDArray[np.float64], *, top_k: int = 4
+        self,
+        query_vector: npt.NDArray[np.float64],
+        *,
+        top_k: int = 4,
+        filters: MetadataFilters | None = None,
     ) -> list[SearchResult]:
-        """Return the most similar chunks for a query vector (highest score first)."""
+        """Page ranked points until enough eligible chunks are found or results end.
+
+        Local matching preserves case-insensitive and legacy metadata semantics
+        without requiring a payload migration. Selective filters may scan many
+        pages; each page is bounded, but there is no fixed candidate cutoff.
+        """
         if top_k <= 0:
             raise ValueError("top_k must be positive")
         if query_vector.ndim == 2 and query_vector.shape[0] == 1:
@@ -165,19 +175,29 @@ class QdrantVectorStore:
         if query_vector.shape[0] != self.dim:
             raise ValueError(f"expected query vector with dim={self.dim}")
 
-        response = self._client.query_points(
-            collection_name=self.collection_name,
-            query=query_vector.astype(np.float64, copy=False).tolist(),
-            limit=top_k,
-            with_payload=True,
-        )
-        return [
-            SearchResult(
-                chunk=_payload_to_chunk(point.payload or {}),
-                score=float(point.score),
+        filter_active = filters is not None and not filters.is_empty
+        page_size = max(64, top_k) if filter_active else top_k
+        offset = 0
+        results: list[SearchResult] = []
+        query = query_vector.astype(np.float64, copy=False).tolist()
+        while True:
+            response = self._client.query_points(
+                collection_name=self.collection_name,
+                query=query,
+                limit=page_size,
+                offset=offset,
+                with_payload=True,
             )
-            for point in response.points
-        ]
+            for point in response.points:
+                chunk = _payload_to_chunk(point.payload or {})
+                if filters is not None and not matches_metadata_filters(chunk.metadata, filters):
+                    continue
+                results.append(SearchResult(chunk=chunk, score=float(point.score)))
+                if len(results) == top_k:
+                    return results
+            if len(response.points) < page_size:
+                return results
+            offset += len(response.points)
 
 
 def _chunk_to_payload(chunk: DocumentChunk) -> dict[str, Any]:

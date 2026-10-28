@@ -6660,7 +6660,7 @@
       "module": "feedback_intelligence_agent.lexical_search",
       "bases": [],
       "source": "src/feedback_intelligence_agent/lexical_search.py",
-      "line": 26,
+      "line": 27,
       "public": true,
       "decorators": [],
       "summary": "In-memory Okapi BM25 retriever over document chunks.",
@@ -6672,13 +6672,13 @@
           "qualified_name": "feedback_intelligence_agent.lexical_search.BM25Retriever.search",
           "kind": "method",
           "module": "feedback_intelligence_agent.lexical_search",
-          "signature": "search(self, question: str, *, top_k: int = 4) -> list[SearchResult]",
+          "signature": "search(self, question: str, *, top_k: int = 4, filters: MetadataFilters | None = None) -> list[SearchResult]",
           "source": "src/feedback_intelligence_agent/lexical_search.py",
-          "line": 73,
+          "line": 74,
           "public": true,
           "is_async": false,
           "decorators": [],
-          "summary": "Return chunks with a positive BM25 score for the question, best first.",
+          "summary": "Filter chunks before selecting positive BM25 results, best first.",
           "description": "",
           "parameters": [
             {
@@ -6699,6 +6699,13 @@
               "name": "top_k",
               "annotation": "int",
               "default": "4",
+              "kind": "keyword-only",
+              "description": ""
+            },
+            {
+              "name": "filters",
+              "annotation": "MetadataFilters | None",
+              "default": "None",
               "kind": "keyword-only",
               "description": ""
             }
@@ -6726,7 +6733,7 @@
           "module": "feedback_intelligence_agent.lexical_search",
           "signature": "size(self) -> int",
           "source": "src/feedback_intelligence_agent/lexical_search.py",
-          "line": 69,
+          "line": 70,
           "public": true,
           "is_async": false,
           "decorators": [
@@ -6760,7 +6767,7 @@
         "module": "feedback_intelligence_agent.lexical_search",
         "signature": "__init__(self, chunks: Sequence[DocumentChunk], *, texts: Sequence[str] | None = None, k1: float = 1.5, b: float = 0.75, query_expander: QueryExpander | None = None) -> None",
         "source": "src/feedback_intelligence_agent/lexical_search.py",
-        "line": 34,
+        "line": 35,
         "public": false,
         "is_async": false,
         "decorators": [],
@@ -9551,7 +9558,7 @@
         "RuntimeError"
       ],
       "source": "src/feedback_intelligence_agent/qdrant_store.py",
-      "line": 30,
+      "line": 31,
       "public": true,
       "decorators": [],
       "summary": "Raised when the Qdrant store cannot be configured or reached.",
@@ -9560,259 +9567,6 @@
       "methods": [],
       "properties": [],
       "constructor": null,
-      "notes": ""
-    },
-    {
-      "name": "QdrantVectorStore",
-      "qualified_name": "feedback_intelligence_agent.qdrant_store.QdrantVectorStore",
-      "kind": "class",
-      "module": "feedback_intelligence_agent.qdrant_store",
-      "bases": [],
-      "source": "src/feedback_intelligence_agent/qdrant_store.py",
-      "line": 57,
-      "public": true,
-      "decorators": [],
-      "summary": "Cosine-similarity vector store backed by a Qdrant collection.",
-      "description": "The collection is created on demand using ``Distance.COSINE`` so the scoring\norientation matches the in-memory store: higher scores mean more similar.",
-      "attributes": [],
-      "methods": [
-        {
-          "name": "add",
-          "qualified_name": "feedback_intelligence_agent.qdrant_store.QdrantVectorStore.add",
-          "kind": "method",
-          "module": "feedback_intelligence_agent.qdrant_store",
-          "signature": "add(self, chunks: list[DocumentChunk], vectors: npt.NDArray[np.float64]) -> None",
-          "source": "src/feedback_intelligence_agent/qdrant_store.py",
-          "line": 133,
-          "public": true,
-          "is_async": false,
-          "decorators": [],
-          "summary": "Upsert chunks and their vectors into the collection.",
-          "description": "",
-          "parameters": [
-            {
-              "name": "self",
-              "annotation": null,
-              "default": null,
-              "kind": "positional-or-keyword",
-              "description": ""
-            },
-            {
-              "name": "chunks",
-              "annotation": "list[DocumentChunk]",
-              "default": null,
-              "kind": "positional-or-keyword",
-              "description": ""
-            },
-            {
-              "name": "vectors",
-              "annotation": "npt.NDArray[np.float64]",
-              "default": null,
-              "kind": "positional-or-keyword",
-              "description": ""
-            }
-          ],
-          "returns": {
-            "annotation": "None",
-            "description": ""
-          },
-          "raises": [
-            {
-              "exception": "ValueError",
-              "description": ""
-            }
-          ],
-          "examples": "",
-          "notes": "",
-          "see_also": []
-        },
-        {
-          "name": "search",
-          "qualified_name": "feedback_intelligence_agent.qdrant_store.QdrantVectorStore.search",
-          "kind": "method",
-          "module": "feedback_intelligence_agent.qdrant_store",
-          "signature": "search(self, query_vector: npt.NDArray[np.float64], *, top_k: int = 4) -> list[SearchResult]",
-          "source": "src/feedback_intelligence_agent/qdrant_store.py",
-          "line": 155,
-          "public": true,
-          "is_async": false,
-          "decorators": [],
-          "summary": "Return the most similar chunks for a query vector (highest score first).",
-          "description": "",
-          "parameters": [
-            {
-              "name": "self",
-              "annotation": null,
-              "default": null,
-              "kind": "positional-or-keyword",
-              "description": ""
-            },
-            {
-              "name": "query_vector",
-              "annotation": "npt.NDArray[np.float64]",
-              "default": null,
-              "kind": "positional-or-keyword",
-              "description": ""
-            },
-            {
-              "name": "top_k",
-              "annotation": "int",
-              "default": "4",
-              "kind": "keyword-only",
-              "description": ""
-            }
-          ],
-          "returns": {
-            "annotation": "list[SearchResult]",
-            "description": ""
-          },
-          "raises": [
-            {
-              "exception": "ValueError",
-              "description": ""
-            }
-          ],
-          "examples": "",
-          "notes": "",
-          "see_also": []
-        }
-      ],
-      "properties": [
-        {
-          "name": "size",
-          "qualified_name": "feedback_intelligence_agent.qdrant_store.QdrantVectorStore.size",
-          "kind": "property",
-          "module": "feedback_intelligence_agent.qdrant_store",
-          "signature": "size(self) -> int",
-          "source": "src/feedback_intelligence_agent/qdrant_store.py",
-          "line": 111,
-          "public": true,
-          "is_async": false,
-          "decorators": [
-            "property"
-          ],
-          "summary": "Number of indexed chunks in the collection.",
-          "description": "",
-          "parameters": [
-            {
-              "name": "self",
-              "annotation": null,
-              "default": null,
-              "kind": "positional-or-keyword",
-              "description": ""
-            }
-          ],
-          "returns": {
-            "annotation": "int",
-            "description": ""
-          },
-          "raises": [],
-          "examples": "",
-          "notes": "",
-          "see_also": []
-        },
-        {
-          "name": "chunks",
-          "qualified_name": "feedback_intelligence_agent.qdrant_store.QdrantVectorStore.chunks",
-          "kind": "property",
-          "module": "feedback_intelligence_agent.qdrant_store",
-          "signature": "chunks(self) -> list[DocumentChunk]",
-          "source": "src/feedback_intelligence_agent/qdrant_store.py",
-          "line": 116,
-          "public": true,
-          "is_async": false,
-          "decorators": [
-            "property"
-          ],
-          "summary": "Return all indexed chunks, reconstructed from point payloads.",
-          "description": "",
-          "parameters": [
-            {
-              "name": "self",
-              "annotation": null,
-              "default": null,
-              "kind": "positional-or-keyword",
-              "description": ""
-            }
-          ],
-          "returns": {
-            "annotation": "list[DocumentChunk]",
-            "description": ""
-          },
-          "raises": [],
-          "examples": "",
-          "notes": "",
-          "see_also": []
-        }
-      ],
-      "constructor": {
-        "name": "__init__",
-        "qualified_name": "feedback_intelligence_agent.qdrant_store.QdrantVectorStore.__init__",
-        "kind": "method",
-        "module": "feedback_intelligence_agent.qdrant_store",
-        "signature": "__init__(self, dim: int, *, url: str = 'http://localhost:6333', collection_name: str = 'feedback_intelligence', client: QdrantClient | None = None) -> None",
-        "source": "src/feedback_intelligence_agent/qdrant_store.py",
-        "line": 64,
-        "public": false,
-        "is_async": false,
-        "decorators": [],
-        "summary": "Connect to Qdrant and ensure the target collection exists.",
-        "description": "``client`` can be injected for testing; otherwise a real ``QdrantClient``\nis created against ``url``.",
-        "parameters": [
-          {
-            "name": "self",
-            "annotation": null,
-            "default": null,
-            "kind": "positional-or-keyword",
-            "description": ""
-          },
-          {
-            "name": "dim",
-            "annotation": "int",
-            "default": null,
-            "kind": "positional-or-keyword",
-            "description": ""
-          },
-          {
-            "name": "url",
-            "annotation": "str",
-            "default": "'http://localhost:6333'",
-            "kind": "keyword-only",
-            "description": ""
-          },
-          {
-            "name": "collection_name",
-            "annotation": "str",
-            "default": "'feedback_intelligence'",
-            "kind": "keyword-only",
-            "description": ""
-          },
-          {
-            "name": "client",
-            "annotation": "QdrantClient | None",
-            "default": "None",
-            "kind": "keyword-only",
-            "description": ""
-          }
-        ],
-        "returns": {
-          "annotation": "None",
-          "description": ""
-        },
-        "raises": [
-          {
-            "exception": "ValueError",
-            "description": ""
-          },
-          {
-            "exception": "QdrantStoreError",
-            "description": ""
-          }
-        ],
-        "examples": "",
-        "notes": "",
-        "see_also": []
-      },
       "notes": ""
     }
   ]

@@ -22,7 +22,7 @@ Module & Lines & Objects & Summary \\
 \endlastfoot
 \texttt{feedback\_\allowbreak{}intelligence\_\allowbreak{}agent} & 7 & 0 & Feedback Intelligence Agent package. \\
 \texttt{active\_\allowbreak{}learning} & 215 & 8 & Workflow state for active-learning follow-up items. \\
-\texttt{agent} & 564 & 3 & Agent orchestration for the feedback intelligence agent. \\
+\texttt{agent} & 510 & 3 & Agent orchestration for the feedback intelligence agent. \\
 \texttt{api} & 639 & 1 & FastAPI application. \\
 \texttt{auth} & 121 & 8 & Optional API-key authorization for the FastAPI service. \\
 \texttt{benchmarking} & 286 & 13 & Latency and throughput benchmarks for the RAG pipeline. \\
@@ -43,28 +43,29 @@ Module & Lines & Objects & Summary \\
 \texttt{ingestion} & 58 & 2 & Feedback ingestion utilities. \\
 \texttt{jobs} & 293 & 9 & Asynchronous ingestion jobs with status tracking. \\
 \texttt{lakehouse} & 398 & 7 & Local lakehouse-style feedback exports. \\
-\texttt{lexical\_\allowbreak{}search} & 113 & 3 & Lexical BM25 search implemented from scratch. \\
+\texttt{lexical\_\allowbreak{}search} & 120 & 3 & Lexical BM25 search implemented from scratch. \\
 \texttt{llm} & 657 & 11 & LLM provider abstraction. \\
 \texttt{memory} & 345 & 11 & Conversation memory and follow-up query rewriting. \\
+\texttt{metadata\_\allowbreak{}filters} & 76 & 1 & Shared metadata matching for retrieval and the agent's final evidence check. \\
 \texttt{output\_\allowbreak{}parser} & 181 & 4 & Structured LLM output parsing and deterministic repair. \\
 \texttt{privacy} & 59 & 6 & Deterministic PII redaction helpers. \\
 \texttt{prompt\_\allowbreak{}registry} & 159 & 6 & Versioned prompt registry. \\
 \texttt{prompts} & 91 & 5 & Prompt construction utilities and the default prompt registry. \\
-\texttt{qdrant\_\allowbreak{}store} & 217 & 2 & Optional Qdrant-backed vector store. \\
+\texttt{qdrant\_\allowbreak{}store} & 237 & 2 & Optional Qdrant-backed vector store. \\
 \texttt{query\_\allowbreak{}expansion} & 93 & 5 & Deterministic query expansion for product-specific terminology. \\
 \texttt{rate\_\allowbreak{}limit} & 76 & 2 & Small in-memory fixed-window rate limiter for API deployments. \\
 \texttt{reports} & 279 & 8 & Saved insight reports for product and analyst workflows. \\
 \texttt{reranking} & 137 & 2 & Local candidate reranking for retrieved feedback chunks. \\
 \texttt{resilience} & 148 & 4 & Retry, timeout, and circuit-breaker wrappers for LLM providers. \\
-\texttt{retrieval} & 113 & 4 & Retrieval helpers. \\
+\texttt{retrieval} & 131 & 4 & Retrieval helpers. \\
 \texttt{safe\_\allowbreak{}paths} & 23 & 1 & Constrain JSON record identifiers to one file under a configured store root. \\
-\texttt{schemas} & 311 & 16 & Typed domain schemas used across the project. \\
+\texttt{schemas} & 310 & 16 & Typed domain schemas used across the project. \\
 \texttt{source\_\allowbreak{}ids} & 76 & 3 & Collision-free source identifiers and migration of legacy chunk identities. \\
 \texttt{streaming\_\allowbreak{}ingestion} & 524 & 12 & Streaming ingestion primitives for feedback events. \\
 \texttt{synthetic\_\allowbreak{}data} & 318 & 8 & Synthetic customer feedback dataset generation. \\
 \texttt{telemetry} & 352 & 13 & Structured logging and OpenTelemetry-style telemetry. \\
 \texttt{tools} & 565 & 21 & Deterministic tool-use framework for the feedback intelligence agent. \\
-\texttt{vector\_\allowbreak{}store} & 231 & 3 & A small vector store with JSON persistence. \\
+\texttt{vector\_\allowbreak{}store} & 256 & 3 & A small vector store with JSON persistence. \\
 \end{longtable}
 
 \apibreak
@@ -91,8 +92,8 @@ Workflow state for active-learning follow-up items.
 \label{module:feedback_intelligence_agent.agent}\index{Modules!agent}
 
 Agent orchestration for the feedback intelligence agent.
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}agent.\allowbreak{}py}, 564 lines
-\apifield{Imports}\texttt{citations}, \texttt{guardrails}, \texttt{hallucination}, \texttt{llm}, \texttt{memory}, \texttt{output\_\allowbreak{}parser}, \texttt{prompts}, \texttt{reranking}, \texttt{retrieval}, \texttt{schemas}, \texttt{telemetry}, \texttt{tools}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}agent.\allowbreak{}py}, 510 lines
+\apifield{Imports}\texttt{citations}, \texttt{guardrails}, \texttt{hallucination}, \texttt{llm}, \texttt{memory}, \texttt{metadata\_\allowbreak{}filters}, \texttt{output\_\allowbreak{}parser}, \texttt{prompts}, \texttt{reranking}, \texttt{retrieval}, \texttt{schemas}, \texttt{telemetry}, \texttt{tools}
 \apifield{Classes}\cref{class:feedback_intelligence_agent.agent.RouteRule}, \cref{class:feedback_intelligence_agent.agent.FeedbackInsightAgent}
 \apifield{Constants}\texttt{ROUTE\_\allowbreak{}RULES}
 
@@ -335,8 +336,8 @@ Local lakehouse-style feedback exports.
 \label{module:feedback_intelligence_agent.lexical_search}\index{Modules!lexical\_search}
 
 Lexical BM25 search implemented from scratch.
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}lexical\_\allowbreak{}search.\allowbreak{}py}, 113 lines
-\apifield{Imports}\texttt{query\_\allowbreak{}expansion}, \texttt{schemas}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}lexical\_\allowbreak{}search.\allowbreak{}py}, 120 lines
+\apifield{Imports}\texttt{metadata\_\allowbreak{}filters}, \texttt{query\_\allowbreak{}expansion}, \texttt{schemas}
 \apifield{Classes}\cref{class:feedback_intelligence_agent.lexical_search.BM25Retriever}
 \apifield{Functions}\cref{func:feedback_intelligence_agent.lexical_search.tokenize}
 \apifield{Constants}\texttt{TOKEN\_\allowbreak{}PATTERN}
@@ -364,6 +365,15 @@ Conversation memory and follow-up query rewriting.
 \apifield{Details}The module provides three building blocks:
 
 1. Typed conversation state (\texttt{ConversationTurn}, \texttt{ConversationMemory}) that records what the user asked, what the agent answered, and which documents grounded the answer. 2. Pluggable persistence (\texttt{InMemoryConversationStore} for tests and \texttt{JsonConversationStore} for local JSON files under \texttt{.\allowbreak{}artifacts/\allowbreak{}}). 3. Deterministic follow-up query rewriting (\texttt{DeterministicQueryRewriter}) that converts elliptical follow-ups ("What about pricing?") and pronoun references ("Why do they complain about it?") into standalone questions using only entities from the previous turn. Only the rewritten standalone question reaches retrieval, so the index is never queried with the full conversation history. An optional \texttt{LLMQueryRewriter} can delegate rewriting to an LLM provider, but the deterministic local rewriter is the default and requires no external APIs.
+
+\apibreak
+\section{\texttt{metadata\_filters}}
+\label{module:feedback_intelligence_agent.metadata_filters}\index{Modules!metadata\_filters}
+
+Shared metadata matching for retrieval and the agent's final evidence check.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}metadata\_\allowbreak{}filters.\allowbreak{}py}, 76 lines
+\apifield{Imports}\texttt{schemas}
+\apifield{Functions}\cref{func:feedback_intelligence_agent.metadata_filters.matches_metadata_filters}
 
 \apibreak
 \section{\texttt{output\_parser}}
@@ -413,8 +423,8 @@ Prompt construction utilities and the default prompt registry.
 \label{module:feedback_intelligence_agent.qdrant_store}\index{Modules!qdrant\_store}
 
 Optional Qdrant-backed vector store.
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}qdrant\_\allowbreak{}store.\allowbreak{}py}, 217 lines
-\apifield{Imports}\texttt{schemas}, \texttt{source\_\allowbreak{}ids}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}qdrant\_\allowbreak{}store.\allowbreak{}py}, 237 lines
+\apifield{Imports}\texttt{metadata\_\allowbreak{}filters}, \texttt{schemas}, \texttt{source\_\allowbreak{}ids}
 \apifield{Classes}\cref{class:feedback_intelligence_agent.qdrant_store.QdrantStoreError}, \cref{class:feedback_intelligence_agent.qdrant_store.QdrantVectorStore}
 \apifield{Details}The store mirrors the semantics of the default \texttt{InMemoryVectorStore} but persists vectors in a running Qdrant instance instead of a local JSON file. It satisfies the same \texttt{VectorStore} protocol, so the retrieval layer treats both stores identically.
 
@@ -471,7 +481,7 @@ Retry, timeout, and circuit-breaker wrappers for LLM providers.
 \label{module:feedback_intelligence_agent.retrieval}\index{Modules!retrieval}
 
 Retrieval helpers.
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}retrieval.\allowbreak{}py}, 113 lines
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}retrieval.\allowbreak{}py}, 131 lines
 \apifield{Imports}\texttt{embeddings}, \texttt{query\_\allowbreak{}expansion}, \texttt{schemas}, \texttt{vector\_\allowbreak{}store}
 \apifield{Classes}\cref{class:feedback_intelligence_agent.retrieval.Retriever}, \cref{class:feedback_intelligence_agent.retrieval.QueryEngine}, \cref{class:feedback_intelligence_agent.retrieval.HybridRetriever}
 \apifield{Functions}\cref{func:feedback_intelligence_agent.retrieval.min_max_normalize}
@@ -489,7 +499,7 @@ Constrain JSON record identifiers to one file under a configured store root.
 \label{module:feedback_intelligence_agent.schemas}\index{Modules!schemas}
 
 Typed domain schemas used across the project.
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}schemas.\allowbreak{}py}, 311 lines
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}schemas.\allowbreak{}py}, 310 lines
 \apifield{Imports}\texttt{guardrails}
 \apifield{Classes}\cref{class:feedback_intelligence_agent.schemas.FeedbackChannel}, \cref{class:feedback_intelligence_agent.schemas.FeedbackRecord}, \cref{class:feedback_intelligence_agent.schemas.DocumentChunk}, \cref{class:feedback_intelligence_agent.schemas.SearchResult}, \cref{class:feedback_intelligence_agent.schemas.MetadataFilters}, \cref{class:feedback_intelligence_agent.schemas.Citation}, \cref{class:feedback_intelligence_agent.schemas.ToolRunRecord}, \cref{class:feedback_intelligence_agent.schemas.AgentAnswer}, \cref{class:feedback_intelligence_agent.schemas.QueryRequest}, \cref{class:feedback_intelligence_agent.schemas.QueryResponse}, \cref{class:feedback_intelligence_agent.schemas.StreamMetadata}, \cref{class:feedback_intelligence_agent.schemas.ChatRequest}, \cref{class:feedback_intelligence_agent.schemas.ChatResponse}, \cref{class:feedback_intelligence_agent.schemas.IndexRequest}, \cref{class:feedback_intelligence_agent.schemas.JobSubmitResponse}, \cref{class:feedback_intelligence_agent.schemas.EvaluationCase}
 
@@ -564,6 +574,6 @@ No function-calling API is involved: routing and execution are keyword and rule 
 \label{module:feedback_intelligence_agent.vector_store}\index{Modules!vector\_store}
 
 A small vector store with JSON persistence.
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}vector\_\allowbreak{}store.\allowbreak{}py}, 231 lines
-\apifield{Imports}\texttt{schemas}, \texttt{source\_\allowbreak{}ids}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}vector\_\allowbreak{}store.\allowbreak{}py}, 256 lines
+\apifield{Imports}\texttt{metadata\_\allowbreak{}filters}, \texttt{schemas}, \texttt{source\_\allowbreak{}ids}
 \apifield{Classes}\cref{class:feedback_intelligence_agent.vector_store.VectorStore}, \cref{class:feedback_intelligence_agent.vector_store.PersistedVectorStore}, \cref{class:feedback_intelligence_agent.vector_store.InMemoryVectorStore}

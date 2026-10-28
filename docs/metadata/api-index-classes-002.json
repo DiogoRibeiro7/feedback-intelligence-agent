@@ -1,6 +1,266 @@
 {
   "classes": [
     {
+      "name": "QdrantVectorStore",
+      "qualified_name": "feedback_intelligence_agent.qdrant_store.QdrantVectorStore",
+      "kind": "class",
+      "module": "feedback_intelligence_agent.qdrant_store",
+      "bases": [],
+      "source": "src/feedback_intelligence_agent/qdrant_store.py",
+      "line": 58,
+      "public": true,
+      "decorators": [],
+      "summary": "Cosine-similarity vector store backed by a Qdrant collection.",
+      "description": "The collection is created on demand using ``Distance.COSINE`` so the scoring\norientation matches the in-memory store: higher scores mean more similar.",
+      "attributes": [],
+      "methods": [
+        {
+          "name": "add",
+          "qualified_name": "feedback_intelligence_agent.qdrant_store.QdrantVectorStore.add",
+          "kind": "method",
+          "module": "feedback_intelligence_agent.qdrant_store",
+          "signature": "add(self, chunks: list[DocumentChunk], vectors: npt.NDArray[np.float64]) -> None",
+          "source": "src/feedback_intelligence_agent/qdrant_store.py",
+          "line": 134,
+          "public": true,
+          "is_async": false,
+          "decorators": [],
+          "summary": "Upsert chunks and their vectors into the collection.",
+          "description": "",
+          "parameters": [
+            {
+              "name": "self",
+              "annotation": null,
+              "default": null,
+              "kind": "positional-or-keyword",
+              "description": ""
+            },
+            {
+              "name": "chunks",
+              "annotation": "list[DocumentChunk]",
+              "default": null,
+              "kind": "positional-or-keyword",
+              "description": ""
+            },
+            {
+              "name": "vectors",
+              "annotation": "npt.NDArray[np.float64]",
+              "default": null,
+              "kind": "positional-or-keyword",
+              "description": ""
+            }
+          ],
+          "returns": {
+            "annotation": "None",
+            "description": ""
+          },
+          "raises": [
+            {
+              "exception": "ValueError",
+              "description": ""
+            }
+          ],
+          "examples": "",
+          "notes": "",
+          "see_also": []
+        },
+        {
+          "name": "search",
+          "qualified_name": "feedback_intelligence_agent.qdrant_store.QdrantVectorStore.search",
+          "kind": "method",
+          "module": "feedback_intelligence_agent.qdrant_store",
+          "signature": "search(self, query_vector: npt.NDArray[np.float64], *, top_k: int = 4, filters: MetadataFilters | None = None) -> list[SearchResult]",
+          "source": "src/feedback_intelligence_agent/qdrant_store.py",
+          "line": 156,
+          "public": true,
+          "is_async": false,
+          "decorators": [],
+          "summary": "Page ranked points until enough eligible chunks are found or results end.",
+          "description": "Local matching preserves case-insensitive and legacy metadata semantics\nwithout requiring a payload migration. Selective filters may scan many\npages; each page is bounded, but there is no fixed candidate cutoff.",
+          "parameters": [
+            {
+              "name": "self",
+              "annotation": null,
+              "default": null,
+              "kind": "positional-or-keyword",
+              "description": ""
+            },
+            {
+              "name": "query_vector",
+              "annotation": "npt.NDArray[np.float64]",
+              "default": null,
+              "kind": "positional-or-keyword",
+              "description": ""
+            },
+            {
+              "name": "top_k",
+              "annotation": "int",
+              "default": "4",
+              "kind": "keyword-only",
+              "description": ""
+            },
+            {
+              "name": "filters",
+              "annotation": "MetadataFilters | None",
+              "default": "None",
+              "kind": "keyword-only",
+              "description": ""
+            }
+          ],
+          "returns": {
+            "annotation": "list[SearchResult]",
+            "description": ""
+          },
+          "raises": [
+            {
+              "exception": "ValueError",
+              "description": ""
+            }
+          ],
+          "examples": "",
+          "notes": "",
+          "see_also": []
+        }
+      ],
+      "properties": [
+        {
+          "name": "size",
+          "qualified_name": "feedback_intelligence_agent.qdrant_store.QdrantVectorStore.size",
+          "kind": "property",
+          "module": "feedback_intelligence_agent.qdrant_store",
+          "signature": "size(self) -> int",
+          "source": "src/feedback_intelligence_agent/qdrant_store.py",
+          "line": 112,
+          "public": true,
+          "is_async": false,
+          "decorators": [
+            "property"
+          ],
+          "summary": "Number of indexed chunks in the collection.",
+          "description": "",
+          "parameters": [
+            {
+              "name": "self",
+              "annotation": null,
+              "default": null,
+              "kind": "positional-or-keyword",
+              "description": ""
+            }
+          ],
+          "returns": {
+            "annotation": "int",
+            "description": ""
+          },
+          "raises": [],
+          "examples": "",
+          "notes": "",
+          "see_also": []
+        },
+        {
+          "name": "chunks",
+          "qualified_name": "feedback_intelligence_agent.qdrant_store.QdrantVectorStore.chunks",
+          "kind": "property",
+          "module": "feedback_intelligence_agent.qdrant_store",
+          "signature": "chunks(self) -> list[DocumentChunk]",
+          "source": "src/feedback_intelligence_agent/qdrant_store.py",
+          "line": 117,
+          "public": true,
+          "is_async": false,
+          "decorators": [
+            "property"
+          ],
+          "summary": "Return all indexed chunks, reconstructed from point payloads.",
+          "description": "",
+          "parameters": [
+            {
+              "name": "self",
+              "annotation": null,
+              "default": null,
+              "kind": "positional-or-keyword",
+              "description": ""
+            }
+          ],
+          "returns": {
+            "annotation": "list[DocumentChunk]",
+            "description": ""
+          },
+          "raises": [],
+          "examples": "",
+          "notes": "",
+          "see_also": []
+        }
+      ],
+      "constructor": {
+        "name": "__init__",
+        "qualified_name": "feedback_intelligence_agent.qdrant_store.QdrantVectorStore.__init__",
+        "kind": "method",
+        "module": "feedback_intelligence_agent.qdrant_store",
+        "signature": "__init__(self, dim: int, *, url: str = 'http://localhost:6333', collection_name: str = 'feedback_intelligence', client: QdrantClient | None = None) -> None",
+        "source": "src/feedback_intelligence_agent/qdrant_store.py",
+        "line": 65,
+        "public": false,
+        "is_async": false,
+        "decorators": [],
+        "summary": "Connect to Qdrant and ensure the target collection exists.",
+        "description": "``client`` can be injected for testing; otherwise a real ``QdrantClient``\nis created against ``url``.",
+        "parameters": [
+          {
+            "name": "self",
+            "annotation": null,
+            "default": null,
+            "kind": "positional-or-keyword",
+            "description": ""
+          },
+          {
+            "name": "dim",
+            "annotation": "int",
+            "default": null,
+            "kind": "positional-or-keyword",
+            "description": ""
+          },
+          {
+            "name": "url",
+            "annotation": "str",
+            "default": "'http://localhost:6333'",
+            "kind": "keyword-only",
+            "description": ""
+          },
+          {
+            "name": "collection_name",
+            "annotation": "str",
+            "default": "'feedback_intelligence'",
+            "kind": "keyword-only",
+            "description": ""
+          },
+          {
+            "name": "client",
+            "annotation": "QdrantClient | None",
+            "default": "None",
+            "kind": "keyword-only",
+            "description": ""
+          }
+        ],
+        "returns": {
+          "annotation": "None",
+          "description": ""
+        },
+        "raises": [
+          {
+            "exception": "ValueError",
+            "description": ""
+          },
+          {
+            "exception": "QdrantStoreError",
+            "description": ""
+          }
+        ],
+        "examples": "",
+        "notes": "",
+        "see_also": []
+      },
+      "notes": ""
+    },
+    {
       "name": "ProductTerminologyExpander",
       "qualified_name": "feedback_intelligence_agent.query_expansion.ProductTerminologyExpander",
       "kind": "class",
@@ -1858,7 +2118,7 @@
       "module": "feedback_intelligence_agent.retrieval",
       "bases": [],
       "source": "src/feedback_intelligence_agent/retrieval.py",
-      "line": 50,
+      "line": 56,
       "public": true,
       "decorators": [],
       "summary": "Combine dense and lexical retrieval with weighted, normalized scores.",
@@ -1870,9 +2130,9 @@
           "qualified_name": "feedback_intelligence_agent.retrieval.HybridRetriever.search",
           "kind": "method",
           "module": "feedback_intelligence_agent.retrieval",
-          "signature": "search(self, question: str, *, top_k: int = 4) -> list[SearchResult]",
+          "signature": "search(self, question: str, *, top_k: int = 4, filters: MetadataFilters | None = None) -> list[SearchResult]",
           "source": "src/feedback_intelligence_agent/retrieval.py",
-          "line": 78,
+          "line": 84,
           "public": true,
           "is_async": false,
           "decorators": [],
@@ -1897,6 +2157,13 @@
               "name": "top_k",
               "annotation": "int",
               "default": "4",
+              "kind": "keyword-only",
+              "description": ""
+            },
+            {
+              "name": "filters",
+              "annotation": "MetadataFilters | None",
+              "default": "None",
               "kind": "keyword-only",
               "description": ""
             }
@@ -1924,7 +2191,7 @@
         "module": "feedback_intelligence_agent.retrieval",
         "signature": "__init__(self, dense: Retriever, lexical: Retriever, *, dense_weight: float = 0.6, lexical_weight: float = 0.4) -> None",
         "source": "src/feedback_intelligence_agent/retrieval.py",
-        "line": 59,
+        "line": 65,
         "public": false,
         "is_async": false,
         "decorators": [],
@@ -1990,7 +2257,7 @@
       "module": "feedback_intelligence_agent.retrieval",
       "bases": [],
       "source": "src/feedback_intelligence_agent/retrieval.py",
-      "line": 22,
+      "line": 24,
       "public": true,
       "decorators": [],
       "summary": "Embed user questions and retrieve relevant document chunks.",
@@ -2002,9 +2269,9 @@
           "qualified_name": "feedback_intelligence_agent.retrieval.QueryEngine.search",
           "kind": "method",
           "module": "feedback_intelligence_agent.retrieval",
-          "signature": "search(self, question: str, *, top_k: int = 4) -> list[SearchResult]",
+          "signature": "search(self, question: str, *, top_k: int = 4, filters: MetadataFilters | None = None) -> list[SearchResult]",
           "source": "src/feedback_intelligence_agent/retrieval.py",
-          "line": 37,
+          "line": 39,
           "public": true,
           "is_async": false,
           "decorators": [],
@@ -2029,6 +2296,13 @@
               "name": "top_k",
               "annotation": "int",
               "default": "4",
+              "kind": "keyword-only",
+              "description": ""
+            },
+            {
+              "name": "filters",
+              "annotation": "MetadataFilters | None",
+              "default": "None",
               "kind": "keyword-only",
               "description": ""
             }
@@ -2056,7 +2330,7 @@
         "module": "feedback_intelligence_agent.retrieval",
         "signature": "__init__(self, embedding_model: EmbeddingModel, vector_store: VectorStore, *, query_expander: QueryExpander | None = None) -> None",
         "source": "src/feedback_intelligence_agent/retrieval.py",
-        "line": 25,
+        "line": 27,
         "public": false,
         "is_async": false,
         "decorators": [],
@@ -2124,13 +2398,13 @@
           "qualified_name": "feedback_intelligence_agent.retrieval.Retriever.search",
           "kind": "method",
           "module": "feedback_intelligence_agent.retrieval",
-          "signature": "search(self, question: str, *, top_k: int = 4) -> list[SearchResult]",
+          "signature": "search(self, question: str, *, top_k: int = 4, filters: MetadataFilters | None = None) -> list[SearchResult]",
           "source": "src/feedback_intelligence_agent/retrieval.py",
           "line": 17,
           "public": true,
           "is_async": false,
           "decorators": [],
-          "summary": "Return the most relevant chunks for a natural-language question.",
+          "summary": "Apply metadata filters before limiting the most relevant chunks.",
           "description": "",
           "parameters": [
             {
@@ -2151,6 +2425,13 @@
               "name": "top_k",
               "annotation": "int",
               "default": "4",
+              "kind": "keyword-only",
+              "description": ""
+            },
+            {
+              "name": "filters",
+              "annotation": "MetadataFilters | None",
+              "default": "None",
               "kind": "keyword-only",
               "description": ""
             }
@@ -2178,7 +2459,7 @@
         "BaseModel"
       ],
       "source": "src/feedback_intelligence_agent/schemas.py",
-      "line": 149,
+      "line": 148,
       "public": true,
       "decorators": [],
       "summary": "Final answer returned by the insight agent.",
@@ -2271,7 +2552,7 @@
         "BaseModel"
       ],
       "source": "src/feedback_intelligence_agent/schemas.py",
-      "line": 231,
+      "line": 230,
       "public": true,
       "decorators": [],
       "summary": "API request for the `/chat` endpoint.",
@@ -2381,7 +2662,7 @@
           "module": "feedback_intelligence_agent.schemas",
           "signature": "validate_filter_ranges(self) -> ChatRequest",
           "source": "src/feedback_intelligence_agent/schemas.py",
-          "line": 251,
+          "line": 250,
           "public": true,
           "is_async": false,
           "decorators": [
@@ -2414,7 +2695,7 @@
           "module": "feedback_intelligence_agent.schemas",
           "signature": "metadata_filters(self) -> MetadataFilters | None",
           "source": "src/feedback_intelligence_agent/schemas.py",
-          "line": 256,
+          "line": 255,
           "public": true,
           "is_async": false,
           "decorators": [],
@@ -2452,7 +2733,7 @@
         "BaseModel"
       ],
       "source": "src/feedback_intelligence_agent/schemas.py",
-      "line": 270,
+      "line": 269,
       "public": true,
       "decorators": [],
       "summary": "API response for the `/chat` endpoint.",
@@ -2489,7 +2770,7 @@
         "BaseModel"
       ],
       "source": "src/feedback_intelligence_agent/schemas.py",
-      "line": 118,
+      "line": 117,
       "public": true,
       "decorators": [],
       "summary": "Evidence citation exposed to agent and API consumers.",
@@ -2613,7 +2894,7 @@
         "BaseModel"
       ],
       "source": "src/feedback_intelligence_agent/schemas.py",
-      "line": 296,
+      "line": 295,
       "public": true,
       "decorators": [],
       "summary": "Single evaluation case covering retrieval and answer quality.",
@@ -2919,7 +3200,7 @@
         "BaseModel"
       ],
       "source": "src/feedback_intelligence_agent/schemas.py",
-      "line": 277,
+      "line": 276,
       "public": true,
       "decorators": [],
       "summary": "API request for rebuilding the index from a CSV path.",
@@ -2958,7 +3239,7 @@
         "BaseModel"
       ],
       "source": "src/feedback_intelligence_agent/schemas.py",
-      "line": 284,
+      "line": 283,
       "public": true,
       "decorators": [],
       "summary": "API response returned when an ingestion job is submitted.",
@@ -2998,7 +3279,7 @@
       "line": 66,
       "public": true,
       "decorators": [],
-      "summary": "Optional filters applied to chunk metadata before final ranking.",
+      "summary": "Optional filters applied to chunk metadata before retrieval candidate limits.",
       "description": "",
       "attributes": [
         {
@@ -3157,7 +3438,7 @@
           "module": "feedback_intelligence_agent.schemas",
           "signature": "is_empty(self) -> bool",
           "source": "src/feedback_intelligence_agent/schemas.py",
-          "line": 103,
+          "line": 102,
           "public": true,
           "is_async": false,
           "decorators": [
@@ -3196,7 +3477,7 @@
         "BaseModel"
       ],
       "source": "src/feedback_intelligence_agent/schemas.py",
-      "line": 170,
+      "line": 169,
       "public": true,
       "decorators": [],
       "summary": "API request for the `/query` endpoint.",
@@ -3298,7 +3579,7 @@
           "module": "feedback_intelligence_agent.schemas",
           "signature": "validate_filter_ranges(self) -> QueryRequest",
           "source": "src/feedback_intelligence_agent/schemas.py",
-          "line": 184,
+          "line": 183,
           "public": true,
           "is_async": false,
           "decorators": [
@@ -3331,7 +3612,7 @@
           "module": "feedback_intelligence_agent.schemas",
           "signature": "metadata_filters(self) -> MetadataFilters | None",
           "source": "src/feedback_intelligence_agent/schemas.py",
-          "line": 189,
+          "line": 188,
           "public": true,
           "is_async": false,
           "decorators": [],
@@ -3369,7 +3650,7 @@
         "BaseModel"
       ],
       "source": "src/feedback_intelligence_agent/schemas.py",
-      "line": 203,
+      "line": 202,
       "public": true,
       "decorators": [],
       "summary": "API response for the `/query` endpoint.",
@@ -3435,7 +3716,7 @@
         "BaseModel"
       ],
       "source": "src/feedback_intelligence_agent/schemas.py",
-      "line": 209,
+      "line": 208,
       "public": true,
       "decorators": [],
       "summary": "Payload of the final ``metadata`` SSE event of the `/query/stream` endpoint.",
@@ -3528,7 +3809,7 @@
         "BaseModel"
       ],
       "source": "src/feedback_intelligence_agent/schemas.py",
-      "line": 134,
+      "line": 133,
       "public": true,
       "decorators": [],
       "summary": "Metadata about one tool invocation performed during an agent run.",
@@ -6855,7 +7136,7 @@
       "module": "feedback_intelligence_agent.vector_store",
       "bases": [],
       "source": "src/feedback_intelligence_agent/vector_store.py",
-      "line": 56,
+      "line": 61,
       "public": true,
       "decorators": [],
       "summary": "Cosine-similarity vector store.",
@@ -6869,7 +7150,7 @@
           "module": "feedback_intelligence_agent.vector_store",
           "signature": "add(self, chunks: list[DocumentChunk], vectors: npt.NDArray[np.float64]) -> None",
           "source": "src/feedback_intelligence_agent/vector_store.py",
-          "line": 80,
+          "line": 85,
           "public": true,
           "is_async": false,
           "decorators": [],
@@ -6919,7 +7200,7 @@
           "module": "feedback_intelligence_agent.vector_store",
           "signature": "remove_source_ids(self, source_ids: set[str]) -> int",
           "source": "src/feedback_intelligence_agent/vector_store.py",
-          "line": 106,
+          "line": 111,
           "public": true,
           "is_async": false,
           "decorators": [],
@@ -6957,7 +7238,7 @@
           "module": "feedback_intelligence_agent.vector_store",
           "signature": "upsert_sources(self, chunks: list[DocumentChunk], vectors: npt.NDArray[np.float64]) -> int",
           "source": "src/feedback_intelligence_agent/vector_store.py",
-          "line": 125,
+          "line": 130,
           "public": true,
           "is_async": false,
           "decorators": [],
@@ -7005,13 +7286,13 @@
           "qualified_name": "feedback_intelligence_agent.vector_store.InMemoryVectorStore.search",
           "kind": "method",
           "module": "feedback_intelligence_agent.vector_store",
-          "signature": "search(self, query_vector: npt.NDArray[np.float64], *, top_k: int = 4) -> list[SearchResult]",
+          "signature": "search(self, query_vector: npt.NDArray[np.float64], *, top_k: int = 4, filters: MetadataFilters | None = None) -> list[SearchResult]",
           "source": "src/feedback_intelligence_agent/vector_store.py",
-          "line": 157,
+          "line": 162,
           "public": true,
           "is_async": false,
           "decorators": [],
-          "summary": "Return the most similar chunks for a query vector.",
+          "summary": "Return the most similar eligible chunks, filtering before top-k selection.",
           "description": "",
           "parameters": [
             {
@@ -7032,6 +7313,13 @@
               "name": "top_k",
               "annotation": "int",
               "default": "4",
+              "kind": "keyword-only",
+              "description": ""
+            },
+            {
+              "name": "filters",
+              "annotation": "MetadataFilters | None",
+              "default": "None",
               "kind": "keyword-only",
               "description": ""
             }
@@ -7057,7 +7345,7 @@
           "module": "feedback_intelligence_agent.vector_store",
           "signature": "save(self, path: str | Path) -> None",
           "source": "src/feedback_intelligence_agent/vector_store.py",
-          "line": 182,
+          "line": 207,
           "public": true,
           "is_async": false,
           "decorators": [],
@@ -7095,7 +7383,7 @@
           "module": "feedback_intelligence_agent.vector_store",
           "signature": "load(cls, path: str | Path) -> InMemoryVectorStore",
           "source": "src/feedback_intelligence_agent/vector_store.py",
-          "line": 197,
+          "line": 222,
           "public": true,
           "is_async": false,
           "decorators": [
@@ -7140,7 +7428,7 @@
           "module": "feedback_intelligence_agent.vector_store",
           "signature": "to_json(self) -> str",
           "source": "src/feedback_intelligence_agent/vector_store.py",
-          "line": 224,
+          "line": 249,
           "public": true,
           "is_async": false,
           "decorators": [],
@@ -7173,7 +7461,7 @@
           "module": "feedback_intelligence_agent.vector_store",
           "signature": "size(self) -> int",
           "source": "src/feedback_intelligence_agent/vector_store.py",
-          "line": 71,
+          "line": 76,
           "public": true,
           "is_async": false,
           "decorators": [
@@ -7206,7 +7494,7 @@
           "module": "feedback_intelligence_agent.vector_store",
           "signature": "chunks(self) -> list[DocumentChunk]",
           "source": "src/feedback_intelligence_agent/vector_store.py",
-          "line": 76,
+          "line": 81,
           "public": true,
           "is_async": false,
           "decorators": [
@@ -7240,7 +7528,7 @@
         "module": "feedback_intelligence_agent.vector_store",
         "signature": "__init__(self, dim: int) -> None",
         "source": "src/feedback_intelligence_agent/vector_store.py",
-        "line": 63,
+        "line": 68,
         "public": false,
         "is_async": false,
         "decorators": [],
@@ -7287,7 +7575,7 @@
         "BaseModel"
       ],
       "source": "src/feedback_intelligence_agent/vector_store.py",
-      "line": 47,
+      "line": 52,
       "public": true,
       "decorators": [],
       "summary": "Serializable representation of the vector store.",
@@ -7340,7 +7628,7 @@
         "Protocol"
       ],
       "source": "src/feedback_intelligence_agent/vector_store.py",
-      "line": 19,
+      "line": 20,
       "public": true,
       "decorators": [
         "runtime_checkable"
@@ -7365,7 +7653,7 @@
           "module": "feedback_intelligence_agent.vector_store",
           "signature": "add(self, chunks: list[DocumentChunk], vectors: npt.NDArray[np.float64]) -> None",
           "source": "src/feedback_intelligence_agent/vector_store.py",
-          "line": 38,
+          "line": 39,
           "public": true,
           "is_async": false,
           "decorators": [],
@@ -7408,13 +7696,13 @@
           "qualified_name": "feedback_intelligence_agent.vector_store.VectorStore.search",
           "kind": "method",
           "module": "feedback_intelligence_agent.vector_store",
-          "signature": "search(self, query_vector: npt.NDArray[np.float64], *, top_k: int = 4) -> list[SearchResult]",
+          "signature": "search(self, query_vector: npt.NDArray[np.float64], *, top_k: int = 4, filters: MetadataFilters | None = None) -> list[SearchResult]",
           "source": "src/feedback_intelligence_agent/vector_store.py",
-          "line": 41,
+          "line": 42,
           "public": true,
           "is_async": false,
           "decorators": [],
-          "summary": "Return the most similar chunks for a query vector, highest score first.",
+          "summary": "Filter eligible chunks before limiting results, highest score first.",
           "description": "",
           "parameters": [
             {
@@ -7437,6 +7725,13 @@
               "default": "4",
               "kind": "keyword-only",
               "description": ""
+            },
+            {
+              "name": "filters",
+              "annotation": "MetadataFilters | None",
+              "default": "None",
+              "kind": "keyword-only",
+              "description": ""
             }
           ],
           "returns": {
@@ -7457,7 +7752,7 @@
           "module": "feedback_intelligence_agent.vector_store",
           "signature": "size(self) -> int",
           "source": "src/feedback_intelligence_agent/vector_store.py",
-          "line": 31,
+          "line": 32,
           "public": true,
           "is_async": false,
           "decorators": [
@@ -7490,7 +7785,7 @@
           "module": "feedback_intelligence_agent.vector_store",
           "signature": "chunks(self) -> list[DocumentChunk]",
           "source": "src/feedback_intelligence_agent/vector_store.py",
-          "line": 35,
+          "line": 36,
           "public": true,
           "is_async": false,
           "decorators": [

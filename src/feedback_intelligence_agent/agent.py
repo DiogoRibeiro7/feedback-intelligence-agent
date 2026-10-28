@@ -4,7 +4,6 @@ from __future__ import annotations
 
 from collections.abc import Sequence
 from dataclasses import dataclass
-from datetime import datetime, timezone
 
 from feedback_intelligence_agent.citations import build_citations
 from feedback_intelligence_agent.guardrails import (
@@ -28,6 +27,7 @@ from feedback_intelligence_agent.memory import (
     QueryRewriter,
     new_conversation_id,
 )
+from feedback_intelligence_agent.metadata_filters import matches_metadata_filters
 from feedback_intelligence_agent.output_parser import parse_llm_output
 from feedback_intelligence_agent.prompts import build_grounded_prompt
 from feedback_intelligence_agent.reranking import DeterministicJudgeReranker, Reranker
@@ -471,15 +471,22 @@ class FeedbackInsightAgent:
                 ),
             },
         ) as span:
-            candidates = self.query_engine.search(question, top_k=candidate_k)
+            candidates = (
+                self.query_engine.search(question, top_k=candidate_k, filters=filters)
+                if filters is not None and not filters.is_empty
+                else self.query_engine.search(question, top_k=candidate_k)
+            )
             unfiltered_count = len(candidates)
             if filters is not None:
                 candidates = [
                     result
                     for result in candidates
-                    if self._matches_metadata_filters(result.chunk.metadata, filters)
+                    if matches_metadata_filters(result.chunk.metadata, filters)
                 ]
             span["metadata_filtered_out"] = unfiltered_count - len(candidates)
+            span["metadata_filters_applied_before_limit"] = (
+                filters is not None and not filters.is_empty
+            )
             route_keywords = next((rule.patterns for rule in ROUTE_RULES if rule.name == route), ())
             ranked = self.reranker.rerank(
                 question,
@@ -492,67 +499,6 @@ class FeedbackInsightAgent:
             span["max_score"] = max((result.score for result in ranked), default=0.0)
             span["min_score"] = min((result.score for result in ranked), default=0.0)
         return ranked
-
-    def _matches_metadata_filters(
-        self, metadata: dict[str, object], filters: MetadataFilters
-    ) -> bool:
-        """Return whether chunk metadata satisfies all requested filters."""
-        if filters.tenant_id is not None:
-            tenant_id = str(metadata.get("tenant_id", "default")).lower()
-            if tenant_id != filters.tenant_id.lower():
-                return False
-        if filters.customer_segment is not None:
-            segment = str(metadata.get("customer_segment", "")).lower()
-            if segment != filters.customer_segment.lower():
-                return False
-        if filters.channel is not None and str(metadata.get("channel", "")) != filters.channel:
-            return False
-
-        rating = self._metadata_rating(metadata)
-        if filters.min_rating is not None and rating < filters.min_rating:
-            return False
-        if filters.max_rating is not None and rating > filters.max_rating:
-            return False
-
-        created_at = self._metadata_datetime(metadata.get("created_at"))
-        if filters.created_after is not None:
-            created_after = self._comparable_datetime(filters.created_after)
-            if created_at is None or created_at < created_after:
-                return False
-        if filters.created_before is not None:
-            created_before = self._comparable_datetime(filters.created_before)
-            if created_at is None or created_at > created_before:
-                return False
-        return True
-
-    def _metadata_rating(self, metadata: dict[str, object]) -> int:
-        """Read a metadata rating, defaulting to the neutral upper bound."""
-        value = metadata.get("rating", 5)
-        if isinstance(value, int):
-            return value
-        if not isinstance(value, str):
-            return 5
-        try:
-            return int(value)
-        except ValueError:
-            return 5
-
-    def _metadata_datetime(self, value: object) -> datetime | None:
-        """Parse an ISO datetime value from chunk metadata."""
-        if isinstance(value, datetime):
-            return value
-        if not isinstance(value, str) or not value:
-            return None
-        try:
-            return self._comparable_datetime(datetime.fromisoformat(value))
-        except ValueError:
-            return None
-
-    def _comparable_datetime(self, value: datetime) -> datetime:
-        """Normalize datetimes so metadata and API filters compare reliably."""
-        if value.tzinfo is None:
-            return value
-        return value.astimezone(timezone.utc).replace(tzinfo=None)
 
     def _confidence(self, results: list[SearchResult], citations: list[Citation]) -> float:
         """Compute a simple confidence score from retrieval quality and citations."""

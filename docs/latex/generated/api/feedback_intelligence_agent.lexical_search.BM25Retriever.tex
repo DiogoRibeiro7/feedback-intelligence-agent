@@ -28,20 +28,21 @@ BM25Retriever(self, chunks: Sequence[DocumentChunk], *, texts: Sequence[str] | N
   \item[\texttt{size}] Number of indexed chunks.
 \end{arglist}
 \apifield{Details}The index is built once at construction time. \texttt{texts} allows indexing an enriched representation (for example chunk text plus metadata) while the returned \texttt{SearchResult} objects keep the original chunks.
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}lexical\_\allowbreak{}search.\allowbreak{}py:26}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/edc9d78403eeed9f7d6ee5aef6b8d9b1b5780ef4/src/feedback_intelligence_agent/lexical_search.py#L26}{online}), class, module \cref{module:feedback_intelligence_agent.lexical_search}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}lexical\_\allowbreak{}search.\allowbreak{}py:27}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/edc9d78403eeed9f7d6ee5aef6b8d9b1b5780ef4/src/feedback_intelligence_agent/lexical_search.py#L27}{online}), class, module \cref{module:feedback_intelligence_agent.lexical_search}
 
 \subsection{\texttt{search}}
 \label{method:feedback_intelligence_agent.lexical_search.BM25Retriever.search}\index{Methods!search}
-Return chunks with a positive BM25 score for the question, best first.
+Filter chunks before selecting positive BM25 results, best first.
 \apifield{Usage}
 \begin{lstlisting}[style=usage, language=Python]
-search(self, question: str, *, top_k: int = 4) -> list[SearchResult]
+search(self, question: str, *, top_k: int = 4, filters: MetadataFilters | None = None) -> list[SearchResult]
 \end{lstlisting}
 \apifield{Arguments}
 \begin{arglist}
   \item[\texttt{question}] \texttt{str}, required.
   \item[\texttt{top\_\allowbreak{}k}] \texttt{int}, default \texttt{4}, keyword-only.
+  \item[\texttt{filters}] \texttt{MetadataFilters \textbar{} None}, default \texttt{None}, keyword-only.
 \end{arglist}
 \apifield{Value}\texttt{list[SearchResult]\allowbreak{}}
 \apifield{Raises}\texttt{ValueError}
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}lexical\_\allowbreak{}search.\allowbreak{}py:73}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/edc9d78403eeed9f7d6ee5aef6b8d9b1b5780ef4/src/feedback_intelligence_agent/lexical_search.py#L73}{online})
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}lexical\_\allowbreak{}search.\allowbreak{}py:74}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/edc9d78403eeed9f7d6ee5aef6b8d9b1b5780ef4/src/feedback_intelligence_agent/lexical_search.py#L74}{online})

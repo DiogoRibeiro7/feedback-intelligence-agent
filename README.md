@@ -196,8 +196,9 @@ LLM-judge reranker can replace it without changing the agent orchestration.
 
 ## Metadata filters
 
-Queries can restrict retrieved feedback before the final ranking step. Filters
-work through the API and CLI:
+Queries restrict eligible feedback before the retrieval candidate limit is
+applied. Higher-scoring records outside the requested tenant or other filters
+cannot displace matching evidence. Filters work through the API and CLI:
 
 ```bash
 poetry run feedback-agent query "Which support tickets mention onboarding?" \
@@ -212,9 +213,27 @@ poetry run feedback-agent query "Which support tickets mention onboarding?" \
 
 The `/query`, `/query/stream`, and `/chat` endpoints accept the same fields:
 `tenant_id`, `customer_segment`, `channel`, `min_rating`, `max_rating`,
-`created_after`, and `created_before`. Omitting `tenant_id` preserves the
-single-tenant local default; non-default tenants are isolated by chunk metadata
-before final ranking.
+`created_after`, and `created_before`. Omitting `tenant_id` leaves retrieval
+unscoped; supplying it restricts evidence to that tenant.
+
+Dense and BM25 searches select their top results from eligible chunks. Hybrid
+search passes filters to both component retrievers before combining scores.
+Tenant and segment matches ignore case. Date bounds are inclusive, timestamps
+are compared in UTC, and naive timestamps are treated as UTC. Legacy chunks
+without tenant metadata belong to `default`; missing or invalid ratings retain
+the existing fallback of 5. Missing or invalid dates do not satisfy date filters.
+
+Qdrant applies the same matching rules while paging through ranked results
+using the [query API's offset](https://api.qdrant.tech/api-reference/search/query-points).
+It stops when enough matching candidates are found or results are exhausted.
+Selective filters can require scanning many pages; this compatibility path
+does not require changing existing payloads or rebuilding collections.
+
+Custom `Retriever` and `VectorStore` implementations should accept the optional
+`filters: MetadataFilters | None` search argument and enforce it before their
+result limit. The agent retains a final metadata check before reranking.
+Retrieval telemetry records `metadata_filters_applied_before_limit`;
+`metadata_filtered_out` counts only candidates rejected by that final check.
 
 ## Data validation
 
