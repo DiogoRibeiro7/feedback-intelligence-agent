@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
-from typing import Protocol, runtime_checkable
+from typing import Literal, Protocol, runtime_checkable
 
 import numpy as np
 import numpy.typing as npt
@@ -12,6 +12,7 @@ from dataexcept import DataLoadingError, FileReadError, FileWriteError, wrapping
 from pydantic import BaseModel, Field, ValidationError
 
 from feedback_intelligence_agent.schemas import DocumentChunk, SearchResult
+from feedback_intelligence_agent.source_ids import SourceIdMigrationError, migrate_legacy_chunks
 
 
 @runtime_checkable
@@ -46,6 +47,7 @@ class VectorStore(Protocol):
 class PersistedVectorStore(BaseModel):
     """Serializable representation of the vector store."""
 
+    source_id_version: Literal[1, 2] = 1
     dim: int
     chunks: list[DocumentChunk]
     vectors: list[list[float]] = Field(default_factory=list)
@@ -76,18 +78,30 @@ class InMemoryVectorStore:
         return list(self._chunks)
 
     def add(self, chunks: list[DocumentChunk], vectors: npt.NDArray[np.float64]) -> None:
-        """Add chunks and their vectors to the store."""
+        """Add chunks and their vectors to the store.
+
+        Raises:
+            ValueError: If vector shape or dimension does not match the chunks and store.
+        """
+        prepared_vectors = self._prepare_vectors(chunks, vectors)
+        if not chunks:
+            return
+
+        combined_vectors = np.vstack([self._vectors, prepared_vectors])
+        self._chunks.extend(chunks)
+        self._vectors = combined_vectors
+
+    def _prepare_vectors(
+        self, chunks: list[DocumentChunk], vectors: npt.NDArray[np.float64]
+    ) -> npt.NDArray[np.float64]:
+        """Validate and convert incoming vectors before mutating store state."""
         if vectors.ndim != 2:
             raise ValueError("vectors must be a two-dimensional array")
         if vectors.shape[0] != len(chunks):
             raise ValueError("number of vectors must match number of chunks")
         if vectors.shape[1] != self.dim:
             raise ValueError(f"expected vectors with dim={self.dim}")
-        if not chunks:
-            return
-
-        self._chunks.extend(chunks)
-        self._vectors = np.vstack([self._vectors, vectors.astype(np.float64, copy=False)])
+        return vectors.astype(np.float64, copy=False)
 
     def remove_source_ids(self, source_ids: set[str]) -> int:
         """Remove all chunks whose source document ID is in ``source_ids``.
@@ -116,14 +130,28 @@ class InMemoryVectorStore:
         """Replace existing source documents and append the new chunks.
 
         The replacement key is ``DocumentChunk.source_id``. All old chunks for
-        any incoming source are removed first, which handles changed text that
-        produces a different number of chunks.
+        any incoming source are replaced, which handles changed text that
+        produces a different number of chunks. Invalid vectors leave the
+        existing chunks and vectors unchanged.
 
         Returns:
             Number of chunks removed before adding the new chunks.
+
+        Raises:
+            ValueError: If vector shape or dimension does not match the chunks and store.
         """
-        removed = self.remove_source_ids({chunk.source_id for chunk in chunks})
-        self.add(chunks, vectors)
+        prepared_vectors = self._prepare_vectors(chunks, vectors)
+        if not chunks:
+            return 0
+        source_ids = {chunk.source_id for chunk in chunks}
+        keep_indices = [
+            index for index, chunk in enumerate(self._chunks) if chunk.source_id not in source_ids
+        ]
+        replacement_chunks = [self._chunks[index] for index in keep_indices] + chunks
+        replacement_vectors = np.vstack([self._vectors[keep_indices, :], prepared_vectors])
+        removed = len(self._chunks) - len(keep_indices)
+        self._chunks = replacement_chunks
+        self._vectors = replacement_vectors
         return removed
 
     def search(
@@ -157,6 +185,7 @@ class InMemoryVectorStore:
         with wrapping(OSError, FileWriteError, path=str(output_path.parent)):
             output_path.parent.mkdir(parents=True, exist_ok=True)
         payload = PersistedVectorStore(
+            source_id_version=2,
             dim=self.dim,
             chunks=self._chunks,
             vectors=self._vectors.tolist(),
@@ -166,16 +195,30 @@ class InMemoryVectorStore:
 
     @classmethod
     def load(cls, path: str | Path) -> InMemoryVectorStore:
-        """Load a vector store from JSON."""
+        """Load JSON and migrate legacy chunk IDs in memory without changing the file.
+
+        Saving the returned store persists version-2 identifiers. Migration
+        retains the original vectors and requires no embedding provider.
+
+        Raises:
+            DataLoadingError: If the payload or its legacy identities are invalid.
+        """
         input_path = Path(path)
         with wrapping((OSError, UnicodeError), FileReadError, path=str(input_path)):
             contents = input_path.read_text(encoding="utf-8")
-        with wrapping(ValidationError, DataLoadingError, source=str(input_path)):
+        with wrapping(
+            (ValidationError, SourceIdMigrationError), DataLoadingError, source=str(input_path)
+        ):
             payload = PersistedVectorStore.model_validate_json(contents)
+            chunks = (
+                migrate_legacy_chunks(payload.chunks)
+                if payload.source_id_version == 1
+                else payload.chunks
+            )
         store = cls(dim=payload.dim)
-        if payload.chunks:
+        if chunks:
             vectors = np.asarray(payload.vectors, dtype=np.float64)
-            store.add(payload.chunks, vectors)
+            store.add(chunks, vectors)
         return store
 
     def to_json(self) -> str:

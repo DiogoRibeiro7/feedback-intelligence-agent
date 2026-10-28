@@ -65,7 +65,7 @@ Cited answer + tool metadata + recommended actions + diagnostics
 
 ### Chunking
 
-`chunking.py` splits feedback into overlapping word chunks and carries tenant metadata into every chunk. Default-tenant source IDs preserve the original `feedback_id`; non-default tenants use tenant-qualified source IDs to avoid collisions. Before chunking, `privacy.py` redacts emails, phone numbers, and obvious access tokens so persisted chunks do not carry raw PII or pasted credentials. The current dataset has short feedback, but the logic also works for longer support tickets or interview transcripts.
+`chunking.py` splits feedback into overlapping word chunks and carries tenant metadata into every chunk. `source_ids.py` percent-encodes tenant and feedback ID components, reserving a colon for the tenant separator. Default-tenant source IDs omit the prefix. Ordinary IDs stay unchanged, while colons and literal percent escapes cannot create collisions. Before chunking, `privacy.py` redacts emails, phone numbers, and obvious access tokens so persisted chunks do not carry raw PII or pasted credentials. The current dataset has short feedback, but the logic also works for longer support tickets or interview transcripts.
 
 ### Privacy
 
@@ -82,6 +82,13 @@ Cited answer + tool metadata + recommended actions + diagnostics
 ### Vector store
 
 `vector_store.py` provides cosine search, JSON persistence, and source-level upsert support for incremental updates. It is deliberately simple. Production alternatives include pgvector, OpenSearch, Pinecone, Weaviate, Qdrant, or FAISS.
+
+JSON persistence records `source_id_version: 2`. Unversioned/version-1 files are
+migrated in memory using `source_ids.py`, preserving vector alignment and the
+original file until an explicit save or update. Inconsistent identities fail
+before persistence. Qdrant checks existing payloads when opening a collection;
+collections requiring an ID migration must be rebuilt from source data in a
+new collection, preventing writes from mixing incompatible point identities.
 
 ### Agent
 

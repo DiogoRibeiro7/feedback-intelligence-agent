@@ -8,19 +8,19 @@
   "revision_date": "2026-08-09T21:46:40+01:00",
   "project_version": "0.5.0",
   "counts": {
-    "generated_latex_files": 312,
+    "generated_latex_files": 315,
     "metadata_files": 5
   },
   "generated_files": [
     {
       "path": "docs/latex/generated/api/_classes.tex",
-      "bytes": 14574,
-      "sha256": "0e887cb70f51cd94fdb56d06d5428b300e8b59a26c23017891a84956410a696b"
+      "bytes": 14662,
+      "sha256": "f923ff537bc8b4f0369c7eaca557b16f02a96918d0f71ce17467c3176edf08e7"
     },
     {
       "path": "docs/latex/generated/api/_functions.tex",
-      "bytes": 9295,
-      "sha256": "43cf93f80e6012f501b929c28b04380de9694e14a9820cbfa042179ca52247ca"
+      "bytes": 9464,
+      "sha256": "41a6ad8e4a3942405ac0ee33fb68a321c32ac2c161a1f95abf57d23ce03c3b9c"
     },
     {
       "path": "docs/latex/generated/api/feedback_intelligence_agent.active_learning.ActiveLearningState.tex",
@@ -155,17 +155,17 @@
     {
       "path": "docs/latex/generated/api/feedback_intelligence_agent.chunking.chunk_text.tex",
       "bytes": 1488,
-      "sha256": "98b1d43e7653b263779feb5b26772ffc9cbe17d12b724329af25d976149342ab"
+      "sha256": "f644350d47581714328fa1f5382f8832b95ef60e719a6c9d7b96664c68345f5f"
     },
     {
       "path": "docs/latex/generated/api/feedback_intelligence_agent.chunking.feedback_to_chunks.tex",
       "bytes": 1618,
-      "sha256": "a656691ac6a2fc618d5824baa55139658dd4e55355368819fa48d55231619318"
+      "sha256": "5beda18cf7072e7a75f919909e9d2c7351ed3fd3b901d04fefdd300ced5b3ea8"
     },
     {
       "path": "docs/latex/generated/api/feedback_intelligence_agent.chunking.scoped_source_id.tex",
-      "bytes": 1155,
-      "sha256": "35c330ef7816d97a4daf248be3f468a91baacce9cf49df8895768685e0e94a9e"
+      "bytes": 1161,
+      "sha256": "1207f0045dbc112ce98e908f4d0854ceeedb2f1823cc230fe09d0999e66d8251"
     },
     {
       "path": "docs/latex/generated/api/feedback_intelligence_agent.citations.build_citations.tex",
@@ -1000,12 +1000,12 @@
     {
       "path": "docs/latex/generated/api/feedback_intelligence_agent.qdrant_store.QdrantStoreError.tex",
       "bytes": 955,
-      "sha256": "fc892f30b9a2938f0f7eb4f18a1d5f761c45f059783d04457831fd89edcaf901"
+      "sha256": "4f5814414d7edfa9b20442b4b73a2138c01c800f362a3a93e6229ad201c3dfcb"
     },
     {
       "path": "docs/latex/generated/api/feedback_intelligence_agent.qdrant_store.QdrantVectorStore.tex",
       "bytes": 4095,
-      "sha256": "fe74f498575fe5dcb1f9adc2a6aec4991b6f8e9ab874f59e497aa3aad1354d0e"
+      "sha256": "14c4dd1ecf73cfcceeb51c306b27ccb955a9ffa937802d333a4f4993a6fdaf3d"
     },
     {
       "path": "docs/latex/generated/api/feedback_intelligence_agent.query_expansion.ProductTerminologyExpander.tex",
@@ -1201,6 +1201,21 @@
       "path": "docs/latex/generated/api/feedback_intelligence_agent.schemas.ToolRunRecord.tex",
       "bytes": 1659,
       "sha256": "98fcf0afdb34c4ac33256124dda17b10ab8202125010067d56703a8571a25b12"
+    },
+    {
+      "path": "docs/latex/generated/api/feedback_intelligence_agent.source_ids.SourceIdMigrationError.tex",
+      "bytes": 971,
+      "sha256": "39f5b9f3037cc71f5af600d1e04e18932b6ef46bfd1fb4fae36257a68ea28f7b"
+    },
+    {
+      "path": "docs/latex/generated/api/feedback_intelligence_agent.source_ids.encode_source_id.tex",
+      "bytes": 1531,
+      "sha256": "2a4957467b49bbe7506a0d96dccb47d931ea36b0937b7af2f1ba21f8743205a3"
+    },
+    {
+      "path": "docs/latex/generated/api/feedback_intelligence_agent.source_ids.migrate_legacy_chunks.tex",
+      "bytes": 1754,
+      "sha256": "ccc6444c0ec9430e41960dce6ac42e869b6b2d6e2fac07d71acfc36fa992c9e4"
     },
     {
       "path": "docs/latex/generated/api/feedback_intelligence_agent.streaming_ingestion.FeedbackStream.tex",
@@ -1434,43 +1449,43 @@
     },
     {
       "path": "docs/latex/generated/api/feedback_intelligence_agent.vector_store.InMemoryVectorStore.tex",
-      "bytes": 8052,
-      "sha256": "d179d8d31ab2f0986cca61581421ae9075b94c38340cf8b54e58e5f99596baf4"
+      "bytes": 8695,
+      "sha256": "f29464a9505d2a1522472e9a2187d93b9e5a419d543f93076b6c08e223a605d2"
     },
     {
       "path": "docs/latex/generated/api/feedback_intelligence_agent.vector_store.PersistedVectorStore.tex",
-      "bytes": 1278,
-      "sha256": "d749a9b1f81f20e3e3ca0133e3cb6f82c6bdc0628ec816faddda71c03dab0649"
+      "bytes": 1411,
+      "sha256": "b86c6269896b9419091a52d1c2f0dfaf8c648b7f4d87824e402a78c3825eb5f7"
     },
     {
       "path": "docs/latex/generated/api/feedback_intelligence_agent.vector_store.VectorStore.tex",
       "bytes": 3427,
-      "sha256": "4b3a9cd34f39877e89319f5c5af72a40bc407d03f6cd7ba5d5b42bfd1600f9c2"
+      "sha256": "266f661d4bdc4f47145aea846e2e031dec6f9ae4ca51850e6788e8031b06f1a7"
     },
     {
       "path": "docs/latex/generated/architecture/components.tex",
-      "bytes": 16609,
-      "sha256": "f4a8228aaab6fce16d273d1f0d2d91429824db00a1ddccd00807c4e6068441c8"
+      "bytes": 16996,
+      "sha256": "f641ed8387a204bb9fd326e503c0c79f03f83f4c0f7bf040cd6bf51f03c8c166"
     },
     {
       "path": "docs/latex/generated/architecture/dependencies.tex",
-      "bytes": 16278,
-      "sha256": "b622226407f9c54c9f79901654a1cbc7279d986239effa88b91d7f8171cd88d8"
+      "bytes": 16630,
+      "sha256": "5fc9af46bc75f47f7efcde41ec3d4bdc12d6dabd5636cc620c95c5daa001e090"
     },
     {
       "path": "docs/latex/generated/architecture/layer-diagram.tex",
-      "bytes": 2286,
-      "sha256": "d5c2730fd17ffcfe9fcfb9fa540e33152ceb8f7769c9605fe1c2a85d6e52bdd6"
+      "bytes": 2299,
+      "sha256": "1bcc2ac953eb58051433b4395ddf68c0c2121f099df02b20e9fced9d2a2f28c5"
     },
     {
       "path": "docs/latex/generated/architecture/layer-violations.tex",
-      "bytes": 2018,
-      "sha256": "b6f5cfa80bb12cf2b58a0ccc999992d9523618927150aa582872d2882c131cd1"
+      "bytes": 2216,
+      "sha256": "326aed66f56d1738ec65ab948f1a7788cd977e9c33d1c4e102ca82664c066a2d"
     },
     {
       "path": "docs/latex/generated/architecture/module-graph.tex",
       "bytes": 4110,
-      "sha256": "8d2a3adf9dd26c6ba778522cc08f2968613545c2a9d3332dc5d8d03cb0d2785c"
+      "sha256": "0f47b17d903b5da63112a81be344173fb7888a5cb3a5ea04ce6547c76ce851d6"
     },
     {
       "path": "docs/latex/generated/cli.tex",
@@ -1524,18 +1539,18 @@
     },
     {
       "path": "docs/latex/generated/engineering/repository-structure.tex",
-      "bytes": 7732,
-      "sha256": "3901d1a17446052a30cd9338e3a615da3a7f7898b8609134bc6983955b777b7a"
+      "bytes": 7842,
+      "sha256": "231862be10b6babaeebe2fa2a81c4a4852d72d40a0f369a73602fb546f8761e1"
     },
     {
       "path": "docs/latex/generated/engineering/testing.tex",
-      "bytes": 7990,
-      "sha256": "f0ebe2d530950d2412cfe2fa79b42e454576fa9e2cb6d2f9acd97b4a690f72b0"
+      "bytes": 8133,
+      "sha256": "63b86dc98b26a571b1d14505b743ad0ba5802df29f02c8995db18bbbb7a15bd8"
     },
     {
       "path": "docs/latex/generated/engineering/traceability.tex",
-      "bytes": 25772,
-      "sha256": "616d16bb9b667cc3b4f015d0d657132087da125c1e9579b74a1099aae04ebfbd"
+      "bytes": 26056,
+      "sha256": "50cf6894977a246a0acf4e3500badcb90a56c4dcc3361e514bc7d6c77415755f"
     },
     {
       "path": "docs/latex/generated/http-api.tex",
@@ -1544,23 +1559,23 @@
     },
     {
       "path": "docs/latex/generated/indexes.tex",
-      "bytes": 47371,
-      "sha256": "f9822a5b0e2330fa9c0df1d4d4d2539cee0cb235e785845b950534914b4d644b"
+      "bytes": 47855,
+      "sha256": "0be0d85f9103d27494cad2b00ed7a79261bcc8ba34becf72883fb05b0cd6b892"
     },
     {
       "path": "docs/latex/generated/modules.tex",
-      "bytes": 59760,
-      "sha256": "d78133b3005597945094c55e09b4e46a8d7d93f1f3bab5f88e4dfe33c637ed5a"
+      "bytes": 60631,
+      "sha256": "feb2ced02d48c65aa401768bdbfa71f554edbaded11e2178d1b4b785b255033f"
     },
     {
       "path": "docs/latex/generated/project-metadata.tex",
       "bytes": 2827,
-      "sha256": "fe78bc4abb2a785afbcedfc686125a8a555d5f1523fac1fb070f33a48b21abcc"
+      "sha256": "b371de1bf06d54a6bdf54b205edc2aeae21701f04ecd55dbf7524905ac870652"
     },
     {
       "path": "docs/latex/generated/schemas.tex",
       "bytes": 12652,
-      "sha256": "d9e3ff3d0339f69b1ff572fb2ba2497ac76def351792f8d1ed9e13edcb9c508e"
+      "sha256": "77d70478ab7b43c26a4fa3d6dbcf2618715bc88e2a25c03a76ec0fae80aa50a7"
     },
     {
       "path": "docs/latex/generated/types.tex",
@@ -1577,27 +1592,27 @@
     {
       "path": "docs/metadata/api-index-classes-001.json",
       "bytes": 299392,
-      "sha256": "5f4ba567643bb82029829193c183f67bfb2d719a046041edb5156959d5399793"
+      "sha256": "2b0910c7d10010a29c093d3a188985d53e56992ce90058634e581cbd7c9188ce"
     },
     {
       "path": "docs/metadata/api-index-classes-002.json",
-      "bytes": 230809,
-      "sha256": "710164c0fa7b1a9cdbd318fb97cf51f81ee41d1bddc49ec533a4f6f3b6c4312d"
+      "bytes": 232306,
+      "sha256": "88ddfff76dba8021f21f70ca24e29cd5b017eaa816e02d7f4a3a5016141b4d32"
     },
     {
       "path": "docs/metadata/api-index.json",
-      "bytes": 395589,
-      "sha256": "304594157ede43210b126467b72d81f34d5685c163d602f6ec86b93692e81cec"
+      "bytes": 399049,
+      "sha256": "6a24d961433767fa334f588e0dff9176c6c2cef28cdeb2725a31d6d85583fafc"
     },
     {
       "path": "docs/metadata/module-dependencies.json",
-      "bytes": 43363,
-      "sha256": "a9c186cfa5e84b3c84f019b41750b3798c81d50d3a7ab68ebc8489bde646086d"
+      "bytes": 44351,
+      "sha256": "6cacd661f5e73bc28db8ed55d1ac55bc1ef0621499c2b7d193ab291d2feb2e2c"
     },
     {
       "path": "docs/metadata/repository-inventory.json",
-      "bytes": 87371,
-      "sha256": "7ebef0b8187311219f9ac07749bad78d1f759aceb66ef390493bf85184c2c169"
+      "bytes": 88262,
+      "sha256": "d0b8e7ae7681469e9b1721a654824b9ad845c0620c32e7ee2ba193c04841b660"
     }
   ]
 }

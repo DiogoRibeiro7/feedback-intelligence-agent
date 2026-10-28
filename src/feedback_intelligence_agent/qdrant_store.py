@@ -21,6 +21,7 @@ import numpy as np
 import numpy.typing as npt
 
 from feedback_intelligence_agent.schemas import DocumentChunk, SearchResult
+from feedback_intelligence_agent.source_ids import SourceIdMigrationError, migrate_legacy_chunks
 
 if TYPE_CHECKING:  # pragma: no cover - import only for static type checking.
     from qdrant_client import QdrantClient
@@ -97,7 +98,10 @@ class QdrantVectorStore:
             exists = self._client.collection_exists(self.collection_name)
         except Exception as exc:  # pragma: no cover - network-dependent.
             raise QdrantStoreError(f"Could not query collections on Qdrant at {self.url}.") from exc
-        if not exists:
+        if exists:
+            # Validate legacy identities before any new points can overwrite them.
+            _ = self.chunks
+        else:
             self._client.create_collection(
                 collection_name=self.collection_name,
                 vectors_config=models.VectorParams(size=self.dim, distance=models.Distance.COSINE),
@@ -179,6 +183,7 @@ class QdrantVectorStore:
 def _chunk_to_payload(chunk: DocumentChunk) -> dict[str, Any]:
     """Serialise a chunk into a Qdrant point payload."""
     return {
+        "source_id_version": 2,
         "chunk_id": chunk.chunk_id,
         "source_id": chunk.source_id,
         "text": chunk.text,
@@ -188,9 +193,25 @@ def _chunk_to_payload(chunk: DocumentChunk) -> dict[str, Any]:
 
 def _payload_to_chunk(payload: dict[str, Any]) -> DocumentChunk:
     """Reconstruct a chunk from a Qdrant point payload."""
-    return DocumentChunk(
+    chunk = DocumentChunk(
         chunk_id=str(payload["chunk_id"]),
         source_id=str(payload["source_id"]),
         text=str(payload["text"]),
         metadata=dict(payload.get("metadata") or {}),
     )
+    version = payload.get("source_id_version", 1)
+    if version == 2:
+        return chunk
+    if version != 1:
+        raise QdrantStoreError("Unsupported Qdrant source ID version")
+    rebuild_message = (
+        "Legacy Qdrant source IDs require migration. Set FEEDBACK_AGENT_QDRANT_COLLECTION "
+        "to a new collection and rebuild from the original feedback data."
+    )
+    try:
+        [migrated] = migrate_legacy_chunks([chunk])
+    except SourceIdMigrationError as exc:
+        raise QdrantStoreError(rebuild_message) from exc
+    if migrated.source_id != chunk.source_id or migrated.chunk_id != chunk.chunk_id:
+        raise QdrantStoreError(rebuild_message)
+    return chunk

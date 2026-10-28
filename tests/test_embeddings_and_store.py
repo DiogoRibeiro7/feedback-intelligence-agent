@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
+import numpy as np
 import pytest
 from dataexcept import DataLoadingError, FileReadError, FileWriteError
 
@@ -89,3 +90,23 @@ def test_vector_store_upsert_replaces_existing_source_chunks() -> None:
     assert {chunk.text for chunk in store.chunks} == {"new export dashboard", "pricing renewal"}
     results = store.search(model.embed(["export dashboard"])[0], top_k=1)
     assert results[0].chunk.source_id == "fb-1"
+
+
+@pytest.mark.parametrize("shape", [(128,), (2, 128), (1, 64)])
+def test_invalid_upsert_preserves_existing_chunks_and_vectors(shape: tuple[int, ...]) -> None:
+    model = HashingEmbeddingModel(dim=128)
+    chunks = [
+        DocumentChunk(chunk_id="1", source_id="fb-1", text="original onboarding", metadata={}),
+        DocumentChunk(chunk_id="2", source_id="fb-2", text="pricing renewal", metadata={}),
+    ]
+    store = InMemoryVectorStore(dim=128)
+    store.add(chunks, model.embed([chunk.text for chunk in chunks]))
+    query = model.embed(["onboarding"])[0]
+    previous_results = store.search(query, top_k=2)
+    replacement = chunks[0].model_copy(update={"text": "replacement onboarding"})
+
+    with pytest.raises(ValueError):
+        store.upsert_sources([replacement], np.zeros(shape, dtype=np.float64))
+
+    assert store.chunks == chunks
+    assert store.search(query, top_k=2) == previous_results

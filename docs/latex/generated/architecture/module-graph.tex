@@ -27,8 +27,8 @@
   \node[font=\scriptsize\bfseries, anchor=west] at (-12.20,-2.00) {application};
   \node[mod] (nchunking) at (0.00,-4.00) {chunking};
   \node[font=\scriptsize\bfseries, anchor=west] at (-3.20,-4.00) {domain};
-  \node[mod] (nindexXupdates) at (-1.50,-6.00) {index\_updates};
-  \node[mod] (ningestion) at (1.50,-6.00) {ingestion};
+  \node[mod] (ningestion) at (-1.50,-6.00) {ingestion};
+  \node[mod] (nvectorXstore) at (1.50,-6.00) {vector\_store};
   \node[font=\scriptsize\bfseries, anchor=west] at (-4.70,-6.00) {data};
   \node[mod] (ntelemetry) at (0.00,-8.00) {telemetry};
   \node[font=\scriptsize\bfseries, anchor=west] at (-3.20,-8.00) {infrastructure};
@@ -46,13 +46,13 @@
   \draw[dep] (nbenchmarking) -- (nevaluation);
   \draw[dep] (nbenchmarking) -- (nfactory);
   \draw[dep] (nbenchmarking) -- (ningestion);
+  \draw[dep] (nbenchmarking) -- (nvectorXstore);
   \draw[dep] (nchunking) -- (nschemas);
   \draw[dep] (ncli) -- (nbenchmarking);
   \draw[dep] (ncli) -- (nevaluation);
   \draw[dep] (ncli) -- (nexperiments);
   \draw[dep] (ncli) -- (nfactory);
   \draw[dep] (ncli) -- (nhumanXfeedback);
-  \draw[dep] (ncli) -- (nindexXupdates);
   \draw[dep] (ncli) -- (ningestion);
   \draw[dep] (ncli) -- (njobs);
   \draw[dep] (ncli) -- (nschemas);
@@ -65,6 +65,7 @@
   \draw[dep] (nexperiments) -- (nevaluation);
   \draw[dep] (nexperiments) -- (nfactory);
   \draw[dep] (nexperiments) -- (ningestion);
+  \draw[dep] (nexperiments) -- (nvectorXstore);
   \draw[dep] (nfactory) -- (nagent);
   \draw[dep] (nfactory) -- (nchunking);
   \draw[lazy] (nfactory) -- (nhumanXfeedback);
@@ -72,17 +73,16 @@
   \draw[lazy] (nfactory) -- (njobs);
   \draw[dep] (nfactory) -- (nschemas);
   \draw[dep] (nfactory) -- (ntelemetry);
+  \draw[dep] (nfactory) -- (nvectorXstore);
   \draw[dep] (nhumanXfeedback) -- (nschemas);
-  \draw[dep] (nindexXupdates) -- (nchunking);
-  \draw[dep] (nindexXupdates) -- (nfactory);
-  \draw[dep] (nindexXupdates) -- (nschemas);
-  \draw[dep] (nindexXupdates) -- (ntelemetry);
   \draw[dep] (ningestion) -- (nschemas);
   \draw[dep] (ningestion) -- (ntelemetry);
   \draw[dep] (njobs) -- (nchunking);
   \draw[dep] (njobs) -- (nfactory);
   \draw[dep] (njobs) -- (ningestion);
   \draw[dep] (njobs) -- (ntelemetry);
+  \draw[dep] (njobs) -- (nvectorXstore);
+  \draw[dep] (nvectorXstore) -- (nschemas);
 \end{tikzpicture}%
 }
 \caption{Internal dependency graph of the 14 most connected modules. Solid edges are module-level (eager) imports; dashed edges are deferred imports performed inside function bodies or under \texttt{TYPE\_CHECKING}.}

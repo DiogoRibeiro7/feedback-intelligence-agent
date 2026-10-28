@@ -1,0 +1,24 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{encode\_source\_id}}
+\label{func:feedback_intelligence_agent.source_ids.encode_source_id}\index{Functions!encode\_source\_id}
+
+Encode each identity component, reserving a colon for the tenant separator.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+encode_source_id(tenant_id: str, feedback_id: str) -> str
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{tenant\_\allowbreak{}id}] \texttt{str}, required.
+  \item[\texttt{feedback\_\allowbreak{}id}] \texttt{str}, required.
+\end{arglist}
+\apifield{Value}\texttt{str}
+\apifield{Details}The default tenant has no prefix. Percent signs are escaped along with colons, so a literal escape sequence cannot impersonate an encoded ID. Ordinary IDs such as \texttt{fb-\allowbreak{}1} and \texttt{acme:fb-\allowbreak{}1} remain unchanged.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}source\_\allowbreak{}ids.\allowbreak{}py:14}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/edc9d78403eeed9f7d6ee5aef6b8d9b1b5780ef4/src/feedback_intelligence_agent/source_ids.py#L14}{online}), module \cref{module:feedback_intelligence_agent.source_ids}

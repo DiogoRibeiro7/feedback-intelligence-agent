@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+import pytest
 from typer.testing import CliRunner
 
 from feedback_intelligence_agent.cli import app
@@ -168,6 +169,61 @@ def test_stream_ingest_command_can_update_index(tmp_path: Path) -> None:
     assert payload["accepted_records"] == 1
     assert output.exists()
     assert InMemoryVectorStore.load(index_path).chunks[0].source_id == "stream-inc-1"
+
+
+@pytest.mark.parametrize("command", ["update-index", "stream-ingest"])
+def test_incremental_commands_preserve_shared_feedback_ids_across_tenants(
+    tmp_path: Path, command: str
+) -> None:
+    records = [
+        {
+            "tenant_id": tenant,
+            "feedback_id": "shared",
+            "customer_segment": "enterprise",
+            "channel": "support_ticket",
+            "rating": 2,
+            "text": f"Feedback from {tenant}",
+            "created_at": "2026-08-01T09:00:00Z",
+        }
+        for tenant in ("acme", "cobalt")
+    ]
+    batch = tmp_path / ("batch.csv" if command == "update-index" else "events.jsonl")
+    if command == "update-index":
+        content = "\n".join(
+            [",".join(records[0])]
+            + [",".join(str(value) for value in row.values()) for row in records]
+        )
+        options: list[str] = []
+    else:
+        content = "\n".join(json.dumps(row) for row in records)
+        options = ["--update-index", "--output", str(tmp_path / "accepted.csv")]
+    batch.write_text(content + "\n", encoding="utf-8")
+    index_path = tmp_path / "vector_store.json"
+
+    for expected_inserts in (2, 0):
+        result = stdout_runner.invoke(
+            app,
+            [
+                command,
+                "--input",
+                str(batch),
+                "--index-path",
+                str(index_path),
+                "--embedding-dim",
+                "64",
+                *options,
+            ],
+        )
+        assert result.exit_code == 0, result.output
+        if command == "update-index":
+            payload = json.loads(result.stdout)
+            assert payload["inserted_records"] == expected_inserts
+            assert payload["updated_records"] == 2 - expected_inserts
+        chunks = InMemoryVectorStore.load(index_path).chunks
+        assert {(chunk.source_id, chunk.text) for chunk in chunks} == {
+            ("acme:shared", "Feedback from acme"),
+            ("cobalt:shared", "Feedback from cobalt"),
+        }
 
 
 def test_export_lakehouse_command_writes_table_metadata(tmp_path: Path) -> None:

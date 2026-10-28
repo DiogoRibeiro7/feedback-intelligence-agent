@@ -18,10 +18,11 @@ from typing import Any
 import numpy as np
 import pytest
 
+from feedback_intelligence_agent.chunking import feedback_to_chunks
 from feedback_intelligence_agent.config import Settings
 from feedback_intelligence_agent.embeddings import HashingEmbeddingModel
 from feedback_intelligence_agent.factory import load_or_build_index
-from feedback_intelligence_agent.schemas import DocumentChunk
+from feedback_intelligence_agent.schemas import DocumentChunk, FeedbackRecord
 
 # ---------------------------------------------------------------------------
 # Fake qdrant_client module + client for unit tests
@@ -174,6 +175,7 @@ def test_qdrant_store_upsert_payloads(fake_qdrant: ModuleType) -> None:
     points = client.upsert_calls[0]["points"]
     assert len(points) == 2
     first = points[0]
+    assert first.payload["source_id_version"] == 2
     assert first.payload["chunk_id"] == "fb-1::chunk-0"
     assert first.payload["source_id"] == "fb-1"
     assert first.payload["text"] == "onboarding checklist setup"
@@ -224,6 +226,81 @@ def test_qdrant_store_validates_inputs(fake_qdrant: ModuleType) -> None:
         store.search(np.zeros(8, dtype=np.float64), top_k=0)
     with pytest.raises(ValueError, match="dim=8"):
         store.search(np.zeros(4, dtype=np.float64), top_k=1)
+
+
+def test_qdrant_preserves_records_with_previously_colliding_ids(fake_qdrant: ModuleType) -> None:
+    from feedback_intelligence_agent.qdrant_store import QdrantVectorStore
+
+    client = FakeQdrantClient()
+    store = QdrantVectorStore(dim=64, client=client)
+    records = [
+        FeedbackRecord.model_validate(
+            {
+                "tenant_id": tenant,
+                "feedback_id": feedback_id,
+                "customer_segment": "enterprise",
+                "channel": "support_ticket",
+                "rating": 2,
+                "text": "Tenant feedback about onboarding",
+                "created_at": "2026-10-28T00:00:00Z",
+            }
+        )
+        for tenant, feedback_id in [("default", "acme:shared"), ("acme", "shared")]
+    ]
+    chunks = feedback_to_chunks(records)
+    model = HashingEmbeddingModel(dim=64)
+    store.add(chunks, model.embed([chunk.text for chunk in chunks]))
+
+    assert store.size == 2
+    assert QdrantVectorStore(dim=64, client=client).chunks == chunks
+    assert {result.chunk.source_id for result in store.search(model.embed(["onboarding"])[0])} == {
+        "acme%3Ashared",
+        "acme:shared",
+    }
+
+
+@pytest.mark.parametrize("legacy_id", ["fb-1", "acme:shared", "fb%3A1"])
+def test_qdrant_checks_legacy_collection_before_writes(
+    fake_qdrant: ModuleType, legacy_id: str
+) -> None:
+    from feedback_intelligence_agent.qdrant_store import QdrantStoreError, QdrantVectorStore
+
+    client = FakeQdrantClient()
+    client.collections["feedback_intelligence"] = object()
+    payload = {
+        "chunk_id": f"{legacy_id}::chunk-0",
+        "source_id": legacy_id,
+        "text": "Legacy feedback",
+        "metadata": {"tenant_id": "default", "feedback_id": legacy_id},
+    }
+    client.points["legacy-point"] = SimpleNamespace(payload=payload, vector=[1.0] * 64)
+
+    if legacy_id == "fb-1":
+        store = QdrantVectorStore(dim=64, client=client)
+        assert store.chunks[0].source_id == "fb-1"
+    else:
+        with pytest.raises(QdrantStoreError, match="new collection and rebuild"):
+            QdrantVectorStore(dim=64, client=client)
+    assert client.upsert_calls == []
+    assert len(client.points) == 1
+
+
+@pytest.mark.parametrize("problem", ["version", "metadata"])
+def test_qdrant_rejects_invalid_identity_payloads(fake_qdrant: ModuleType, problem: str) -> None:
+    from feedback_intelligence_agent.qdrant_store import QdrantStoreError, QdrantVectorStore
+
+    client = FakeQdrantClient()
+    client.collections["feedback_intelligence"] = object()
+    payload = _sample_chunks()[0].model_dump()
+    if problem == "version":
+        payload["source_id_version"] = 99
+    else:
+        payload["metadata"]["feedback_id"] = "different"
+    client.points["legacy-point"] = SimpleNamespace(payload=payload)
+
+    with pytest.raises(QdrantStoreError):
+        QdrantVectorStore(dim=64, client=client)
+    assert client.upsert_calls == []
 
 
 # ---------------------------------------------------------------------------

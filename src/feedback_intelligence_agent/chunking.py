@@ -6,13 +6,12 @@ from collections.abc import Iterable
 
 from feedback_intelligence_agent.privacy import redact_pii
 from feedback_intelligence_agent.schemas import DocumentChunk, FeedbackRecord
+from feedback_intelligence_agent.source_ids import encode_source_id
 
 
 def scoped_source_id(record: FeedbackRecord) -> str:
-    """Return a tenant-safe source ID while preserving legacy default IDs."""
-    if record.tenant_id == "default":
-        return record.feedback_id
-    return f"{record.tenant_id}:{record.feedback_id}"
+    """Return an unambiguous source ID with percent-encoded identity components."""
+    return encode_source_id(record.tenant_id, record.feedback_id)
 
 
 def chunk_text(text: str, *, max_words: int = 80, overlap_words: int = 16) -> list[str]:

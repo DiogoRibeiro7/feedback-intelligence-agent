@@ -26,7 +26,7 @@ Module & Lines & Objects & Summary \\
 \texttt{api} & 639 & 1 & FastAPI application. \\
 \texttt{auth} & 121 & 8 & Optional API-key authorization for the FastAPI service. \\
 \texttt{benchmarking} & 286 & 13 & Latency and throughput benchmarks for the RAG pipeline. \\
-\texttt{chunking} & 93 & 3 & Text chunking utilities. \\
+\texttt{chunking} & 92 & 3 & Text chunking utilities. \\
 \texttt{citations} & 65 & 4 & Citation construction shared by the agent and the deterministic LLM provider. \\
 \texttt{cli} & 1007 & 29 & Command-line interface for the feedback intelligence agent. \\
 \texttt{config} & 113 & 4 & Application configuration. \\
@@ -39,7 +39,7 @@ Module & Lines & Objects & Summary \\
 \texttt{guardrails} & 220 & 8 & Deterministic safety guardrails for the feedback intelligence agent. \\
 \texttt{hallucination} & 285 & 9 & Hallucination checks for evidence-grounded answers. \\
 \texttt{human\_\allowbreak{}feedback} & 408 & 14 & Human review feedback on generated agent answers. \\
-\texttt{index\_\allowbreak{}updates} & 115 & 2 & Incremental index update helpers. \\
+\texttt{index\_\allowbreak{}updates} & 114 & 2 & Incremental index update helpers. \\
 \texttt{ingestion} & 58 & 2 & Feedback ingestion utilities. \\
 \texttt{jobs} & 293 & 9 & Asynchronous ingestion jobs with status tracking. \\
 \texttt{lakehouse} & 398 & 7 & Local lakehouse-style feedback exports. \\
@@ -50,7 +50,7 @@ Module & Lines & Objects & Summary \\
 \texttt{privacy} & 59 & 6 & Deterministic PII redaction helpers. \\
 \texttt{prompt\_\allowbreak{}registry} & 159 & 6 & Versioned prompt registry. \\
 \texttt{prompts} & 91 & 5 & Prompt construction utilities and the default prompt registry. \\
-\texttt{qdrant\_\allowbreak{}store} & 196 & 2 & Optional Qdrant-backed vector store. \\
+\texttt{qdrant\_\allowbreak{}store} & 217 & 2 & Optional Qdrant-backed vector store. \\
 \texttt{query\_\allowbreak{}expansion} & 93 & 5 & Deterministic query expansion for product-specific terminology. \\
 \texttt{rate\_\allowbreak{}limit} & 76 & 2 & Small in-memory fixed-window rate limiter for API deployments. \\
 \texttt{reports} & 279 & 8 & Saved insight reports for product and analyst workflows. \\
@@ -59,11 +59,12 @@ Module & Lines & Objects & Summary \\
 \texttt{retrieval} & 113 & 4 & Retrieval helpers. \\
 \texttt{safe\_\allowbreak{}paths} & 23 & 1 & Constrain JSON record identifiers to one file under a configured store root. \\
 \texttt{schemas} & 311 & 16 & Typed domain schemas used across the project. \\
+\texttt{source\_\allowbreak{}ids} & 76 & 3 & Collision-free source identifiers and migration of legacy chunk identities. \\
 \texttt{streaming\_\allowbreak{}ingestion} & 524 & 12 & Streaming ingestion primitives for feedback events. \\
 \texttt{synthetic\_\allowbreak{}data} & 318 & 8 & Synthetic customer feedback dataset generation. \\
 \texttt{telemetry} & 352 & 13 & Structured logging and OpenTelemetry-style telemetry. \\
 \texttt{tools} & 565 & 21 & Deterministic tool-use framework for the feedback intelligence agent. \\
-\texttt{vector\_\allowbreak{}store} & 188 & 3 & A small vector store with JSON persistence. \\
+\texttt{vector\_\allowbreak{}store} & 231 & 3 & A small vector store with JSON persistence. \\
 \end{longtable}
 
 \apibreak
@@ -136,8 +137,8 @@ The summary statistics (mean, median, p95, min, max) are exposed as pure functio
 \label{module:feedback_intelligence_agent.chunking}\index{Modules!chunking}
 
 Text chunking utilities.
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}chunking.\allowbreak{}py}, 93 lines
-\apifield{Imports}\texttt{privacy}, \texttt{schemas}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}chunking.\allowbreak{}py}, 92 lines
+\apifield{Imports}\texttt{privacy}, \texttt{schemas}, \texttt{source\_\allowbreak{}ids}
 \apifield{Functions}\cref{func:feedback_intelligence_agent.chunking.scoped_source_id}, \cref{func:feedback_intelligence_agent.chunking.chunk_text}, \cref{func:feedback_intelligence_agent.chunking.feedback_to_chunks}
 
 \apibreak
@@ -282,11 +283,11 @@ Human review feedback on generated agent answers.
 \label{module:feedback_intelligence_agent.index_updates}\index{Modules!index\_updates}
 
 Incremental index update helpers.
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}index\_\allowbreak{}updates.\allowbreak{}py}, 115 lines
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}index\_\allowbreak{}updates.\allowbreak{}py}, 114 lines
 \apifield{Imports}\texttt{chunking}, \texttt{embeddings}, \texttt{factory}, \texttt{schemas}, \texttt{telemetry}, \texttt{vector\_\allowbreak{}store}
 \apifield{Classes}\cref{class:feedback_intelligence_agent.index_updates.IncrementalIndexResult}
 \apifield{Functions}\cref{func:feedback_intelligence_agent.index_updates.update_json_index}
-\apifield{Details}The default JSON index can be updated without rebuilding from the full dataset: validated feedback records are chunked, embedded, and merged into the persisted vector store by \texttt{feedback\_\allowbreak{}id}. Existing chunks for the same source document are replaced before new chunks are appended.
+\apifield{Details}The default JSON index can be updated without rebuilding from the full dataset: validated feedback records are chunked, embedded, and merged into the persisted vector store by tenant-scoped source ID. Existing chunks for the same source document are replaced before new chunks are appended.
 
 \apibreak
 \section{\texttt{ingestion}}
@@ -412,8 +413,8 @@ Prompt construction utilities and the default prompt registry.
 \label{module:feedback_intelligence_agent.qdrant_store}\index{Modules!qdrant\_store}
 
 Optional Qdrant-backed vector store.
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}qdrant\_\allowbreak{}store.\allowbreak{}py}, 196 lines
-\apifield{Imports}\texttt{schemas}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}qdrant\_\allowbreak{}store.\allowbreak{}py}, 217 lines
+\apifield{Imports}\texttt{schemas}, \texttt{source\_\allowbreak{}ids}
 \apifield{Classes}\cref{class:feedback_intelligence_agent.qdrant_store.QdrantStoreError}, \cref{class:feedback_intelligence_agent.qdrant_store.QdrantVectorStore}
 \apifield{Details}The store mirrors the semantics of the default \texttt{InMemoryVectorStore} but persists vectors in a running Qdrant instance instead of a local JSON file. It satisfies the same \texttt{VectorStore} protocol, so the retrieval layer treats both stores identically.
 
@@ -493,6 +494,16 @@ Typed domain schemas used across the project.
 \apifield{Classes}\cref{class:feedback_intelligence_agent.schemas.FeedbackChannel}, \cref{class:feedback_intelligence_agent.schemas.FeedbackRecord}, \cref{class:feedback_intelligence_agent.schemas.DocumentChunk}, \cref{class:feedback_intelligence_agent.schemas.SearchResult}, \cref{class:feedback_intelligence_agent.schemas.MetadataFilters}, \cref{class:feedback_intelligence_agent.schemas.Citation}, \cref{class:feedback_intelligence_agent.schemas.ToolRunRecord}, \cref{class:feedback_intelligence_agent.schemas.AgentAnswer}, \cref{class:feedback_intelligence_agent.schemas.QueryRequest}, \cref{class:feedback_intelligence_agent.schemas.QueryResponse}, \cref{class:feedback_intelligence_agent.schemas.StreamMetadata}, \cref{class:feedback_intelligence_agent.schemas.ChatRequest}, \cref{class:feedback_intelligence_agent.schemas.ChatResponse}, \cref{class:feedback_intelligence_agent.schemas.IndexRequest}, \cref{class:feedback_intelligence_agent.schemas.JobSubmitResponse}, \cref{class:feedback_intelligence_agent.schemas.EvaluationCase}
 
 \apibreak
+\section{\texttt{source\_ids}}
+\label{module:feedback_intelligence_agent.source_ids}\index{Modules!source\_ids}
+
+Collision-free source identifiers and migration of legacy chunk identities.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}source\_\allowbreak{}ids.\allowbreak{}py}, 76 lines
+\apifield{Imports}\texttt{schemas}
+\apifield{Classes}\cref{class:feedback_intelligence_agent.source_ids.SourceIdMigrationError}
+\apifield{Functions}\cref{func:feedback_intelligence_agent.source_ids.encode_source_id}, \cref{func:feedback_intelligence_agent.source_ids.migrate_legacy_chunks}
+
+\apibreak
 \section{\texttt{streaming\_ingestion}}
 \label{module:feedback_intelligence_agent.streaming_ingestion}\index{Modules!streaming\_ingestion}
 
@@ -553,6 +564,6 @@ No function-calling API is involved: routing and execution are keyword and rule 
 \label{module:feedback_intelligence_agent.vector_store}\index{Modules!vector\_store}
 
 A small vector store with JSON persistence.
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}vector\_\allowbreak{}store.\allowbreak{}py}, 188 lines
-\apifield{Imports}\texttt{schemas}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}vector\_\allowbreak{}store.\allowbreak{}py}, 231 lines
+\apifield{Imports}\texttt{schemas}, \texttt{source\_\allowbreak{}ids}
 \apifield{Classes}\cref{class:feedback_intelligence_agent.vector_store.VectorStore}, \cref{class:feedback_intelligence_agent.vector_store.PersistedVectorStore}, \cref{class:feedback_intelligence_agent.vector_store.InMemoryVectorStore}
