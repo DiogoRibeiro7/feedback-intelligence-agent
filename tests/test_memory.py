@@ -43,6 +43,21 @@ def test_json_store_round_trip(tmp_path: Path) -> None:
     assert reloaded_store.conversation_ids() == ["abc-123"]
 
 
+def test_json_store_retains_tenant_scope_and_loads_legacy_history(tmp_path: Path) -> None:
+    store = JsonConversationStore(tmp_path)
+    memory = ConversationMemory(conversation_id="scoped", tenant_id=" AcMe ", turns=[make_turn()])
+    store.save(memory)
+    loaded = JsonConversationStore(tmp_path).get("scoped")
+    assert loaded is not None and loaded.tenant_id == "acme"
+    (tmp_path / "legacy.json").write_text(
+        '{"conversation_id":"legacy","turns":[]}', encoding="utf-8"
+    )
+    legacy = store.get("legacy")
+    assert legacy is not None and legacy.tenant_id is None
+    with pytest.raises(ValueError, match="blank"):
+        ConversationMemory(conversation_id="blank", tenant_id=" ")
+
+
 def test_json_store_returns_none_for_unknown_conversation(tmp_path: Path) -> None:
     store = JsonConversationStore(tmp_path)
     assert store.get("missing") is None

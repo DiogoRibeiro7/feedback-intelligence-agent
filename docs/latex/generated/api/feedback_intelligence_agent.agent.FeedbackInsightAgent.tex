@@ -62,7 +62,8 @@ chat(self, message: str, *, store: ConversationStore, conversation_id: str | Non
   \item[\texttt{filters}] \texttt{MetadataFilters \textbar{} None}, default \texttt{None}, keyword-only.
 \end{arglist}
 \apifield{Value}\texttt{tuple[AgentAnswer,\allowbreak{} str]\allowbreak{}}. The agent answer and the conversation identifier (newly generated when none was supplied).
-\apifield{Details}Loads the conversation from \texttt{store} (or starts a new one when \texttt{conversation\_\allowbreak{}id} is \texttt{None}), answers with the previous turns as context, records the new turn (user message, answer, cited document IDs, route, and confidence), and saves the conversation back.
+\apifield{Raises}\texttt{ValueError}
+\apifield{Details}Loads the conversation from \texttt{store} (or starts a new one when \texttt{conversation\_\allowbreak{}id} is \texttt{None}), answers with the previous turns as context, records the new turn (user message, answer, cited document IDs, route, and confidence), and saves the conversation back. Follow-ups inherit the stored tenant when omitted. Changing a stored conversation's tenant requires starting a new conversation.
 \apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}agent.\allowbreak{}py:263}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/edc9d78403eeed9f7d6ee5aef6b8d9b1b5780ef4/src/feedback_intelligence_agent/agent.py#L263}{online})
 
 \subsection{\texttt{route}}
@@ -77,4 +78,4 @@ route(self, question: str) -> str
   \item[\texttt{question}] \texttt{str}, required.
 \end{arglist}
 \apifield{Value}\texttt{str}
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}agent.\allowbreak{}py:435}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/edc9d78403eeed9f7d6ee5aef6b8d9b1b5780ef4/src/feedback_intelligence_agent/agent.py#L435}{online})
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}agent.\allowbreak{}py:446}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/edc9d78403eeed9f7d6ee5aef6b8d9b1b5780ef4/src/feedback_intelligence_agent/agent.py#L446}{online})

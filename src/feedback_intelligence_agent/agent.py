@@ -275,13 +275,24 @@ class FeedbackInsightAgent:
         ``conversation_id`` is ``None``), answers with the previous turns as
         context, records the new turn (user message, answer, cited document
         IDs, route, and confidence), and saves the conversation back.
+        Follow-ups inherit the stored tenant when omitted. Changing a stored
+        conversation's tenant requires starting a new conversation.
 
         Returns:
             The agent answer and the conversation identifier (newly generated
             when none was supplied).
         """
         resolved_id = conversation_id or new_conversation_id()
-        memory = store.get(resolved_id) or ConversationMemory(conversation_id=resolved_id)
+        memory = store.get(resolved_id)
+        requested_tenant = filters.tenant_id if filters is not None else None
+        if memory is None:
+            memory = ConversationMemory(conversation_id=resolved_id, tenant_id=requested_tenant)
+        elif requested_tenant is not None and requested_tenant != memory.tenant_id:
+            raise ValueError("conversation tenant cannot be changed; start a new conversation")
+        if memory.tenant_id is not None:
+            filters = (filters or MetadataFilters()).model_copy(
+                update={"tenant_id": memory.tenant_id}
+            )
         answer = self.answer(message, top_k=top_k, history=memory.turns, filters=filters)
         document_ids: list[str] = []
         for citation in answer.citations:

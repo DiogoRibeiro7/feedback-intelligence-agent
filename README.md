@@ -605,6 +605,22 @@ update active-learning workflow state. `admin` keys can also rebuild indexes
 and submit ingestion jobs. `GET /health` and `GET /ready` remain open for
 deployment probes.
 
+When authentication is enabled, conversation history belongs to the API key
+that created it. A different key receives `404` when reading or continuing that
+conversation, including an admin key. Sharing a key shares its conversation
+history; changing that key's role preserves access, while rotating it starts a
+new history namespace. Authenticated clients omit `conversation_id` to start a
+conversation and use the returned ID for follow-ups.
+
+Opaque caller identities use PBKDF2-HMAC-SHA256 with 600,000 iterations and a
+fixed application-specific domain separator so they survive restarts. Successful
+derivations are cached in memory for up to three keys; each request still checks
+the current key configuration and role. Use randomly generated API keys.
+
+This ownership check protects conversation history. Tenant authorization for
+queries, reports, feedback, and ingestion, plus tenant filtering in aggregate
+tools, remains on the roadmap.
+
 Optional rate limiting can be enabled independently:
 
 ```bash
@@ -979,6 +995,20 @@ message, the assistant answer, the cited document IDs, a UTC timestamp, and opti
 metadata, keyed by a `conversation_id`. Conversations are persisted as one JSON file
 each (default `.artifacts/conversations/{conversation_id}.json`); an in-memory store
 is available for tests.
+
+Authenticated API histories are stored under
+`.artifacts/conversations/authenticated/<principal-digest>/{conversation_id}.json`.
+Raw API keys are not stored in conversation files or paths. Existing files in
+the legacy root remain available to local/CLI use and are not automatically
+assigned to an authenticated caller. After enabling authentication, start a
+new conversation; key rotation also leaves prior histories in their previous
+namespace.
+
+Each conversation persists its initial `tenant_id` for retrieval. Follow-ups
+that omit it inherit the stored tenant; an explicit different tenant returns
+`400` and requires a new conversation. Tenant names are normalized, and other
+filters remain specific to each request. A conversation started without a
+tenant remains unscoped. Legacy files without this field load as unscoped.
 
 Follow-up questions are first rewritten into standalone questions by a deterministic,
 fully local rewriter (no model call): standalone pronouns are resolved against entities

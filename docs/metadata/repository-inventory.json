@@ -43,7 +43,7 @@
     }
   },
   "files": {
-    "total": 217,
+    "total": 218,
     "excluded_generated_documentation": 323,
     "by_category": {
       "build-configuration": 1,
@@ -65,7 +65,7 @@
       "other": 2,
       "python-script": 2,
       "python-source": 47,
-      "python-test": 44,
+      "python-test": 45,
       "repository-configuration": 2,
       "repository-governance": 8,
       "test-fixture": 2
@@ -97,11 +97,11 @@
       },
       "Markdown": {
         "files": 15,
-        "lines": 2751
+        "lines": 2792
       },
       "Python": {
-        "files": 105,
-        "lines": 28031
+        "files": 106,
+        "lines": 28495
       },
       "TOML": {
         "files": 2,
@@ -129,7 +129,7 @@
         "category": "configuration-template",
         "language": null,
         "lines": null,
-        "bytes": 2906
+        "bytes": 3000
       },
       {
         "path": ".gitattributes",
@@ -254,8 +254,8 @@
         "path": "CHANGELOG.md",
         "category": "documentation",
         "language": "Markdown",
-        "lines": 137,
-        "bytes": 6561
+        "lines": 144,
+        "bytes": 7047
       },
       {
         "path": "CITATION.cff",
@@ -303,15 +303,15 @@
         "path": "README.md",
         "category": "documentation",
         "language": "Markdown",
-        "lines": 1248,
-        "bytes": 58246
+        "lines": 1278,
+        "bytes": 60021
       },
       {
         "path": "ROADMAP.md",
         "category": "documentation",
         "language": "Markdown",
-        "lines": 75,
-        "bytes": 3219
+        "lines": 77,
+        "bytes": 3384
       },
       {
         "path": "SECURITY.md",
@@ -387,8 +387,8 @@
         "path": "docs/architecture.md",
         "category": "documentation",
         "language": "Markdown",
-        "lines": 173,
-        "bytes": 13138
+        "lines": 175,
+        "bytes": 13816
       },
       {
         "path": "docs/case_study.md",
@@ -779,8 +779,8 @@
         "path": "docs/tools/extract_api.py",
         "category": "documentation-tool",
         "language": "Python",
-        "lines": 1102,
-        "bytes": 39306
+        "lines": 1105,
+        "bytes": 39547
       },
       {
         "path": "docs/tools/extract_dependencies.py",
@@ -1003,22 +1003,22 @@
         "path": "src/feedback_intelligence_agent/agent.py",
         "category": "python-source",
         "language": "Python",
-        "lines": 510,
-        "bytes": 21390
+        "lines": 521,
+        "bytes": 22041
       },
       {
         "path": "src/feedback_intelligence_agent/api.py",
         "category": "python-source",
         "language": "Python",
-        "lines": 639,
-        "bytes": 24669
+        "lines": 658,
+        "bytes": 25584
       },
       {
         "path": "src/feedback_intelligence_agent/auth.py",
         "category": "python-source",
         "language": "Python",
-        "lines": 121,
-        "bytes": 3139
+        "lines": 145,
+        "bytes": 4134
       },
       {
         "path": "src/feedback_intelligence_agent/benchmarking.py",
@@ -1094,8 +1094,8 @@
         "path": "src/feedback_intelligence_agent/factory.py",
         "category": "python-source",
         "language": "Python",
-        "lines": 355,
-        "bytes": 14516
+        "lines": 364,
+        "bytes": 14909
       },
       {
         "path": "src/feedback_intelligence_agent/guardrails.py",
@@ -1171,8 +1171,8 @@
         "path": "src/feedback_intelligence_agent/memory.py",
         "category": "python-source",
         "language": "Python",
-        "lines": 345,
-        "bytes": 12909
+        "lines": 357,
+        "bytes": 13379
       },
       {
         "path": "src/feedback_intelligence_agent/metadata_filters.py",
@@ -1360,8 +1360,8 @@
         "path": "tests/test_auth.py",
         "category": "python-test",
         "language": "Python",
-        "lines": 94,
-        "bytes": 2493
+        "lines": 179,
+        "bytes": 5641
       },
       {
         "path": "tests/test_benchmarking.py",
@@ -1392,6 +1392,13 @@
         "bytes": 23815
       },
       {
+        "path": "tests/test_conversation_access.py",
+        "category": "python-test",
+        "language": "Python",
+        "lines": 266,
+        "bytes": 10630
+      },
+      {
         "path": "tests/test_data_contracts.py",
         "category": "python-test",
         "language": "Python",
@@ -1402,8 +1409,8 @@
         "path": "tests/test_docs_tools.py",
         "category": "python-test",
         "language": "Python",
-        "lines": 695,
-        "bytes": 29295
+        "lines": 715,
+        "bytes": 30255
       },
       {
         "path": "tests/test_email_summaries.py",
@@ -1507,8 +1514,8 @@
         "path": "tests/test_memory.py",
         "category": "python-test",
         "language": "Python",
-        "lines": 166,
-        "bytes": 6260
+        "lines": 181,
+        "bytes": 6966
       },
       {
         "path": "tests/test_metadata_filters.py",
@@ -2904,7 +2911,7 @@
       "path": "tests/test_auth.py",
       "module_under_test": "auth",
       "category": "unit",
-      "test_functions": 6,
+      "test_functions": 10,
       "parametrized_cases": 0
     },
     {
@@ -2936,6 +2943,13 @@
       "parametrized_cases": 1
     },
     {
+      "path": "tests/test_conversation_access.py",
+      "module_under_test": "conversation_access",
+      "category": "unit",
+      "test_functions": 12,
+      "parametrized_cases": 3
+    },
+    {
       "path": "tests/test_data_contracts.py",
       "module_under_test": "data_contracts",
       "category": "data validation",
@@ -2946,7 +2960,7 @@
       "path": "tests/test_docs_tools.py",
       "module_under_test": "docs_tools",
       "category": "unit",
-      "test_functions": 56,
+      "test_functions": 57,
       "parametrized_cases": 2
     },
     {
@@ -3051,7 +3065,7 @@
       "path": "tests/test_memory.py",
       "module_under_test": "memory",
       "category": "unit",
-      "test_functions": 14,
+      "test_functions": 15,
       "parametrized_cases": 0
     },
     {
@@ -3380,7 +3394,7 @@
     {
       "name": "FEEDBACK_AGENT_API_AUTH_ENABLED",
       "example": "false",
-      "comment": "Optional API-key authorization. Health and readiness remain open."
+      "comment": "Optional API-key authorization. Health and readiness remain open. Authenticated conversation history belongs to the key; rotating it creates a new namespace."
     },
     {
       "name": "FEEDBACK_AGENT_API_READER_KEY",

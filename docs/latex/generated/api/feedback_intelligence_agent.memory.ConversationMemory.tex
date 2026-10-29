@@ -14,9 +14,25 @@ Ordered turns of one conversation identified by \texttt{conversation\_\allowbrea
 \apifield{Fields}
 \begin{arglist}
   \item[\texttt{conversation\_\allowbreak{}id}] \texttt{str}, required, \texttt{min\_\allowbreak{}length=1}
+  \item[\texttt{tenant\_\allowbreak{}id}] \texttt{str \textbar{} None}, default \texttt{None}, \texttt{min\_\allowbreak{}length=1}
   \item[\texttt{turns}] \texttt{list[ConversationTurn]\allowbreak{}}, default \texttt{list()\allowbreak{}}
 \end{arglist}
 \apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}memory.\allowbreak{}py:118}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/edc9d78403eeed9f7d6ee5aef6b8d9b1b5780ef4/src/feedback_intelligence_agent/memory.py#L118}{online}), pydantic model, module \cref{module:feedback_intelligence_agent.memory}
+
+\subsection{\texttt{normalise\_tenant\_id}}
+\label{method:feedback_intelligence_agent.memory.ConversationMemory.normalise_tenant_id}\index{Methods!normalise\_tenant\_id}
+Keep the conversation's retrieval scope canonical; None is unscoped.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+normalise_tenant_id(cls, value: str | None) -> str | None
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{value}] \texttt{str \textbar{} None}, required.
+\end{arglist}
+\apifield{Value}\texttt{str \textbar{} None}
+\apifield{Raises}\texttt{ValueError}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}memory.\allowbreak{}py:127}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/edc9d78403eeed9f7d6ee5aef6b8d9b1b5780ef4/src/feedback_intelligence_agent/memory.py#L127}{online})
 
 \subsection{\texttt{add\_turn}}
 \label{method:feedback_intelligence_agent.memory.ConversationMemory.add_turn}\index{Methods!add\_turn}
@@ -29,7 +45,7 @@ add_turn(self, turn: ConversationTurn) -> None
 \begin{arglist}
   \item[\texttt{turn}] \texttt{ConversationTurn}, required.
 \end{arglist}
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}memory.\allowbreak{}py:124}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/edc9d78403eeed9f7d6ee5aef6b8d9b1b5780ef4/src/feedback_intelligence_agent/memory.py#L124}{online})
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}memory.\allowbreak{}py:136}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/edc9d78403eeed9f7d6ee5aef6b8d9b1b5780ef4/src/feedback_intelligence_agent/memory.py#L136}{online})
 
 \subsection{\texttt{last\_turn}}
 \label{method:feedback_intelligence_agent.memory.ConversationMemory.last_turn}\index{Methods!last\_turn}
@@ -39,4 +55,4 @@ Return the most recent turn, or \texttt{None} for a new conversation.
 last_turn(self) -> ConversationTurn | None
 \end{lstlisting}
 \apifield{Value}\texttt{ConversationTurn \textbar{} None}
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}memory.\allowbreak{}py:128}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/edc9d78403eeed9f7d6ee5aef6b8d9b1b5780ef4/src/feedback_intelligence_agent/memory.py#L128}{online})
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}memory.\allowbreak{}py:140}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/edc9d78403eeed9f7d6ee5aef6b8d9b1b5780ef4/src/feedback_intelligence_agent/memory.py#L140}{online})

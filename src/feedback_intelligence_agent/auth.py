@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 from enum import Enum
+from functools import lru_cache
+from hashlib import pbkdf2_hmac
 
 from pydantic import BaseModel
 
@@ -16,10 +18,11 @@ class ApiRole(str, Enum):
 
 
 class ApiPrincipal(BaseModel):
-    """Resolved API caller identity."""
+    """Resolved role and opaque API-key identity, independent of role assignment."""
 
     role: ApiRole
     authenticated: bool
+    subject_id: str | None = None
 
 
 class ApiAuthError(ValueError):
@@ -45,6 +48,21 @@ _ROLE_RANK = {
 }
 
 
+@lru_cache(maxsize=3)
+def _subject_id(validated_key: str) -> str:
+    """Stretch a validated key into a stable opaque conversation identity."""
+    # Fixed domain separation preserves identities across restarts and role changes.
+    # This identifies a namespace; it is not a stored password verifier.
+    # Cache only the three configured keys, after authentication, to avoid paying
+    # the derivation cost on every request or caching arbitrary rejected input.
+    return pbkdf2_hmac(
+        "sha256",
+        validated_key.encode("utf-8"),
+        b"feedback-intelligence-agent:api-subject:v1",
+        600_000,
+    ).hex()
+
+
 def resolve_api_principal(
     api_key: str | None,
     *,
@@ -57,6 +75,8 @@ def resolve_api_principal(
 
     When auth is disabled, local callers receive an unauthenticated admin
     principal so route-level dependencies become no-ops.
+    Authenticated identities are derived from the normalized API key; key
+    rotation changes identity, while changing its role preserves identity.
     """
     if not auth_enabled:
         return ApiPrincipal(role=ApiRole.admin, authenticated=False)
@@ -75,7 +95,11 @@ def resolve_api_principal(
     role = keys.get(api_key.strip())
     if role is None:
         raise ApiAuthenticationError("invalid API key")
-    return ApiPrincipal(role=role, authenticated=True)
+    return ApiPrincipal(
+        role=role,
+        authenticated=True,
+        subject_id=_subject_id(api_key.strip()),
+    )
 
 
 def require_api_role(
