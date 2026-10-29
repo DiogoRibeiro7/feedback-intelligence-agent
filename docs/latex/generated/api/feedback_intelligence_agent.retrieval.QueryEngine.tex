@@ -20,20 +20,21 @@ QueryEngine(self, embedding_model: EmbeddingModel, vector_store: VectorStore, *,
   \item[\texttt{vector\_\allowbreak{}store}] \texttt{VectorStore}, required.
   \item[\texttt{query\_\allowbreak{}expander}] \texttt{QueryExpander \textbar{} None}, default \texttt{None}, keyword-only.
 \end{arglist}
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}retrieval.\allowbreak{}py:22}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/edc9d78403eeed9f7d6ee5aef6b8d9b1b5780ef4/src/feedback_intelligence_agent/retrieval.py#L22}{online}), class, module \cref{module:feedback_intelligence_agent.retrieval}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}retrieval.\allowbreak{}py:24}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/edc9d78403eeed9f7d6ee5aef6b8d9b1b5780ef4/src/feedback_intelligence_agent/retrieval.py#L24}{online}), class, module \cref{module:feedback_intelligence_agent.retrieval}
 
 \subsection{\texttt{search}}
 \label{method:feedback_intelligence_agent.retrieval.QueryEngine.search}\index{Methods!search}
 Search for chunks relevant to a natural-language question.
 \apifield{Usage}
 \begin{lstlisting}[style=usage, language=Python]
-search(self, question: str, *, top_k: int = 4) -> list[SearchResult]
+search(self, question: str, *, top_k: int = 4, filters: MetadataFilters | None = None) -> list[SearchResult]
 \end{lstlisting}
 \apifield{Arguments}
 \begin{arglist}
   \item[\texttt{question}] \texttt{str}, required.
   \item[\texttt{top\_\allowbreak{}k}] \texttt{int}, default \texttt{4}, keyword-only.
+  \item[\texttt{filters}] \texttt{MetadataFilters \textbar{} None}, default \texttt{None}, keyword-only.
 \end{arglist}
 \apifield{Value}\texttt{list[SearchResult]\allowbreak{}}
 \apifield{Raises}\texttt{ValueError}
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}retrieval.\allowbreak{}py:37}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/edc9d78403eeed9f7d6ee5aef6b8d9b1b5780ef4/src/feedback_intelligence_agent/retrieval.py#L37}{online})
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}retrieval.\allowbreak{}py:39}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/edc9d78403eeed9f7d6ee5aef6b8d9b1b5780ef4/src/feedback_intelligence_agent/retrieval.py#L39}{online})

@@ -21,7 +21,7 @@ Interface shared by every vector store backend.
   \item[\texttt{chunks}] Return the indexed chunks.
 \end{arglist}
 \apifield{Details}Both the default \texttt{InMemoryVectorStore} (JSON persistence) and the optional Qdrant-backed store satisfy this protocol, so the retrieval layer can treat them interchangeably. Vectors are assumed to be L2-normalised and scored by cosine similarity, with higher scores meaning more similar.
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}vector\_\allowbreak{}store.\allowbreak{}py:19}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/edc9d78403eeed9f7d6ee5aef6b8d9b1b5780ef4/src/feedback_intelligence_agent/vector_store.py#L19}{online}), protocol, module \cref{module:feedback_intelligence_agent.vector_store}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}vector\_\allowbreak{}store.\allowbreak{}py:20}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/edc9d78403eeed9f7d6ee5aef6b8d9b1b5780ef4/src/feedback_intelligence_agent/vector_store.py#L20}{online}), protocol, module \cref{module:feedback_intelligence_agent.vector_store}
 
 \subsection{\texttt{add}}
 \label{method:feedback_intelligence_agent.vector_store.VectorStore.add}\index{Methods!add}
@@ -35,19 +35,20 @@ add(self, chunks: list[DocumentChunk], vectors: npt.NDArray[np.float64]) -> None
   \item[\texttt{chunks}] \texttt{list[DocumentChunk]\allowbreak{}}, required.
   \item[\texttt{vectors}] \texttt{npt.\allowbreak{}NDArray[np.\allowbreak{}float64]\allowbreak{}}, required.
 \end{arglist}
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}vector\_\allowbreak{}store.\allowbreak{}py:38}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/edc9d78403eeed9f7d6ee5aef6b8d9b1b5780ef4/src/feedback_intelligence_agent/vector_store.py#L38}{online})
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}vector\_\allowbreak{}store.\allowbreak{}py:39}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/edc9d78403eeed9f7d6ee5aef6b8d9b1b5780ef4/src/feedback_intelligence_agent/vector_store.py#L39}{online})
 
 \subsection{\texttt{search}}
 \label{method:feedback_intelligence_agent.vector_store.VectorStore.search}\index{Methods!search}
-Return the most similar chunks for a query vector, highest score first.
+Filter eligible chunks before limiting results, highest score first.
 \apifield{Usage}
 \begin{lstlisting}[style=usage, language=Python]
-search(self, query_vector: npt.NDArray[np.float64], *, top_k: int = 4) -> list[SearchResult]
+search(self, query_vector: npt.NDArray[np.float64], *, top_k: int = 4, filters: MetadataFilters | None = None) -> list[SearchResult]
 \end{lstlisting}
 \apifield{Arguments}
 \begin{arglist}
   \item[\texttt{query\_\allowbreak{}vector}] \texttt{npt.\allowbreak{}NDArray[np.\allowbreak{}float64]\allowbreak{}}, required.
   \item[\texttt{top\_\allowbreak{}k}] \texttt{int}, default \texttt{4}, keyword-only.
+  \item[\texttt{filters}] \texttt{MetadataFilters \textbar{} None}, default \texttt{None}, keyword-only.
 \end{arglist}
 \apifield{Value}\texttt{list[SearchResult]\allowbreak{}}
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}vector\_\allowbreak{}store.\allowbreak{}py:41}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/edc9d78403eeed9f7d6ee5aef6b8d9b1b5780ef4/src/feedback_intelligence_agent/vector_store.py#L41}{online})
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}vector\_\allowbreak{}store.\allowbreak{}py:42}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/edc9d78403eeed9f7d6ee5aef6b8d9b1b5780ef4/src/feedback_intelligence_agent/vector_store.py#L42}{online})

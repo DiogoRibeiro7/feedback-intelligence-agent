@@ -43,8 +43,8 @@
     }
   },
   "files": {
-    "total": 213,
-    "excluded_generated_documentation": 320,
+    "total": 215,
+    "excluded_generated_documentation": 321,
     "by_category": {
       "build-configuration": 1,
       "build-interface": 1,
@@ -64,8 +64,8 @@
       "license": 1,
       "other": 2,
       "python-script": 2,
-      "python-source": 45,
-      "python-test": 42,
+      "python-source": 46,
+      "python-test": 43,
       "repository-configuration": 2,
       "repository-governance": 8,
       "test-fixture": 2
@@ -97,11 +97,11 @@
       },
       "Markdown": {
         "files": 15,
-        "lines": 2697
+        "lines": 2722
       },
       "Python": {
-        "files": 101,
-        "lines": 27274
+        "files": 103,
+        "lines": 27604
       },
       "TOML": {
         "files": 2,
@@ -254,8 +254,8 @@
         "path": "CHANGELOG.md",
         "category": "documentation",
         "language": "Markdown",
-        "lines": 124,
-        "bytes": 5603
+        "lines": 130,
+        "bytes": 6061
       },
       {
         "path": "CITATION.cff",
@@ -303,8 +303,8 @@
         "path": "README.md",
         "category": "documentation",
         "language": "Markdown",
-        "lines": 1209,
-        "bytes": 55657
+        "lines": 1228,
+        "bytes": 56971
       },
       {
         "path": "ROADMAP.md",
@@ -388,7 +388,7 @@
         "category": "documentation",
         "language": "Markdown",
         "lines": 171,
-        "bytes": 12206
+        "bytes": 12569
       },
       {
         "path": "docs/case_study.md",
@@ -786,8 +786,8 @@
         "path": "docs/tools/extract_dependencies.py",
         "category": "documentation-tool",
         "language": "Python",
-        "lines": 374,
-        "bytes": 13141
+        "lines": 375,
+        "bytes": 13175
       },
       {
         "path": "docs/tools/generate_docs.py",
@@ -1003,8 +1003,8 @@
         "path": "src/feedback_intelligence_agent/agent.py",
         "category": "python-source",
         "language": "Python",
-        "lines": 564,
-        "bytes": 23621
+        "lines": 510,
+        "bytes": 21390
       },
       {
         "path": "src/feedback_intelligence_agent/api.py",
@@ -1150,8 +1150,8 @@
         "path": "src/feedback_intelligence_agent/lexical_search.py",
         "category": "python-source",
         "language": "Python",
-        "lines": 113,
-        "bytes": 4468
+        "lines": 120,
+        "bytes": 4779
       },
       {
         "path": "src/feedback_intelligence_agent/llm.py",
@@ -1166,6 +1166,13 @@
         "language": "Python",
         "lines": 345,
         "bytes": 12909
+      },
+      {
+        "path": "src/feedback_intelligence_agent/metadata_filters.py",
+        "category": "python-source",
+        "language": "Python",
+        "lines": 76,
+        "bytes": 2918
       },
       {
         "path": "src/feedback_intelligence_agent/output_parser.py",
@@ -1199,8 +1206,8 @@
         "path": "src/feedback_intelligence_agent/qdrant_store.py",
         "category": "python-source",
         "language": "Python",
-        "lines": 217,
-        "bytes": 8263
+        "lines": 237,
+        "bytes": 9279
       },
       {
         "path": "src/feedback_intelligence_agent/query_expansion.py",
@@ -1241,8 +1248,8 @@
         "path": "src/feedback_intelligence_agent/retrieval.py",
         "category": "python-source",
         "language": "Python",
-        "lines": 113,
-        "bytes": 4473
+        "lines": 131,
+        "bytes": 5209
       },
       {
         "path": "src/feedback_intelligence_agent/safe_paths.py",
@@ -1255,8 +1262,8 @@
         "path": "src/feedback_intelligence_agent/schemas.py",
         "category": "python-source",
         "language": "Python",
-        "lines": 311,
-        "bytes": 10241
+        "lines": 310,
+        "bytes": 10403
       },
       {
         "path": "src/feedback_intelligence_agent/source_ids.py",
@@ -1297,8 +1304,8 @@
         "path": "src/feedback_intelligence_agent/vector_store.py",
         "category": "python-source",
         "language": "Python",
-        "lines": 231,
-        "bytes": 8970
+        "lines": 256,
+        "bytes": 9859
       },
       {
         "path": "tests/conftest.py",
@@ -1420,6 +1427,13 @@
         "bytes": 14612
       },
       {
+        "path": "tests/test_filtered_retrieval.py",
+        "category": "python-test",
+        "language": "Python",
+        "lines": 182,
+        "bytes": 7760
+      },
+      {
         "path": "tests/test_guardrails.py",
         "category": "python-test",
         "language": "Python",
@@ -1521,8 +1535,8 @@
         "path": "tests/test_qdrant_store.py",
         "category": "python-test",
         "language": "Python",
-        "lines": 364,
-        "bytes": 13790
+        "lines": 420,
+        "bytes": 15658
       },
       {
         "path": "tests/test_query_expansion.py",
@@ -2905,6 +2919,13 @@
       "parametrized_cases": 0
     },
     {
+      "path": "tests/test_filtered_retrieval.py",
+      "module_under_test": "filtered_retrieval",
+      "category": "unit",
+      "test_functions": 6,
+      "parametrized_cases": 8
+    },
+    {
       "path": "tests/test_guardrails.py",
       "module_under_test": "guardrails",
       "category": "unit",
@@ -3006,8 +3027,8 @@
       "path": "tests/test_qdrant_store.py",
       "module_under_test": "qdrant_store",
       "category": "unit",
-      "test_functions": 12,
-      "parametrized_cases": 2
+      "test_functions": 13,
+      "parametrized_cases": 3
     },
     {
       "path": "tests/test_query_expansion.py",

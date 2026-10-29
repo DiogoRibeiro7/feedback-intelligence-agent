@@ -1,0 +1,24 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{matches\_metadata\_filters}}
+\label{func:feedback_intelligence_agent.metadata_filters.matches_metadata_filters}\index{Functions!matches\_metadata\_filters}
+
+Match all requested fields using the same semantics for every backend.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+matches_metadata_filters(metadata: Mapping[str, object], filters: MetadataFilters) -> bool
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{metadata}] \texttt{Mapping[str,\allowbreak{} object]\allowbreak{}}, required.
+  \item[\texttt{filters}] \texttt{MetadataFilters}, required.
+\end{arglist}
+\apifield{Value}\texttt{bool}
+\apifield{Details}Tenant and segment comparisons ignore case. Missing tenant metadata denotes the default tenant; missing or invalid ratings retain the legacy fallback of 5. Date bounds are inclusive, and naive dates are interpreted as UTC. Missing or invalid dates cannot satisfy a date filter.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}metadata\_\allowbreak{}filters.\allowbreak{}py:11}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/edc9d78403eeed9f7d6ee5aef6b8d9b1b5780ef4/src/feedback_intelligence_agent/metadata_filters.py#L11}{online}), module \cref{module:feedback_intelligence_agent.metadata_filters}

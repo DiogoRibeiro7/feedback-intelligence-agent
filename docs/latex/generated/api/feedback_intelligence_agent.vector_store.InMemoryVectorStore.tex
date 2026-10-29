@@ -25,7 +25,7 @@ InMemoryVectorStore(self, dim: int) -> None
   \item[\texttt{chunks}] Return indexed chunks.
 \end{arglist}
 \apifield{Details}Vectors are assumed to be L2-normalised. The embedding model in this project returns normalised vectors, so search can use a simple dot product.
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}vector\_\allowbreak{}store.\allowbreak{}py:56}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/edc9d78403eeed9f7d6ee5aef6b8d9b1b5780ef4/src/feedback_intelligence_agent/vector_store.py#L56}{online}), class, module \cref{module:feedback_intelligence_agent.vector_store}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}vector\_\allowbreak{}store.\allowbreak{}py:61}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/edc9d78403eeed9f7d6ee5aef6b8d9b1b5780ef4/src/feedback_intelligence_agent/vector_store.py#L61}{online}), class, module \cref{module:feedback_intelligence_agent.vector_store}
 
 \subsection{\texttt{add}}
 \label{method:feedback_intelligence_agent.vector_store.InMemoryVectorStore.add}\index{Methods!add}
@@ -43,7 +43,7 @@ add(self, chunks: list[DocumentChunk], vectors: npt.NDArray[np.float64]) -> None
 \begin{arglist}
   \item[\texttt{ValueError}] If vector shape or dimension does not match the chunks and store.
 \end{arglist}
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}vector\_\allowbreak{}store.\allowbreak{}py:80}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/edc9d78403eeed9f7d6ee5aef6b8d9b1b5780ef4/src/feedback_intelligence_agent/vector_store.py#L80}{online})
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}vector\_\allowbreak{}store.\allowbreak{}py:85}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/edc9d78403eeed9f7d6ee5aef6b8d9b1b5780ef4/src/feedback_intelligence_agent/vector_store.py#L85}{online})
 
 \subsection{\texttt{remove\_source\_ids}}
 \label{method:feedback_intelligence_agent.vector_store.InMemoryVectorStore.remove_source_ids}\index{Methods!remove\_source\_ids}
@@ -58,7 +58,7 @@ remove_source_ids(self, source_ids: set[str]) -> int
 \end{arglist}
 \apifield{Value}\texttt{int}
 \apifield{Details}Returns the number of chunks removed. This supports incremental updates: a refreshed feedback record can replace every old chunk for the same \texttt{feedback\_\allowbreak{}id} before the new chunks are appended.
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}vector\_\allowbreak{}store.\allowbreak{}py:106}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/edc9d78403eeed9f7d6ee5aef6b8d9b1b5780ef4/src/feedback_intelligence_agent/vector_store.py#L106}{online})
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}vector\_\allowbreak{}store.\allowbreak{}py:111}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/edc9d78403eeed9f7d6ee5aef6b8d9b1b5780ef4/src/feedback_intelligence_agent/vector_store.py#L111}{online})
 
 \subsection{\texttt{upsert\_sources}}
 \label{method:feedback_intelligence_agent.vector_store.InMemoryVectorStore.upsert_sources}\index{Methods!upsert\_sources}
@@ -78,23 +78,24 @@ upsert_sources(self, chunks: list[DocumentChunk], vectors: npt.NDArray[np.float6
   \item[\texttt{ValueError}] If vector shape or dimension does not match the chunks and store.
 \end{arglist}
 \apifield{Details}The replacement key is \texttt{DocumentChunk.\allowbreak{}source\_\allowbreak{}id}. All old chunks for any incoming source are replaced, which handles changed text that produces a different number of chunks. Invalid vectors leave the existing chunks and vectors unchanged.
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}vector\_\allowbreak{}store.\allowbreak{}py:125}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/edc9d78403eeed9f7d6ee5aef6b8d9b1b5780ef4/src/feedback_intelligence_agent/vector_store.py#L125}{online})
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}vector\_\allowbreak{}store.\allowbreak{}py:130}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/edc9d78403eeed9f7d6ee5aef6b8d9b1b5780ef4/src/feedback_intelligence_agent/vector_store.py#L130}{online})
 
 \subsection{\texttt{search}}
 \label{method:feedback_intelligence_agent.vector_store.InMemoryVectorStore.search}\index{Methods!search}
-Return the most similar chunks for a query vector.
+Return the most similar eligible chunks, filtering before top-k selection.
 \apifield{Usage}
 \begin{lstlisting}[style=usage, language=Python]
-search(self, query_vector: npt.NDArray[np.float64], *, top_k: int = 4) -> list[SearchResult]
+search(self, query_vector: npt.NDArray[np.float64], *, top_k: int = 4, filters: MetadataFilters | None = None) -> list[SearchResult]
 \end{lstlisting}
 \apifield{Arguments}
 \begin{arglist}
   \item[\texttt{query\_\allowbreak{}vector}] \texttt{npt.\allowbreak{}NDArray[np.\allowbreak{}float64]\allowbreak{}}, required.
   \item[\texttt{top\_\allowbreak{}k}] \texttt{int}, default \texttt{4}, keyword-only.
+  \item[\texttt{filters}] \texttt{MetadataFilters \textbar{} None}, default \texttt{None}, keyword-only.
 \end{arglist}
 \apifield{Value}\texttt{list[SearchResult]\allowbreak{}}
 \apifield{Raises}\texttt{ValueError}
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}vector\_\allowbreak{}store.\allowbreak{}py:157}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/edc9d78403eeed9f7d6ee5aef6b8d9b1b5780ef4/src/feedback_intelligence_agent/vector_store.py#L157}{online})
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}vector\_\allowbreak{}store.\allowbreak{}py:162}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/edc9d78403eeed9f7d6ee5aef6b8d9b1b5780ef4/src/feedback_intelligence_agent/vector_store.py#L162}{online})
 
 \subsection{\texttt{save}}
 \label{method:feedback_intelligence_agent.vector_store.InMemoryVectorStore.save}\index{Methods!save}
@@ -107,7 +108,7 @@ save(self, path: str | Path) -> None
 \begin{arglist}
   \item[\texttt{path}] \texttt{str \textbar{} Path}, required.
 \end{arglist}
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}vector\_\allowbreak{}store.\allowbreak{}py:182}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/edc9d78403eeed9f7d6ee5aef6b8d9b1b5780ef4/src/feedback_intelligence_agent/vector_store.py#L182}{online})
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}vector\_\allowbreak{}store.\allowbreak{}py:207}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/edc9d78403eeed9f7d6ee5aef6b8d9b1b5780ef4/src/feedback_intelligence_agent/vector_store.py#L207}{online})
 
 \subsection{\texttt{load}}
 \label{method:feedback_intelligence_agent.vector_store.InMemoryVectorStore.load}\index{Methods!load}
@@ -126,7 +127,7 @@ load(cls, path: str | Path) -> InMemoryVectorStore
   \item[\texttt{DataLoadingError}] If the payload or its legacy identities are invalid.
 \end{arglist}
 \apifield{Details}Saving the returned store persists version-2 identifiers. Migration retains the original vectors and requires no embedding provider.
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}vector\_\allowbreak{}store.\allowbreak{}py:197}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/edc9d78403eeed9f7d6ee5aef6b8d9b1b5780ef4/src/feedback_intelligence_agent/vector_store.py#L197}{online})
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}vector\_\allowbreak{}store.\allowbreak{}py:222}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/edc9d78403eeed9f7d6ee5aef6b8d9b1b5780ef4/src/feedback_intelligence_agent/vector_store.py#L222}{online})
 
 \subsection{\texttt{to\_json}}
 \label{method:feedback_intelligence_agent.vector_store.InMemoryVectorStore.to_json}\index{Methods!to\_json}
@@ -136,4 +137,4 @@ Return a compact JSON representation for debugging.
 to_json(self) -> str
 \end{lstlisting}
 \apifield{Value}\texttt{str}
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}vector\_\allowbreak{}store.\allowbreak{}py:224}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/edc9d78403eeed9f7d6ee5aef6b8d9b1b5780ef4/src/feedback_intelligence_agent/vector_store.py#L224}{online})
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}vector\_\allowbreak{}store.\allowbreak{}py:249}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/edc9d78403eeed9f7d6ee5aef6b8d9b1b5780ef4/src/feedback_intelligence_agent/vector_store.py#L249}{online})

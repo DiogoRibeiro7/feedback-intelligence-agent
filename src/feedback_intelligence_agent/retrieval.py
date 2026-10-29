@@ -7,15 +7,17 @@ from typing import Protocol
 
 from feedback_intelligence_agent.embeddings import EmbeddingModel
 from feedback_intelligence_agent.query_expansion import QueryExpander
-from feedback_intelligence_agent.schemas import DocumentChunk, SearchResult
+from feedback_intelligence_agent.schemas import DocumentChunk, MetadataFilters, SearchResult
 from feedback_intelligence_agent.vector_store import VectorStore
 
 
 class Retriever(Protocol):
     """Protocol implemented by all retrievers (dense, lexical, hybrid)."""
 
-    def search(self, question: str, *, top_k: int = 4) -> list[SearchResult]:
-        """Return the most relevant chunks for a natural-language question."""
+    def search(
+        self, question: str, *, top_k: int = 4, filters: MetadataFilters | None = None
+    ) -> list[SearchResult]:
+        """Apply metadata filters before limiting the most relevant chunks."""
         ...
 
 
@@ -34,7 +36,9 @@ class QueryEngine:
         self.vector_store = vector_store
         self.query_expander = query_expander
 
-    def search(self, question: str, *, top_k: int = 4) -> list[SearchResult]:
+    def search(
+        self, question: str, *, top_k: int = 4, filters: MetadataFilters | None = None
+    ) -> list[SearchResult]:
         """Search for chunks relevant to a natural-language question."""
         if not question.strip():
             raise ValueError("question cannot be empty")
@@ -44,6 +48,8 @@ class QueryEngine:
             else question
         )
         query_vector = self.embedding_model.embed([retrieval_question])[0]
+        if filters is not None and not filters.is_empty:
+            return self.vector_store.search(query_vector, top_k=top_k, filters=filters)
         return self.vector_store.search(query_vector, top_k=top_k)
 
 
@@ -75,7 +81,9 @@ class HybridRetriever:
         self.dense_weight = dense_weight / total
         self.lexical_weight = lexical_weight / total
 
-    def search(self, question: str, *, top_k: int = 4) -> list[SearchResult]:
+    def search(
+        self, question: str, *, top_k: int = 4, filters: MetadataFilters | None = None
+    ) -> list[SearchResult]:
         """Return de-duplicated chunks ranked by the combined hybrid score."""
         if not question.strip():
             raise ValueError("question cannot be empty")
@@ -83,9 +91,19 @@ class HybridRetriever:
             raise ValueError("top_k must be positive")
 
         candidate_k = max(top_k * 2, top_k)
+        dense_results = (
+            self.dense.search(question, top_k=candidate_k, filters=filters)
+            if filters is not None and not filters.is_empty
+            else self.dense.search(question, top_k=candidate_k)
+        )
+        lexical_results = (
+            self.lexical.search(question, top_k=candidate_k, filters=filters)
+            if filters is not None and not filters.is_empty
+            else self.lexical.search(question, top_k=candidate_k)
+        )
         contributions = (
-            (self.dense.search(question, top_k=candidate_k), self.dense_weight),
-            (self.lexical.search(question, top_k=candidate_k), self.lexical_weight),
+            (dense_results, self.dense_weight),
+            (lexical_results, self.lexical_weight),
         )
         combined_scores: dict[str, float] = {}
         chunks_by_id: dict[str, DocumentChunk] = {}

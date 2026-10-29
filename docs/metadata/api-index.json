@@ -49,7 +49,7 @@
     {
       "name": "feedback_intelligence_agent.agent",
       "source": "src/feedback_intelligence_agent/agent.py",
-      "line_count": 564,
+      "line_count": 510,
       "public": true,
       "summary": "Agent orchestration for the feedback intelligence agent.",
       "description": "",
@@ -60,6 +60,7 @@
         "hallucination",
         "llm",
         "memory",
+        "metadata_filters",
         "output_parser",
         "prompts",
         "reranking",
@@ -693,12 +694,13 @@
     {
       "name": "feedback_intelligence_agent.lexical_search",
       "source": "src/feedback_intelligence_agent/lexical_search.py",
-      "line_count": 113,
+      "line_count": 120,
       "public": true,
       "summary": "Lexical BM25 search implemented from scratch.",
       "description": "The retriever complements dense hashing-embedding search: BM25 rewards exact\nterm matches (product names, error codes, integration names) that vector\nsimilarity can dilute, while staying fully local and dependency-free.",
       "exports": [],
       "imports_internal": [
+        "metadata_filters",
         "query_expansion",
         "schemas"
       ],
@@ -766,6 +768,23 @@
       "function_names": [
         "new_conversation_id",
         "extract_entities"
+      ],
+      "constant_names": []
+    },
+    {
+      "name": "feedback_intelligence_agent.metadata_filters",
+      "source": "src/feedback_intelligence_agent/metadata_filters.py",
+      "line_count": 76,
+      "public": true,
+      "summary": "Shared metadata matching for retrieval and the agent's final evidence check.",
+      "description": "",
+      "exports": [],
+      "imports_internal": [
+        "schemas"
+      ],
+      "class_names": [],
+      "function_names": [
+        "matches_metadata_filters"
       ],
       "constant_names": []
     },
@@ -868,12 +887,13 @@
     {
       "name": "feedback_intelligence_agent.qdrant_store",
       "source": "src/feedback_intelligence_agent/qdrant_store.py",
-      "line_count": 217,
+      "line_count": 237,
       "public": true,
       "summary": "Optional Qdrant-backed vector store.",
       "description": "The store mirrors the semantics of the default ``InMemoryVectorStore`` but\npersists vectors in a running Qdrant instance instead of a local JSON file.\nIt satisfies the same ``VectorStore`` protocol, so the retrieval layer treats both\nstores identically.\n\n``qdrant-client`` is an *optional* dependency (poetry extra ``qdrant``) and is\nimported lazily, with an actionable error if it is not installed. This keeps the\ndefault install lean and the deterministic local path free of any external\nservice.",
       "exports": [],
       "imports_internal": [
+        "metadata_filters",
         "schemas",
         "source_ids"
       ],
@@ -989,7 +1009,7 @@
     {
       "name": "feedback_intelligence_agent.retrieval",
       "source": "src/feedback_intelligence_agent/retrieval.py",
-      "line_count": 113,
+      "line_count": 131,
       "public": true,
       "summary": "Retrieval helpers.",
       "description": "",
@@ -1028,7 +1048,7 @@
     {
       "name": "feedback_intelligence_agent.schemas",
       "source": "src/feedback_intelligence_agent/schemas.py",
-      "line_count": 311,
+      "line_count": 310,
       "public": true,
       "summary": "Typed domain schemas used across the project.",
       "description": "",
@@ -1229,12 +1249,13 @@
     {
       "name": "feedback_intelligence_agent.vector_store",
       "source": "src/feedback_intelligence_agent/vector_store.py",
-      "line_count": 231,
+      "line_count": 256,
       "public": true,
       "summary": "A small vector store with JSON persistence.",
       "description": "",
       "exports": [],
       "imports_internal": [
+        "metadata_filters",
         "schemas",
         "source_ids"
       ],
@@ -5542,7 +5563,7 @@
       "module": "feedback_intelligence_agent.lexical_search",
       "signature": "tokenize(text: str) -> list[str]",
       "source": "src/feedback_intelligence_agent/lexical_search.py",
-      "line": 21,
+      "line": 22,
       "public": true,
       "is_async": false,
       "decorators": [],
@@ -5620,6 +5641,44 @@
       "parameters": [],
       "returns": {
         "annotation": "str",
+        "description": ""
+      },
+      "raises": [],
+      "examples": "",
+      "notes": "",
+      "see_also": []
+    },
+    {
+      "name": "matches_metadata_filters",
+      "qualified_name": "feedback_intelligence_agent.metadata_filters.matches_metadata_filters",
+      "kind": "function",
+      "module": "feedback_intelligence_agent.metadata_filters",
+      "signature": "matches_metadata_filters(metadata: Mapping[str, object], filters: MetadataFilters) -> bool",
+      "source": "src/feedback_intelligence_agent/metadata_filters.py",
+      "line": 11,
+      "public": true,
+      "is_async": false,
+      "decorators": [],
+      "summary": "Match all requested fields using the same semantics for every backend.",
+      "description": "Tenant and segment comparisons ignore case. Missing tenant metadata denotes\nthe default tenant; missing or invalid ratings retain the legacy fallback\nof 5. Date bounds are inclusive, and naive dates are interpreted as UTC.\nMissing or invalid dates cannot satisfy a date filter.",
+      "parameters": [
+        {
+          "name": "metadata",
+          "annotation": "Mapping[str, object]",
+          "default": null,
+          "kind": "positional-or-keyword",
+          "description": ""
+        },
+        {
+          "name": "filters",
+          "annotation": "MetadataFilters",
+          "default": null,
+          "kind": "positional-or-keyword",
+          "description": ""
+        }
+      ],
+      "returns": {
+        "annotation": "bool",
         "description": ""
       },
       "raises": [],
@@ -5893,7 +5952,7 @@
       "module": "feedback_intelligence_agent.retrieval",
       "signature": "min_max_normalize(scores: Sequence[float]) -> list[float]",
       "source": "src/feedback_intelligence_agent/retrieval.py",
-      "line": 106,
+      "line": 124,
       "public": true,
       "is_async": false,
       "decorators": [],
@@ -7887,13 +7946,13 @@
           "qualified_name": "feedback_intelligence_agent.retrieval.Retriever.search",
           "kind": "method",
           "module": "feedback_intelligence_agent.retrieval",
-          "signature": "search(self, question: str, *, top_k: int = 4) -> list[SearchResult]",
+          "signature": "search(self, question: str, *, top_k: int = 4, filters: MetadataFilters | None = None) -> list[SearchResult]",
           "source": "src/feedback_intelligence_agent/retrieval.py",
           "line": 17,
           "public": true,
           "is_async": false,
           "decorators": [],
-          "summary": "Return the most relevant chunks for a natural-language question.",
+          "summary": "Apply metadata filters before limiting the most relevant chunks.",
           "description": "",
           "parameters": [
             {
@@ -7914,6 +7973,13 @@
               "name": "top_k",
               "annotation": "int",
               "default": "4",
+              "kind": "keyword-only",
+              "description": ""
+            },
+            {
+              "name": "filters",
+              "annotation": "MetadataFilters | None",
+              "default": "None",
               "kind": "keyword-only",
               "description": ""
             }
@@ -8369,7 +8435,7 @@
         "Protocol"
       ],
       "source": "src/feedback_intelligence_agent/vector_store.py",
-      "line": 19,
+      "line": 20,
       "public": true,
       "decorators": [
         "runtime_checkable"
@@ -8394,7 +8460,7 @@
           "module": "feedback_intelligence_agent.vector_store",
           "signature": "add(self, chunks: list[DocumentChunk], vectors: npt.NDArray[np.float64]) -> None",
           "source": "src/feedback_intelligence_agent/vector_store.py",
-          "line": 38,
+          "line": 39,
           "public": true,
           "is_async": false,
           "decorators": [],
@@ -8437,13 +8503,13 @@
           "qualified_name": "feedback_intelligence_agent.vector_store.VectorStore.search",
           "kind": "method",
           "module": "feedback_intelligence_agent.vector_store",
-          "signature": "search(self, query_vector: npt.NDArray[np.float64], *, top_k: int = 4) -> list[SearchResult]",
+          "signature": "search(self, query_vector: npt.NDArray[np.float64], *, top_k: int = 4, filters: MetadataFilters | None = None) -> list[SearchResult]",
           "source": "src/feedback_intelligence_agent/vector_store.py",
-          "line": 41,
+          "line": 42,
           "public": true,
           "is_async": false,
           "decorators": [],
-          "summary": "Return the most similar chunks for a query vector, highest score first.",
+          "summary": "Filter eligible chunks before limiting results, highest score first.",
           "description": "",
           "parameters": [
             {
@@ -8466,6 +8532,13 @@
               "default": "4",
               "kind": "keyword-only",
               "description": ""
+            },
+            {
+              "name": "filters",
+              "annotation": "MetadataFilters | None",
+              "default": "None",
+              "kind": "keyword-only",
+              "description": ""
             }
           ],
           "returns": {
@@ -8486,7 +8559,7 @@
           "module": "feedback_intelligence_agent.vector_store",
           "signature": "size(self) -> int",
           "source": "src/feedback_intelligence_agent/vector_store.py",
-          "line": 31,
+          "line": 32,
           "public": true,
           "is_async": false,
           "decorators": [
@@ -8519,7 +8592,7 @@
           "module": "feedback_intelligence_agent.vector_store",
           "signature": "chunks(self) -> list[DocumentChunk]",
           "source": "src/feedback_intelligence_agent/vector_store.py",
-          "line": 35,
+          "line": 36,
           "public": true,
           "is_async": false,
           "decorators": [
@@ -8895,7 +8968,7 @@
       "annotation": null,
       "value": "re.compile('[a-zA-Z0-9_]+')",
       "source": "src/feedback_intelligence_agent/lexical_search.py",
-      "line": 18,
+      "line": 19,
       "public": true,
       "description": ""
     },
@@ -11580,6 +11653,9 @@
       "feedback_intelligence_agent.llm._import_boto3",
       "feedback_intelligence_agent.llm._import_botocore_exceptions",
       "feedback_intelligence_agent.memory._validate_conversation_id",
+      "feedback_intelligence_agent.metadata_filters._comparable_datetime",
+      "feedback_intelligence_agent.metadata_filters._metadata_datetime",
+      "feedback_intelligence_agent.metadata_filters._metadata_rating",
       "feedback_intelligence_agent.output_parser._compact_error",
       "feedback_intelligence_agent.output_parser._extract_fenced_json",
       "feedback_intelligence_agent.output_parser._extract_first_json_object",

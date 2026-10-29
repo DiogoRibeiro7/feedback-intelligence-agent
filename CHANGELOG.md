@@ -6,6 +6,12 @@ All notable changes to this project are documented here.
 
 ### Fixed
 
+- Metadata filters apply before candidate limits in dense, lexical, and hybrid
+  retrieval; Qdrant pages until enough eligible results are found or exhausted.
+- Shared metadata matching preserves legacy defaults and normalizes timestamp
+  objects and ISO strings, including trailing `Z`, to inclusive UTC date bounds.
+- Date filter range validation accepts mixed naive and timezone-aware bounds
+  using UTC, and reports reversed ranges as validation errors.
 - Source and chunk IDs escape tenant/feedback components to prevent delimiter
   collisions, with in-memory legacy JSON migration and a persisted version marker.
 - Qdrant refuses legacy collections requiring identifier migration before writes,

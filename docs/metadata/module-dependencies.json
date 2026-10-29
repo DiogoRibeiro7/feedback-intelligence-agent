@@ -1,7 +1,7 @@
 {
   "package": "feedback_intelligence_agent",
-  "module_count": 45,
-  "edge_count": 160,
+  "module_count": 46,
+  "edge_count": 165,
   "layer_order": [
     "interface",
     "application",
@@ -37,6 +37,7 @@
       "hallucination",
       "lexical_search",
       "memory",
+      "metadata_filters",
       "output_parser",
       "privacy",
       "prompt_registry",
@@ -136,7 +137,7 @@
       "qualified_name": "feedback_intelligence_agent.agent",
       "source": "src/feedback_intelligence_agent/agent.py",
       "layer": "application",
-      "fan_out": 12,
+      "fan_out": 13,
       "external_dependencies": [],
       "optional_dependencies": [],
       "lazy_imports": [],
@@ -442,7 +443,7 @@
       "qualified_name": "feedback_intelligence_agent.lexical_search",
       "source": "src/feedback_intelligence_agent/lexical_search.py",
       "layer": "domain",
-      "fan_out": 2,
+      "fan_out": 3,
       "external_dependencies": [],
       "optional_dependencies": [],
       "lazy_imports": [],
@@ -482,6 +483,18 @@
       "lazy_imports": [],
       "typing_only_imports": [],
       "fan_in": 3
+    },
+    {
+      "name": "metadata_filters",
+      "qualified_name": "feedback_intelligence_agent.metadata_filters",
+      "source": "src/feedback_intelligence_agent/metadata_filters.py",
+      "layer": "domain",
+      "fan_out": 1,
+      "external_dependencies": [],
+      "optional_dependencies": [],
+      "lazy_imports": [],
+      "typing_only_imports": [],
+      "fan_in": 4
     },
     {
       "name": "output_parser",
@@ -538,7 +551,7 @@
       "qualified_name": "feedback_intelligence_agent.qdrant_store",
       "source": "src/feedback_intelligence_agent/qdrant_store.py",
       "layer": "data",
-      "fan_out": 2,
+      "fan_out": 3,
       "external_dependencies": [
         "numpy",
         "qdrant_client"
@@ -652,7 +665,7 @@
       "optional_dependencies": [],
       "lazy_imports": [],
       "typing_only_imports": [],
-      "fan_in": 27
+      "fan_in": 28
     },
     {
       "name": "source_ids",
@@ -734,7 +747,7 @@
       "qualified_name": "feedback_intelligence_agent.vector_store",
       "source": "src/feedback_intelligence_agent/vector_store.py",
       "layer": "data",
-      "fan_out": 2,
+      "fan_out": 3,
       "external_dependencies": [
         "dataexcept",
         "numpy",
@@ -800,6 +813,12 @@
       "target": "memory",
       "context": "eager",
       "names": "ConversationMemory, ConversationStore, ConversationTurn, DeterministicQueryRewriter, QueryRewrite, QueryRewriter, new_conversation_id"
+    },
+    {
+      "source": "agent",
+      "target": "metadata_filters",
+      "context": "eager",
+      "names": "matches_metadata_filters"
     },
     {
       "source": "agent",
@@ -1517,6 +1536,12 @@
     },
     {
       "source": "lexical_search",
+      "target": "metadata_filters",
+      "context": "eager",
+      "names": "matches_metadata_filters"
+    },
+    {
+      "source": "lexical_search",
       "target": "query_expansion",
       "context": "eager",
       "names": "QueryExpander"
@@ -1525,7 +1550,7 @@
       "source": "lexical_search",
       "target": "schemas",
       "context": "eager",
-      "names": "DocumentChunk, SearchResult"
+      "names": "DocumentChunk, MetadataFilters, SearchResult"
     },
     {
       "source": "llm",
@@ -1550,6 +1575,12 @@
       "target": "safe_paths",
       "context": "eager",
       "names": "json_record_path"
+    },
+    {
+      "source": "metadata_filters",
+      "target": "schemas",
+      "context": "eager",
+      "names": "MetadataFilters"
     },
     {
       "source": "privacy",
@@ -1577,9 +1608,15 @@
     },
     {
       "source": "qdrant_store",
+      "target": "metadata_filters",
+      "context": "eager",
+      "names": "matches_metadata_filters"
+    },
+    {
+      "source": "qdrant_store",
       "target": "schemas",
       "context": "eager",
-      "names": "DocumentChunk, SearchResult"
+      "names": "DocumentChunk, MetadataFilters, SearchResult"
     },
     {
       "source": "qdrant_store",
@@ -1633,7 +1670,7 @@
       "source": "retrieval",
       "target": "schemas",
       "context": "eager",
-      "names": "DocumentChunk, SearchResult"
+      "names": "DocumentChunk, MetadataFilters, SearchResult"
     },
     {
       "source": "retrieval",
@@ -1697,9 +1734,15 @@
     },
     {
       "source": "vector_store",
+      "target": "metadata_filters",
+      "context": "eager",
+      "names": "matches_metadata_filters"
+    },
+    {
+      "source": "vector_store",
       "target": "schemas",
       "context": "eager",
-      "names": "DocumentChunk, SearchResult"
+      "names": "DocumentChunk, MetadataFilters, SearchResult"
     },
     {
       "source": "vector_store",
@@ -1721,7 +1764,7 @@
   "most_depended_upon": [
     {
       "module": "schemas",
-      "fan_in": 27,
+      "fan_in": 28,
       "fan_out": 1
     },
     {
@@ -1747,12 +1790,12 @@
     {
       "module": "vector_store",
       "fan_in": 6,
-      "fan_out": 2
+      "fan_out": 3
     },
     {
       "module": "agent",
       "fan_in": 5,
-      "fan_out": 12
+      "fan_out": 13
     },
     {
       "module": "chunking",

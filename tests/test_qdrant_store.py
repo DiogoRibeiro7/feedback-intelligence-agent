@@ -22,7 +22,7 @@ from feedback_intelligence_agent.chunking import feedback_to_chunks
 from feedback_intelligence_agent.config import Settings
 from feedback_intelligence_agent.embeddings import HashingEmbeddingModel
 from feedback_intelligence_agent.factory import load_or_build_index
-from feedback_intelligence_agent.schemas import DocumentChunk, FeedbackRecord
+from feedback_intelligence_agent.schemas import DocumentChunk, FeedbackRecord, MetadataFilters
 
 # ---------------------------------------------------------------------------
 # Fake qdrant_client module + client for unit tests
@@ -68,6 +68,7 @@ class FakeQdrantClient:
         self.points: dict[str, Any] = {}
         self.upsert_calls: list[dict[str, Any]] = []
         self.create_calls: list[dict[str, Any]] = []
+        self.query_calls: list[dict[str, int]] = []
 
     def collection_exists(self, collection_name: str) -> bool:
         return collection_name in self.collections
@@ -99,8 +100,15 @@ class FakeQdrantClient:
         return items, None
 
     def query_points(
-        self, *, collection_name: str, query: list[float], limit: int, with_payload: bool
+        self,
+        *,
+        collection_name: str,
+        query: list[float],
+        limit: int,
+        with_payload: bool,
+        offset: int = 0,
     ) -> SimpleNamespace:
+        self.query_calls.append({"offset": offset, "limit": limit})
         query_vec = np.asarray(query, dtype=np.float64)
         scored = []
         for point in self.points.values():
@@ -108,7 +116,7 @@ class FakeQdrantClient:
             score = float(vec @ query_vec)
             scored.append(SimpleNamespace(payload=point.payload, score=score))
         scored.sort(key=lambda item: item.score, reverse=True)
-        return SimpleNamespace(points=scored[:limit])
+        return SimpleNamespace(points=scored[offset : offset + limit])
 
 
 @pytest.fixture()
@@ -226,6 +234,54 @@ def test_qdrant_store_validates_inputs(fake_qdrant: ModuleType) -> None:
         store.search(np.zeros(8, dtype=np.float64), top_k=0)
     with pytest.raises(ValueError, match="dim=8"):
         store.search(np.zeros(4, dtype=np.float64), top_k=1)
+
+
+@pytest.mark.parametrize("matching_count", [0, 1, 3])
+def test_qdrant_filtered_search_pages_until_matches_or_exhaustion(
+    fake_qdrant: ModuleType, matching_count: int
+) -> None:
+    from feedback_intelligence_agent.qdrant_store import QdrantVectorStore
+
+    client = FakeQdrantClient()
+    store = QdrantVectorStore(dim=2, client=client)
+    excluded = [
+        DocumentChunk(
+            chunk_id=f"other-{index}",
+            source_id=f"other-{index}",
+            text="Other tenant",
+            metadata={"tenant_id": "cobalt"},
+        )
+        for index in range(130)
+    ]
+    matching = [
+        DocumentChunk(
+            chunk_id=f"wanted-{index}",
+            source_id=f"wanted-{index}",
+            text="Requested tenant",
+            metadata={"tenant_id": "acme", "customer_segment": "Enterprise", "rating": "2"},
+        )
+        for index in range(matching_count)
+    ]
+    vectors = np.asarray(
+        [[1.0, 0.0]] * 130 + [[0.6 - index / 10, 0.8] for index in range(matching_count)]
+    )
+    store.add(excluded + matching, vectors)
+
+    results = store.search(
+        np.asarray([1.0, 0.0]),
+        top_k=2,
+        filters=MetadataFilters(tenant_id="ACME", customer_segment="enterprise", max_rating=2),
+    )
+
+    assert [result.chunk for result in results] == matching[:2]
+    assert client.query_calls == [
+        {"offset": 0, "limit": 64},
+        {"offset": 64, "limit": 64},
+        {"offset": 128, "limit": 64},
+    ]
+    client.query_calls.clear()
+    assert len(store.search(np.asarray([1.0, 0.0]), top_k=2, filters=MetadataFilters())) == 2
+    assert client.query_calls == [{"offset": 0, "limit": 2}]
 
 
 def test_qdrant_preserves_records_with_previously_colliding_ids(fake_qdrant: ModuleType) -> None:
