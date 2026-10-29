@@ -29,9 +29,9 @@
     ],
     "date_released": "2026-10-29",
     "python_requires": ">=3.10,<3.13",
-    "revision": "2bfda7f641ce3a42063a31fa6471e4601f988efe",
-    "revision_short": "2bfda7f641ce",
-    "revision_date": "2026-10-29T16:07:46Z",
+    "revision": "86f0194b942234417240ae4a94ed1e16d77cac26",
+    "revision_short": "86f0194b9422",
+    "revision_date": "2026-10-29T18:01:26Z",
     "packages": [
       {
         "include": "feedback_intelligence_agent",
@@ -43,8 +43,8 @@
     }
   },
   "files": {
-    "total": 225,
-    "excluded_generated_documentation": 323,
+    "total": 227,
+    "excluded_generated_documentation": 326,
     "by_category": {
       "build-configuration": 1,
       "build-interface": 1,
@@ -64,8 +64,8 @@
       "license": 1,
       "other": 2,
       "python-script": 3,
-      "python-source": 47,
-      "python-test": 49,
+      "python-source": 48,
+      "python-test": 50,
       "repository-configuration": 2,
       "repository-governance": 8,
       "test-fixture": 2
@@ -93,15 +93,15 @@
       },
       "LaTeX": {
         "files": 47,
-        "lines": 4138
+        "lines": 4141
       },
       "Markdown": {
         "files": 17,
-        "lines": 3076
+        "lines": 3137
       },
       "Python": {
-        "files": 111,
-        "lines": 29593
+        "files": 113,
+        "lines": 30199
       },
       "TOML": {
         "files": 2,
@@ -113,7 +113,7 @@
       },
       "YAML": {
         "files": 16,
-        "lines": 736
+        "lines": 737
       }
     },
     "entries": [
@@ -198,8 +198,8 @@
         "path": ".github/workflows/ci.yml",
         "category": "ci-workflow",
         "language": "YAML",
-        "lines": 163,
-        "bytes": 4695
+        "lines": 164,
+        "bytes": 4736
       },
       {
         "path": ".github/workflows/dependency-review.yml",
@@ -254,8 +254,8 @@
         "path": "CHANGELOG.md",
         "category": "documentation",
         "language": "Markdown",
-        "lines": 184,
-        "bytes": 9162
+        "lines": 190,
+        "bytes": 9561
       },
       {
         "path": "CITATION.cff",
@@ -303,15 +303,15 @@
         "path": "README.md",
         "category": "documentation",
         "language": "Markdown",
-        "lines": 1332,
-        "bytes": 63460
+        "lines": 1385,
+        "bytes": 66114
       },
       {
         "path": "ROADMAP.md",
         "category": "documentation",
         "language": "Markdown",
-        "lines": 78,
-        "bytes": 3536
+        "lines": 80,
+        "bytes": 3722
       },
       {
         "path": "SECURITY.md",
@@ -674,8 +674,8 @@
         "path": "docs/latex/engineering/security.tex",
         "category": "documentation-latex",
         "language": "LaTeX",
-        "lines": 95,
-        "bytes": 4955
+        "lines": 98,
+        "bytes": 5144
       },
       {
         "path": "docs/latex/engineering/testing.tex",
@@ -800,8 +800,8 @@
         "path": "docs/tools/extract_dependencies.py",
         "category": "documentation-tool",
         "language": "Python",
-        "lines": 376,
-        "bytes": 13208
+        "lines": 377,
+        "bytes": 13247
       },
       {
         "path": "docs/tools/generate_docs.py",
@@ -1031,8 +1031,8 @@
         "path": "src/feedback_intelligence_agent/api.py",
         "category": "python-source",
         "language": "Python",
-        "lines": 705,
-        "bytes": 28190
+        "lines": 742,
+        "bytes": 30034
       },
       {
         "path": "src/feedback_intelligence_agent/auth.py",
@@ -1150,8 +1150,8 @@
         "path": "src/feedback_intelligence_agent/index_updates.py",
         "category": "python-source",
         "language": "Python",
-        "lines": 118,
-        "bytes": 4738
+        "lines": 127,
+        "bytes": 5168
       },
       {
         "path": "src/feedback_intelligence_agent/ingestion.py",
@@ -1250,6 +1250,13 @@
         "language": "Python",
         "lines": 76,
         "bytes": 2359
+      },
+      {
+        "path": "src/feedback_intelligence_agent/record_ingestion.py",
+        "category": "python-source",
+        "language": "Python",
+        "lines": 96,
+        "bytes": 3621
       },
       {
         "path": "src/feedback_intelligence_agent/reports.py",
@@ -1507,8 +1514,8 @@
         "path": "tests/test_index_updates.py",
         "category": "python-test",
         "language": "Python",
-        "lines": 209,
-        "bytes": 7339
+        "lines": 230,
+        "bytes": 8201
       },
       {
         "path": "tests/test_jobs.py",
@@ -1607,6 +1614,13 @@
         "language": "Python",
         "lines": 52,
         "bytes": 1639
+      },
+      {
+        "path": "tests/test_record_ingestion.py",
+        "category": "python-test",
+        "language": "Python",
+        "lines": 442,
+        "bytes": 17001
       },
       {
         "path": "tests/test_release_metadata.py",
@@ -2478,7 +2492,7 @@
             {
               "name": "Test atomic saves and concurrent updates",
               "uses": "",
-              "run": "poetry run pytest tests/test_index_persistence.py tests/test_index_updates.py tests/test_embeddings_and_store.py",
+              "run": "poetry run pytest tests/test_index_persistence.py tests/test_index_updates.py tests/test_embeddings_and_store.py tests/test_record_ingestion.py",
               "working_directory": ""
             }
           ]
@@ -3144,8 +3158,8 @@
       "path": "tests/test_index_updates.py",
       "module_under_test": "index_updates",
       "category": "unit",
-      "test_functions": 8,
-      "parametrized_cases": 2
+      "test_functions": 9,
+      "parametrized_cases": 3
     },
     {
       "path": "tests/test_jobs.py",
@@ -3244,6 +3258,13 @@
       "category": "unit",
       "test_functions": 4,
       "parametrized_cases": 0
+    },
+    {
+      "path": "tests/test_record_ingestion.py",
+      "module_under_test": "record_ingestion",
+      "category": "unit",
+      "test_functions": 16,
+      "parametrized_cases": 7
     },
     {
       "path": "tests/test_release_metadata.py",

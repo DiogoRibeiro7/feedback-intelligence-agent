@@ -44,6 +44,7 @@
   \item[\texttt{qdrant\_\allowbreak{}store}] \cref{module:feedback_intelligence_agent.qdrant_store}
   \item[\texttt{query\_\allowbreak{}expansion}] \cref{module:feedback_intelligence_agent.query_expansion}
   \item[\texttt{rate\_\allowbreak{}limit}] \cref{module:feedback_intelligence_agent.rate_limit}
+  \item[\texttt{record\_\allowbreak{}ingestion}] \cref{module:feedback_intelligence_agent.record_ingestion}
   \item[\texttt{reports}] \cref{module:feedback_intelligence_agent.reports}
   \item[\texttt{reranking}] \cref{module:feedback_intelligence_agent.reranking}
   \item[\texttt{resilience}] \cref{module:feedback_intelligence_agent.resilience}
@@ -166,6 +167,8 @@
   \item[\texttt{QueryExpansion}] \cref{class:feedback_intelligence_agent.query_expansion.QueryExpansion}
   \item[\texttt{InMemoryRateLimiter}] \cref{class:feedback_intelligence_agent.rate_limit.InMemoryRateLimiter}
   \item[\texttt{RateLimitDecision}] \cref{class:feedback_intelligence_agent.rate_limit.RateLimitDecision}
+  \item[\texttt{RecordIngestionRequest}] \cref{class:feedback_intelligence_agent.record_ingestion.RecordIngestionRequest}
+  \item[\texttt{RecordIngestionResult}] \cref{class:feedback_intelligence_agent.record_ingestion.RecordIngestionResult}
   \item[\texttt{InMemoryInsightReportStore}] \cref{class:feedback_intelligence_agent.reports.InMemoryInsightReportStore}
   \item[\texttt{InsightReportStore}] \cref{class:feedback_intelligence_agent.reports.InsightReportStore}
   \item[\texttt{InsightReportSummary}] \cref{class:feedback_intelligence_agent.reports.InsightReportSummary}
@@ -347,6 +350,7 @@
   \item[\texttt{redact\_\allowbreak{}pii}] \cref{func:feedback_intelligence_agent.privacy.redact_pii}
   \item[\texttt{template\_\allowbreak{}placeholders}] \cref{func:feedback_intelligence_agent.prompt_registry.template_placeholders}
   \item[\texttt{build\_\allowbreak{}grounded\_\allowbreak{}prompt}] \cref{func:feedback_intelligence_agent.prompts.build_grounded_prompt}
+  \item[\texttt{ingest\_\allowbreak{}record\_\allowbreak{}batch}] \cref{func:feedback_intelligence_agent.record_ingestion.ingest_record_batch}
   \item[\texttt{new\_\allowbreak{}report\_\allowbreak{}id}] \cref{func:feedback_intelligence_agent.reports.new_report_id}
   \item[\texttt{render\_\allowbreak{}report\_\allowbreak{}markdown}] \cref{func:feedback_intelligence_agent.reports.render_report_markdown}
   \item[\texttt{min\_\allowbreak{}max\_\allowbreak{}normalize}] \cref{func:feedback_intelligence_agent.retrieval.min_max_normalize}
@@ -416,6 +420,7 @@
   \item[\texttt{POST /\allowbreak{}index}] \cref{http:POST--index}
   \item[\texttt{POST /\allowbreak{}ingestion/\allowbreak{}jobs}] \cref{http:POST--ingestion-jobs}
   \item[\texttt{GET /\allowbreak{}ingestion/\allowbreak{}jobs/\allowbreak{}\{job\_\allowbreak{}id\}}] \cref{http:GET--ingestion-jobs-job_id}
+  \item[\texttt{POST /\allowbreak{}ingestion/\allowbreak{}records}] \cref{http:POST--ingestion-records}
   \item[\texttt{POST /\allowbreak{}query}] \cref{http:POST--query}
   \item[\texttt{POST /\allowbreak{}query/\allowbreak{}stream}] \cref{http:POST--query-stream}
   \item[\texttt{GET /\allowbreak{}ready}] \cref{http:GET--ready}

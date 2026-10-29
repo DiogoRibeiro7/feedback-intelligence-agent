@@ -62,6 +62,8 @@ Model & Fields & Module & Purpose \\
 \cref{class:feedback_intelligence_agent.output_parser.GeneratedAnswerPayload} & 3 & \texttt{output\_\allowbreak{}parser} & Validated answer payload expected from an LLM provider. \\
 \cref{class:feedback_intelligence_agent.output_parser.ParsedLLMOutput} & 4 & \texttt{output\_\allowbreak{}parser} & Parsed answer plus diagnostics about validation and repair. \\
 \cref{class:feedback_intelligence_agent.rate_limit.RateLimitDecision} & 4 & \texttt{rate\_\allowbreak{}limit} & Result of one rate-limit check. \\
+\cref{class:feedback_intelligence_agent.record_ingestion.RecordIngestionRequest} & 3 & \texttt{record\_\allowbreak{}ingestion} & A single tenant's records, with no client-selectable filesystem paths. \\
+\cref{class:feedback_intelligence_agent.record_ingestion.RecordIngestionResult} & 7 & \texttt{record\_\allowbreak{}ingestion} & Batch-local counts without global index totals or server paths. \\
 \cref{class:feedback_intelligence_agent.reports.InsightReportSummary} & 9 & \texttt{reports} & Lightweight report metadata for list endpoints and CLI output. \\
 \cref{class:feedback_intelligence_agent.reports.SaveInsightReportRequest} & 5 & \texttt{reports} & Request to persist one generated agent answer as an insight report. \\
 \cref{class:feedback_intelligence_agent.reports.SavedInsightReport} & 8 & \texttt{reports} & Persisted answer package that can be shared or revisited later. \\

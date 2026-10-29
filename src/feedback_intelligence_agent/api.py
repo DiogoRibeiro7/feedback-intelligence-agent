@@ -55,9 +55,15 @@ from feedback_intelligence_agent.human_feedback import (
     build_active_learning_queue,
     summarise_human_feedback,
 )
+from feedback_intelligence_agent.index_persistence import index_write_lock
 from feedback_intelligence_agent.jobs import JobRequest, JobResult, run_ingestion_job
 from feedback_intelligence_agent.memory import ConversationMemory, JsonConversationStore
 from feedback_intelligence_agent.rate_limit import InMemoryRateLimiter, RateLimitDecision
+from feedback_intelligence_agent.record_ingestion import (
+    RecordIngestionRequest,
+    RecordIngestionResult,
+    ingest_record_batch,
+)
 from feedback_intelligence_agent.reports import (
     InsightReportSummary,
     SavedInsightReport,
@@ -640,6 +646,37 @@ def create_app() -> FastAPI:
     ) -> HumanFeedbackRecord:
         """Return one human feedback record."""
         return caller_feedback(feedback_id, principal)
+
+    @app.post("/ingestion/records", response_model=RecordIngestionResult)
+    def ingest_records(
+        request: RecordIngestionRequest, principal: ApiPrincipal = writer_access
+    ) -> RecordIngestionResult:
+        """Merge one tenant's records and refresh this API instance's agent."""
+        nonlocal agent
+        if principal.tenant_id is None and principal.role != ApiRole.admin:
+            raise HTTPException(
+                status_code=403, detail="Record ingestion requires a tenant binding"
+            )
+        tenant_id = _tenant_scope(principal, request.tenant_id) or "default"
+        if any(
+            "tenant_id" in record.model_fields_set and record.tenant_id != tenant_id
+            for record in request.records
+        ):
+            raise HTTPException(status_code=403, detail="Records must belong to the batch tenant")
+        if settings.vector_store != "json":
+            raise HTTPException(
+                status_code=409, detail="Record ingestion requires the JSON vector store"
+            )
+        records = [record.model_copy(update={"tenant_id": tenant_id}) for record in request.records]
+        try:
+            with index_write_lock(settings.index_path):
+                result, agent = ingest_record_batch(
+                    records, tenant_id, settings=settings, agent=agent
+                )
+        except Exception as exc:  # noqa: BLE001 - hide paths and input contents from API errors.
+            log_event("record_ingestion_failed", {"error": str(exc)})
+            raise HTTPException(status_code=500, detail="Record ingestion failed") from exc
+        return result
 
     @app.post("/index")
     def index(

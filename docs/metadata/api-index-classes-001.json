@@ -5701,7 +5701,7 @@
         "BaseModel"
       ],
       "source": "src/feedback_intelligence_agent/index_updates.py",
-      "line": 24,
+      "line": 25,
       "public": true,
       "decorators": [],
       "summary": "Summary of an incremental JSON index update.",

@@ -24,6 +24,27 @@ def make_record(feedback_id: str, text: str, *, tenant_id: str = "default") -> F
     )
 
 
+@pytest.mark.parametrize("existing", [False, True])
+def test_snapshot_preparation_failure_preserves_index(tmp_path: Path, existing: bool) -> None:
+    path = tmp_path / "index.json"
+    if existing:
+        update_json_index([make_record("old", "Existing feedback")], path, embedding_dim=64)
+    before = path.read_bytes() if existing else None
+
+    def reject_snapshot(store: InMemoryVectorStore) -> None:
+        assert "new" in {chunk.source_id for chunk in store.chunks}
+        raise RuntimeError("Consumer snapshot could not be prepared")
+
+    with pytest.raises(RuntimeError, match="Consumer snapshot"):
+        update_json_index(
+            [make_record("new", "New feedback")],
+            path,
+            embedding_dim=64,
+            prepare_snapshot=reject_snapshot,
+        )
+    assert (path.read_bytes() if path.exists() else None) == before
+
+
 def test_update_json_index_creates_new_index(tmp_path: Path) -> None:
     index_path = tmp_path / "vector_store.json"
 

@@ -1,0 +1,27 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{ingest\_record\_batch}}
+\label{func:feedback_intelligence_agent.record_ingestion.ingest_record_batch}\index{Functions!ingest\_record\_batch}
+
+Persist a validated tenant batch and return its prepared agent snapshot.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+ingest_record_batch(records: list[FeedbackRecord], tenant_id: str, *, settings: Settings, agent: FeedbackInsightAgent) -> tuple[RecordIngestionResult, FeedbackInsightAgent]
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{records}] \texttt{list[FeedbackRecord]\allowbreak{}}, required.
+  \item[\texttt{tenant\_\allowbreak{}id}] \texttt{str}, required.
+  \item[\texttt{settings}] \texttt{Settings}, required, keyword-only.
+  \item[\texttt{agent}] \texttt{FeedbackInsightAgent}, required, keyword-only.
+\end{arglist}
+\apifield{Value}\texttt{tuple[RecordIngestionResult,\allowbreak{} FeedbackInsightAgent]\allowbreak{}}
+\apifield{Raises}\texttt{ValueError}
+\apifield{Details}The API holds the index writer lock until it publishes the returned agent. Preparation precedes the atomic save, so failed preparation or persistence never replaces the serving agent. Existing provider and policy objects are retained, including circuit-breaker state.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}record\_\allowbreak{}ingestion.\allowbreak{}py:48}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/86f0194b942234417240ae4a94ed1e16d77cac26/src/feedback_intelligence_agent/record_ingestion.py#L48}{online}), module \cref{module:feedback_intelligence_agent.record_ingestion}

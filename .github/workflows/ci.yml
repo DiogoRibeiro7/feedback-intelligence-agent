@@ -110,6 +110,7 @@ jobs:
         run: >-
           poetry run pytest tests/test_index_persistence.py
           tests/test_index_updates.py tests/test_embeddings_and_store.py
+          tests/test_record_ingestion.py
 
   documentation:
     name: Documentation

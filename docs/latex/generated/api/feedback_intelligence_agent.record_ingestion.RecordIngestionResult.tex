@@ -1,0 +1,24 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{RecordIngestionResult}}
+\label{class:feedback_intelligence_agent.record_ingestion.RecordIngestionResult}\label{schema:RecordIngestionResult}\index{Classes!RecordIngestionResult}
+
+Batch-local counts without global index totals or server paths.
+\apifield{Inherits}\texttt{BaseModel}
+\apifield{Fields}
+\begin{arglist}
+  \item[\texttt{tenant\_\allowbreak{}id}] \texttt{str}, required
+  \item[\texttt{input\_\allowbreak{}records}] \texttt{int}, required, \texttt{ge=0}
+  \item[\texttt{inserted\_\allowbreak{}records}] \texttt{int}, required, \texttt{ge=0}
+  \item[\texttt{updated\_\allowbreak{}records}] \texttt{int}, required, \texttt{ge=0}
+  \item[\texttt{skipped\_\allowbreak{}records}] \texttt{int}, required, \texttt{ge=0}
+  \item[\texttt{added\_\allowbreak{}chunks}] \texttt{int}, required, \texttt{ge=0}
+  \item[\texttt{removed\_\allowbreak{}chunks}] \texttt{int}, required, \texttt{ge=0}
+\end{arglist}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}record\_\allowbreak{}ingestion.\allowbreak{}py:36}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/86f0194b942234417240ae4a94ed1e16d77cac26/src/feedback_intelligence_agent/record_ingestion.py#L36}{online}), pydantic model, module \cref{module:feedback_intelligence_agent.record_ingestion}

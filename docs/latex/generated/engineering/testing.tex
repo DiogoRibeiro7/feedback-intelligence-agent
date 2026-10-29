@@ -7,7 +7,7 @@
 
 \section{Test suite at a glance}
 
-The suite contains 48 test modules and 595 test functions, all executed by a single pytest invocation.
+The suite contains 49 test modules and 612 test functions, all executed by a single pytest invocation.
 
 \begin{longtable}{>{\raggedright\arraybackslash\small}p{0.45\textwidth} >{\small}r >{\small}r}
 \caption{Test modules and functions by category.}\label{tab:test-categories}\\
@@ -33,7 +33,7 @@ numerical / retrieval & 2 & 18 \\
 performance measurement & 1 & 16 \\
 retrieval regression & 1 & 5 \\
 snapshot regression & 1 & 3 \\
-unit & 37 & 404 \\
+unit & 38 & 421 \\
 \end{longtable}
 
 \section{Execution}
@@ -82,7 +82,7 @@ Test module & Primary subject & Category & Tests & Parametrised \\
 \texttt{tests/\allowbreak{}test\_\allowbreak{}hallucination.\allowbreak{}py} & \texttt{hallucination} & unit & 4 & 0 \\
 \texttt{tests/\allowbreak{}test\_\allowbreak{}human\_\allowbreak{}feedback.\allowbreak{}py} & \texttt{human\_\allowbreak{}feedback} & unit & 7 & 0 \\
 \texttt{tests/\allowbreak{}test\_\allowbreak{}index\_\allowbreak{}persistence.\allowbreak{}py} & \texttt{index\_\allowbreak{}persistence} & unit & 11 & 4 \\
-\texttt{tests/\allowbreak{}test\_\allowbreak{}index\_\allowbreak{}updates.\allowbreak{}py} & \texttt{index\_\allowbreak{}updates} & unit & 8 & 2 \\
+\texttt{tests/\allowbreak{}test\_\allowbreak{}index\_\allowbreak{}updates.\allowbreak{}py} & \texttt{index\_\allowbreak{}updates} & unit & 9 & 3 \\
 \texttt{tests/\allowbreak{}test\_\allowbreak{}jobs.\allowbreak{}py} & \texttt{jobs} & unit & 9 & 0 \\
 \texttt{tests/\allowbreak{}test\_\allowbreak{}lakehouse.\allowbreak{}py} & \texttt{lakehouse} & unit & 5 & 0 \\
 \texttt{tests/\allowbreak{}test\_\allowbreak{}lexical\_\allowbreak{}and\_\allowbreak{}hybrid.\allowbreak{}py} & \texttt{lexical\_\allowbreak{}search,\allowbreak{} retrieval} & numerical / retrieval & 13 & 0 \\
@@ -97,6 +97,7 @@ Test module & Primary subject & Category & Tests & Parametrised \\
 \texttt{tests/\allowbreak{}test\_\allowbreak{}qdrant\_\allowbreak{}store.\allowbreak{}py} & \texttt{qdrant\_\allowbreak{}store} & unit & 13 & 3 \\
 \texttt{tests/\allowbreak{}test\_\allowbreak{}query\_\allowbreak{}expansion.\allowbreak{}py} & \texttt{query\_\allowbreak{}expansion} & unit & 4 & 0 \\
 \texttt{tests/\allowbreak{}test\_\allowbreak{}rate\_\allowbreak{}limit.\allowbreak{}py} & \texttt{rate\_\allowbreak{}limit} & unit & 4 & 0 \\
+\texttt{tests/\allowbreak{}test\_\allowbreak{}record\_\allowbreak{}ingestion.\allowbreak{}py} & \texttt{record\_\allowbreak{}ingestion} & unit & 16 & 7 \\
 \texttt{tests/\allowbreak{}test\_\allowbreak{}release\_\allowbreak{}metadata.\allowbreak{}py} & \texttt{release\_\allowbreak{}metadata} & unit & 6 & 3 \\
 \texttt{tests/\allowbreak{}test\_\allowbreak{}reports.\allowbreak{}py} & \texttt{reports} & unit & 4 & 0 \\
 \texttt{tests/\allowbreak{}test\_\allowbreak{}reranking.\allowbreak{}py} & \texttt{reranking} & unit & 3 & 0 \\

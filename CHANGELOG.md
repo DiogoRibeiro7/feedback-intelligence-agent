@@ -6,6 +6,12 @@ All notable changes to this project are documented here.
 
 ### Added
 
+- Tenant-bound writers and admins can ingest validated record batches through
+  `POST /ingestion/records`. JSON upserts preserve other tenants and refresh the
+  handling API instance's retriever and aggregation tools after persistence.
+- Batch ingestion rejects foreign tenants, path overrides, and invalid batches;
+  responses expose batch-local counts without global index sizes or server paths.
+
 - Optional API-key tenant bindings scope queries, streaming, conversations,
   reports, exports, email summaries, feedback, and active-learning workflows.
   Foreign resource IDs return 404, and explicit tenant overrides return 403.

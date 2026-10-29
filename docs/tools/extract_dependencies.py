@@ -46,6 +46,7 @@ MODULE_LAYERS: dict[str, str] = {
     "agent": "application",
     "factory": "application",
     "jobs": "application",
+    "record_ingestion": "application",
     "experiments": "application",
     "benchmarking": "application",
     "evaluation": "application",
