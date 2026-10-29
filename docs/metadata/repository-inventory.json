@@ -1,7 +1,7 @@
 {
   "project": {
     "name": "feedback-intelligence-agent",
-    "version": "0.5.0",
+    "version": "0.6.0",
     "description": "A production-style AI engineering project with RAG, evaluation, FastAPI, and local deterministic LLM fallback.",
     "authors": [
       "Diogo Ribeiro <dfr@esmad.ipp.pt>"
@@ -27,11 +27,11 @@
       "evaluation",
       "FastAPI"
     ],
-    "date_released": "2026-08-08",
+    "date_released": "2026-10-29",
     "python_requires": ">=3.10,<3.13",
-    "revision": "edc9d78403eeed9f7d6ee5aef6b8d9b1b5780ef4",
-    "revision_short": "edc9d78403ee",
-    "revision_date": "2026-08-09T21:46:40+01:00",
+    "revision": "2bfda7f641ce3a42063a31fa6471e4601f988efe",
+    "revision_short": "2bfda7f641ce",
+    "revision_date": "2026-10-29T16:07:46Z",
     "packages": [
       {
         "include": "feedback_intelligence_agent",
@@ -43,7 +43,7 @@
     }
   },
   "files": {
-    "total": 220,
+    "total": 224,
     "excluded_generated_documentation": 323,
     "by_category": {
       "build-configuration": 1,
@@ -55,7 +55,7 @@
       "dataset": 1,
       "dependency-lock": 1,
       "deployment": 3,
-      "documentation": 13,
+      "documentation": 15,
       "documentation-latex": 48,
       "documentation-tool": 12,
       "editor-configuration": 1,
@@ -63,9 +63,9 @@
       "frontend": 13,
       "license": 1,
       "other": 2,
-      "python-script": 2,
+      "python-script": 3,
       "python-source": 47,
-      "python-test": 47,
+      "python-test": 48,
       "repository-configuration": 2,
       "repository-governance": 8,
       "test-fixture": 2
@@ -85,7 +85,7 @@
       },
       "JSON": {
         "files": 5,
-        "lines": 1305
+        "lines": 1306
       },
       "JSON Lines": {
         "files": 3,
@@ -93,15 +93,15 @@
       },
       "LaTeX": {
         "files": 47,
-        "lines": 4144
+        "lines": 4130
       },
       "Markdown": {
-        "files": 15,
-        "lines": 2840
+        "files": 17,
+        "lines": 3027
       },
       "Python": {
-        "files": 108,
-        "lines": 28832
+        "files": 110,
+        "lines": 29026
       },
       "TOML": {
         "files": 2,
@@ -198,8 +198,8 @@
         "path": ".github/workflows/ci.yml",
         "category": "ci-workflow",
         "language": "YAML",
-        "lines": 160,
-        "bytes": 4598
+        "lines": 163,
+        "bytes": 4695
       },
       {
         "path": ".github/workflows/dependency-review.yml",
@@ -226,8 +226,8 @@
         "path": ".github/workflows/release.yml",
         "category": "ci-workflow",
         "language": "YAML",
-        "lines": 70,
-        "bytes": 1636
+        "lines": 67,
+        "bytes": 1564
       },
       {
         "path": ".github/workflows/security.yml",
@@ -247,15 +247,15 @@
         "path": ".zenodo.json",
         "category": "citation-metadata",
         "language": "JSON",
-        "lines": 33,
-        "bytes": 1196
+        "lines": 34,
+        "bytes": 1232
       },
       {
         "path": "CHANGELOG.md",
         "category": "documentation",
         "language": "Markdown",
-        "lines": 160,
-        "bytes": 8061
+        "lines": 172,
+        "bytes": 8511
       },
       {
         "path": "CITATION.cff",
@@ -275,8 +275,8 @@
         "path": "CONTRIBUTING.md",
         "category": "documentation",
         "language": "Markdown",
-        "lines": 49,
-        "bytes": 1154
+        "lines": 54,
+        "bytes": 1320
       },
       {
         "path": "Dockerfile",
@@ -303,8 +303,8 @@
         "path": "README.md",
         "category": "documentation",
         "language": "Markdown",
-        "lines": 1293,
-        "bytes": 61108
+        "lines": 1296,
+        "bytes": 61260
       },
       {
         "path": "ROADMAP.md",
@@ -632,8 +632,8 @@
         "path": "docs/latex/engineering/improvements.tex",
         "category": "documentation-latex",
         "language": "LaTeX",
-        "lines": 110,
-        "bytes": 4632
+        "lines": 99,
+        "bytes": 4173
       },
       {
         "path": "docs/latex/engineering/observability.tex",
@@ -653,8 +653,8 @@
         "path": "docs/latex/engineering/releases.tex",
         "category": "documentation-latex",
         "language": "LaTeX",
-        "lines": 98,
-        "bytes": 4013
+        "lines": 95,
+        "bytes": 4236
       },
       {
         "path": "docs/latex/engineering/repository-structure.tex",
@@ -703,7 +703,7 @@
         "category": "documentation-latex",
         "language": "LaTeX",
         "lines": 30,
-        "bytes": 1310
+        "bytes": 1305
       },
       {
         "path": "docs/latex/preamble.tex",
@@ -753,6 +753,20 @@
         "language": "Markdown",
         "lines": 93,
         "bytes": 4212
+      },
+      {
+        "path": "docs/releases/v0.6.0.md",
+        "category": "documentation",
+        "language": "Markdown",
+        "lines": 107,
+        "bytes": 5284
+      },
+      {
+        "path": "docs/releasing.md",
+        "category": "documentation",
+        "language": "Markdown",
+        "lines": 60,
+        "bytes": 3277
       },
       {
         "path": "docs/tools/__init__.py",
@@ -977,6 +991,13 @@
         "language": "Python",
         "lines": 30,
         "bytes": 985
+      },
+      {
+        "path": "scripts/check_release.py",
+        "category": "python-script",
+        "language": "Python",
+        "lines": 90,
+        "bytes": 3816
       },
       {
         "path": "scripts/run_demo.py",
@@ -1579,6 +1600,13 @@
         "language": "Python",
         "lines": 52,
         "bytes": 1639
+      },
+      {
+        "path": "tests/test_release_metadata.py",
+        "category": "python-test",
+        "language": "Python",
+        "lines": 104,
+        "bytes": 3634
       },
       {
         "path": "tests/test_reports.py",
@@ -2322,6 +2350,12 @@
               "working_directory": ""
             },
             {
+              "name": "Validate release metadata",
+              "uses": "",
+              "run": "poetry run python scripts/check_release.py",
+              "working_directory": ""
+            },
+            {
               "name": "Lint",
               "uses": "",
               "run": "poetry run ruff check .",
@@ -2749,15 +2783,9 @@
               "working_directory": "frontend"
             },
             {
-              "name": "Validate Zenodo metadata",
+              "name": "Validate release metadata and tag",
               "uses": "",
-              "run": "python -m json.tool .zenodo.json",
-              "working_directory": ""
-            },
-            {
-              "name": "Validate citation metadata",
-              "uses": "",
-              "run": "poetry run python -c \"from pathlib import Path; import yaml; yaml.safe_load(Path('CITATION.cff').read_text(encoding='utf-8'))\"",
+              "run": "poetry run python scripts/check_release.py --tag \"$RELEASE_TAG\"",
               "working_directory": ""
             },
             {
@@ -3204,6 +3232,13 @@
       "parametrized_cases": 0
     },
     {
+      "path": "tests/test_release_metadata.py",
+      "module_under_test": "release_metadata",
+      "category": "unit",
+      "test_functions": 6,
+      "parametrized_cases": 3
+    },
+    {
       "path": "tests/test_reports.py",
       "module_under_test": "reports",
       "category": "unit",
@@ -3299,7 +3334,7 @@
     {
       "path": "examples/experiment_config.yaml",
       "format": "yaml",
-      "bytes": 725,
+      "bytes": 746,
       "records": null,
       "columns": []
     },

@@ -85,7 +85,7 @@ Security & \texttt{.\allowbreak{}github/\allowbreak{}workflows/\allowbreak{}secu
   \item Runner: ubuntu-latest
   \item Matrix: python-version: 3.10, 3.11, 3.12
   \item Depends on: nothing
-  \item Steps: 10
+  \item Steps: 11
 \end{itemize}
 
 \begin{longtable}{>{\raggedright\arraybackslash\small}p{0.04\textwidth} >{\raggedright\arraybackslash\small}p{0.24\textwidth} >{\raggedright\arraybackslash\small}p{0.26\textwidth} >{\raggedright\arraybackslash\small}p{0.36\textwidth}}
@@ -106,12 +106,13 @@ Security & \texttt{.\allowbreak{}github/\allowbreak{}workflows/\allowbreak{}secu
 2 & Install Poetry & -- & \texttt{pipx install poetry==2.\allowbreak{}2.\allowbreak{}1} \\
 3 & Set up Python & \texttt{actions/\allowbreak{}setup-\allowbreak{}python@v7} & -- \\
 4 & Install dependencies & -- & \texttt{poetry install -\allowbreak{}-\allowbreak{}with dev} \\
-5 & Lint & -- & \texttt{poetry run ruff check .\allowbreak{}} \\
-6 & Format check & -- & \texttt{poetry run ruff format -\allowbreak{}-\allowbreak{}check .\allowbreak{}} \\
-7 & Type check & -- & \texttt{poetry run mypy src} \\
-8 & Test with coverage & -- & \texttt{poetry run pytest -\allowbreak{}-\allowbreak{}cov=feedback\_\allowbreak{}intelligence\_\allowbreak{}agent -\allowbreak{}-\allowbreak{}cov-\allowbreak{}report=term-\allowbreak{}missing -\allowbreak{}-\allowbreak{}cov-\allowbreak{}fail-\allowbreak{}under=63} \\
-9 & Run deterministic demo & -- & \texttt{poetry run python scripts/\allowbreak{}run\_\allowbreak{}demo.\allowbreak{}py} \\
-10 & Build package & -- & \texttt{poetry build} \\
+5 & Validate release metadata & -- & \texttt{poetry run python scripts/\allowbreak{}check\_\allowbreak{}release.\allowbreak{}py} \\
+6 & Lint & -- & \texttt{poetry run ruff check .\allowbreak{}} \\
+7 & Format check & -- & \texttt{poetry run ruff format -\allowbreak{}-\allowbreak{}check .\allowbreak{}} \\
+8 & Type check & -- & \texttt{poetry run mypy src} \\
+9 & Test with coverage & -- & \texttt{poetry run pytest -\allowbreak{}-\allowbreak{}cov=feedback\_\allowbreak{}intelligence\_\allowbreak{}agent -\allowbreak{}-\allowbreak{}cov-\allowbreak{}report=term-\allowbreak{}missing -\allowbreak{}-\allowbreak{}cov-\allowbreak{}fail-\allowbreak{}under=63} \\
+10 & Run deterministic demo & -- & \texttt{poetry run python scripts/\allowbreak{}run\_\allowbreak{}demo.\allowbreak{}py} \\
+11 & Build package & -- & \texttt{poetry build} \\
 \end{longtable}
 
 \subsection*{Job \texttt{mlflow-integration}}
@@ -347,7 +348,7 @@ Security & \texttt{.\allowbreak{}github/\allowbreak{}workflows/\allowbreak{}secu
   \item Runner: ubuntu-latest
   \item Matrix: none
   \item Depends on: nothing
-  \item Steps: 13
+  \item Steps: 12
 \end{itemize}
 
 \begin{longtable}{>{\raggedright\arraybackslash\small}p{0.04\textwidth} >{\raggedright\arraybackslash\small}p{0.24\textwidth} >{\raggedright\arraybackslash\small}p{0.26\textwidth} >{\raggedright\arraybackslash\small}p{0.36\textwidth}}
@@ -370,13 +371,12 @@ Security & \texttt{.\allowbreak{}github/\allowbreak{}workflows/\allowbreak{}secu
 4 & Set up Node & \texttt{actions/\allowbreak{}setup-\allowbreak{}node@v7} & -- \\
 5 & Install Python dependencies & -- & \texttt{poetry install -\allowbreak{}-\allowbreak{}with dev} \\
 6 & Install frontend dependencies & -- & \texttt{npm ci} \\
-7 & Validate Zenodo metadata & -- & \texttt{python -\allowbreak{}m json.\allowbreak{}tool .\allowbreak{}zenodo.\allowbreak{}json} \\
-8 & Validate citation metadata & -- & \texttt{poetry run python -\allowbreak{}c "from pathlib import Path; import yaml; yaml.\allowbreak{}safe\_\allowbreak{}load(Path('CITATION.\allowbreak{}cff')\allowbreak{}.\allowbreak{}read\_\allowbreak{}text(encoding='utf-\allowbreak{}8')\allowbreak{})\allowbreak{}"} \\
-9 & Run deterministic demo & -- & \texttt{poetry run python scripts/\allowbreak{}run\_\allowbreak{}demo.\allowbreak{}py} \\
-10 & Build Python package & -- & \texttt{poetry build} \\
-11 & Build frontend & -- & \texttt{npm run build} \\
-12 & Upload Python distributions & \texttt{actions/\allowbreak{}upload-\allowbreak{}artifact@v7} & -- \\
-13 & Upload frontend build & \texttt{actions/\allowbreak{}upload-\allowbreak{}artifact@v7} & -- \\
+7 & Validate release metadata and tag & -- & \texttt{poetry run python scripts/\allowbreak{}check\_\allowbreak{}release.\allowbreak{}py -\allowbreak{}-\allowbreak{}tag "\$RELEASE\_\allowbreak{}TAG"} \\
+8 & Run deterministic demo & -- & \texttt{poetry run python scripts/\allowbreak{}run\_\allowbreak{}demo.\allowbreak{}py} \\
+9 & Build Python package & -- & \texttt{poetry build} \\
+10 & Build frontend & -- & \texttt{npm run build} \\
+11 & Upload Python distributions & \texttt{actions/\allowbreak{}upload-\allowbreak{}artifact@v7} & -- \\
+12 & Upload frontend build & \texttt{actions/\allowbreak{}upload-\allowbreak{}artifact@v7} & -- \\
 \end{longtable}
 
 \section{Workflow: Security}

@@ -35,6 +35,9 @@ jobs:
       - name: Install dependencies
         run: poetry install --with dev
 
+      - name: Validate release metadata
+        run: poetry run python scripts/check_release.py
+
       - name: Lint
         run: poetry run ruff check .
 

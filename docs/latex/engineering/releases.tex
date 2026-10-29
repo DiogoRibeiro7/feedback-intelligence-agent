@@ -8,13 +8,10 @@
 The project version at this revision is \texttt{\projectversion}. Version
 numbers follow a \texttt{MAJOR.MINOR.PATCH} form and the changelog history
 shows minor increments carrying new features, which is consistent with
-semantic versioning~\cite{semver}. The repository states no versioning policy
-document, so the scheme is inferred from the artifacts rather than quoted from
-a rule.
+semantic versioning~\cite{semver}. The release policy and publication steps are
+documented in \srcfile{docs/releasing.md}.
 
-\noevidence
-
-The version is declared in four places that must agree:
+The version is declared in six files that must agree:
 
 \begin{longtable}{p{0.34\textwidth} p{0.30\textwidth} p{0.28\textwidth}}
 \toprule
@@ -31,11 +28,13 @@ File & Field & Purpose \\
 \texttt{src/.../\_\_init\_\_.py} & \texttt{\_\_version\_\_} & Reported by the API and CLI \\
 \texttt{CITATION.cff} & \texttt{version}, \texttt{date-released} & Software citation \\
 \texttt{.zenodo.json} & \texttt{version} & Archive deposit metadata \\
+\texttt{frontend/package.json} & \texttt{version} & Frontend package metadata \\
+\texttt{frontend/package-lock.json} & Root and root-package \texttt{version} & Locked frontend metadata \\
 \end{longtable}
 
-Nothing enforces the agreement automatically; the release workflow validates
-that the two metadata files \emph{parse}, not that their versions match
-\srcfile{pyproject.toml}. See \cref{ch:improvements}.
+\srcfile{scripts/check_release.py} validates all version declarations, matching
+citation and Zenodo dates, and the dated changelog entry. CI runs this check;
+tag-triggered Release runs also require the tag to match the declared version.
 
 \section{Changelog}
 
@@ -61,8 +60,7 @@ Python 3.12 and Node 24:
   \item check out the repository;
   \item install Poetry (pinned) and the Python dev dependencies;
   \item install frontend dependencies with \texttt{npm ci};
-  \item validate \srcfile{.zenodo.json} parses as JSON;
-  \item validate \srcfile{CITATION.cff} parses as YAML;
+  \item validate metadata versions, publication dates, the changelog, and the tag;
   \item run the deterministic demo;
   \item build the Python distribution;
   \item build the frontend;
@@ -74,10 +72,8 @@ The workflow requests \texttt{contents: read} and references no secret. It
 therefore \emph{validates and builds} a release; it does not publish one. There
 is no PyPI upload, no container registry push, no GitHub Release creation, and
 no deployment step anywhere in \srcfile{.github/workflows/}. Distribution
-beyond the workflow artifacts is a manual step, and the repository does not
-document it.
-
-\noevidence
+beyond the workflow artifacts is a manual step described in
+\srcfile{docs/releasing.md}.
 
 \section{Archival and citation}
 
@@ -86,8 +82,9 @@ The project is archived on Zenodo with the concept DOI
 Format~\cite{citationcff} and carries author, ORCID, affiliation, licence,
 version, release date, and repository URL; \srcfile{.zenodo.json} carries the
 deposit metadata including the related-identifier link back to the repository.
-Both are validated on every release run, which is what keeps the archive
-deposit from failing on malformed metadata.
+Both are checked on every release run. Zenodo uses \srcfile{.zenodo.json}
+when both files are present; the publication procedure separately verifies the
+version-specific deposit after the GitHub release is published.
 
 \section{Licence}
 
