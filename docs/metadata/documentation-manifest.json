@@ -8,7 +8,7 @@
   "revision_date": "2026-08-09T21:46:40+01:00",
   "project_version": "0.5.0",
   "counts": {
-    "generated_latex_files": 316,
+    "generated_latex_files": 318,
     "metadata_files": 5
   },
   "generated_files": [
@@ -19,8 +19,8 @@
     },
     {
       "path": "docs/latex/generated/api/_functions.tex",
-      "bytes": 9560,
-      "sha256": "c26e53dd0eb5533cb3871c2fdf050ceabba3fbee7b9a0e55effd3c9099c1457e"
+      "bytes": 9738,
+      "sha256": "cc57eb654b08bf7f469841b7c8e1e80f5b08af6bf6e4d5957c92f3b48c8ef50b"
     },
     {
       "path": "docs/latex/generated/api/feedback_intelligence_agent.active_learning.ActiveLearningState.tex",
@@ -535,67 +535,67 @@
     {
       "path": "docs/latex/generated/api/feedback_intelligence_agent.factory.build_active_learning_state_store.tex",
       "bytes": 1261,
-      "sha256": "7f596666a82ca8aaae6298b352f3e6d5828d46b915acc34d9109a44903fbb98a"
+      "sha256": "e0d630478133769574d074cc134a6d662933c2733bd4c74a76e06e8dc195dbf6"
     },
     {
       "path": "docs/latex/generated/api/feedback_intelligence_agent.factory.build_agent.tex",
       "bytes": 1523,
-      "sha256": "589debfa6167332653d35007e3f386d0c0af9616f1b822dc7fb5a274b87e17c3"
+      "sha256": "a14fe3d92f72eef368bfce188951c8ba2e467459c1455b013b19c0ff67894942"
     },
     {
       "path": "docs/latex/generated/api/feedback_intelligence_agent.factory.build_conversation_store.tex",
       "bytes": 1465,
-      "sha256": "5d7a549c4f67ae51b6d76f5e054f00a05912b17474e0de1a393afe1bb8307880"
+      "sha256": "8aa531c8b4641074e2e2806b53da1781b63a41e539ffb33acee1e82f60f4d274"
     },
     {
       "path": "docs/latex/generated/api/feedback_intelligence_agent.factory.build_human_feedback_store.tex",
       "bytes": 1210,
-      "sha256": "283d839902232c58272cee4a5d0df7652bc932dbe83694540d07aebc3a0a36df"
+      "sha256": "972750fdee099b0fec5e9cd1efdae16d02b4216c9f6413fee614fe68679d21c2"
     },
     {
       "path": "docs/latex/generated/api/feedback_intelligence_agent.factory.build_index.tex",
       "bytes": 1526,
-      "sha256": "578e3feb952d0b6abfbf9fcefd1554ce9a0b73fdf0a51447d9c6e0026b8f7b71"
+      "sha256": "52363049dd8b51d528e256e2c0b8d15bf847c6d6a37caa676e377dc853944c82"
     },
     {
       "path": "docs/latex/generated/api/feedback_intelligence_agent.factory.build_job_store.tex",
       "bytes": 1671,
-      "sha256": "70b9d1a22fbc210f9d582933d589aa815204b5abb3aaef519f9c1d64f5bc376c"
+      "sha256": "3923c8c1a1576b37c74a512eb59455366670619adc57f5d79ae14ecddc4796c1"
     },
     {
       "path": "docs/latex/generated/api/feedback_intelligence_agent.factory.build_llm.tex",
       "bytes": 1797,
-      "sha256": "ca2d1e65e921b0cd50b7806d4d15b586c0494b4d3f3949ed44f8d7ed57c26ffb"
+      "sha256": "dd8c43603932704f7f56015dfb9387805778b428aac78a1393ac0e17726ab332"
     },
     {
       "path": "docs/latex/generated/api/feedback_intelligence_agent.factory.build_qdrant_index.tex",
       "bytes": 1539,
-      "sha256": "70d69ea9f2f6fc05237c7b8749c13ba14defb509de957a4121a63cc2f1723c06"
+      "sha256": "71532debd6b80ab0afd16d55d2937f85426cd8c00642bc9c2433cfec3b32354b"
     },
     {
       "path": "docs/latex/generated/api/feedback_intelligence_agent.factory.build_report_store.tex",
       "bytes": 1175,
-      "sha256": "c207e2c9c22ff8983c965c8fbdaf74374e995e76647fcdccbe1b63f8123197b2"
+      "sha256": "aa9eaf4f61c317a2ddf2fa93dcb59cb28b7e58772d6608f38cea4329cd4a0d39"
     },
     {
       "path": "docs/latex/generated/api/feedback_intelligence_agent.factory.build_retriever.tex",
       "bytes": 1511,
-      "sha256": "6070fed94a2edbabae6155d80f0a4ad44764699f3d1f0e0b5806c2496b362353"
+      "sha256": "8cdb2d828a39f2a4b0268c5ac255dce5f98b371762b02bf01862eca2a5471f9f"
     },
     {
       "path": "docs/latex/generated/api/feedback_intelligence_agent.factory.build_telemetry.tex",
       "bytes": 1548,
-      "sha256": "a947037e302b9bda9b8a1035166c4de5c67a62b38497d704deea9c3fbe02a53f"
+      "sha256": "4768e7cc89bd8c667266d1c083cde5252bc339feb27082ebef2f141be90b6417"
     },
     {
       "path": "docs/latex/generated/api/feedback_intelligence_agent.factory.chunk_to_embedding_text.tex",
       "bytes": 1341,
-      "sha256": "cf03d044f705b03c565f06a820f09806d535f9abaf21aa21af24d185e35fdc61"
+      "sha256": "f19f3efc0633e3b1338e0345db1f6cd6d6d7933fd6d1cf07860b472b4aae1d40"
     },
     {
       "path": "docs/latex/generated/api/feedback_intelligence_agent.factory.load_or_build_index.tex",
       "bytes": 1569,
-      "sha256": "b6f5744663370aa93a31bed702e391209696672397fce60b11ee426606b5f0b4"
+      "sha256": "80d5c4d52bbc10e7aa27dac8a84515660c51b53255d30f8fbfa036cf414c2d03"
     },
     {
       "path": "docs/latex/generated/api/feedback_intelligence_agent.guardrails.GuardrailDecision.tex",
@@ -728,14 +728,24 @@
       "sha256": "cb79c5532d6b22589f7c7ac87f0569915c632f62f9ad4dd67647e9e58f865643"
     },
     {
+      "path": "docs/latex/generated/api/feedback_intelligence_agent.index_persistence.index_write_lock.tex",
+      "bytes": 1800,
+      "sha256": "849dba2f3d970e6e9510b388557d33552084c5e5b7e7fb3e1f086541f7977b63"
+    },
+    {
+      "path": "docs/latex/generated/api/feedback_intelligence_agent.index_persistence.write_index_json.tex",
+      "bytes": 1553,
+      "sha256": "0ac4e36eaaadf3684d3dd67ec334726a084335ed902df71754f6c9551328ef8f"
+    },
+    {
       "path": "docs/latex/generated/api/feedback_intelligence_agent.index_updates.IncrementalIndexResult.tex",
       "bytes": 1757,
-      "sha256": "458decd5320caaf9cf9a63196c5d41a10f0f9bee2e7d17ad2137a4e5f1c979c1"
+      "sha256": "efc6da05abddbb2705b5ad06e194911022f887e2766c0f5e35ad57c0ab0f6b57"
     },
     {
       "path": "docs/latex/generated/api/feedback_intelligence_agent.index_updates.update_json_index.tex",
-      "bytes": 1872,
-      "sha256": "5235794b3239f800cebeee9221968ca6e3b187a7d0a739ca7a7798b3de22b17b"
+      "bytes": 1887,
+      "sha256": "1f520291d60aef8ada1299caf6fb1d85603034ffaf69f0c06ab7340c96e517e5"
     },
     {
       "path": "docs/latex/generated/api/feedback_intelligence_agent.ingestion.FeedbackIngestionError.tex",
@@ -1454,33 +1464,33 @@
     },
     {
       "path": "docs/latex/generated/api/feedback_intelligence_agent.vector_store.InMemoryVectorStore.tex",
-      "bytes": 8864,
-      "sha256": "27ab36e75623eb8be2637f859b21b2b804361c827e1c6da4a48850c920eeaf67"
+      "bytes": 8898,
+      "sha256": "eb28587131be46623cf81d9832969c8343de2d0a8d9c33852dc1730a1968eeb1"
     },
     {
       "path": "docs/latex/generated/api/feedback_intelligence_agent.vector_store.PersistedVectorStore.tex",
       "bytes": 1411,
-      "sha256": "1da12bf9eaea6776e5be346f5b4e9f51956491323bca297f335cb072506ba444"
+      "sha256": "b4519795c46dfa66715ad46fc646603b2c2a7c517cad29eeffec5185e7757e3c"
     },
     {
       "path": "docs/latex/generated/api/feedback_intelligence_agent.vector_store.VectorStore.tex",
       "bytes": 3569,
-      "sha256": "622281d7cd53db71ed400f7843f9f996459e1ba1a6a50f03c8b6fbab9d47e33a"
+      "sha256": "c8904a84ec9d9991aa84022db015939df259ca7d451e4a70712fa4984c7f1207"
     },
     {
       "path": "docs/latex/generated/architecture/components.tex",
-      "bytes": 17491,
-      "sha256": "61881af601a27a34dfb96a3ee4cdf39eefe919ad6d4254af28b58ed95d0bf52a"
+      "bytes": 17857,
+      "sha256": "c19d9eb48a208f5a1c0c067cbea74ac66197b2d436f9aef7e5f04d273b185473"
     },
     {
       "path": "docs/latex/generated/architecture/dependencies.tex",
-      "bytes": 17109,
-      "sha256": "b3d79ed27ebaec3d850836c632bc3f654c0785d040aea52368f58b4771ad4b4c"
+      "bytes": 17504,
+      "sha256": "6744edfce439d5db6e2f2201734b3387bfc2c85080db6edd29dcbe934c8ca745"
     },
     {
       "path": "docs/latex/generated/architecture/layer-diagram.tex",
-      "bytes": 2318,
-      "sha256": "ec091c52156b9256532a9fd3a0bbde7d02d7914f686066d5fa5a3d513fc9737a"
+      "bytes": 2338,
+      "sha256": "3c176494e0ba85ae46380074ed726b3981e2fd2f2207c83790ee6caa20f941c7"
     },
     {
       "path": "docs/latex/generated/architecture/layer-violations.tex",
@@ -1489,8 +1499,8 @@
     },
     {
       "path": "docs/latex/generated/architecture/module-graph.tex",
-      "bytes": 4110,
-      "sha256": "0f47b17d903b5da63112a81be344173fb7888a5cb3a5ea04ce6547c76ce851d6"
+      "bytes": 4205,
+      "sha256": "abd52859e304b1d3c6607d79a06b3458adc889b9777f164cc9403906f73abd62"
     },
     {
       "path": "docs/latex/generated/cli.tex",
@@ -1514,8 +1524,8 @@
     },
     {
       "path": "docs/latex/generated/engineering/ci-cd.tex",
-      "bytes": 15807,
-      "sha256": "3921f81b0c93bbf434f9e6b222b632f613f27e5d35ad3fd00cebd214337bc8e7"
+      "bytes": 17180,
+      "sha256": "50b91236dcd40cde018e35aa4ec3baf20f5f25b4a2b8c3f1ee5a0ba8adba0b37"
     },
     {
       "path": "docs/latex/generated/engineering/containers.tex",
@@ -1529,8 +1539,8 @@
     },
     {
       "path": "docs/latex/generated/engineering/dependencies.tex",
-      "bytes": 6858,
-      "sha256": "6371da5f239cfe0f27173efd54b3420009ea3ab72db971d641d40045f3b0e54d"
+      "bytes": 6969,
+      "sha256": "1a563a96b99895dbf641747c6a51a5b700c88f2e86abc6bd77048a43ef4ae33c"
     },
     {
       "path": "docs/latex/generated/engineering/environment.tex",
@@ -1544,18 +1554,18 @@
     },
     {
       "path": "docs/latex/generated/engineering/repository-structure.tex",
-      "bytes": 7877,
-      "sha256": "383ce9bd251e68f3fb9a3a5f5e285a432cdae7837c1d214997b94c76c6b7d904"
+      "bytes": 7911,
+      "sha256": "07580fad26136ee15f61f56125262386345add439f5b716cf31508af8bc5898c"
     },
     {
       "path": "docs/latex/generated/engineering/testing.tex",
-      "bytes": 8291,
-      "sha256": "0345aad55872ac592bd8ef8ff7a3d725bf8daf0a1483d18000534629c4f1b504"
+      "bytes": 8448,
+      "sha256": "12775b7ef9481c91797f4c9ff15dc5ea838699c2974aa8f12a6f1abb1d4e5af0"
     },
     {
       "path": "docs/latex/generated/engineering/traceability.tex",
-      "bytes": 26315,
-      "sha256": "59f30b73150ec169737dd1a53ef44ec16a887aac0025e261fcf3f453afac52fa"
+      "bytes": 26620,
+      "sha256": "7defd1c5a8e9888dc930509599ecc8313f6cdda0eabfa33ab0b9288ae0db5af1"
     },
     {
       "path": "docs/latex/generated/http-api.tex",
@@ -1564,18 +1574,18 @@
     },
     {
       "path": "docs/latex/generated/indexes.tex",
-      "bytes": 48116,
-      "sha256": "bb3e47d21281c3c04795dbefa2f027a7619bf8d85a958cc23f3d8143aa980d68"
+      "bytes": 48502,
+      "sha256": "767ca9d2efdc446f574ead50e2e2c72fff3af295902041b5b0c8c75fb5e32eed"
     },
     {
       "path": "docs/latex/generated/modules.tex",
-      "bytes": 61451,
-      "sha256": "60c3cdad9886a7844e6a5c4bb6f35dfbc70c2fbafcf90321003e22d490035522"
+      "bytes": 62270,
+      "sha256": "f1b422d8ba88094fe6e3559111cb2fd4d78efd7b60f44f2db5ed8073983aa28d"
     },
     {
       "path": "docs/latex/generated/project-metadata.tex",
-      "bytes": 2827,
-      "sha256": "884b82acd5a6a6fb6fcc257426fa53c6c8398237c1a494d9e295eebb18ba7f27"
+      "bytes": 2850,
+      "sha256": "11b3f090cda22625d6919d7ac707d00c6fbc6916be1901ad6c6c7293ac8b9974"
     },
     {
       "path": "docs/latex/generated/schemas.tex",
@@ -1597,27 +1607,27 @@
     {
       "path": "docs/metadata/api-index-classes-001.json",
       "bytes": 291327,
-      "sha256": "c70978bb9c222f1fa1c6bc5b74dd914eea25750b365fbe36d5454a8d4bf155a1"
+      "sha256": "8befebd1bb513b522fec479f50445aef9a5c1135f105d8bf2f1f52fa71057f24"
     },
     {
       "path": "docs/metadata/api-index-classes-002.json",
-      "bytes": 242427,
-      "sha256": "3e7135a752499a5f0b9a8afc6134c633ba3260acfd19c9f427e93ac2e2cdbeb8"
+      "bytes": 242461,
+      "sha256": "89bbe5a65641001d6ddaa9cc80ba71ca54fabee61cb46e29c123be57607c3fd4"
     },
     {
       "path": "docs/metadata/api-index.json",
-      "bytes": 401902,
-      "sha256": "91ef20279a7b163df10460b90fecbf02a3193b419404627a76aef2ee604fd6a5"
+      "bytes": 405532,
+      "sha256": "51230bb3ec5a8428796f2a3245588da0d096ab4fd80e13dbb1fbb839be204f50"
     },
     {
       "path": "docs/metadata/module-dependencies.json",
-      "bytes": 45553,
-      "sha256": "6239fd6bce83e7914500177535cdacd0c25c7480e54de9b9d1a50f4e16f84540"
+      "bytes": 46490,
+      "sha256": "d8e23581e2fba25e5d4a9fb8597533f074ccefc781b73581573012c222c04e11"
     },
     {
       "path": "docs/metadata/repository-inventory.json",
-      "bytes": 88833,
-      "sha256": "68f875f99826ed96a0ed73b52fc925acbf89617e22a188e9afe1d4db17408f47"
+      "bytes": 90788,
+      "sha256": "48aa6f42f45487c258e3d7f06bd479a4efdf36209249fdd95cced952bc6450e8"
     }
   ]
 }

@@ -9,7 +9,7 @@
 \section{\texttt{update\_json\_index}}
 \label{func:feedback_intelligence_agent.index_updates.update_json_index}\index{Functions!update\_json\_index}
 
-Merge validated records into a persisted JSON vector index.
+Merge records under a writer lock, then atomically replace the JSON index.
 \apifield{Usage}
 \begin{lstlisting}[style=usage, language=Python]
 update_json_index(records: list[FeedbackRecord], index_path: str | Path, *, embedding_dim: int, chunk_size: int = 80, chunk_overlap: int = 16, telemetry: Telemetry | None = None) -> IncrementalIndexResult
@@ -25,4 +25,4 @@ update_json_index(records: list[FeedbackRecord], index_path: str | Path, *, embe
 \end{arglist}
 \apifield{Value}\texttt{IncrementalIndexResult}
 \apifield{Raises}\texttt{ValueError}
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}index\_\allowbreak{}updates.\allowbreak{}py:37}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/edc9d78403eeed9f7d6ee5aef6b8d9b1b5780ef4/src/feedback_intelligence_agent/index_updates.py#L37}{online}), module \cref{module:feedback_intelligence_agent.index_updates}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}index\_\allowbreak{}updates.\allowbreak{}py:38}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/edc9d78403eeed9f7d6ee5aef6b8d9b1b5780ef4/src/feedback_intelligence_agent/index_updates.py#L38}{online}), module \cref{module:feedback_intelligence_agent.index_updates}

@@ -78,6 +78,7 @@ MODULE_LAYERS: dict[str, str] = {
     "lakehouse": "data",
     "streaming_ingestion": "data",
     "index_updates": "data",
+    "index_persistence": "data",
     "llm": "infrastructure",
     "telemetry": "infrastructure",
     "resilience": "infrastructure",

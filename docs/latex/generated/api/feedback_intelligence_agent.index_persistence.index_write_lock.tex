@@ -1,0 +1,24 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{index\_write\_lock}}
+\label{func:feedback_intelligence_agent.index_persistence.index_write_lock}\index{Functions!index\_write\_lock}
+
+Lock a canonical index path across threads and processes, yielding that path.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+index_write_lock(path: str | Path, *, timeout: float = 60.0) -> Iterator[Path]
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{path}] \texttt{str \textbar{} Path}, required.
+  \item[\texttt{timeout}] \texttt{float}, default \texttt{60.\allowbreak{}0}, keyword-only.
+\end{arglist}
+\apifield{Value}\texttt{Iterator[Path]\allowbreak{}}
+\apifield{Details}Hold this lock across the entire read/modify/write operation. Nested calls on the same thread are reentrant, including saves inside an update. The sidecar \texttt{\textless{}index\textgreater{}.\allowbreak{}lock} belongs to the locking library; do not remove it while processes may use the index. Lock acquisition failures retain file context in \texttt{FileWriteError}. Locks require a cooperating local filesystem.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}index\_\allowbreak{}persistence.\allowbreak{}py:22}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/edc9d78403eeed9f7d6ee5aef6b8d9b1b5780ef4/src/feedback_intelligence_agent/index_persistence.py#L22}{online}), module \cref{module:feedback_intelligence_agent.index_persistence}

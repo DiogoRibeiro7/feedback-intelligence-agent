@@ -13,6 +13,7 @@ from feedback_intelligence_agent.hallucination import (
     EvidenceOverlapHallucinationChecker,
     LLMHallucinationJudge,
 )
+from feedback_intelligence_agent.index_persistence import index_write_lock
 from feedback_intelligence_agent.ingestion import load_feedback_csv
 from feedback_intelligence_agent.lexical_search import BM25Retriever
 from feedback_intelligence_agent.llm import (
@@ -200,12 +201,17 @@ def load_or_build_index(settings: Settings, *, telemetry: Telemetry | None = Non
     settings.ensure_artifact_dir()
     if settings.index_path.exists():
         return InMemoryVectorStore.load(settings.index_path)
-    return build_index(
-        settings.data_path,
-        settings.index_path,
-        embedding_dim=settings.embedding_dim,
-        telemetry=telemetry,
-    )
+    with index_write_lock(settings.index_path) as index_path:
+        # Another initializer or incremental update may have created the index
+        # while this caller was waiting. Never rebuild over its committed data.
+        if index_path.exists():
+            return InMemoryVectorStore.load(index_path)
+        return build_index(
+            settings.data_path,
+            index_path,
+            embedding_dim=settings.embedding_dim,
+            telemetry=telemetry,
+        )
 
 
 def build_retriever(settings: Settings, vector_store: VectorStore) -> Retriever:

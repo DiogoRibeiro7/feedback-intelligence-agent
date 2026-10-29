@@ -72,4 +72,4 @@ This roadmap is designed to evolve the repository from a compact portfolio proje
 - [x] Use collision-free source identifiers, with a migration path for existing indexes.
 - [x] Apply metadata filters before limiting retrieval candidates, including tenant filters.
 - [ ] Bind tenant access and conversation history to authenticated caller identities.
-- [ ] Make JSON index persistence atomic and serialize concurrent updates.
+- [x] Make JSON index persistence atomic and serialize concurrent updates.

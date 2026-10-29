@@ -6,6 +6,11 @@ All notable changes to this project are documented here.
 
 ### Fixed
 
+- JSON index saves flush a sibling temporary file before atomic replacement,
+  keeping the last committed snapshot intact when writes fail.
+- Incremental JSON updates lock the full load/merge/save transaction across
+  threads and processes; initial index creation rechecks after acquiring the
+  same lock to avoid rebuilding over a concurrent update.
 - Metadata filters apply before candidate limits in dense, lexical, and hybrid
   retrieval; Qdrant pages until enough eligible results are found or exhausted.
 - Shared metadata matching preserves legacy defaults and normalizes timestamp
