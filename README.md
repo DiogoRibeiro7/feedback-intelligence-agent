@@ -612,6 +612,11 @@ history; changing that key's role preserves access, while rotating it starts a
 new history namespace. Authenticated clients omit `conversation_id` to start a
 conversation and use the returned ID for follow-ups.
 
+Opaque caller identities use PBKDF2-HMAC-SHA256 with 600,000 iterations and a
+fixed application-specific domain separator so they survive restarts. Successful
+derivations are cached in memory for up to three keys; each request still checks
+the current key configuration and role. Use randomly generated API keys.
+
 This ownership check protects conversation history. Tenant authorization for
 queries, reports, feedback, and ingestion, plus tenant filtering in aggregate
 tools, remains on the roadmap.

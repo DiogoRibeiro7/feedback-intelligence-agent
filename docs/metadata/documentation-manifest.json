@@ -80,42 +80,42 @@
     {
       "path": "docs/latex/generated/api/feedback_intelligence_agent.auth.ApiAuthConfigurationError.tex",
       "bytes": 927,
-      "sha256": "b0e2a8d94185977a27b63e53319aedd88314d9a1732e8b990c727e857f995acb"
+      "sha256": "bc957b26ca29f5a37cc27c2bd96017bf464fad193b510a6678a3c42d812448f0"
     },
     {
       "path": "docs/latex/generated/api/feedback_intelligence_agent.auth.ApiAuthError.tex",
       "bytes": 876,
-      "sha256": "d8acc5868d6cb3102f4dc4a0995d5e961029626055210c51f9a1e132c8267fd4"
+      "sha256": "c02a806d99bb350c444c52231e47896ada230bd84d02587def1821e42af559f8"
     },
     {
       "path": "docs/latex/generated/api/feedback_intelligence_agent.auth.ApiAuthenticationError.tex",
       "bytes": 919,
-      "sha256": "f3c065c9e38133a3e0491426b4151081108352e4b7262a4ab32c036fc0657d0f"
+      "sha256": "bb36da7e662b9d3023d9a3cb864824e8dba5c53ac8abd8992f3cf017cc580db7"
     },
     {
       "path": "docs/latex/generated/api/feedback_intelligence_agent.auth.ApiPermissionError.tex",
       "bytes": 902,
-      "sha256": "5f604f6b079b093c0ace088186c78dbd28dacc4b69fdda550571a77f8c12fbec"
+      "sha256": "46e8669bae26588a83a591f74ed76ecca86889331ac218986d1ceeb129c09d44"
     },
     {
       "path": "docs/latex/generated/api/feedback_intelligence_agent.auth.ApiPrincipal.tex",
       "bytes": 1188,
-      "sha256": "637ce4d17958d578e4caa24abfadeb14fd9e588b8aa050e0f3e9653d06fc65a4"
+      "sha256": "f83fca509a0d8d61453ff7665573a97bf037bed1eef70b7799963ff2d03b0d5b"
     },
     {
       "path": "docs/latex/generated/api/feedback_intelligence_agent.auth.ApiRole.tex",
       "bytes": 1071,
-      "sha256": "f1e1eac6975e2cfbbe1685bc6a078740c04a7aa229bbfff1e980a99d562b39a4"
+      "sha256": "ba6d2b43d4a08b41c4f3797932ab52c894c4b1fb9b1f941e3e17ad305847de68"
     },
     {
       "path": "docs/latex/generated/api/feedback_intelligence_agent.auth.require_api_role.tex",
-      "bytes": 1769,
-      "sha256": "fbcf8d3686973b1aff2bf5cd6e56999ffd1805e9931ac0bac94a8a1e3825eeda"
+      "bytes": 1771,
+      "sha256": "3df766fa6e6db2992b9eefe28a26fe00e014e2597a59b8563f2b998d39edf8f9"
     },
     {
       "path": "docs/latex/generated/api/feedback_intelligence_agent.auth.resolve_api_principal.tex",
-      "bytes": 2010,
-      "sha256": "80e3de8b8c70fc6de4833968faa2e6682bacb8634a7af551c1fd9d8086b06aaf"
+      "bytes": 2007,
+      "sha256": "051877deffbf06a2e3771d9e31ed76b701e53a9eda1f4f39d6d976af1f1fbe5c"
     },
     {
       "path": "docs/latex/generated/api/feedback_intelligence_agent.benchmarking.BenchmarkReport.tex",
@@ -1555,12 +1555,12 @@
     {
       "path": "docs/latex/generated/engineering/repository-structure.tex",
       "bytes": 7947,
-      "sha256": "1adebc67786ed6775c0db96ee95eb43a62f72da1725d3b9bb2c39fb3e51bd85b"
+      "sha256": "1fa0a4713e239eb2d2f078a68b48e2e9d5e9f212e5015078cdc96322b58a1d28"
     },
     {
       "path": "docs/latex/generated/engineering/testing.tex",
-      "bytes": 8609,
-      "sha256": "175abdc3aa85c0f3852ada3c3b43c1d141cae49763daa83af1a994ace17a01cb"
+      "bytes": 8610,
+      "sha256": "5c917e4faa326f6578f7509308d04dfa611e00f9e68ee67bcd348125dd874538"
     },
     {
       "path": "docs/latex/generated/engineering/traceability.tex",
@@ -1580,7 +1580,7 @@
     {
       "path": "docs/latex/generated/modules.tex",
       "bytes": 62270,
-      "sha256": "4fdd4521d28cc75d5b6ca2041cae3ee94e967f5b95609a6dd78caa05edcc866e"
+      "sha256": "d1f95fda746c02ce7f5ec050059c6bd1e6a3cc630609f70c0fac9ef4fd6d3681"
     },
     {
       "path": "docs/latex/generated/project-metadata.tex",
@@ -1607,7 +1607,7 @@
     {
       "path": "docs/metadata/api-index-classes-001.json",
       "bytes": 293552,
-      "sha256": "be1a089a51a411704599c1d44cc043dab156c7b74a8495c1a9a4c60998422f90"
+      "sha256": "9e7a6c96d99d2f99276ee4f23e244df12ddf2b0525edb0fa09380b68f4c094d9"
     },
     {
       "path": "docs/metadata/api-index-classes-002.json",
@@ -1616,8 +1616,8 @@
     },
     {
       "path": "docs/metadata/api-index.json",
-      "bytes": 406118,
-      "sha256": "3c22cfd658f5f5b8571c463167f224424a78abc0ede67ea3d03dd53b412a335a"
+      "bytes": 406170,
+      "sha256": "de3f5df20bb5b73d7d66fa0dd51fe92ae973acefdee33aeb34e21c1b4923bcf3"
     },
     {
       "path": "docs/metadata/module-dependencies.json",
@@ -1626,8 +1626,8 @@
     },
     {
       "path": "docs/metadata/repository-inventory.json",
-      "bytes": 91259,
-      "sha256": "9c588e10b55c147ecdcfaeb9ad8edd8bd1416d2997381eec2705b3467623c425"
+      "bytes": 91260,
+      "sha256": "2435db618f58dabfe3261b6013cd8dfc1467e6c28182be93f6b77bd01ea49232"
     }
   ]
 }

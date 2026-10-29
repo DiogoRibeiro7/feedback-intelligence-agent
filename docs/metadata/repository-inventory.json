@@ -97,11 +97,11 @@
       },
       "Markdown": {
         "files": 15,
-        "lines": 2784
+        "lines": 2792
       },
       "Python": {
         "files": 106,
-        "lines": 28410
+        "lines": 28495
       },
       "TOML": {
         "files": 2,
@@ -254,8 +254,8 @@
         "path": "CHANGELOG.md",
         "category": "documentation",
         "language": "Markdown",
-        "lines": 141,
-        "bytes": 6849
+        "lines": 144,
+        "bytes": 7047
       },
       {
         "path": "CITATION.cff",
@@ -303,8 +303,8 @@
         "path": "README.md",
         "category": "documentation",
         "language": "Markdown",
-        "lines": 1273,
-        "bytes": 59707
+        "lines": 1278,
+        "bytes": 60021
       },
       {
         "path": "ROADMAP.md",
@@ -1017,8 +1017,8 @@
         "path": "src/feedback_intelligence_agent/auth.py",
         "category": "python-source",
         "language": "Python",
-        "lines": 129,
-        "bytes": 3492
+        "lines": 145,
+        "bytes": 4134
       },
       {
         "path": "src/feedback_intelligence_agent/benchmarking.py",
@@ -1360,8 +1360,8 @@
         "path": "tests/test_auth.py",
         "category": "python-test",
         "language": "Python",
-        "lines": 110,
-        "bytes": 3179
+        "lines": 179,
+        "bytes": 5641
       },
       {
         "path": "tests/test_benchmarking.py",
@@ -2911,7 +2911,7 @@
       "path": "tests/test_auth.py",
       "module_under_test": "auth",
       "category": "unit",
-      "test_functions": 7,
+      "test_functions": 10,
       "parametrized_cases": 0
     },
     {

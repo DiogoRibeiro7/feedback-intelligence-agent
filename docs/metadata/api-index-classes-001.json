@@ -1065,7 +1065,7 @@
         "ApiAuthError"
       ],
       "source": "src/feedback_intelligence_agent/auth.py",
-      "line": 31,
+      "line": 32,
       "public": true,
       "decorators": [],
       "summary": "Raised when auth is enabled without any configured keys.",
@@ -1085,7 +1085,7 @@
         "ValueError"
       ],
       "source": "src/feedback_intelligence_agent/auth.py",
-      "line": 27,
+      "line": 28,
       "public": true,
       "decorators": [],
       "summary": "Base class for API authorization failures.",
@@ -1105,7 +1105,7 @@
         "ApiAuthError"
       ],
       "source": "src/feedback_intelligence_agent/auth.py",
-      "line": 35,
+      "line": 36,
       "public": true,
       "decorators": [],
       "summary": "Raised when the request does not provide a valid API key.",
@@ -1125,7 +1125,7 @@
         "ApiAuthError"
       ],
       "source": "src/feedback_intelligence_agent/auth.py",
-      "line": 39,
+      "line": 40,
       "public": true,
       "decorators": [],
       "summary": "Raised when a valid API key lacks the required role.",
@@ -1145,7 +1145,7 @@
         "BaseModel"
       ],
       "source": "src/feedback_intelligence_agent/auth.py",
-      "line": 19,
+      "line": 20,
       "public": true,
       "decorators": [],
       "summary": "Resolved role and opaque API-key identity, independent of role assignment.",
@@ -1191,7 +1191,7 @@
         "Enum"
       ],
       "source": "src/feedback_intelligence_agent/auth.py",
-      "line": 11,
+      "line": 12,
       "public": true,
       "decorators": [],
       "summary": "API roles ordered from least to most privileged.",

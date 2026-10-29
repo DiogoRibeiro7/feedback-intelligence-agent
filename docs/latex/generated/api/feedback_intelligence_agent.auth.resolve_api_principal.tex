@@ -24,5 +24,5 @@ resolve_api_principal(api_key: str | None, *, auth_enabled: bool, reader_key: st
 \end{arglist}
 \apifield{Value}\texttt{ApiPrincipal}
 \apifield{Raises}\texttt{ApiAuthConfigurationError}, \texttt{ApiAuthenticationError}
-\apifield{Details}When auth is disabled, local callers receive an unauthenticated admin principal so route-level dependencies become no-ops. Authenticated identities are fingerprints of the normalized API key; key rotation changes identity, while changing its role preserves identity.
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}auth.\allowbreak{}py:50}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/edc9d78403eeed9f7d6ee5aef6b8d9b1b5780ef4/src/feedback_intelligence_agent/auth.py#L50}{online}), module \cref{module:feedback_intelligence_agent.auth}
+\apifield{Details}When auth is disabled, local callers receive an unauthenticated admin principal so route-level dependencies become no-ops. Authenticated identities are derived from the normalized API key; key rotation changes identity, while changing its role preserves identity.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}auth.\allowbreak{}py:66}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/edc9d78403eeed9f7d6ee5aef6b8d9b1b5780ef4/src/feedback_intelligence_agent/auth.py#L66}{online}), module \cref{module:feedback_intelligence_agent.auth}
