@@ -1,7 +1,7 @@
 {
   "package": "feedback_intelligence_agent",
-  "module_count": 47,
-  "edge_count": 169,
+  "module_count": 48,
+  "edge_count": 178,
   "layer_order": [
     "interface",
     "application",
@@ -27,6 +27,7 @@
       "factory",
       "human_feedback",
       "jobs",
+      "record_ingestion",
       "reports"
     ],
     "domain": [
@@ -143,14 +144,14 @@
       "optional_dependencies": [],
       "lazy_imports": [],
       "typing_only_imports": [],
-      "fan_in": 5
+      "fan_in": 6
     },
     {
       "name": "api",
       "qualified_name": "feedback_intelligence_agent.api",
       "source": "src/feedback_intelligence_agent/api.py",
       "layer": "interface",
-      "fan_out": 13,
+      "fan_out": 15,
       "external_dependencies": [
         "fastapi"
       ],
@@ -239,7 +240,7 @@
       "optional_dependencies": [],
       "lazy_imports": [],
       "typing_only_imports": [],
-      "fan_in": 6
+      "fan_in": 7
     },
     {
       "name": "data_contracts",
@@ -340,7 +341,7 @@
         "jobs",
         "reports"
       ],
-      "fan_in": 6
+      "fan_in": 7
     },
     {
       "name": "guardrails",
@@ -400,7 +401,7 @@
       "optional_dependencies": [],
       "lazy_imports": [],
       "typing_only_imports": [],
-      "fan_in": 3
+      "fan_in": 4
     },
     {
       "name": "index_updates",
@@ -414,7 +415,7 @@
       "optional_dependencies": [],
       "lazy_imports": [],
       "typing_only_imports": [],
-      "fan_in": 1
+      "fan_in": 2
     },
     {
       "name": "ingestion",
@@ -609,6 +610,20 @@
       "fan_in": 1
     },
     {
+      "name": "record_ingestion",
+      "qualified_name": "feedback_intelligence_agent.record_ingestion",
+      "source": "src/feedback_intelligence_agent/record_ingestion.py",
+      "layer": "application",
+      "fan_out": 7,
+      "external_dependencies": [
+        "pydantic"
+      ],
+      "optional_dependencies": [],
+      "lazy_imports": [],
+      "typing_only_imports": [],
+      "fan_in": 1
+    },
+    {
       "name": "reports",
       "qualified_name": "feedback_intelligence_agent.reports",
       "source": "src/feedback_intelligence_agent/reports.py",
@@ -684,7 +699,7 @@
       "optional_dependencies": [],
       "lazy_imports": [],
       "typing_only_imports": [],
-      "fan_in": 28
+      "fan_in": 29
     },
     {
       "name": "source_ids",
@@ -759,7 +774,7 @@
       "optional_dependencies": [],
       "lazy_imports": [],
       "typing_only_imports": [],
-      "fan_in": 2
+      "fan_in": 3
     },
     {
       "name": "vector_store",
@@ -775,7 +790,7 @@
       "optional_dependencies": [],
       "lazy_imports": [],
       "typing_only_imports": [],
-      "fan_in": 6
+      "fan_in": 7
     }
   ],
   "edges": [
@@ -925,6 +940,12 @@
     },
     {
       "source": "api",
+      "target": "index_persistence",
+      "context": "eager",
+      "names": "index_write_lock"
+    },
+    {
+      "source": "api",
       "target": "jobs",
       "context": "eager",
       "names": "JobRequest, JobResult, run_ingestion_job"
@@ -940,6 +961,12 @@
       "target": "rate_limit",
       "context": "eager",
       "names": "InMemoryRateLimiter, RateLimitDecision"
+    },
+    {
+      "source": "api",
+      "target": "record_ingestion",
+      "context": "eager",
+      "names": "RecordIngestionRequest, RecordIngestionResult, ingest_record_batch"
     },
     {
       "source": "api",
@@ -1656,6 +1683,48 @@
       "names": "SourceIdMigrationError, migrate_legacy_chunks"
     },
     {
+      "source": "record_ingestion",
+      "target": "agent",
+      "context": "eager",
+      "names": "FeedbackInsightAgent"
+    },
+    {
+      "source": "record_ingestion",
+      "target": "config",
+      "context": "eager",
+      "names": "Settings"
+    },
+    {
+      "source": "record_ingestion",
+      "target": "factory",
+      "context": "eager",
+      "names": "build_retriever"
+    },
+    {
+      "source": "record_ingestion",
+      "target": "index_updates",
+      "context": "eager",
+      "names": "update_json_index"
+    },
+    {
+      "source": "record_ingestion",
+      "target": "schemas",
+      "context": "eager",
+      "names": "FeedbackRecord"
+    },
+    {
+      "source": "record_ingestion",
+      "target": "tools",
+      "context": "eager",
+      "names": "build_default_tools"
+    },
+    {
+      "source": "record_ingestion",
+      "target": "vector_store",
+      "context": "eager",
+      "names": "InMemoryVectorStore"
+    },
+    {
       "source": "reports",
       "target": "safe_paths",
       "context": "eager",
@@ -1807,7 +1876,7 @@
   "most_depended_upon": [
     {
       "module": "schemas",
-      "fan_in": 28,
+      "fan_in": 29,
       "fan_out": 1
     },
     {
@@ -1817,28 +1886,28 @@
     },
     {
       "module": "config",
-      "fan_in": 6,
+      "fan_in": 7,
       "fan_out": 0
+    },
+    {
+      "module": "factory",
+      "fan_in": 7,
+      "fan_out": 22
+    },
+    {
+      "module": "vector_store",
+      "fan_in": 7,
+      "fan_out": 4
+    },
+    {
+      "module": "agent",
+      "fan_in": 6,
+      "fan_out": 13
     },
     {
       "module": "embeddings",
       "fan_in": 6,
       "fan_out": 0
-    },
-    {
-      "module": "factory",
-      "fan_in": 6,
-      "fan_out": 22
-    },
-    {
-      "module": "vector_store",
-      "fan_in": 6,
-      "fan_out": 4
-    },
-    {
-      "module": "agent",
-      "fan_in": 5,
-      "fan_out": 13
     },
     {
       "module": "chunking",

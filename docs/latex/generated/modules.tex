@@ -23,7 +23,7 @@ Module & Lines & Objects & Summary \\
 \texttt{feedback\_\allowbreak{}intelligence\_\allowbreak{}agent} & 7 & 0 & Feedback Intelligence Agent package. \\
 \texttt{active\_\allowbreak{}learning} & 215 & 8 & Workflow state for active-learning follow-up items. \\
 \texttt{agent} & 522 & 3 & Agent orchestration for the feedback intelligence agent. \\
-\texttt{api} & 705 & 1 & FastAPI application. \\
+\texttt{api} & 742 & 1 & FastAPI application. \\
 \texttt{auth} & 181 & 8 & Optional API-key authorization for the FastAPI service. \\
 \texttt{benchmarking} & 286 & 13 & Latency and throughput benchmarks for the RAG pipeline. \\
 \texttt{chunking} & 92 & 3 & Text chunking utilities. \\
@@ -40,7 +40,7 @@ Module & Lines & Objects & Summary \\
 \texttt{hallucination} & 285 & 9 & Hallucination checks for evidence-grounded answers. \\
 \texttt{human\_\allowbreak{}feedback} & 408 & 14 & Human review feedback on generated agent answers. \\
 \texttt{index\_\allowbreak{}persistence} & 89 & 2 & Atomic JSON index replacement and cooperative locking on local filesystems. \\
-\texttt{index\_\allowbreak{}updates} & 118 & 2 & Incremental index update helpers. \\
+\texttt{index\_\allowbreak{}updates} & 127 & 2 & Incremental index update helpers. \\
 \texttt{ingestion} & 58 & 2 & Feedback ingestion utilities. \\
 \texttt{jobs} & 293 & 9 & Asynchronous ingestion jobs with status tracking. \\
 \texttt{lakehouse} & 398 & 7 & Local lakehouse-style feedback exports. \\
@@ -55,6 +55,7 @@ Module & Lines & Objects & Summary \\
 \texttt{qdrant\_\allowbreak{}store} & 237 & 2 & Optional Qdrant-backed vector store. \\
 \texttt{query\_\allowbreak{}expansion} & 93 & 5 & Deterministic query expansion for product-specific terminology. \\
 \texttt{rate\_\allowbreak{}limit} & 76 & 2 & Small in-memory fixed-window rate limiter for API deployments. \\
+\texttt{record\_\allowbreak{}ingestion} & 96 & 3 & Bounded record batches and live retrieval snapshots for JSON ingestion. \\
 \texttt{reports} & 279 & 8 & Saved insight reports for product and analyst workflows. \\
 \texttt{reranking} & 137 & 2 & Local candidate reranking for retrieved feedback chunks. \\
 \texttt{resilience} & 148 & 4 & Retry, timeout, and circuit-breaker wrappers for LLM providers. \\
@@ -103,8 +104,8 @@ Agent orchestration for the feedback intelligence agent.
 \label{module:feedback_intelligence_agent.api}\index{Modules!api}
 
 FastAPI application.
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}api.\allowbreak{}py}, 705 lines
-\apifield{Imports}\texttt{active\_\allowbreak{}learning}, \texttt{auth}, \texttt{config}, \texttt{email\_\allowbreak{}summaries}, \texttt{factory}, \texttt{human\_\allowbreak{}feedback}, \texttt{jobs}, \texttt{memory}, \texttt{rate\_\allowbreak{}limit}, \texttt{reports}, \texttt{schemas}, \texttt{telemetry}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}api.\allowbreak{}py}, 742 lines
+\apifield{Imports}\texttt{active\_\allowbreak{}learning}, \texttt{auth}, \texttt{config}, \texttt{email\_\allowbreak{}summaries}, \texttt{factory}, \texttt{human\_\allowbreak{}feedback}, \texttt{index\_\allowbreak{}persistence}, \texttt{jobs}, \texttt{memory}, \texttt{rate\_\allowbreak{}limit}, \texttt{record\_\allowbreak{}ingestion}, \texttt{reports}, \texttt{schemas}, \texttt{telemetry}
 \apifield{Functions}\cref{func:feedback_intelligence_agent.api.create_app}
 
 \apibreak
@@ -293,7 +294,7 @@ Atomic JSON index replacement and cooperative locking on local filesystems.
 \label{module:feedback_intelligence_agent.index_updates}\index{Modules!index\_updates}
 
 Incremental index update helpers.
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}index\_\allowbreak{}updates.\allowbreak{}py}, 118 lines
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}index\_\allowbreak{}updates.\allowbreak{}py}, 127 lines
 \apifield{Imports}\texttt{chunking}, \texttt{embeddings}, \texttt{factory}, \texttt{index\_\allowbreak{}persistence}, \texttt{schemas}, \texttt{telemetry}, \texttt{vector\_\allowbreak{}store}
 \apifield{Classes}\cref{class:feedback_intelligence_agent.index_updates.IncrementalIndexResult}
 \apifield{Functions}\cref{func:feedback_intelligence_agent.index_updates.update_json_index}
@@ -455,6 +456,16 @@ Deterministic query expansion for product-specific terminology.
 Small in-memory fixed-window rate limiter for API deployments.
 \apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}rate\_\allowbreak{}limit.\allowbreak{}py}, 76 lines
 \apifield{Classes}\cref{class:feedback_intelligence_agent.rate_limit.RateLimitDecision}, \cref{class:feedback_intelligence_agent.rate_limit.InMemoryRateLimiter}
+
+\apibreak
+\section{\texttt{record\_ingestion}}
+\label{module:feedback_intelligence_agent.record_ingestion}\index{Modules!record\_ingestion}
+
+Bounded record batches and live retrieval snapshots for JSON ingestion.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}record\_\allowbreak{}ingestion.\allowbreak{}py}, 96 lines
+\apifield{Imports}\texttt{agent}, \texttt{config}, \texttt{factory}, \texttt{index\_\allowbreak{}updates}, \texttt{schemas}, \texttt{tools}, \texttt{vector\_\allowbreak{}store}
+\apifield{Classes}\cref{class:feedback_intelligence_agent.record_ingestion.RecordIngestionRequest}, \cref{class:feedback_intelligence_agent.record_ingestion.RecordIngestionResult}
+\apifield{Functions}\cref{func:feedback_intelligence_agent.record_ingestion.ingest_record_batch}
 
 \apibreak
 \section{\texttt{reports}}

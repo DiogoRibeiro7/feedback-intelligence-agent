@@ -665,6 +665,192 @@
       "notes": ""
     },
     {
+      "name": "RecordIngestionRequest",
+      "qualified_name": "feedback_intelligence_agent.record_ingestion.RecordIngestionRequest",
+      "kind": "pydantic model",
+      "module": "feedback_intelligence_agent.record_ingestion",
+      "bases": [
+        "BaseModel"
+      ],
+      "source": "src/feedback_intelligence_agent/record_ingestion.py",
+      "line": 16,
+      "public": true,
+      "decorators": [],
+      "summary": "A single tenant's records, with no client-selectable filesystem paths.",
+      "description": "",
+      "attributes": [
+        {
+          "name": "model_config",
+          "annotation": null,
+          "default": "ConfigDict(extra='forbid')",
+          "required": false,
+          "description": "",
+          "constraints": {}
+        },
+        {
+          "name": "tenant_id",
+          "annotation": "str | None",
+          "default": "None",
+          "required": false,
+          "description": "",
+          "constraints": {
+            "min_length": "1"
+          }
+        },
+        {
+          "name": "records",
+          "annotation": "list[FeedbackRecord]",
+          "default": null,
+          "required": true,
+          "description": "",
+          "constraints": {
+            "min_length": "1",
+            "max_length": "1000"
+          }
+        }
+      ],
+      "methods": [
+        {
+          "name": "normalise_tenant_id",
+          "qualified_name": "feedback_intelligence_agent.record_ingestion.RecordIngestionRequest.normalise_tenant_id",
+          "kind": "class method",
+          "module": "feedback_intelligence_agent.record_ingestion",
+          "signature": "normalise_tenant_id(cls, value: str | None) -> str | None",
+          "source": "src/feedback_intelligence_agent/record_ingestion.py",
+          "line": 26,
+          "public": true,
+          "is_async": false,
+          "decorators": [
+            "field_validator('tenant_id')",
+            "classmethod"
+          ],
+          "summary": "Normalize explicit batch tenants and reject blank names.",
+          "description": "",
+          "parameters": [
+            {
+              "name": "cls",
+              "annotation": null,
+              "default": null,
+              "kind": "positional-or-keyword",
+              "description": ""
+            },
+            {
+              "name": "value",
+              "annotation": "str | None",
+              "default": null,
+              "kind": "positional-or-keyword",
+              "description": ""
+            }
+          ],
+          "returns": {
+            "annotation": "str | None",
+            "description": ""
+          },
+          "raises": [
+            {
+              "exception": "ValueError",
+              "description": ""
+            }
+          ],
+          "examples": "",
+          "notes": "",
+          "see_also": []
+        }
+      ],
+      "properties": [],
+      "constructor": null,
+      "notes": ""
+    },
+    {
+      "name": "RecordIngestionResult",
+      "qualified_name": "feedback_intelligence_agent.record_ingestion.RecordIngestionResult",
+      "kind": "pydantic model",
+      "module": "feedback_intelligence_agent.record_ingestion",
+      "bases": [
+        "BaseModel"
+      ],
+      "source": "src/feedback_intelligence_agent/record_ingestion.py",
+      "line": 36,
+      "public": true,
+      "decorators": [],
+      "summary": "Batch-local counts without global index totals or server paths.",
+      "description": "",
+      "attributes": [
+        {
+          "name": "tenant_id",
+          "annotation": "str",
+          "default": null,
+          "required": true,
+          "description": "",
+          "constraints": {}
+        },
+        {
+          "name": "input_records",
+          "annotation": "int",
+          "default": null,
+          "required": true,
+          "description": "",
+          "constraints": {
+            "ge": "0"
+          }
+        },
+        {
+          "name": "inserted_records",
+          "annotation": "int",
+          "default": null,
+          "required": true,
+          "description": "",
+          "constraints": {
+            "ge": "0"
+          }
+        },
+        {
+          "name": "updated_records",
+          "annotation": "int",
+          "default": null,
+          "required": true,
+          "description": "",
+          "constraints": {
+            "ge": "0"
+          }
+        },
+        {
+          "name": "skipped_records",
+          "annotation": "int",
+          "default": null,
+          "required": true,
+          "description": "",
+          "constraints": {
+            "ge": "0"
+          }
+        },
+        {
+          "name": "added_chunks",
+          "annotation": "int",
+          "default": null,
+          "required": true,
+          "description": "",
+          "constraints": {
+            "ge": "0"
+          }
+        },
+        {
+          "name": "removed_chunks",
+          "annotation": "int",
+          "default": null,
+          "required": true,
+          "description": "",
+          "constraints": {
+            "ge": "0"
+          }
+        }
+      ],
+      "methods": [],
+      "properties": [],
+      "constructor": null,
+      "notes": ""
+    },
+    {
       "name": "InMemoryInsightReportStore",
       "qualified_name": "feedback_intelligence_agent.reports.InMemoryInsightReportStore",
       "kind": "class",

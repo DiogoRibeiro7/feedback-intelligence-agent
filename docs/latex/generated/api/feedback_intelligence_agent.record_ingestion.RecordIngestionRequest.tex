@@ -1,0 +1,35 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{RecordIngestionRequest}}
+\label{class:feedback_intelligence_agent.record_ingestion.RecordIngestionRequest}\label{schema:RecordIngestionRequest}\index{Classes!RecordIngestionRequest}
+
+A single tenant's records, with no client-selectable filesystem paths.
+\apifield{Inherits}\texttt{BaseModel}
+\apifield{Fields}
+\begin{arglist}
+  \item[\texttt{model\_\allowbreak{}config}] default \texttt{ConfigDict(extra='forbid')\allowbreak{}}
+  \item[\texttt{tenant\_\allowbreak{}id}] \texttt{str \textbar{} None}, default \texttt{None}, \texttt{min\_\allowbreak{}length=1}
+  \item[\texttt{records}] \texttt{list[FeedbackRecord]\allowbreak{}}, required, \texttt{max\_\allowbreak{}length=1000,\allowbreak{} min\_\allowbreak{}length=1}
+\end{arglist}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}record\_\allowbreak{}ingestion.\allowbreak{}py:16}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/86f0194b942234417240ae4a94ed1e16d77cac26/src/feedback_intelligence_agent/record_ingestion.py#L16}{online}), pydantic model, module \cref{module:feedback_intelligence_agent.record_ingestion}
+
+\subsection{\texttt{normalise\_tenant\_id}}
+\label{method:feedback_intelligence_agent.record_ingestion.RecordIngestionRequest.normalise_tenant_id}\index{Methods!normalise\_tenant\_id}
+Normalize explicit batch tenants and reject blank names.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+normalise_tenant_id(cls, value: str | None) -> str | None
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{value}] \texttt{str \textbar{} None}, required.
+\end{arglist}
+\apifield{Value}\texttt{str \textbar{} None}
+\apifield{Raises}\texttt{ValueError}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}record\_\allowbreak{}ingestion.\allowbreak{}py:26}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/86f0194b942234417240ae4a94ed1e16d77cac26/src/feedback_intelligence_agent/record_ingestion.py#L26}{online})
