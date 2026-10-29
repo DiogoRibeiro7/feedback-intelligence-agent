@@ -704,6 +704,28 @@ def test_recorded_sizes_ignore_line_ending_style(tmp_path: Path) -> None:
     assert inspect_repository._content_size(unix) == len(b"one\ntwo\nthree\n")
 
 
+@pytest.mark.parametrize(
+    ("relative", "contents"),
+    [
+        ("data/sample.csv", b"id,text\n1,example\n"),
+        ("examples/queries.jsonl", b'{"question": "example"}\n'),
+        ("examples/config.yaml", b"tracking_provider: mlflow\ntracking_uri: sqlite:///test.db\n"),
+    ],
+)
+def test_dataset_inventory_ignores_checkout_line_endings(
+    tmp_path: Path, relative: str, contents: bytes
+) -> None:
+    inventories = []
+    for name, newline in (("unix", b"\n"), ("windows", b"\r\n")):
+        root = tmp_path / name
+        path = root / relative
+        path.parent.mkdir(parents=True)
+        path.write_bytes(contents.replace(b"\n", newline))
+        inventories.append(inspect_repository.dataset_inventory(root))
+    assert inventories[0] == inventories[1]
+    assert inventories[0][0]["bytes"] == len(contents)
+
+
 def test_metadata_files_are_valid_json_and_describe_one_revision() -> None:
     """Every metadata artifact parses and agrees on the documented revision."""
     _require_generated_docs()

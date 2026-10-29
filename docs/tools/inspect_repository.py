@@ -684,7 +684,7 @@ def dataset_inventory(repo_root: Path) -> list[dict[str, Any]]:
         entry: dict[str, Any] = {
             "path": relative,
             "format": path.suffix.lstrip("."),
-            "bytes": path.stat().st_size,
+            "bytes": _content_size(path),
             "records": None,
             "columns": [],
         }

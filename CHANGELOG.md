@@ -24,6 +24,8 @@ and MLflow compatibility changes.
 
 ### Fixed
 
+- Normalize dataset sizes in generated documentation so Windows and Linux
+  checkouts produce the same release manual.
 - Feedback ingestion and vector persistence use DataExcept context, and API
   file access is confined to the configured data and artifact directories.
 - Refresh vulnerable Python dependencies, including AnyIO, Certifi, Cryptography,
