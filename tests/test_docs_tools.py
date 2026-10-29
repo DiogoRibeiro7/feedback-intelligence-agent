@@ -410,6 +410,8 @@ def test_extract_settings_fields_reports_aliases_and_sensitivity() -> None:
     assert fields["openai_api_key"]["sensitive"] is True
     assert fields["data_path"]["env_var"] == "FEEDBACK_AGENT_DATA_PATH"
     assert fields["data_path"]["sensitive"] is False
+    assert fields["api_tenant_bindings"]["sensitive"] is True
+    assert fields["api_tenant_bindings"]["default"] == "dict()"
     assert fields["embedding_dim"]["constraints"] == {"ge": "64", "le": "8192"}
 
 
@@ -417,7 +419,7 @@ def test_settings_defaults_never_contain_a_credential_value() -> None:
     """Documentation cannot leak a secret because none is declared in source."""
     for item in extract_api.extract_settings_fields(PACKAGE_DIR / "config.py"):
         if item["sensitive"]:
-            assert item["default"] in (None, "None")
+            assert item["default"] in (None, "None", "dict()", "{}")
 
 
 def test_partitioned_api_index_round_trip_and_stale_part_cleanup(tmp_path: Path) -> None:

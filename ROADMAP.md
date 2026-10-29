@@ -72,6 +72,7 @@ This roadmap is designed to evolve the repository from a compact portfolio proje
 - [x] Use collision-free source identifiers, with a migration path for existing indexes.
 - [x] Apply metadata filters before limiting retrieval candidates, including tenant filters.
 - [x] Isolate conversation history by authenticated API key and retain its tenant context.
-- [ ] Bind tenant access on query, report, feedback, and ingestion routes to authenticated identities.
+- [x] Bind tenant access on query, report, and feedback routes to authenticated identities; reserve global ingestion for unrestricted administrators.
+- [ ] Support tenant-specific ingestion without replacing other tenants' shared index data.
 - [x] Apply tenant and metadata filters to dataset aggregation tools.
 - [x] Make JSON index persistence atomic and serialize concurrent updates.

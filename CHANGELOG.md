@@ -4,6 +4,16 @@ All notable changes to this project are documented here.
 
 ## Unreleased
 
+### Added
+
+- Optional API-key tenant bindings scope queries, streaming, conversations,
+  reports, exports, email summaries, feedback, and active-learning workflows.
+  Foreign resource IDs return 404, and explicit tenant overrides return 403.
+- Tenant-bound keys cannot rebuild shared indexes, submit ingestion jobs, or read
+  global job artifacts. Unbound administrators retain these operations.
+- Invalid nonempty tenant policies fail closed. The default empty policy retains
+  existing API role behavior and local CLI workflows.
+
 ## 0.6.0 - 2026-10-29
 
 See [upgrade notes](docs/releases/v0.6.0.md) for index, conversation, extension,

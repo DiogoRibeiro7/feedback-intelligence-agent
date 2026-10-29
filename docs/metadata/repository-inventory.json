@@ -43,7 +43,7 @@
     }
   },
   "files": {
-    "total": 224,
+    "total": 225,
     "excluded_generated_documentation": 323,
     "by_category": {
       "build-configuration": 1,
@@ -65,7 +65,7 @@
       "other": 2,
       "python-script": 3,
       "python-source": 47,
-      "python-test": 48,
+      "python-test": 49,
       "repository-configuration": 2,
       "repository-governance": 8,
       "test-fixture": 2
@@ -93,15 +93,15 @@
       },
       "LaTeX": {
         "files": 47,
-        "lines": 4130
+        "lines": 4138
       },
       "Markdown": {
         "files": 17,
-        "lines": 3029
+        "lines": 3076
       },
       "Python": {
-        "files": 110,
-        "lines": 29048
+        "files": 111,
+        "lines": 29593
       },
       "TOML": {
         "files": 2,
@@ -129,7 +129,7 @@
         "category": "configuration-template",
         "language": null,
         "lines": null,
-        "bytes": 3000
+        "bytes": 3200
       },
       {
         "path": ".gitattributes",
@@ -254,8 +254,8 @@
         "path": "CHANGELOG.md",
         "category": "documentation",
         "language": "Markdown",
-        "lines": 174,
-        "bytes": 8630
+        "lines": 184,
+        "bytes": 9162
       },
       {
         "path": "CITATION.cff",
@@ -303,15 +303,15 @@
         "path": "README.md",
         "category": "documentation",
         "language": "Markdown",
-        "lines": 1296,
-        "bytes": 61260
+        "lines": 1332,
+        "bytes": 63460
       },
       {
         "path": "ROADMAP.md",
         "category": "documentation",
         "language": "Markdown",
-        "lines": 77,
-        "bytes": 3397
+        "lines": 78,
+        "bytes": 3536
       },
       {
         "path": "SECURITY.md",
@@ -674,8 +674,8 @@
         "path": "docs/latex/engineering/security.tex",
         "category": "documentation-latex",
         "language": "LaTeX",
-        "lines": 87,
-        "bytes": 4351
+        "lines": 95,
+        "bytes": 4955
       },
       {
         "path": "docs/latex/engineering/testing.tex",
@@ -793,8 +793,8 @@
         "path": "docs/tools/extract_api.py",
         "category": "documentation-tool",
         "language": "Python",
-        "lines": 1105,
-        "bytes": 39547
+        "lines": 1106,
+        "bytes": 39601
       },
       {
         "path": "docs/tools/extract_dependencies.py",
@@ -1031,15 +1031,15 @@
         "path": "src/feedback_intelligence_agent/api.py",
         "category": "python-source",
         "language": "Python",
-        "lines": 658,
-        "bytes": 25584
+        "lines": 705,
+        "bytes": 28190
       },
       {
         "path": "src/feedback_intelligence_agent/auth.py",
         "category": "python-source",
         "language": "Python",
-        "lines": 145,
-        "bytes": 4134
+        "lines": 181,
+        "bytes": 5817
       },
       {
         "path": "src/feedback_intelligence_agent/benchmarking.py",
@@ -1073,8 +1073,8 @@
         "path": "src/feedback_intelligence_agent/config.py",
         "category": "python-source",
         "language": "Python",
-        "lines": 113,
-        "bytes": 5073
+        "lines": 114,
+        "bytes": 5155
       },
       {
         "path": "src/feedback_intelligence_agent/data_contracts.py",
@@ -1378,11 +1378,18 @@
         "bytes": 37446
       },
       {
+        "path": "tests/test_api_tenant_access.py",
+        "category": "python-test",
+        "language": "Python",
+        "lines": 396,
+        "bytes": 16921
+      },
+      {
         "path": "tests/test_auth.py",
         "category": "python-test",
         "language": "Python",
-        "lines": 179,
-        "bytes": 5641
+        "lines": 241,
+        "bytes": 8008
       },
       {
         "path": "tests/test_benchmarking.py",
@@ -1430,8 +1437,8 @@
         "path": "tests/test_docs_tools.py",
         "category": "python-test",
         "language": "Python",
-        "lines": 737,
-        "bytes": 31085
+        "lines": 739,
+        "bytes": 31227
       },
       {
         "path": "tests/test_email_summaries.py",
@@ -3008,11 +3015,18 @@
       "parametrized_cases": 5
     },
     {
+      "path": "tests/test_api_tenant_access.py",
+      "module_under_test": "api_tenant_access",
+      "category": "integration (HTTP)",
+      "test_functions": 19,
+      "parametrized_cases": 9
+    },
+    {
       "path": "tests/test_auth.py",
       "module_under_test": "auth",
       "category": "unit",
-      "test_functions": 10,
-      "parametrized_cases": 0
+      "test_functions": 15,
+      "parametrized_cases": 1
     },
     {
       "path": "tests/test_benchmarking.py",
@@ -3531,6 +3545,11 @@
       "name": "FEEDBACK_AGENT_API_ADMIN_KEY",
       "example": "",
       "comment": ""
+    },
+    {
+      "name": "FEEDBACK_AGENT_API_TENANT_BINDINGS",
+      "example": "{}",
+      "comment": "Optional JSON mapping from configured API keys to tenant IDs; {} preserves global access. A nonempty map requires auth and a binding for every non-admin key."
     },
     {
       "name": "FEEDBACK_AGENT_API_RATE_LIMIT_ENABLED",

@@ -80,6 +80,7 @@ class Settings(BaseSettings):
     api_reader_key: str | None = Field(default=None)
     api_writer_key: str | None = Field(default=None)
     api_admin_key: str | None = Field(default=None)
+    api_tenant_bindings: dict[str, str] = Field(default_factory=dict, repr=False)
     api_rate_limit_enabled: bool = Field(default=False)
     api_rate_limit_max_requests: int = Field(default=120, ge=1)
     api_rate_limit_window_seconds: float = Field(default=60.0, gt=0.0)

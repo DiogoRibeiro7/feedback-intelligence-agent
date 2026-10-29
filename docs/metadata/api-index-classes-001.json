@@ -1065,10 +1065,10 @@
         "ApiAuthError"
       ],
       "source": "src/feedback_intelligence_agent/auth.py",
-      "line": 32,
+      "line": 40,
       "public": true,
       "decorators": [],
-      "summary": "Raised when auth is enabled without any configured keys.",
+      "summary": "Raised when API credentials or tenant bindings are misconfigured.",
       "description": "",
       "attributes": [],
       "methods": [],
@@ -1085,7 +1085,7 @@
         "ValueError"
       ],
       "source": "src/feedback_intelligence_agent/auth.py",
-      "line": 28,
+      "line": 36,
       "public": true,
       "decorators": [],
       "summary": "Base class for API authorization failures.",
@@ -1105,7 +1105,7 @@
         "ApiAuthError"
       ],
       "source": "src/feedback_intelligence_agent/auth.py",
-      "line": 36,
+      "line": 44,
       "public": true,
       "decorators": [],
       "summary": "Raised when the request does not provide a valid API key.",
@@ -1125,7 +1125,7 @@
         "ApiAuthError"
       ],
       "source": "src/feedback_intelligence_agent/auth.py",
-      "line": 40,
+      "line": 48,
       "public": true,
       "decorators": [],
       "summary": "Raised when a valid API key lacks the required role.",
@@ -1145,7 +1145,7 @@
         "BaseModel"
       ],
       "source": "src/feedback_intelligence_agent/auth.py",
-      "line": 20,
+      "line": 21,
       "public": true,
       "decorators": [],
       "summary": "Resolved role and opaque API-key identity, independent of role assignment.",
@@ -1174,9 +1174,56 @@
           "required": false,
           "description": "",
           "constraints": {}
+        },
+        {
+          "name": "tenant_id",
+          "annotation": "str | None",
+          "default": "None",
+          "required": false,
+          "description": "",
+          "constraints": {}
         }
       ],
-      "methods": [],
+      "methods": [
+        {
+          "name": "permits_tenant",
+          "qualified_name": "feedback_intelligence_agent.auth.ApiPrincipal.permits_tenant",
+          "kind": "method",
+          "module": "feedback_intelligence_agent.auth",
+          "signature": "permits_tenant(self, tenant_id: str | None) -> bool",
+          "source": "src/feedback_intelligence_agent/auth.py",
+          "line": 29,
+          "public": true,
+          "is_async": false,
+          "decorators": [],
+          "summary": "Allow global principals or resources belonging to the bound tenant.",
+          "description": "",
+          "parameters": [
+            {
+              "name": "self",
+              "annotation": null,
+              "default": null,
+              "kind": "positional-or-keyword",
+              "description": ""
+            },
+            {
+              "name": "tenant_id",
+              "annotation": "str | None",
+              "default": null,
+              "kind": "positional-or-keyword",
+              "description": ""
+            }
+          ],
+          "returns": {
+            "annotation": "bool",
+            "description": ""
+          },
+          "raises": [],
+          "examples": "",
+          "notes": "",
+          "see_also": []
+        }
+      ],
       "properties": [],
       "constructor": null,
       "notes": ""
@@ -1191,7 +1238,7 @@
         "Enum"
       ],
       "source": "src/feedback_intelligence_agent/auth.py",
-      "line": 12,
+      "line": 13,
       "public": true,
       "decorators": [],
       "summary": "API roles ordered from least to most privileged.",
@@ -1870,6 +1917,16 @@
           "constraints": {}
         },
         {
+          "name": "api_tenant_bindings",
+          "annotation": "dict[str, str]",
+          "default": "dict()",
+          "required": false,
+          "description": "",
+          "constraints": {
+            "repr": "False"
+          }
+        },
+        {
           "name": "api_rate_limit_enabled",
           "annotation": "bool",
           "default": "False",
@@ -1965,7 +2022,7 @@
           "module": "feedback_intelligence_agent.config",
           "signature": "ensure_artifact_dir(self) -> None",
           "source": "src/feedback_intelligence_agent/config.py",
-          "line": 111,
+          "line": 112,
           "public": true,
           "is_async": false,
           "decorators": [],
@@ -1998,7 +2055,7 @@
           "module": "feedback_intelligence_agent.config",
           "signature": "cors_origins(self) -> list[str]",
           "source": "src/feedback_intelligence_agent/config.py",
-          "line": 100,
+          "line": 101,
           "public": true,
           "is_async": false,
           "decorators": [

@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from collections.abc import Mapping
 from enum import Enum
 from functools import lru_cache
 from hashlib import pbkdf2_hmac
@@ -23,6 +24,13 @@ class ApiPrincipal(BaseModel):
     role: ApiRole
     authenticated: bool
     subject_id: str | None = None
+    tenant_id: str | None = None
+
+    def permits_tenant(self, tenant_id: str | None) -> bool:
+        """Allow global principals or resources belonging to the bound tenant."""
+        return self.tenant_id is None or (
+            tenant_id is not None and tenant_id.strip().lower() == self.tenant_id
+        )
 
 
 class ApiAuthError(ValueError):
@@ -30,7 +38,7 @@ class ApiAuthError(ValueError):
 
 
 class ApiAuthConfigurationError(ApiAuthError):
-    """Raised when auth is enabled without any configured keys."""
+    """Raised when API credentials or tenant bindings are misconfigured."""
 
 
 class ApiAuthenticationError(ApiAuthError):
@@ -70,6 +78,7 @@ def resolve_api_principal(
     reader_key: str | None,
     writer_key: str | None,
     admin_key: str | None,
+    tenant_bindings: Mapping[str, str] | None = None,
 ) -> ApiPrincipal:
     """Resolve an optional API key into a principal.
 
@@ -79,6 +88,8 @@ def resolve_api_principal(
     rotation changes identity, while changing its role preserves identity.
     """
     if not auth_enabled:
+        if tenant_bindings:
+            raise ApiAuthConfigurationError("Tenant bindings require API authentication")
         return ApiPrincipal(role=ApiRole.admin, authenticated=False)
 
     keys = _configured_keys(
@@ -88,6 +99,7 @@ def resolve_api_principal(
     )
     if not keys:
         raise ApiAuthConfigurationError("API auth is enabled but no API keys are configured")
+    tenants = _configured_tenants(keys, tenant_bindings)
 
     if api_key is None or not api_key.strip():
         raise ApiAuthenticationError("missing API key")
@@ -99,6 +111,7 @@ def resolve_api_principal(
         role=role,
         authenticated=True,
         subject_id=_subject_id(api_key.strip()),
+        tenant_id=tenants.get(api_key.strip()),
     )
 
 
@@ -110,6 +123,7 @@ def require_api_role(
     reader_key: str | None,
     writer_key: str | None,
     admin_key: str | None,
+    tenant_bindings: Mapping[str, str] | None = None,
 ) -> ApiPrincipal:
     """Resolve a principal and require the requested role."""
     principal = resolve_api_principal(
@@ -118,12 +132,34 @@ def require_api_role(
         reader_key=reader_key,
         writer_key=writer_key,
         admin_key=admin_key,
+        tenant_bindings=tenant_bindings,
     )
     if _ROLE_RANK[principal.role] < _ROLE_RANK[required_role]:
         raise ApiPermissionError(
             f"API key role {principal.role.value!r} cannot access {required_role.value!r} endpoints"
         )
     return principal
+
+
+def _configured_tenants(
+    keys: Mapping[str, ApiRole], bindings: Mapping[str, str] | None
+) -> dict[str, str]:
+    """Validate an optional policy without including credential values in errors."""
+    if not bindings:
+        return {}
+    tenants: dict[str, str] = {}
+    for raw_key, raw_tenant in bindings.items():
+        key, tenant = raw_key.strip(), raw_tenant.strip().lower()
+        if key not in keys or not tenant:
+            raise ApiAuthConfigurationError(
+                "Tenant bindings must reference configured API keys and nonblank tenants"
+            )
+        if key in tenants and tenants[key] != tenant:
+            raise ApiAuthConfigurationError("Conflicting tenant bindings for one API key")
+        tenants[key] = tenant
+    if any(role != ApiRole.admin and key not in tenants for key, role in keys.items()):
+        raise ApiAuthConfigurationError("Every non-admin API key requires a tenant binding")
+    return tenants
 
 
 def _configured_keys(
