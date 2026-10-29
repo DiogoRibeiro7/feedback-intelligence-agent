@@ -43,8 +43,8 @@
     }
   },
   "files": {
-    "total": 215,
-    "excluded_generated_documentation": 321,
+    "total": 217,
+    "excluded_generated_documentation": 323,
     "by_category": {
       "build-configuration": 1,
       "build-interface": 1,
@@ -64,8 +64,8 @@
       "license": 1,
       "other": 2,
       "python-script": 2,
-      "python-source": 46,
-      "python-test": 43,
+      "python-source": 47,
+      "python-test": 44,
       "repository-configuration": 2,
       "repository-governance": 8,
       "test-fixture": 2
@@ -97,15 +97,15 @@
       },
       "Markdown": {
         "files": 15,
-        "lines": 2722
+        "lines": 2751
       },
       "Python": {
-        "files": 103,
-        "lines": 27604
+        "files": 105,
+        "lines": 28031
       },
       "TOML": {
         "files": 2,
-        "lines": 164
+        "lines": 165
       },
       "TypeScript": {
         "files": 4,
@@ -113,7 +113,7 @@
       },
       "YAML": {
         "files": 16,
-        "lines": 685
+        "lines": 708
       }
     },
     "entries": [
@@ -198,8 +198,8 @@
         "path": ".github/workflows/ci.yml",
         "category": "ci-workflow",
         "language": "YAML",
-        "lines": 109,
-        "bytes": 3208
+        "lines": 132,
+        "bytes": 3837
       },
       {
         "path": ".github/workflows/dependency-review.yml",
@@ -254,8 +254,8 @@
         "path": "CHANGELOG.md",
         "category": "documentation",
         "language": "Markdown",
-        "lines": 130,
-        "bytes": 6061
+        "lines": 137,
+        "bytes": 6561
       },
       {
         "path": "CITATION.cff",
@@ -303,8 +303,8 @@
         "path": "README.md",
         "category": "documentation",
         "language": "Markdown",
-        "lines": 1228,
-        "bytes": 56971
+        "lines": 1248,
+        "bytes": 58246
       },
       {
         "path": "ROADMAP.md",
@@ -387,8 +387,8 @@
         "path": "docs/architecture.md",
         "category": "documentation",
         "language": "Markdown",
-        "lines": 171,
-        "bytes": 12569
+        "lines": 173,
+        "bytes": 13138
       },
       {
         "path": "docs/case_study.md",
@@ -786,8 +786,8 @@
         "path": "docs/tools/extract_dependencies.py",
         "category": "documentation-tool",
         "language": "Python",
-        "lines": 375,
-        "bytes": 13175
+        "lines": 376,
+        "bytes": 13208
       },
       {
         "path": "docs/tools/generate_docs.py",
@@ -962,14 +962,14 @@
         "category": "dependency-lock",
         "language": null,
         "lines": null,
-        "bytes": 569847
+        "bytes": 569795
       },
       {
         "path": "pyproject.toml",
         "category": "build-configuration",
         "language": "TOML",
-        "lines": 112,
-        "bytes": 3607
+        "lines": 113,
+        "bytes": 3632
       },
       {
         "path": "scripts/benchmark.py",
@@ -1094,8 +1094,8 @@
         "path": "src/feedback_intelligence_agent/factory.py",
         "category": "python-source",
         "language": "Python",
-        "lines": 349,
-        "bytes": 14117
+        "lines": 355,
+        "bytes": 14516
       },
       {
         "path": "src/feedback_intelligence_agent/guardrails.py",
@@ -1119,11 +1119,18 @@
         "bytes": 13818
       },
       {
+        "path": "src/feedback_intelligence_agent/index_persistence.py",
+        "category": "python-source",
+        "language": "Python",
+        "lines": 89,
+        "bytes": 3685
+      },
+      {
         "path": "src/feedback_intelligence_agent/index_updates.py",
         "category": "python-source",
         "language": "Python",
-        "lines": 114,
-        "bytes": 4431
+        "lines": 118,
+        "bytes": 4738
       },
       {
         "path": "src/feedback_intelligence_agent/ingestion.py",
@@ -1304,8 +1311,8 @@
         "path": "src/feedback_intelligence_agent/vector_store.py",
         "category": "python-source",
         "language": "Python",
-        "lines": 256,
-        "bytes": 9859
+        "lines": 253,
+        "bytes": 9666
       },
       {
         "path": "tests/conftest.py",
@@ -1453,6 +1460,13 @@
         "language": "Python",
         "lines": 189,
         "bytes": 6360
+      },
+      {
+        "path": "tests/test_index_persistence.py",
+        "category": "python-test",
+        "language": "Python",
+        "lines": 330,
+        "bytes": 12899
       },
       {
         "path": "tests/test_index_updates.py",
@@ -1760,6 +1774,12 @@
       {
         "name": "pandas",
         "constraint": "^2.2.0",
+        "optional": false,
+        "extras": []
+      },
+      {
+        "name": "portalocker",
+        "constraint": ">=3.2,<4",
         "optional": false,
         "extras": []
       },
@@ -2300,6 +2320,45 @@
               "name": "Build package",
               "uses": "",
               "run": "poetry build",
+              "working_directory": ""
+            }
+          ]
+        },
+        {
+          "id": "windows-persistence",
+          "name": "Windows index persistence",
+          "runs_on": "windows-latest",
+          "needs": [],
+          "matrix": {},
+          "steps": [
+            {
+              "name": "Checkout",
+              "uses": "actions/checkout@v7",
+              "run": "",
+              "working_directory": ""
+            },
+            {
+              "name": "Set up Python",
+              "uses": "actions/setup-python@v7",
+              "run": "",
+              "working_directory": ""
+            },
+            {
+              "name": "Install Poetry",
+              "uses": "",
+              "run": "python -m pip install poetry==2.2.1",
+              "working_directory": ""
+            },
+            {
+              "name": "Install dependencies",
+              "uses": "",
+              "run": "poetry install --with dev",
+              "working_directory": ""
+            },
+            {
+              "name": "Test atomic saves and concurrent updates",
+              "uses": "",
+              "run": "poetry run pytest tests/test_index_persistence.py tests/test_index_updates.py tests/test_embeddings_and_store.py",
               "working_directory": ""
             }
           ]
@@ -2945,6 +3004,13 @@
       "category": "unit",
       "test_functions": 7,
       "parametrized_cases": 0
+    },
+    {
+      "path": "tests/test_index_persistence.py",
+      "module_under_test": "index_persistence",
+      "category": "unit",
+      "test_functions": 11,
+      "parametrized_cases": 4
     },
     {
       "path": "tests/test_index_updates.py",

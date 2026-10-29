@@ -71,6 +71,8 @@ Cited answer + tool metadata + recommended actions + diagnostics
 
 `privacy.py` provides deterministic regex redaction for emails, phone numbers, and obvious access tokens. It is applied before chunking/indexing and when writing accepted stream CSVs or dead-letter payloads.
 
+`index_persistence.py` coordinates JSON index writers with a reentrant, per-path file lock across threads and processes. Incremental updates hold the lock across loading, merging, and saving; initial creation rechecks existence under that lock. Saves flush a sibling temporary file before atomic replacement, so readers see complete snapshots and failed writes preserve the committed index. Full rebuilds still replace the snapshot. Lock acquisition times out after 60 seconds with `FileWriteError`; these guarantees require cooperating writers on a local filesystem.
+
 ### Lakehouse export
 
 `lakehouse.py` writes dependency-light local tables for downstream analytics. It stores partitioned JSONL data files plus a top-level manifest and either Delta-style `_delta_log` actions or Iceberg-style `metadata/v1.metadata.json` metadata. Records are redacted before export, and partition columns are validated against known fields such as `tenant_id`, `created_date`, `created_month`, `channel`, `customer_segment`, and `rating`.

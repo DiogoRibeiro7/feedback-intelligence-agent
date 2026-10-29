@@ -35,11 +35,12 @@ Module & Lines & Objects & Summary \\
 \texttt{embeddings} & 78 & 3 & Embedding models. \\
 \texttt{evaluation} & 417 & 18 & Offline evaluation for retrieval quality and answer quality. \\
 \texttt{experiments} & 346 & 14 & Repeatable experiment runner for comparing RAG configurations. \\
-\texttt{factory} & 349 & 13 & Factories for constructing the application components. \\
+\texttt{factory} & 355 & 13 & Factories for constructing the application components. \\
 \texttt{guardrails} & 220 & 8 & Deterministic safety guardrails for the feedback intelligence agent. \\
 \texttt{hallucination} & 285 & 9 & Hallucination checks for evidence-grounded answers. \\
 \texttt{human\_\allowbreak{}feedback} & 408 & 14 & Human review feedback on generated agent answers. \\
-\texttt{index\_\allowbreak{}updates} & 114 & 2 & Incremental index update helpers. \\
+\texttt{index\_\allowbreak{}persistence} & 89 & 2 & Atomic JSON index replacement and cooperative locking on local filesystems. \\
+\texttt{index\_\allowbreak{}updates} & 118 & 2 & Incremental index update helpers. \\
 \texttt{ingestion} & 58 & 2 & Feedback ingestion utilities. \\
 \texttt{jobs} & 293 & 9 & Asynchronous ingestion jobs with status tracking. \\
 \texttt{lakehouse} & 398 & 7 & Local lakehouse-style feedback exports. \\
@@ -65,7 +66,7 @@ Module & Lines & Objects & Summary \\
 \texttt{synthetic\_\allowbreak{}data} & 318 & 8 & Synthetic customer feedback dataset generation. \\
 \texttt{telemetry} & 352 & 13 & Structured logging and OpenTelemetry-style telemetry. \\
 \texttt{tools} & 565 & 21 & Deterministic tool-use framework for the feedback intelligence agent. \\
-\texttt{vector\_\allowbreak{}store} & 256 & 3 & A small vector store with JSON persistence. \\
+\texttt{vector\_\allowbreak{}store} & 253 & 3 & A small vector store with JSON persistence. \\
 \end{longtable}
 
 \apibreak
@@ -238,8 +239,8 @@ With the deterministic local LLM provider, \texttt{results.\allowbreak{}json} an
 \label{module:feedback_intelligence_agent.factory}\index{Modules!factory}
 
 Factories for constructing the application components.
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}factory.\allowbreak{}py}, 349 lines
-\apifield{Imports}\texttt{active\_\allowbreak{}learning}, \texttt{agent}, \texttt{chunking}, \texttt{config}, \texttt{embeddings}, \texttt{hallucination}, \texttt{human\_\allowbreak{}feedback}, \texttt{ingestion}, \texttt{jobs}, \texttt{lexical\_\allowbreak{}search}, \texttt{llm}, \texttt{memory}, \texttt{qdrant\_\allowbreak{}store}, \texttt{query\_\allowbreak{}expansion}, \texttt{reports}, \texttt{resilience}, \texttt{retrieval}, \texttt{schemas}, \texttt{telemetry}, \texttt{tools}, \texttt{vector\_\allowbreak{}store}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}factory.\allowbreak{}py}, 355 lines
+\apifield{Imports}\texttt{active\_\allowbreak{}learning}, \texttt{agent}, \texttt{chunking}, \texttt{config}, \texttt{embeddings}, \texttt{hallucination}, \texttt{human\_\allowbreak{}feedback}, \texttt{index\_\allowbreak{}persistence}, \texttt{ingestion}, \texttt{jobs}, \texttt{lexical\_\allowbreak{}search}, \texttt{llm}, \texttt{memory}, \texttt{qdrant\_\allowbreak{}store}, \texttt{query\_\allowbreak{}expansion}, \texttt{reports}, \texttt{resilience}, \texttt{retrieval}, \texttt{schemas}, \texttt{telemetry}, \texttt{tools}, \texttt{vector\_\allowbreak{}store}
 \apifield{Functions}\cref{func:feedback_intelligence_agent.factory.build_telemetry}, \cref{func:feedback_intelligence_agent.factory.build_conversation_store}, \cref{func:feedback_intelligence_agent.factory.build_job_store}, \cref{func:feedback_intelligence_agent.factory.build_report_store}, \cref{func:feedback_intelligence_agent.factory.build_human_feedback_store}, \cref{func:feedback_intelligence_agent.factory.build_active_learning_state_store}, \cref{func:feedback_intelligence_agent.factory.chunk_to_embedding_text}, \cref{func:feedback_intelligence_agent.factory.build_index}, \cref{func:feedback_intelligence_agent.factory.build_qdrant_index}, \cref{func:feedback_intelligence_agent.factory.load_or_build_index}, \cref{func:feedback_intelligence_agent.factory.build_retriever}, \cref{func:feedback_intelligence_agent.factory.build_llm}, \cref{func:feedback_intelligence_agent.factory.build_agent}
 
 \apibreak
@@ -280,12 +281,20 @@ Human review feedback on generated agent answers.
 \apifield{Functions}\cref{func:feedback_intelligence_agent.human_feedback.new_human_feedback_id}, \cref{func:feedback_intelligence_agent.human_feedback.summarise_human_feedback}, \cref{func:feedback_intelligence_agent.human_feedback.build_active_learning_queue}
 
 \apibreak
+\section{\texttt{index\_persistence}}
+\label{module:feedback_intelligence_agent.index_persistence}\index{Modules!index\_persistence}
+
+Atomic JSON index replacement and cooperative locking on local filesystems.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}index\_\allowbreak{}persistence.\allowbreak{}py}, 89 lines
+\apifield{Functions}\cref{func:feedback_intelligence_agent.index_persistence.index_write_lock}, \cref{func:feedback_intelligence_agent.index_persistence.write_index_json}
+
+\apibreak
 \section{\texttt{index\_updates}}
 \label{module:feedback_intelligence_agent.index_updates}\index{Modules!index\_updates}
 
 Incremental index update helpers.
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}index\_\allowbreak{}updates.\allowbreak{}py}, 114 lines
-\apifield{Imports}\texttt{chunking}, \texttt{embeddings}, \texttt{factory}, \texttt{schemas}, \texttt{telemetry}, \texttt{vector\_\allowbreak{}store}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}index\_\allowbreak{}updates.\allowbreak{}py}, 118 lines
+\apifield{Imports}\texttt{chunking}, \texttt{embeddings}, \texttt{factory}, \texttt{index\_\allowbreak{}persistence}, \texttt{schemas}, \texttt{telemetry}, \texttt{vector\_\allowbreak{}store}
 \apifield{Classes}\cref{class:feedback_intelligence_agent.index_updates.IncrementalIndexResult}
 \apifield{Functions}\cref{func:feedback_intelligence_agent.index_updates.update_json_index}
 \apifield{Details}The default JSON index can be updated without rebuilding from the full dataset: validated feedback records are chunked, embedded, and merged into the persisted vector store by tenant-scoped source ID. Existing chunks for the same source document are replaced before new chunks are appended.
@@ -574,6 +583,6 @@ No function-calling API is involved: routing and execution are keyword and rule 
 \label{module:feedback_intelligence_agent.vector_store}\index{Modules!vector\_store}
 
 A small vector store with JSON persistence.
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}vector\_\allowbreak{}store.\allowbreak{}py}, 256 lines
-\apifield{Imports}\texttt{metadata\_\allowbreak{}filters}, \texttt{schemas}, \texttt{source\_\allowbreak{}ids}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}vector\_\allowbreak{}store.\allowbreak{}py}, 253 lines
+\apifield{Imports}\texttt{index\_\allowbreak{}persistence}, \texttt{metadata\_\allowbreak{}filters}, \texttt{schemas}, \texttt{source\_\allowbreak{}ids}
 \apifield{Classes}\cref{class:feedback_intelligence_agent.vector_store.VectorStore}, \cref{class:feedback_intelligence_agent.vector_store.PersistedVectorStore}, \cref{class:feedback_intelligence_agent.vector_store.InMemoryVectorStore}

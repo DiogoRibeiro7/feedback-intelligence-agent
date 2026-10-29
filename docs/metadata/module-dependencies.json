@@ -1,7 +1,7 @@
 {
   "package": "feedback_intelligence_agent",
-  "module_count": 46,
-  "edge_count": 165,
+  "module_count": 47,
+  "edge_count": 168,
   "layer_order": [
     "interface",
     "application",
@@ -51,6 +51,7 @@
     ],
     "data": [
       "data_contracts",
+      "index_persistence",
       "index_updates",
       "ingestion",
       "lakehouse",
@@ -323,7 +324,7 @@
       "qualified_name": "feedback_intelligence_agent.factory",
       "source": "src/feedback_intelligence_agent/factory.py",
       "layer": "application",
-      "fan_out": 21,
+      "fan_out": 22,
       "external_dependencies": [],
       "optional_dependencies": [],
       "lazy_imports": [
@@ -384,11 +385,29 @@
       "fan_in": 5
     },
     {
+      "name": "index_persistence",
+      "qualified_name": "feedback_intelligence_agent.index_persistence",
+      "source": "src/feedback_intelligence_agent/index_persistence.py",
+      "layer": "data",
+      "fan_out": 0,
+      "external_dependencies": [
+        "contextlib",
+        "dataexcept",
+        "portalocker",
+        "stat",
+        "weakref"
+      ],
+      "optional_dependencies": [],
+      "lazy_imports": [],
+      "typing_only_imports": [],
+      "fan_in": 3
+    },
+    {
       "name": "index_updates",
       "qualified_name": "feedback_intelligence_agent.index_updates",
       "source": "src/feedback_intelligence_agent/index_updates.py",
       "layer": "data",
-      "fan_out": 6,
+      "fan_out": 7,
       "external_dependencies": [
         "pydantic"
       ],
@@ -747,7 +766,7 @@
       "qualified_name": "feedback_intelligence_agent.vector_store",
       "source": "src/feedback_intelligence_agent/vector_store.py",
       "layer": "data",
-      "fan_out": 3,
+      "fan_out": 4,
       "external_dependencies": [
         "dataexcept",
         "numpy",
@@ -1290,6 +1309,12 @@
     },
     {
       "source": "factory",
+      "target": "index_persistence",
+      "context": "eager",
+      "names": "index_write_lock"
+    },
+    {
+      "source": "factory",
       "target": "ingestion",
       "context": "eager",
       "names": "load_feedback_csv"
@@ -1425,6 +1450,12 @@
       "target": "factory",
       "context": "eager",
       "names": "chunk_to_embedding_text"
+    },
+    {
+      "source": "index_updates",
+      "target": "index_persistence",
+      "context": "eager",
+      "names": "index_write_lock"
     },
     {
       "source": "index_updates",
@@ -1734,6 +1765,12 @@
     },
     {
       "source": "vector_store",
+      "target": "index_persistence",
+      "context": "eager",
+      "names": "write_index_json"
+    },
+    {
+      "source": "vector_store",
       "target": "metadata_filters",
       "context": "eager",
       "names": "matches_metadata_filters"
@@ -1785,12 +1822,12 @@
     {
       "module": "factory",
       "fan_in": 6,
-      "fan_out": 21
+      "fan_out": 22
     },
     {
       "module": "vector_store",
       "fan_in": 6,
-      "fan_out": 3
+      "fan_out": 4
     },
     {
       "module": "agent",

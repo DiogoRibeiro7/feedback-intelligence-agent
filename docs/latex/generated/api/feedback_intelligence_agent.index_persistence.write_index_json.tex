@@ -1,0 +1,23 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{write\_index\_json}}
+\label{func:feedback_intelligence_agent.index_persistence.write_index_json}\index{Functions!write\_index\_json}
+
+Flush JSON to a sibling temporary file, then atomically replace the index.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+write_index_json(path: str | Path, contents: str) -> None
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{path}] \texttt{str \textbar{} Path}, required.
+  \item[\texttt{contents}] \texttt{str}, required.
+\end{arglist}
+\apifield{Details}Serialization must finish before calling this function. Failed writes, flushes, or replacements leave the previous index intact and clean up the temporary file where possible. Readers can keep using the old snapshot until replacement succeeds. Existing file permission bits are retained.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}index\_\allowbreak{}persistence.\allowbreak{}py:59}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/edc9d78403eeed9f7d6ee5aef6b8d9b1b5780ef4/src/feedback_intelligence_agent/index_persistence.py#L59}{online}), module \cref{module:feedback_intelligence_agent.index_persistence}

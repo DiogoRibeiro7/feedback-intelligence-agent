@@ -8,9 +8,10 @@ from typing import Literal, Protocol, runtime_checkable
 
 import numpy as np
 import numpy.typing as npt
-from dataexcept import DataLoadingError, FileReadError, FileWriteError, wrapping
+from dataexcept import DataLoadingError, FileReadError, wrapping
 from pydantic import BaseModel, Field, ValidationError
 
+from feedback_intelligence_agent.index_persistence import write_index_json
 from feedback_intelligence_agent.metadata_filters import matches_metadata_filters
 from feedback_intelligence_agent.schemas import DocumentChunk, MetadataFilters, SearchResult
 from feedback_intelligence_agent.source_ids import SourceIdMigrationError, migrate_legacy_chunks
@@ -205,18 +206,14 @@ class InMemoryVectorStore:
         ]
 
     def save(self, path: str | Path) -> None:
-        """Persist the vector store as JSON."""
-        output_path = Path(path)
-        with wrapping(OSError, FileWriteError, path=str(output_path.parent)):
-            output_path.parent.mkdir(parents=True, exist_ok=True)
+        """Atomically replace the JSON snapshot while holding its writer lock."""
         payload = PersistedVectorStore(
             source_id_version=2,
             dim=self.dim,
             chunks=self._chunks,
             vectors=self._vectors.tolist(),
         )
-        with wrapping((OSError, UnicodeError), FileWriteError, path=str(output_path)):
-            output_path.write_text(payload.model_dump_json(indent=2), encoding="utf-8")
+        write_index_json(path, payload.model_dump_json(indent=2))
 
     @classmethod
     def load(cls, path: str | Path) -> InMemoryVectorStore:

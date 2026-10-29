@@ -803,6 +803,26 @@ Existing chunks for a source are replaced only after the incoming vectors have
 been validated. This supports append-only event streams and corrected feedback
 records without rebuilding the full index.
 
+JSON writes use a temporary file in the index directory, flush it to disk, and
+atomically replace the previous snapshot. A failed write leaves the committed
+index intact. Incremental updates hold a per-index lock across loading,
+merging, and saving, so cooperating threads and processes cannot overwrite
+each other's batches. First-time index creation checks again after acquiring
+the lock to preserve an index created by another caller.
+
+The lock uses [portalocker](https://portalocker.readthedocs.io/en/latest/) with a
+60-second acquisition timeout and a sibling `<index>.lock` file. Keep the
+index directory writable and retain the lock file while callers may use it. Different
+indexes can be updated independently. Lock failures raise `FileWriteError`.
+Full rebuilds and direct `save()` calls use the same writer lock but intentionally
+replace the entire snapshot; they do not merge an older in-memory snapshot.
+Use `update-index` for concurrent incremental ingestion.
+
+These guarantees cover cooperating writers on local filesystems. Existing
+in-memory retrievers keep their loaded snapshot until rebuilt. An abrupt
+process exit releases the OS lock but can leave an unused temporary file;
+atomic replacement does not promise power-loss durability on every filesystem.
+
 Source IDs percent-encode each tenant and feedback ID component before joining
 them with a colon. Ordinary IDs remain `fb-1` (default tenant) or `acme:fb-1`.
 For example, the default-tenant feedback ID `acme:shared` becomes
