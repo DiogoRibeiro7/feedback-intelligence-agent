@@ -7,7 +7,7 @@
 
 \section{Test suite at a glance}
 
-The suite contains 44 test modules and 554 test functions, all executed by a single pytest invocation.
+The suite contains 45 test modules and 563 test functions, all executed by a single pytest invocation.
 
 \begin{longtable}{>{\raggedright\arraybackslash\small}p{0.45\textwidth} >{\small}r >{\small}r}
 \caption{Test modules and functions by category.}\label{tab:test-categories}\\
@@ -33,7 +33,7 @@ numerical / retrieval & 2 & 18 \\
 performance measurement & 1 & 16 \\
 retrieval regression & 1 & 5 \\
 snapshot regression & 1 & 3 \\
-unit & 34 & 382 \\
+unit & 35 & 391 \\
 \end{longtable}
 
 \section{Execution}
@@ -69,7 +69,7 @@ Test module & Primary subject & Category & Tests & Parametrised \\
 \texttt{tests/\allowbreak{}test\_\allowbreak{}chunking.\allowbreak{}py} & \texttt{chunking} & unit & 6 & 0 \\
 \texttt{tests/\allowbreak{}test\_\allowbreak{}citations.\allowbreak{}py} & \texttt{citations} & unit & 13 & 0 \\
 \texttt{tests/\allowbreak{}test\_\allowbreak{}cli.\allowbreak{}py} & \texttt{cli} & integration (CLI) & 24 & 1 \\
-\texttt{tests/\allowbreak{}test\_\allowbreak{}conversation\_\allowbreak{}access.\allowbreak{}py} & \texttt{conversation\_\allowbreak{}access} & unit & 12 & 3 \\
+\texttt{tests/\allowbreak{}test\_\allowbreak{}conversation\_\allowbreak{}access.\allowbreak{}py} & \texttt{conversation\_\allowbreak{}access} & unit & 14 & 5 \\
 \texttt{tests/\allowbreak{}test\_\allowbreak{}data\_\allowbreak{}contracts.\allowbreak{}py} & \texttt{data\_\allowbreak{}contracts} & data validation & 19 & 0 \\
 \texttt{tests/\allowbreak{}test\_\allowbreak{}docs\_\allowbreak{}tools.\allowbreak{}py} & \texttt{docs\_\allowbreak{}tools} & unit & 57 & 2 \\
 \texttt{tests/\allowbreak{}test\_\allowbreak{}email\_\allowbreak{}summaries.\allowbreak{}py} & \texttt{email\_\allowbreak{}summaries} & unit & 6 & 0 \\
@@ -104,5 +104,6 @@ Test module & Primary subject & Category & Tests & Parametrised \\
 \texttt{tests/\allowbreak{}test\_\allowbreak{}streaming\_\allowbreak{}ingestion.\allowbreak{}py} & \texttt{streaming\_\allowbreak{}ingestion} & unit & 13 & 0 \\
 \texttt{tests/\allowbreak{}test\_\allowbreak{}synthetic\_\allowbreak{}data.\allowbreak{}py} & \texttt{synthetic\_\allowbreak{}data} & unit & 13 & 0 \\
 \texttt{tests/\allowbreak{}test\_\allowbreak{}telemetry.\allowbreak{}py} & \texttt{telemetry} & unit & 17 & 0 \\
+\texttt{tests/\allowbreak{}test\_\allowbreak{}tool\_\allowbreak{}filters.\allowbreak{}py} & \texttt{tool\_\allowbreak{}filters} & unit & 7 & 5 \\
 \texttt{tests/\allowbreak{}test\_\allowbreak{}tools.\allowbreak{}py} & \texttt{tools} & unit & 23 & 1 \\
 \end{longtable}

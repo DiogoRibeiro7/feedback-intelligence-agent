@@ -89,7 +89,7 @@ Component & Responsibility & Depends on & Depended on by \\
 \cref{module:feedback_intelligence_agent.hallucination} & Hallucination checks for evidence-grounded answers. & \texttt{llm}, \texttt{schemas} & \texttt{agent}, \texttt{evaluation}, \texttt{factory} \\
 \cref{module:feedback_intelligence_agent.lexical_search} & Lexical BM25 search implemented from scratch. & \texttt{metadata\_\allowbreak{}filters}, \texttt{query\_\allowbreak{}expansion}, \texttt{schemas} & \texttt{factory} \\
 \cref{module:feedback_intelligence_agent.memory} & Conversation memory and follow-up query rewriting. & \texttt{llm}, \texttt{safe\_\allowbreak{}paths} & \texttt{agent}, \texttt{api}, \texttt{factory} \\
-\cref{module:feedback_intelligence_agent.metadata_filters} & Shared metadata matching for retrieval and the agent's final evidence check. & \texttt{schemas} & \texttt{agent}, \texttt{lexical\_\allowbreak{}search}, \texttt{qdrant\_\allowbreak{}store}, \texttt{vector\_\allowbreak{}store} \\
+\cref{module:feedback_intelligence_agent.metadata_filters} & Shared metadata matching for retrieval, dataset tools, and final evidence checks. & \texttt{schemas} & \texttt{agent}, \texttt{lexical\_\allowbreak{}search}, \texttt{qdrant\_\allowbreak{}store}, \texttt{tools}, \texttt{vector\_\allowbreak{}store} \\
 \cref{module:feedback_intelligence_agent.output_parser} & Structured LLM output parsing and deterministic repair. & -- & \texttt{agent} \\
 \cref{module:feedback_intelligence_agent.privacy} & Deterministic PII redaction helpers. & \texttt{schemas} & \texttt{chunking}, \texttt{lakehouse}, \texttt{streaming\_\allowbreak{}ingestion} \\
 \cref{module:feedback_intelligence_agent.prompt_registry} & Versioned prompt registry. & -- & \texttt{cli}, \texttt{prompts} \\
@@ -99,7 +99,7 @@ Component & Responsibility & Depends on & Depended on by \\
 \cref{module:feedback_intelligence_agent.retrieval} & Retrieval helpers. & \texttt{embeddings}, \texttt{query\_\allowbreak{}expansion}, \texttt{schemas}, \texttt{vector\_\allowbreak{}store} & \texttt{agent}, \texttt{evaluation}, \texttt{factory} \\
 \cref{module:feedback_intelligence_agent.source_ids} & Collision-free source identifiers and migration of legacy chunk identities. & \texttt{schemas} & \texttt{chunking}, \texttt{qdrant\_\allowbreak{}store}, \texttt{vector\_\allowbreak{}store} \\
 \cref{module:feedback_intelligence_agent.synthetic_data} & Synthetic customer feedback dataset generation. & \texttt{schemas} & \texttt{cli} \\
-\cref{module:feedback_intelligence_agent.tools} & Deterministic tool-use framework for the feedback intelligence agent. & \texttt{citations}, \texttt{schemas} & \texttt{agent}, \texttt{factory} \\
+\cref{module:feedback_intelligence_agent.tools} & Deterministic tool-use framework for the feedback intelligence agent. & \texttt{citations}, \texttt{metadata\_\allowbreak{}filters}, \texttt{schemas} & \texttt{agent}, \texttt{factory} \\
 \end{longtable}
 
 \section{Data layer}

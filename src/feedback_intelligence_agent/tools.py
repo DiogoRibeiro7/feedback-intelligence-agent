@@ -26,7 +26,8 @@ from typing import Any, ClassVar, Literal
 from pydantic import BaseModel, Field, ValidationError
 
 from feedback_intelligence_agent.citations import summarize_evidence
-from feedback_intelligence_agent.schemas import DocumentChunk, SearchResult
+from feedback_intelligence_agent.metadata_filters import matches_metadata_filters
+from feedback_intelligence_agent.schemas import DocumentChunk, MetadataFilters, SearchResult
 
 
 class ToolError(RuntimeError):
@@ -55,10 +56,16 @@ class Tool(ABC):
     input_schema: ClassVar[type[BaseModel]]
     output_schema: ClassVar[type[ToolOutput]]
 
-    def build_payload(self, question: str, results: Sequence[SearchResult]) -> dict[str, Any]:
-        """Build the tool input payload from the question and retrieved context."""
+    def build_payload(
+        self,
+        question: str,
+        results: Sequence[SearchResult],
+        *,
+        filters: MetadataFilters | None = None,
+    ) -> dict[str, Any]:
+        """Build tool input with request filters, independently of retrieval limits."""
         del question, results
-        return {}
+        return {"filters": filters.model_dump(mode="json")} if filters is not None else {}
 
     def execute(self, payload: Mapping[str, Any]) -> ToolOutput:
         """Validate the payload against the input schema and run the tool."""
@@ -84,11 +91,15 @@ class _FeedbackEntry:
     text: str
 
 
-def _entries_from_chunks(chunks: Sequence[DocumentChunk]) -> list[_FeedbackEntry]:
-    """Build one entry per source document from indexed chunks."""
+def _entries_from_chunks(
+    chunks: Sequence[DocumentChunk], filters: MetadataFilters
+) -> list[_FeedbackEntry]:
+    """Filter indexed chunks before building one entry per matching document."""
     entries: list[_FeedbackEntry] = []
     seen: set[str] = set()
     for chunk in chunks:
+        if not matches_metadata_filters(chunk.metadata, filters):
+            continue
         if chunk.source_id in seen:
             continue
         seen.add(chunk.source_id)
@@ -117,6 +128,7 @@ def _entries_from_chunks(chunks: Sequence[DocumentChunk]) -> list[_FeedbackEntry
 class SentimentSummaryInput(BaseModel):
     """Optional filters applied before summarising sentiment."""
 
+    filters: MetadataFilters = Field(default_factory=MetadataFilters)
     segment: str | None = None
     channel: str | None = None
 
@@ -157,13 +169,13 @@ class SentimentSummaryTool(Tool):
 
     def __init__(self, chunks: Sequence[DocumentChunk]) -> None:
         """Bind the tool to the indexed feedback chunks."""
-        self._entries = _entries_from_chunks(chunks)
+        self._chunks = tuple(chunks)
 
     def _run(self, payload: BaseModel) -> SentimentSummaryOutput:
         """Aggregate ratings into distributions, applying optional filters."""
         if not isinstance(payload, SentimentSummaryInput):
             raise ToolError(f"tool '{self.name}' received an unexpected payload type")
-        entries = self._entries
+        entries = _entries_from_chunks(self._chunks, payload.filters)
         if payload.segment:
             entries = [e for e in entries if e.segment.lower() == payload.segment.lower()]
         if payload.channel:
@@ -217,8 +229,9 @@ ISSUE_TERM_GROUPS: tuple[tuple[str, tuple[str, ...]], ...] = (
 
 
 class IssueClusterInput(BaseModel):
-    """Controls for the issue clustering output size."""
+    """Metadata filters and controls for the issue clustering output size."""
 
+    filters: MetadataFilters = Field(default_factory=MetadataFilters)
     max_clusters: int = Field(default=5, ge=1, le=10)
     min_count: int = Field(default=1, ge=1)
 
@@ -260,18 +273,19 @@ class IssueClusterTool(Tool):
 
     def __init__(self, chunks: Sequence[DocumentChunk]) -> None:
         """Bind the tool to the indexed feedback chunks."""
-        self._entries = _entries_from_chunks(chunks)
+        self._chunks = tuple(chunks)
 
     def _run(self, payload: BaseModel) -> IssueClusterOutput:
         """Match every feedback entry against the keyword groups and rank clusters."""
         if not isinstance(payload, IssueClusterInput):
             raise ToolError(f"tool '{self.name}' received an unexpected payload type")
+        entries = _entries_from_chunks(self._chunks, payload.filters)
         clusters: list[IssueCluster] = []
         for label, terms in ISSUE_TERM_GROUPS:
             document_ids: list[str] = []
             matched_terms: set[str] = set()
             example = ""
-            for entry in self._entries:
+            for entry in entries:
                 hits = [term for term in terms if term in entry.text.lower()]
                 if hits:
                     document_ids.append(entry.document_id)
@@ -290,7 +304,7 @@ class IssueClusterTool(Tool):
                 )
         clusters.sort(key=lambda cluster: (-cluster.count, cluster.label))
         return IssueClusterOutput(
-            total_records=len(self._entries),
+            total_records=len(entries),
             clusters=clusters[: payload.max_clusters],
         )
 
@@ -347,11 +361,19 @@ class TicketDraftTool(Tool):
         re.IGNORECASE,
     )
 
-    def build_payload(self, question: str, results: Sequence[SearchResult]) -> dict[str, Any]:
-        """Convert retrieved chunks into deduplicated ticket evidence."""
+    def build_payload(
+        self,
+        question: str,
+        results: Sequence[SearchResult],
+        *,
+        filters: MetadataFilters | None = None,
+    ) -> dict[str, Any]:
+        """Filter retrieved chunks before deduplicating and limiting ticket evidence."""
         evidence: list[dict[str, str]] = []
         seen: set[str] = set()
         for result in results:
+            if filters is not None and not matches_metadata_filters(result.chunk.metadata, filters):
+                continue
             document_id = result.chunk.source_id
             if document_id in seen:
                 continue

@@ -49,7 +49,7 @@
     {
       "name": "feedback_intelligence_agent.agent",
       "source": "src/feedback_intelligence_agent/agent.py",
-      "line_count": 521,
+      "line_count": 522,
       "public": true,
       "summary": "Agent orchestration for the feedback intelligence agent.",
       "description": "",
@@ -794,7 +794,7 @@
       "source": "src/feedback_intelligence_agent/metadata_filters.py",
       "line_count": 76,
       "public": true,
-      "summary": "Shared metadata matching for retrieval and the agent's final evidence check.",
+      "summary": "Shared metadata matching for retrieval, dataset tools, and final evidence checks.",
       "description": "",
       "exports": [],
       "imports_internal": [
@@ -1227,13 +1227,14 @@
     {
       "name": "feedback_intelligence_agent.tools",
       "source": "src/feedback_intelligence_agent/tools.py",
-      "line_count": 565,
+      "line_count": 587,
       "public": true,
       "summary": "Deterministic tool-use framework for the feedback intelligence agent.",
       "description": "The module provides:\n\n1. A typed tool interface (:class:`Tool`) where every tool declares a name,\n   a description, a Pydantic input schema, and a Pydantic output schema.\n2. Three local tools that run fully offline: :class:`SentimentSummaryTool`,\n   :class:`IssueClusterTool`, and :class:`TicketDraftTool`.\n3. A registry (:class:`ToolRegistry`) and a deterministic keyword router\n   (:class:`ToolRouter`) that selects at most one tool per query.\n\nNo function-calling API is involved: routing and execution are keyword and\nrule based, so tool behaviour is reproducible in tests and CI. Unknown or\nunavailable tool requests are surfaced as a graceful refusal instead of an\nerror, and the agent falls back to the plain RAG answer.",
       "exports": [],
       "imports_internal": [
         "citations",
+        "metadata_filters",
         "schemas"
       ],
       "class_names": [
@@ -6460,7 +6461,7 @@
       "module": "feedback_intelligence_agent.tools",
       "signature": "build_default_tools(chunks: Sequence[DocumentChunk]) -> ToolRegistry",
       "source": "src/feedback_intelligence_agent/tools.py",
-      "line": 557,
+      "line": 579,
       "public": true,
       "is_async": false,
       "decorators": [],
@@ -9276,7 +9277,7 @@
       "annotation": "tuple[tuple[str, tuple[str, ...]], ...]",
       "value": "(('onboarding', ('onboarding', 'checklist', 'setup', 'implementation')), ('integrations', ('integration', 'salesforce', 'hubspot', 'api')), ('reporting_and_exports', ('export', 'report', 'reporting', 'analytics')), ('pricing_and_renewal', ('pricing', 'price', 'renewal', 'cost')), ('support_experience', ('support', 'ticket', 'response', 'incident')), ('performance', ('latency', 'slow', 'performance', 'delay')), ('documentation', ('documentation', 'docs', 'examples', 'templates')))",
       "source": "src/feedback_intelligence_agent/tools.py",
-      "line": 207,
+      "line": 219,
       "public": true,
       "description": ""
     },
@@ -9288,7 +9289,7 @@
       "annotation": "tuple[ToolRoute, ...]",
       "value": "(ToolRoute('ticket_draft', _compile_patterns('\\\\b(?:draft|create|open|file|write|prepare)\\\\b[^.?!]{0,60}?\\\\btickets?\\\\b', '\\\\bsupport\\\\s+ticket\\\\b', '\\\\bjira\\\\s+(?:ticket|issue)\\\\b')), ToolRoute('issue_cluster', _compile_patterns('\\\\b(?:cluster|group|categori[sz]e)\\\\b[^.?!]{0,60}?\\\\b(?:issues?|complaints?|feedback|problems?|themes?)\\\\b', '\\\\b(?:recurring|common|frequent|top|biggest)\\\\s+(?:issues?|problems?|complaints?|themes?)\\\\b', '\\\\bissue\\\\s+clusters?\\\\b', '\\\\bthemes?\\\\s+in\\\\s+(?:the\\\\s+)?feedback\\\\b')), ToolRoute('sentiment_summary', _compile_patterns('\\\\bsentiment\\\\b', '\\\\bratings?\\\\s+distribution\\\\b', '\\\\bdistribution\\\\s+of\\\\s+ratings?\\\\b', '\\\\baverage\\\\s+rating\\\\b', '\\\\bhow\\\\s+do\\\\s+customers\\\\s+feel\\\\b', '\\\\bhow\\\\s+(?:happy|satisfied)\\\\s+are\\\\b')))",
       "source": "src/feedback_intelligence_agent/tools.py",
-      "line": 470,
+      "line": 492,
       "public": true,
       "description": ""
     }

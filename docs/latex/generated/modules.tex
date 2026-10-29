@@ -22,7 +22,7 @@ Module & Lines & Objects & Summary \\
 \endlastfoot
 \texttt{feedback\_\allowbreak{}intelligence\_\allowbreak{}agent} & 7 & 0 & Feedback Intelligence Agent package. \\
 \texttt{active\_\allowbreak{}learning} & 215 & 8 & Workflow state for active-learning follow-up items. \\
-\texttt{agent} & 521 & 3 & Agent orchestration for the feedback intelligence agent. \\
+\texttt{agent} & 522 & 3 & Agent orchestration for the feedback intelligence agent. \\
 \texttt{api} & 658 & 1 & FastAPI application. \\
 \texttt{auth} & 145 & 8 & Optional API-key authorization for the FastAPI service. \\
 \texttt{benchmarking} & 286 & 13 & Latency and throughput benchmarks for the RAG pipeline. \\
@@ -47,7 +47,7 @@ Module & Lines & Objects & Summary \\
 \texttt{lexical\_\allowbreak{}search} & 120 & 3 & Lexical BM25 search implemented from scratch. \\
 \texttt{llm} & 657 & 11 & LLM provider abstraction. \\
 \texttt{memory} & 357 & 11 & Conversation memory and follow-up query rewriting. \\
-\texttt{metadata\_\allowbreak{}filters} & 76 & 1 & Shared metadata matching for retrieval and the agent's final evidence check. \\
+\texttt{metadata\_\allowbreak{}filters} & 76 & 1 & Shared metadata matching for retrieval, dataset tools, and final evidence checks. \\
 \texttt{output\_\allowbreak{}parser} & 181 & 4 & Structured LLM output parsing and deterministic repair. \\
 \texttt{privacy} & 59 & 6 & Deterministic PII redaction helpers. \\
 \texttt{prompt\_\allowbreak{}registry} & 159 & 6 & Versioned prompt registry. \\
@@ -65,7 +65,7 @@ Module & Lines & Objects & Summary \\
 \texttt{streaming\_\allowbreak{}ingestion} & 524 & 12 & Streaming ingestion primitives for feedback events. \\
 \texttt{synthetic\_\allowbreak{}data} & 318 & 8 & Synthetic customer feedback dataset generation. \\
 \texttt{telemetry} & 352 & 13 & Structured logging and OpenTelemetry-style telemetry. \\
-\texttt{tools} & 565 & 21 & Deterministic tool-use framework for the feedback intelligence agent. \\
+\texttt{tools} & 587 & 21 & Deterministic tool-use framework for the feedback intelligence agent. \\
 \texttt{vector\_\allowbreak{}store} & 253 & 3 & A small vector store with JSON persistence. \\
 \end{longtable}
 
@@ -93,7 +93,7 @@ Workflow state for active-learning follow-up items.
 \label{module:feedback_intelligence_agent.agent}\index{Modules!agent}
 
 Agent orchestration for the feedback intelligence agent.
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}agent.\allowbreak{}py}, 521 lines
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}agent.\allowbreak{}py}, 522 lines
 \apifield{Imports}\texttt{citations}, \texttt{guardrails}, \texttt{hallucination}, \texttt{llm}, \texttt{memory}, \texttt{metadata\_\allowbreak{}filters}, \texttt{output\_\allowbreak{}parser}, \texttt{prompts}, \texttt{reranking}, \texttt{retrieval}, \texttt{schemas}, \texttt{telemetry}, \texttt{tools}
 \apifield{Classes}\cref{class:feedback_intelligence_agent.agent.RouteRule}, \cref{class:feedback_intelligence_agent.agent.FeedbackInsightAgent}
 \apifield{Constants}\texttt{ROUTE\_\allowbreak{}RULES}
@@ -379,7 +379,7 @@ Conversation memory and follow-up query rewriting.
 \section{\texttt{metadata\_filters}}
 \label{module:feedback_intelligence_agent.metadata_filters}\index{Modules!metadata\_filters}
 
-Shared metadata matching for retrieval and the agent's final evidence check.
+Shared metadata matching for retrieval, dataset tools, and final evidence checks.
 \apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}metadata\_\allowbreak{}filters.\allowbreak{}py}, 76 lines
 \apifield{Imports}\texttt{schemas}
 \apifield{Functions}\cref{func:feedback_intelligence_agent.metadata_filters.matches_metadata_filters}
@@ -567,8 +567,8 @@ Structured logging and OpenTelemetry-style telemetry.
 \label{module:feedback_intelligence_agent.tools}\index{Modules!tools}
 
 Deterministic tool-use framework for the feedback intelligence agent.
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}tools.\allowbreak{}py}, 565 lines
-\apifield{Imports}\texttt{citations}, \texttt{schemas}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}tools.\allowbreak{}py}, 587 lines
+\apifield{Imports}\texttt{citations}, \texttt{metadata\_\allowbreak{}filters}, \texttt{schemas}
 \apifield{Classes}\cref{class:feedback_intelligence_agent.tools.ToolError}, \cref{class:feedback_intelligence_agent.tools.ToolOutput}, \cref{class:feedback_intelligence_agent.tools.Tool}, \cref{class:feedback_intelligence_agent.tools.SentimentSummaryInput}, \cref{class:feedback_intelligence_agent.tools.SentimentSummaryOutput}, \cref{class:feedback_intelligence_agent.tools.SentimentSummaryTool}, \cref{class:feedback_intelligence_agent.tools.IssueClusterInput}, \cref{class:feedback_intelligence_agent.tools.IssueCluster}, \cref{class:feedback_intelligence_agent.tools.IssueClusterOutput}, \cref{class:feedback_intelligence_agent.tools.IssueClusterTool}, \cref{class:feedback_intelligence_agent.tools.TicketEvidence}, \cref{class:feedback_intelligence_agent.tools.TicketDraftInput}, \cref{class:feedback_intelligence_agent.tools.TicketDraftOutput}, \cref{class:feedback_intelligence_agent.tools.TicketDraftTool}, \cref{class:feedback_intelligence_agent.tools.ToolRegistry}, \cref{class:feedback_intelligence_agent.tools.ToolSelection}, \cref{class:feedback_intelligence_agent.tools.ToolRoute}, \cref{class:feedback_intelligence_agent.tools.ToolRouter}
 \apifield{Functions}\cref{func:feedback_intelligence_agent.tools.build_default_tools}
 \apifield{Constants}\texttt{ISSUE\_\allowbreak{}TERM\_\allowbreak{}GROUPS}, \texttt{TOOL\_\allowbreak{}ROUTES}

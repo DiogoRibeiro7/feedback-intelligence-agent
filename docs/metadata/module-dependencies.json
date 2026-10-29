@@ -1,7 +1,7 @@
 {
   "package": "feedback_intelligence_agent",
   "module_count": 47,
-  "edge_count": 168,
+  "edge_count": 169,
   "layer_order": [
     "interface",
     "application",
@@ -513,7 +513,7 @@
       "optional_dependencies": [],
       "lazy_imports": [],
       "typing_only_imports": [],
-      "fan_in": 4
+      "fan_in": 5
     },
     {
       "name": "output_parser",
@@ -752,7 +752,7 @@
       "qualified_name": "feedback_intelligence_agent.tools",
       "source": "src/feedback_intelligence_agent/tools.py",
       "layer": "domain",
-      "fan_out": 2,
+      "fan_out": 3,
       "external_dependencies": [
         "pydantic"
       ],
@@ -1759,9 +1759,15 @@
     },
     {
       "source": "tools",
+      "target": "metadata_filters",
+      "context": "eager",
+      "names": "matches_metadata_filters"
+    },
+    {
+      "source": "tools",
       "target": "schemas",
       "context": "eager",
-      "names": "DocumentChunk, SearchResult"
+      "names": "DocumentChunk, MetadataFilters, SearchResult"
     },
     {
       "source": "vector_store",

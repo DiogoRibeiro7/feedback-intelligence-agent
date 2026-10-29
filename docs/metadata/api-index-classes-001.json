@@ -904,7 +904,7 @@
           "module": "feedback_intelligence_agent.agent",
           "signature": "route(self, question: str) -> str",
           "source": "src/feedback_intelligence_agent/agent.py",
-          "line": 446,
+          "line": 447,
           "public": true,
           "is_async": false,
           "decorators": [],
