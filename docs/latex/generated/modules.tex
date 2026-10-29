@@ -23,7 +23,8 @@ Module & Lines & Objects & Summary \\
 \texttt{feedback\_\allowbreak{}intelligence\_\allowbreak{}agent} & 7 & 0 & Feedback Intelligence Agent package. \\
 \texttt{active\_\allowbreak{}learning} & 215 & 8 & Workflow state for active-learning follow-up items. \\
 \texttt{agent} & 522 & 3 & Agent orchestration for the feedback intelligence agent. \\
-\texttt{api} & 742 & 1 & FastAPI application. \\
+\texttt{agent\_\allowbreak{}snapshots} & 84 & 2 & Request-time JSON index refresh with immutable, process-local agent snapshots. \\
+\texttt{api} & 751 & 1 & FastAPI application. \\
 \texttt{auth} & 181 & 8 & Optional API-key authorization for the FastAPI service. \\
 \texttt{benchmarking} & 286 & 13 & Latency and throughput benchmarks for the RAG pipeline. \\
 \texttt{chunking} & 92 & 3 & Text chunking utilities. \\
@@ -35,7 +36,7 @@ Module & Lines & Objects & Summary \\
 \texttt{embeddings} & 78 & 3 & Embedding models. \\
 \texttt{evaluation} & 417 & 18 & Offline evaluation for retrieval quality and answer quality. \\
 \texttt{experiments} & 347 & 14 & Repeatable experiment runner for comparing RAG configurations. \\
-\texttt{factory} & 364 & 13 & Factories for constructing the application components. \\
+\texttt{factory} & 379 & 14 & Factories for constructing the application components. \\
 \texttt{guardrails} & 220 & 8 & Deterministic safety guardrails for the feedback intelligence agent. \\
 \texttt{hallucination} & 285 & 9 & Hallucination checks for evidence-grounded answers. \\
 \texttt{human\_\allowbreak{}feedback} & 408 & 14 & Human review feedback on generated agent answers. \\
@@ -55,7 +56,7 @@ Module & Lines & Objects & Summary \\
 \texttt{qdrant\_\allowbreak{}store} & 237 & 2 & Optional Qdrant-backed vector store. \\
 \texttt{query\_\allowbreak{}expansion} & 93 & 5 & Deterministic query expansion for product-specific terminology. \\
 \texttt{rate\_\allowbreak{}limit} & 76 & 2 & Small in-memory fixed-window rate limiter for API deployments. \\
-\texttt{record\_\allowbreak{}ingestion} & 96 & 3 & Bounded record batches and live retrieval snapshots for JSON ingestion. \\
+\texttt{record\_\allowbreak{}ingestion} & 87 & 3 & Bounded record batches and live retrieval snapshots for JSON ingestion. \\
 \texttt{reports} & 279 & 8 & Saved insight reports for product and analyst workflows. \\
 \texttt{reranking} & 137 & 2 & Local candidate reranking for retrieved feedback chunks. \\
 \texttt{resilience} & 148 & 4 & Retry, timeout, and circuit-breaker wrappers for LLM providers. \\
@@ -100,12 +101,21 @@ Agent orchestration for the feedback intelligence agent.
 \apifield{Constants}\texttt{ROUTE\_\allowbreak{}RULES}
 
 \apibreak
+\section{\texttt{agent\_snapshots}}
+\label{module:feedback_intelligence_agent.agent_snapshots}\index{Modules!agent\_snapshots}
+
+Request-time JSON index refresh with immutable, process-local agent snapshots.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}agent\_\allowbreak{}snapshots.\allowbreak{}py}, 84 lines
+\apifield{Imports}\texttt{agent}, \texttt{config}, \texttt{factory}, \texttt{index\_\allowbreak{}persistence}, \texttt{record\_\allowbreak{}ingestion}, \texttt{schemas}, \texttt{vector\_\allowbreak{}store}
+\apifield{Classes}\cref{class:feedback_intelligence_agent.agent_snapshots.IndexSnapshotUnavailableError}, \cref{class:feedback_intelligence_agent.agent_snapshots.AgentSnapshots}
+
+\apibreak
 \section{\texttt{api}}
 \label{module:feedback_intelligence_agent.api}\index{Modules!api}
 
 FastAPI application.
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}api.\allowbreak{}py}, 742 lines
-\apifield{Imports}\texttt{active\_\allowbreak{}learning}, \texttt{auth}, \texttt{config}, \texttt{email\_\allowbreak{}summaries}, \texttt{factory}, \texttt{human\_\allowbreak{}feedback}, \texttt{index\_\allowbreak{}persistence}, \texttt{jobs}, \texttt{memory}, \texttt{rate\_\allowbreak{}limit}, \texttt{record\_\allowbreak{}ingestion}, \texttt{reports}, \texttt{schemas}, \texttt{telemetry}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}api.\allowbreak{}py}, 751 lines
+\apifield{Imports}\texttt{active\_\allowbreak{}learning}, \texttt{agent}, \texttt{agent\_\allowbreak{}snapshots}, \texttt{auth}, \texttt{config}, \texttt{email\_\allowbreak{}summaries}, \texttt{factory}, \texttt{human\_\allowbreak{}feedback}, \texttt{jobs}, \texttt{memory}, \texttt{rate\_\allowbreak{}limit}, \texttt{record\_\allowbreak{}ingestion}, \texttt{reports}, \texttt{schemas}, \texttt{telemetry}
 \apifield{Functions}\cref{func:feedback_intelligence_agent.api.create_app}
 
 \apibreak
@@ -240,9 +250,9 @@ With the deterministic local LLM provider, \texttt{results.\allowbreak{}json} an
 \label{module:feedback_intelligence_agent.factory}\index{Modules!factory}
 
 Factories for constructing the application components.
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}factory.\allowbreak{}py}, 364 lines
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}factory.\allowbreak{}py}, 379 lines
 \apifield{Imports}\texttt{active\_\allowbreak{}learning}, \texttt{agent}, \texttt{chunking}, \texttt{config}, \texttt{embeddings}, \texttt{hallucination}, \texttt{human\_\allowbreak{}feedback}, \texttt{index\_\allowbreak{}persistence}, \texttt{ingestion}, \texttt{jobs}, \texttt{lexical\_\allowbreak{}search}, \texttt{llm}, \texttt{memory}, \texttt{qdrant\_\allowbreak{}store}, \texttt{query\_\allowbreak{}expansion}, \texttt{reports}, \texttt{resilience}, \texttt{retrieval}, \texttt{schemas}, \texttt{telemetry}, \texttt{tools}, \texttt{vector\_\allowbreak{}store}
-\apifield{Functions}\cref{func:feedback_intelligence_agent.factory.build_telemetry}, \cref{func:feedback_intelligence_agent.factory.build_conversation_store}, \cref{func:feedback_intelligence_agent.factory.build_job_store}, \cref{func:feedback_intelligence_agent.factory.build_report_store}, \cref{func:feedback_intelligence_agent.factory.build_human_feedback_store}, \cref{func:feedback_intelligence_agent.factory.build_active_learning_state_store}, \cref{func:feedback_intelligence_agent.factory.chunk_to_embedding_text}, \cref{func:feedback_intelligence_agent.factory.build_index}, \cref{func:feedback_intelligence_agent.factory.build_qdrant_index}, \cref{func:feedback_intelligence_agent.factory.load_or_build_index}, \cref{func:feedback_intelligence_agent.factory.build_retriever}, \cref{func:feedback_intelligence_agent.factory.build_llm}, \cref{func:feedback_intelligence_agent.factory.build_agent}
+\apifield{Functions}\cref{func:feedback_intelligence_agent.factory.build_telemetry}, \cref{func:feedback_intelligence_agent.factory.build_conversation_store}, \cref{func:feedback_intelligence_agent.factory.build_job_store}, \cref{func:feedback_intelligence_agent.factory.build_report_store}, \cref{func:feedback_intelligence_agent.factory.build_human_feedback_store}, \cref{func:feedback_intelligence_agent.factory.build_active_learning_state_store}, \cref{func:feedback_intelligence_agent.factory.chunk_to_embedding_text}, \cref{func:feedback_intelligence_agent.factory.build_index}, \cref{func:feedback_intelligence_agent.factory.build_qdrant_index}, \cref{func:feedback_intelligence_agent.factory.load_or_build_index}, \cref{func:feedback_intelligence_agent.factory.build_retriever}, \cref{func:feedback_intelligence_agent.factory.build_llm}, \cref{func:feedback_intelligence_agent.factory.build_agent_snapshot}, \cref{func:feedback_intelligence_agent.factory.build_agent}
 
 \apibreak
 \section{\texttt{guardrails}}
@@ -462,8 +472,8 @@ Small in-memory fixed-window rate limiter for API deployments.
 \label{module:feedback_intelligence_agent.record_ingestion}\index{Modules!record\_ingestion}
 
 Bounded record batches and live retrieval snapshots for JSON ingestion.
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}record\_\allowbreak{}ingestion.\allowbreak{}py}, 96 lines
-\apifield{Imports}\texttt{agent}, \texttt{config}, \texttt{factory}, \texttt{index\_\allowbreak{}updates}, \texttt{schemas}, \texttt{tools}, \texttt{vector\_\allowbreak{}store}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}record\_\allowbreak{}ingestion.\allowbreak{}py}, 87 lines
+\apifield{Imports}\texttt{agent}, \texttt{config}, \texttt{factory}, \texttt{index\_\allowbreak{}updates}, \texttt{schemas}, \texttt{vector\_\allowbreak{}store}
 \apifield{Classes}\cref{class:feedback_intelligence_agent.record_ingestion.RecordIngestionRequest}, \cref{class:feedback_intelligence_agent.record_ingestion.RecordIngestionResult}
 \apifield{Functions}\cref{func:feedback_intelligence_agent.record_ingestion.ingest_record_batch}
 

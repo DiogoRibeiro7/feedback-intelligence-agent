@@ -7,7 +7,7 @@
 
 \section{Test suite at a glance}
 
-The suite contains 49 test modules and 612 test functions, all executed by a single pytest invocation.
+The suite contains 50 test modules and 619 test functions, all executed by a single pytest invocation.
 
 \begin{longtable}{>{\raggedright\arraybackslash\small}p{0.45\textwidth} >{\small}r >{\small}r}
 \caption{Test modules and functions by category.}\label{tab:test-categories}\\
@@ -33,7 +33,7 @@ numerical / retrieval & 2 & 18 \\
 performance measurement & 1 & 16 \\
 retrieval regression & 1 & 5 \\
 snapshot regression & 1 & 3 \\
-unit & 38 & 421 \\
+unit & 39 & 428 \\
 \end{longtable}
 
 \section{Execution}
@@ -63,6 +63,7 @@ Test module & Primary subject & Category & Tests & Parametrised \\
 \endlastfoot
 \texttt{tests/\allowbreak{}test\_\allowbreak{}active\_\allowbreak{}learning.\allowbreak{}py} & \texttt{active\_\allowbreak{}learning} & unit & 4 & 0 \\
 \texttt{tests/\allowbreak{}test\_\allowbreak{}agent.\allowbreak{}py} & \texttt{agent} & unit & 9 & 0 \\
+\texttt{tests/\allowbreak{}test\_\allowbreak{}agent\_\allowbreak{}snapshots.\allowbreak{}py} & \texttt{agent\_\allowbreak{}snapshots} & unit & 7 & 3 \\
 \texttt{tests/\allowbreak{}test\_\allowbreak{}api.\allowbreak{}py} & \texttt{api} & integration (HTTP) & 52 & 5 \\
 \texttt{tests/\allowbreak{}test\_\allowbreak{}api\_\allowbreak{}tenant\_\allowbreak{}access.\allowbreak{}py} & \texttt{api\_\allowbreak{}tenant\_\allowbreak{}access} & integration (HTTP) & 19 & 9 \\
 \texttt{tests/\allowbreak{}test\_\allowbreak{}auth.\allowbreak{}py} & \texttt{auth} & unit & 15 & 1 \\

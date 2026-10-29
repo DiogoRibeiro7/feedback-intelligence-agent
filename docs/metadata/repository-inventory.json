@@ -29,9 +29,9 @@
     ],
     "date_released": "2026-10-29",
     "python_requires": ">=3.10,<3.13",
-    "revision": "86f0194b942234417240ae4a94ed1e16d77cac26",
-    "revision_short": "86f0194b9422",
-    "revision_date": "2026-10-29T18:01:26Z",
+    "revision": "6381d55ffc81161b9d963ccd83ce961509f444c0",
+    "revision_short": "6381d55ffc81",
+    "revision_date": "2026-10-29T18:17:24Z",
     "packages": [
       {
         "include": "feedback_intelligence_agent",
@@ -43,8 +43,8 @@
     }
   },
   "files": {
-    "total": 227,
-    "excluded_generated_documentation": 326,
+    "total": 229,
+    "excluded_generated_documentation": 329,
     "by_category": {
       "build-configuration": 1,
       "build-interface": 1,
@@ -64,8 +64,8 @@
       "license": 1,
       "other": 2,
       "python-script": 3,
-      "python-source": 48,
-      "python-test": 50,
+      "python-source": 49,
+      "python-test": 51,
       "repository-configuration": 2,
       "repository-governance": 8,
       "test-fixture": 2
@@ -97,11 +97,11 @@
       },
       "Markdown": {
         "files": 17,
-        "lines": 3137
+        "lines": 3159
       },
       "Python": {
-        "files": 113,
-        "lines": 30199
+        "files": 115,
+        "lines": 30599
       },
       "TOML": {
         "files": 2,
@@ -199,7 +199,7 @@
         "category": "ci-workflow",
         "language": "YAML",
         "lines": 164,
-        "bytes": 4736
+        "bytes": 4766
       },
       {
         "path": ".github/workflows/dependency-review.yml",
@@ -254,8 +254,8 @@
         "path": "CHANGELOG.md",
         "category": "documentation",
         "language": "Markdown",
-        "lines": 190,
-        "bytes": 9561
+        "lines": 195,
+        "bytes": 9981
       },
       {
         "path": "CITATION.cff",
@@ -303,8 +303,8 @@
         "path": "README.md",
         "category": "documentation",
         "language": "Markdown",
-        "lines": 1385,
-        "bytes": 66114
+        "lines": 1402,
+        "bytes": 67284
       },
       {
         "path": "ROADMAP.md",
@@ -800,8 +800,8 @@
         "path": "docs/tools/extract_dependencies.py",
         "category": "documentation-tool",
         "language": "Python",
-        "lines": 377,
-        "bytes": 13247
+        "lines": 378,
+        "bytes": 13285
       },
       {
         "path": "docs/tools/generate_docs.py",
@@ -1028,11 +1028,18 @@
         "bytes": 22123
       },
       {
+        "path": "src/feedback_intelligence_agent/agent_snapshots.py",
+        "category": "python-source",
+        "language": "Python",
+        "lines": 84,
+        "bytes": 3988
+      },
+      {
         "path": "src/feedback_intelligence_agent/api.py",
         "category": "python-source",
         "language": "Python",
-        "lines": 742,
-        "bytes": 30034
+        "lines": 751,
+        "bytes": 30384
       },
       {
         "path": "src/feedback_intelligence_agent/auth.py",
@@ -1115,8 +1122,8 @@
         "path": "src/feedback_intelligence_agent/factory.py",
         "category": "python-source",
         "language": "Python",
-        "lines": 364,
-        "bytes": 14909
+        "lines": 379,
+        "bytes": 15505
       },
       {
         "path": "src/feedback_intelligence_agent/guardrails.py",
@@ -1255,8 +1262,8 @@
         "path": "src/feedback_intelligence_agent/record_ingestion.py",
         "category": "python-source",
         "language": "Python",
-        "lines": 96,
-        "bytes": 3621
+        "lines": 87,
+        "bytes": 3255
       },
       {
         "path": "src/feedback_intelligence_agent/reports.py",
@@ -1378,6 +1385,13 @@
         "bytes": 8085
       },
       {
+        "path": "tests/test_agent_snapshots.py",
+        "category": "python-test",
+        "language": "Python",
+        "lines": 297,
+        "bytes": 12350
+      },
+      {
         "path": "tests/test_api.py",
         "category": "python-test",
         "language": "Python",
@@ -1479,8 +1493,8 @@
         "path": "tests/test_filtered_retrieval.py",
         "category": "python-test",
         "language": "Python",
-        "lines": 182,
-        "bytes": 7760
+        "lines": 185,
+        "bytes": 7840
       },
       {
         "path": "tests/test_guardrails.py",
@@ -1620,7 +1634,7 @@
         "category": "python-test",
         "language": "Python",
         "lines": 442,
-        "bytes": 17001
+        "bytes": 16984
       },
       {
         "path": "tests/test_release_metadata.py",
@@ -2492,7 +2506,7 @@
             {
               "name": "Test atomic saves and concurrent updates",
               "uses": "",
-              "run": "poetry run pytest tests/test_index_persistence.py tests/test_index_updates.py tests/test_embeddings_and_store.py tests/test_record_ingestion.py",
+              "run": "poetry run pytest tests/test_index_persistence.py tests/test_index_updates.py tests/test_embeddings_and_store.py tests/test_record_ingestion.py tests/test_agent_snapshots.py",
               "working_directory": ""
             }
           ]
@@ -3020,6 +3034,13 @@
       "category": "unit",
       "test_functions": 9,
       "parametrized_cases": 0
+    },
+    {
+      "path": "tests/test_agent_snapshots.py",
+      "module_under_test": "agent_snapshots",
+      "category": "unit",
+      "test_functions": 7,
+      "parametrized_cases": 3
     },
     {
       "path": "tests/test_api.py",

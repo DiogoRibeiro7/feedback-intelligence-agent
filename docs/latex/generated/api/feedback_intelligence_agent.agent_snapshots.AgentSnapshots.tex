@@ -1,0 +1,50 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{AgentSnapshots}}
+\label{class:feedback_intelligence_agent.agent_snapshots.AgentSnapshots}\index{Classes!AgentSnapshots}
+
+Keep one agent per committed JSON index version in each API worker.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+AgentSnapshots(self, settings: Settings) -> None
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{settings}] \texttt{Settings}, required.
+\end{arglist}
+\apifield{Details}Cooperating writers use atomic replacement and the shared index writer lock. The unchanged-file fast path needs only a stat call; it does not wait for a writer preparing an update. Changed files are loaded and published under that same lock, serializing reloads with ingestion and preventing stale publication. Each request retains its selected agent for its whole answer. Qdrant keeps its existing startup behavior without touching a JSON path.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}agent\_\allowbreak{}snapshots.\allowbreak{}py:28}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/6381d55ffc81161b9d963ccd83ce961509f444c0/src/feedback_intelligence_agent/agent_snapshots.py#L28}{online}), class, module \cref{module:feedback_intelligence_agent.agent_snapshots}
+
+\subsection{\texttt{get}}
+\label{method:feedback_intelligence_agent.agent_snapshots.AgentSnapshots.get}\index{Methods!get}
+Return the current snapshot, or fail closed until an invalid index recovers.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+get(self) -> FeedbackInsightAgent
+\end{lstlisting}
+\apifield{Value}\texttt{FeedbackInsightAgent}
+\apifield{Raises}\texttt{IndexSnapshotUnavailableError}
+\apifield{Details}A failed reload leaves the last good snapshot intact for in-flight requests but raises for new requests. It never rebuilds from the CSV; the next request retries the committed file, even after preparation fails.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}agent\_\allowbreak{}snapshots.\allowbreak{}py:49}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/6381d55ffc81161b9d963ccd83ce961509f444c0/src/feedback_intelligence_agent/agent_snapshots.py#L49}{online})
+
+\subsection{\texttt{ingest}}
+\label{method:feedback_intelligence_agent.agent_snapshots.AgentSnapshots.ingest}\index{Methods!ingest}
+Persist a tenant batch and publish its prepared snapshot before unlocking.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+ingest(self, records: list[FeedbackRecord], tenant_id: str) -> RecordIngestionResult
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{records}] \texttt{list[FeedbackRecord]\allowbreak{}}, required.
+  \item[\texttt{tenant\_\allowbreak{}id}] \texttt{str}, required.
+\end{arglist}
+\apifield{Value}\texttt{RecordIngestionResult}
+\apifield{Raises}\texttt{ValueError}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}agent\_\allowbreak{}snapshots.\allowbreak{}py:75}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/6381d55ffc81161b9d963ccd83ce961509f444c0/src/feedback_intelligence_agent/agent_snapshots.py#L75}{online})
