@@ -140,6 +140,13 @@ or restrict a caller's tenant permissions.
 
 `evaluation.py` measures retrieval quality (precision@k, recall@k, MRR, context hit rate) and answer quality (keyword coverage, groundedness, citation alignment, evidence overlap, hallucination rate, judge support, refusal correctness) and aggregates them into a typed `EvaluationReport`. This is important because AI engineering should not stop at prompt writing: retrieval quality, grounding, and abstention behaviour need continuous measurement. See [evaluation.md](evaluation.md) for details.
 
+Optional experiment tracking uses `mlflow-skinny`, SQLAlchemy, and Alembic through
+the `mlflow` extra. It supports local SQLite stores and remote tracking servers
+without bundling the full MLflow server or model-training dependency stack.
+Legacy file stores require MLflow's `MLFLOW_ALLOW_FILE_STORE=true` opt-in.
+CI checks real parameter, metric, tag, and artifact round trips on Python 3.10
+and 3.12; these tests use local stores with upstream telemetry disabled.
+
 ### API
 
 `api.py` exposes the system through FastAPI. The API validates input and returns typed responses. Optional API-key authorization in `auth.py` protects routes with `reader`, `writer`, and `admin` roles when `FEEDBACK_AGENT_API_AUTH_ENABLED=true`, while leaving health and readiness probes open. Optional fixed-window rate limiting in `rate_limit.py` protects non-probe routes per API key or client IP when `FEEDBACK_AGENT_API_RATE_LIMIT_ENABLED=true`.

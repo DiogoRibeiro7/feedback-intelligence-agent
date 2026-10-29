@@ -1524,8 +1524,8 @@
     },
     {
       "path": "docs/latex/generated/engineering/ci-cd.tex",
-      "bytes": 17180,
-      "sha256": "50b91236dcd40cde018e35aa4ec3baf20f5f25b4a2b8c3f1ee5a0ba8adba0b37"
+      "bytes": 18399,
+      "sha256": "fc9b3697fa328a3af0dccc584f3c1da2f40126ed6e583af1ede01c3e6f226de4"
     },
     {
       "path": "docs/latex/generated/engineering/containers.tex",
@@ -1535,12 +1535,12 @@
     {
       "path": "docs/latex/generated/engineering/data-provenance.tex",
       "bytes": 4455,
-      "sha256": "ced6a052cff0f4c62bb39934b77f5ea333faa5950a021a2adfd59dafb0374898"
+      "sha256": "e2960b704c95f0021904a999505821748a53eee9f4ad3a2d98da0423e2a307c6"
     },
     {
       "path": "docs/latex/generated/engineering/dependencies.tex",
-      "bytes": 6956,
-      "sha256": "8ccdddc4f5c3a23b1bbc2052d1af9e2cf9ff0fce94bd93aaf46d992708f3961a"
+      "bytes": 7303,
+      "sha256": "b714c03e20025c5c806ae011cb58d594cfd63666dd9fda771d07ce2ec35d2554"
     },
     {
       "path": "docs/latex/generated/engineering/environment.tex",
@@ -1554,13 +1554,13 @@
     },
     {
       "path": "docs/latex/generated/engineering/repository-structure.tex",
-      "bytes": 7976,
-      "sha256": "5d997d0cf935d9c95dbfffab36782ce80dc2815668e1fd76bd2805298c675e0e"
+      "bytes": 8011,
+      "sha256": "c156aa80b0ad65c71c23cb63908c57b91d4df06e7fafe0ef47d11632bfbc044c"
     },
     {
       "path": "docs/latex/generated/engineering/testing.tex",
-      "bytes": 8756,
-      "sha256": "f4aad53313626a2e363802d0b17759aed073ddbd711b00d5b6ff78432286a4ff"
+      "bytes": 8914,
+      "sha256": "cf200898c7107688281c68f92a4b8417e880b1c035813824dfdfbff5ef550c9f"
     },
     {
       "path": "docs/latex/generated/engineering/traceability.tex",
@@ -1580,7 +1580,7 @@
     {
       "path": "docs/latex/generated/modules.tex",
       "bytes": 62321,
-      "sha256": "8293152659eeeaa80a1b9f0f36d0225660b3dd4be6a19c00be23b2aacc43a7f9"
+      "sha256": "26a35ee20224186715f0f367dad6385438e1d91ff37285e1b02d5c7f275da115"
     },
     {
       "path": "docs/latex/generated/project-metadata.tex",
@@ -1617,7 +1617,7 @@
     {
       "path": "docs/metadata/api-index.json",
       "bytes": 406203,
-      "sha256": "651db330fc732acd505106712a5b139bd6bba0297be59485d45e222ec655d18f"
+      "sha256": "74460a32b6570209975edc965d6af8dbc06494c2b4bb96092e4247d5bbc850c5"
     },
     {
       "path": "docs/metadata/module-dependencies.json",
@@ -1626,8 +1626,8 @@
     },
     {
       "path": "docs/metadata/repository-inventory.json",
-      "bytes": 91615,
-      "sha256": "a4e030b0ea6d0cd5485fb77e6a81a6b78eccee02082c13c9a791080cd97e0c2f"
+      "bytes": 93615,
+      "sha256": "04368aebb9d0c6a4cda4cf00d8e72924c7ba3da5872c5cd164c8791ee08a25ee"
     }
   ]
 }

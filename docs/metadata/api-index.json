@@ -402,7 +402,7 @@
     {
       "name": "feedback_intelligence_agent.experiments",
       "source": "src/feedback_intelligence_agent/experiments.py",
-      "line_count": 346,
+      "line_count": 347,
       "public": true,
       "summary": "Repeatable experiment runner for comparing RAG configurations.",
       "description": "An experiment is described by a YAML file (parsed into a typed\n:class:`ExperimentConfig`), executed fully locally against a feedback CSV and a\nJSONL query set, and persisted as three JSON artifacts:\n\n- ``results.json``: configuration plus per-query answers and metrics.\n- ``metrics.json``: aggregate retrieval and answer-quality metrics.\n- ``run_metadata.json``: timestamp, git commit, Python and package versions.\n\nWith the deterministic local LLM provider, ``results.json`` and\n``metrics.json`` are bit-for-bit reproducible; everything environment-specific\nlives in ``run_metadata.json``. This makes experiment outputs directly\ncomparable across configurations and usable as CI regression baselines.",

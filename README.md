@@ -331,15 +331,24 @@ artifacts:
 
 ```yaml
 tracking_provider: mlflow
-tracking_uri: file:.artifacts/mlruns
+tracking_uri: sqlite:///.artifacts/mlflow.db
 tracking_experiment_name: feedback-intelligence-agent
 ```
 
-Install the optional dependency with `poetry install --extras mlflow`. The
-tracker logs configuration parameters, aggregate retrieval/answer metrics, run
+Install the optional dependency with `poetry install --extras mlflow`. This
+installs `mlflow-skinny` with SQLAlchemy and Alembic for local SQLite tracking,
+and supports an existing remote tracking server. Run the MLflow server/UI in a
+separate environment with its own dependencies. The tracker logs configuration
+parameters, aggregate retrieval/answer metrics, run
 metadata, and the generated `results.json`, `metrics.json`, and
 `run_metadata.json` artifacts. The default `tracking_provider: none` keeps
 experiments fully local and dependency-light.
+
+For an existing `file:` tracking URI, MLflow 3.17 requires
+`MLFLOW_ALLOW_FILE_STORE=true`. SQLite is the default for new local runs; see
+[MLflow's file-store migration guide](https://mlflow.org/docs/latest/self-hosting/migrate-from-file-store/)
+when moving an existing history. The optional tracking integration can be checked
+offline with `FEEDBACK_AGENT_MLFLOW_TEST=1 poetry run pytest tests/test_mlflow_integration.py`.
 
 ## Benchmarking
 

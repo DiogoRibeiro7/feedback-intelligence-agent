@@ -7,7 +7,7 @@
 
 \section{Test suite at a glance}
 
-The suite contains 45 test modules and 563 test functions, all executed by a single pytest invocation.
+The suite contains 46 test modules and 564 test functions, all executed by a single pytest invocation.
 
 \begin{longtable}{>{\raggedright\arraybackslash\small}p{0.45\textwidth} >{\small}r >{\small}r}
 \caption{Test modules and functions by category.}\label{tab:test-categories}\\
@@ -33,7 +33,7 @@ numerical / retrieval & 2 & 18 \\
 performance measurement & 1 & 16 \\
 retrieval regression & 1 & 5 \\
 snapshot regression & 1 & 3 \\
-unit & 35 & 391 \\
+unit & 36 & 392 \\
 \end{longtable}
 
 \section{Execution}
@@ -88,6 +88,7 @@ Test module & Primary subject & Category & Tests & Parametrised \\
 \texttt{tests/\allowbreak{}test\_\allowbreak{}llm\_\allowbreak{}providers.\allowbreak{}py} & \texttt{llm} & unit & 40 & 0 \\
 \texttt{tests/\allowbreak{}test\_\allowbreak{}memory.\allowbreak{}py} & \texttt{memory} & unit & 15 & 0 \\
 \texttt{tests/\allowbreak{}test\_\allowbreak{}metadata\_\allowbreak{}filters.\allowbreak{}py} & \texttt{agent,\allowbreak{} schemas} & behavioural regression & 8 & 0 \\
+\texttt{tests/\allowbreak{}test\_\allowbreak{}mlflow\_\allowbreak{}integration.\allowbreak{}py} & \texttt{mlflow\_\allowbreak{}integration} & unit & 1 & 1 \\
 \texttt{tests/\allowbreak{}test\_\allowbreak{}output\_\allowbreak{}parser.\allowbreak{}py} & \texttt{output\_\allowbreak{}parser} & unit & 4 & 0 \\
 \texttt{tests/\allowbreak{}test\_\allowbreak{}privacy.\allowbreak{}py} & \texttt{privacy} & unit & 4 & 0 \\
 \texttt{tests/\allowbreak{}test\_\allowbreak{}prompt\_\allowbreak{}registry.\allowbreak{}py} & \texttt{prompt\_\allowbreak{}registry} & unit & 14 & 0 \\
