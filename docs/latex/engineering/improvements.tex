@@ -11,17 +11,6 @@ are documented in \cref{ch:quality-assurance}, \cref{ch:ci-cd}, and
 \cref{ch:security}.
 \end{quote}
 
-\section{Version consistency check}
-
-\textbf{Gap.} The version appears in four files (\cref{ch:releases}) and
-nothing verifies that they agree. The release workflow validates that
-\srcfile{CITATION.cff} and \srcfile{.zenodo.json} \emph{parse}, not that their
-version fields match \srcfile{pyproject.toml} or the package
-\texttt{\_\_version\_\_}.
-
-\textbf{Recommendation.} A test, or a step in the release workflow, asserting
-that all four agree and that the tag being released matches them.
-
 \section{Type checking outside \texttt{src}}
 
 \textbf{Gap.} \texttt{mypy} runs over \srcfile{src} only. \srcfile{tests/} and
@@ -34,9 +23,9 @@ proves noisy.
 
 \section{Contract testing against real optional SDKs}
 
-\textbf{Gap.} The six optional integrations are covered only through injected
-fakes, and CI installs no extras. An upstream SDK change that breaks an adapter
-would pass every gate.
+\textbf{Gap.} MLflow has real local-store integration tests in CI, but the
+other optional integrations still rely on injected fakes. An upstream SDK
+change that breaks those adapters could pass the existing gates.
 
 \textbf{Recommendation.} A scheduled workflow that installs each extra and runs
 the corresponding adapter tests against the real SDK surface --- import,

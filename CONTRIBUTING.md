@@ -47,3 +47,8 @@ npm run build
 Keep each pull request focused on one change. If a fix requires a broader
 refactor, describe the reason clearly in the PR summary and call out any
 behavior that changed.
+
+## Releases
+
+Follow the [release procedure](docs/releasing.md) to synchronize version and
+citation metadata, validate the tag, publish artifacts, and verify Zenodo.

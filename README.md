@@ -1285,6 +1285,9 @@ Citations:
 
 ## Citation
 
+For v0.6.0 compatibility changes, see the [upgrade notes](docs/releases/v0.6.0.md).
+Maintainers can follow the [release procedure](docs/releasing.md).
+
 Cite all versions by using the DOI
 [10.5281/zenodo.21804219](https://doi.org/10.5281/zenodo.21804219).
 

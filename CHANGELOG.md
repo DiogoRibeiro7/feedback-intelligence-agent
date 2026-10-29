@@ -4,6 +4,16 @@ All notable changes to this project are documented here.
 
 ## Unreleased
 
+## 0.6.0 - 2026-10-29
+
+See [upgrade notes](docs/releases/v0.6.0.md) for index, conversation, extension,
+and MLflow compatibility changes.
+
+### Added
+
+- Release metadata validation checks Python, frontend, citation, and Zenodo
+  versions, release dates, the changelog entry, and release tags in CI.
+
 ### Changed
 
 - The `mlflow` extra installs the tracking client (`mlflow-skinny`) with SQLite
@@ -14,6 +24,10 @@ All notable changes to this project are documented here.
 
 ### Fixed
 
+- Normalize dataset sizes in generated documentation so Windows and Linux
+  checkouts produce the same release manual.
+- Feedback ingestion and vector persistence use DataExcept context, and API
+  file access is confined to the configured data and artifact directories.
 - Refresh vulnerable Python dependencies, including AnyIO, Certifi, Cryptography,
   GitPython, SQLParse, Mako, MLflow's tracking client, OpenTelemetry, and urllib3.
 - Exercise real MLflow parameter, metric, tag, and artifact round trips against

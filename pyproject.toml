@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "feedback-intelligence-agent"
-version = "0.5.0"
+version = "0.6.0"
 description = "A production-style AI engineering project with RAG, evaluation, FastAPI, and local deterministic LLM fallback."
 authors = ["Diogo Ribeiro <dfr@esmad.ipp.pt>"]
 readme = "README.md"
