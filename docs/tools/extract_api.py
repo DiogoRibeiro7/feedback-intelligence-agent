@@ -985,7 +985,8 @@ def extract_settings_fields(path: Path) -> list[dict[str, Any]]:
                 "required": default is None,
                 "constraints": constraints,
                 "description": description,
-                "sensitive": name.lower().endswith(sensitive_suffixes),
+                "sensitive": name.lower().endswith(sensitive_suffixes)
+                or constraints.get("repr") == "False",
                 "line": statement.lineno,
             }
         )

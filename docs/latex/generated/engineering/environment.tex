@@ -53,6 +53,7 @@ Variable & Template value & Documented purpose \\
 \texttt{FEEDBACK\_\allowbreak{}AGENT\_\allowbreak{}API\_\allowbreak{}READER\_\allowbreak{}KEY} & (empty) &  \\
 \texttt{FEEDBACK\_\allowbreak{}AGENT\_\allowbreak{}API\_\allowbreak{}WRITER\_\allowbreak{}KEY} & (empty) &  \\
 \texttt{FEEDBACK\_\allowbreak{}AGENT\_\allowbreak{}API\_\allowbreak{}ADMIN\_\allowbreak{}KEY} & (empty) &  \\
+\texttt{FEEDBACK\_\allowbreak{}AGENT\_\allowbreak{}API\_\allowbreak{}TENANT\_\allowbreak{}BINDINGS} & \texttt{\{\}} & Optional JSON mapping from configured API keys to tenant IDs; \{\} preserves global access. A nonempty map requires auth and a binding for every non-admin key. \\
 \texttt{FEEDBACK\_\allowbreak{}AGENT\_\allowbreak{}API\_\allowbreak{}RATE\_\allowbreak{}LIMIT\_\allowbreak{}ENABLED} & \texttt{false} & Optional in-process fixed-window rate limiting for deployed API instances. \\
 \texttt{FEEDBACK\_\allowbreak{}AGENT\_\allowbreak{}API\_\allowbreak{}RATE\_\allowbreak{}LIMIT\_\allowbreak{}MAX\_\allowbreak{}REQUESTS} & \texttt{120} &  \\
 \texttt{FEEDBACK\_\allowbreak{}AGENT\_\allowbreak{}API\_\allowbreak{}RATE\_\allowbreak{}LIMIT\_\allowbreak{}WINDOW\_\allowbreak{}SECONDS} & \texttt{60} &  \\

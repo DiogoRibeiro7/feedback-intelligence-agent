@@ -23,13 +23,13 @@ Module & Lines & Objects & Summary \\
 \texttt{feedback\_\allowbreak{}intelligence\_\allowbreak{}agent} & 7 & 0 & Feedback Intelligence Agent package. \\
 \texttt{active\_\allowbreak{}learning} & 215 & 8 & Workflow state for active-learning follow-up items. \\
 \texttt{agent} & 522 & 3 & Agent orchestration for the feedback intelligence agent. \\
-\texttt{api} & 658 & 1 & FastAPI application. \\
-\texttt{auth} & 145 & 8 & Optional API-key authorization for the FastAPI service. \\
+\texttt{api} & 705 & 1 & FastAPI application. \\
+\texttt{auth} & 181 & 8 & Optional API-key authorization for the FastAPI service. \\
 \texttt{benchmarking} & 286 & 13 & Latency and throughput benchmarks for the RAG pipeline. \\
 \texttt{chunking} & 92 & 3 & Text chunking utilities. \\
 \texttt{citations} & 65 & 4 & Citation construction shared by the agent and the deterministic LLM provider. \\
 \texttt{cli} & 1007 & 29 & Command-line interface for the feedback intelligence agent. \\
-\texttt{config} & 113 & 4 & Application configuration. \\
+\texttt{config} & 114 & 4 & Application configuration. \\
 \texttt{data\_\allowbreak{}contracts} & 244 & 7 & Data contracts and dataset validation for customer feedback CSV files. \\
 \texttt{email\_\allowbreak{}summaries} & 178 & 6 & Email summaries for saved insight reports. \\
 \texttt{embeddings} & 78 & 3 & Embedding models. \\
@@ -103,7 +103,7 @@ Agent orchestration for the feedback intelligence agent.
 \label{module:feedback_intelligence_agent.api}\index{Modules!api}
 
 FastAPI application.
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}api.\allowbreak{}py}, 658 lines
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}api.\allowbreak{}py}, 705 lines
 \apifield{Imports}\texttt{active\_\allowbreak{}learning}, \texttt{auth}, \texttt{config}, \texttt{email\_\allowbreak{}summaries}, \texttt{factory}, \texttt{human\_\allowbreak{}feedback}, \texttt{jobs}, \texttt{memory}, \texttt{rate\_\allowbreak{}limit}, \texttt{reports}, \texttt{schemas}, \texttt{telemetry}
 \apifield{Functions}\cref{func:feedback_intelligence_agent.api.create_app}
 
@@ -112,7 +112,7 @@ FastAPI application.
 \label{module:feedback_intelligence_agent.auth}\index{Modules!auth}
 
 Optional API-key authorization for the FastAPI service.
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}auth.\allowbreak{}py}, 145 lines
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}auth.\allowbreak{}py}, 181 lines
 \apifield{Classes}\cref{class:feedback_intelligence_agent.auth.ApiRole}, \cref{class:feedback_intelligence_agent.auth.ApiPrincipal}, \cref{class:feedback_intelligence_agent.auth.ApiAuthError}, \cref{class:feedback_intelligence_agent.auth.ApiAuthConfigurationError}, \cref{class:feedback_intelligence_agent.auth.ApiAuthenticationError}, \cref{class:feedback_intelligence_agent.auth.ApiPermissionError}
 \apifield{Functions}\cref{func:feedback_intelligence_agent.auth.resolve_api_principal}, \cref{func:feedback_intelligence_agent.auth.require_api_role}
 
@@ -168,7 +168,7 @@ Command-line interface for the feedback intelligence agent.
 \label{module:feedback_intelligence_agent.config}\index{Modules!config}
 
 Application configuration.
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}config.\allowbreak{}py}, 113 lines
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}config.\allowbreak{}py}, 114 lines
 \apifield{Classes}\cref{class:feedback_intelligence_agent.config.Settings}
 \apifield{Constants}\texttt{RetrieverType}, \texttt{TelemetryBackend}, \texttt{VectorStoreType}
 

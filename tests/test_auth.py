@@ -7,10 +7,72 @@ from feedback_intelligence_agent.auth import (
     ApiAuthConfigurationError,
     ApiAuthenticationError,
     ApiPermissionError,
+    ApiPrincipal,
     ApiRole,
     require_api_role,
     resolve_api_principal,
 )
+
+
+def tenant_principal(key: str, bindings: dict[str, str], *, enabled: bool = True) -> ApiPrincipal:
+    return resolve_api_principal(
+        key,
+        auth_enabled=enabled,
+        reader_key="read",
+        writer_key="write",
+        admin_key="admin",
+        tenant_bindings=bindings,
+    )
+
+
+def test_tenant_bindings_follow_normalized_credentials_and_keep_admin_global() -> None:
+    bindings = {" read ": " Acme ", "write": "Cobalt"}
+    reader = tenant_principal(" read ", bindings)
+    assert reader.tenant_id == "acme"
+    assert reader.permits_tenant(" ACME ")
+    assert not reader.permits_tenant("cobalt")
+    assert not reader.permits_tenant(None)
+    assert tenant_principal("write", bindings).tenant_id == "cobalt"
+    assert tenant_principal("admin", bindings).permits_tenant(None)
+
+
+def test_admin_can_be_bound_without_changing_its_role_or_identity() -> None:
+    global_admin = tenant_principal("admin", {})
+    bound_admin = tenant_principal("admin", {"read": "a", "write": "b", "admin": "a"})
+    assert bound_admin.role == ApiRole.admin
+    assert bound_admin.subject_id == global_admin.subject_id
+    assert bound_admin.tenant_id == "a"
+    assert not bound_admin.permits_tenant("b")
+
+
+@pytest.mark.parametrize(
+    "bindings",
+    [
+        {"read": "acme"},
+        {"read": "acme", "write": " "},
+        {"read": "acme", "write": "cobalt", "unknown-secret": "acme"},
+        {"read": "acme", " read ": "other", "write": "cobalt"},
+    ],
+)
+def test_invalid_tenant_policy_fails_closed_without_disclosing_keys(
+    bindings: dict[str, str],
+) -> None:
+    with pytest.raises(ApiAuthConfigurationError) as failure:
+        tenant_principal("admin", bindings)
+    assert not any(key in str(failure.value) for key in ("unknown-secret", "cobalt"))
+
+
+def test_tenant_bindings_require_authentication() -> None:
+    with pytest.raises(ApiAuthConfigurationError, match="require API authentication"):
+        tenant_principal("read", {"read": "acme"}, enabled=False)
+
+
+def test_tenant_binding_changes_do_not_reuse_cached_authorization() -> None:
+    first = tenant_principal("write", {"read": "acme", "write": "cobalt"})
+    second = tenant_principal("write", {"read": "acme", "write": "acme"})
+    assert first.subject_id == second.subject_id
+    assert second.tenant_id == "acme"
+    assert not second.permits_tenant("cobalt")
 
 
 def test_resolve_api_principal_returns_admin_when_auth_is_disabled() -> None:

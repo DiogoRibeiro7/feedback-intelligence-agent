@@ -81,7 +81,7 @@
     {
       "name": "feedback_intelligence_agent.api",
       "source": "src/feedback_intelligence_agent/api.py",
-      "line_count": 658,
+      "line_count": 705,
       "public": true,
       "summary": "FastAPI application.",
       "description": "",
@@ -109,7 +109,7 @@
     {
       "name": "feedback_intelligence_agent.auth",
       "source": "src/feedback_intelligence_agent/auth.py",
-      "line_count": 145,
+      "line_count": 181,
       "public": true,
       "summary": "Optional API-key authorization for the FastAPI service.",
       "description": "",
@@ -277,7 +277,7 @@
     {
       "name": "feedback_intelligence_agent.config",
       "source": "src/feedback_intelligence_agent/config.py",
-      "line_count": 113,
+      "line_count": 114,
       "public": true,
       "summary": "Application configuration.",
       "description": "",
@@ -1371,7 +1371,7 @@
       "module": "feedback_intelligence_agent.api",
       "signature": "create_app() -> FastAPI",
       "source": "src/feedback_intelligence_agent/api.py",
-      "line": 220,
+      "line": 234,
       "public": true,
       "is_async": false,
       "decorators": [],
@@ -1397,9 +1397,9 @@
       "qualified_name": "feedback_intelligence_agent.auth.require_api_role",
       "kind": "function",
       "module": "feedback_intelligence_agent.auth",
-      "signature": "require_api_role(required_role: ApiRole, api_key: str | None, *, auth_enabled: bool, reader_key: str | None, writer_key: str | None, admin_key: str | None) -> ApiPrincipal",
+      "signature": "require_api_role(required_role: ApiRole, api_key: str | None, *, auth_enabled: bool, reader_key: str | None, writer_key: str | None, admin_key: str | None, tenant_bindings: Mapping[str, str] | None = None) -> ApiPrincipal",
       "source": "src/feedback_intelligence_agent/auth.py",
-      "line": 105,
+      "line": 118,
       "public": true,
       "is_async": false,
       "decorators": [],
@@ -1447,6 +1447,13 @@
           "default": null,
           "kind": "keyword-only",
           "description": ""
+        },
+        {
+          "name": "tenant_bindings",
+          "annotation": "Mapping[str, str] | None",
+          "default": "None",
+          "kind": "keyword-only",
+          "description": ""
         }
       ],
       "returns": {
@@ -1468,9 +1475,9 @@
       "qualified_name": "feedback_intelligence_agent.auth.resolve_api_principal",
       "kind": "function",
       "module": "feedback_intelligence_agent.auth",
-      "signature": "resolve_api_principal(api_key: str | None, *, auth_enabled: bool, reader_key: str | None, writer_key: str | None, admin_key: str | None) -> ApiPrincipal",
+      "signature": "resolve_api_principal(api_key: str | None, *, auth_enabled: bool, reader_key: str | None, writer_key: str | None, admin_key: str | None, tenant_bindings: Mapping[str, str] | None = None) -> ApiPrincipal",
       "source": "src/feedback_intelligence_agent/auth.py",
-      "line": 66,
+      "line": 74,
       "public": true,
       "is_async": false,
       "decorators": [],
@@ -1509,6 +1516,13 @@
           "name": "admin_key",
           "annotation": "str | None",
           "default": null,
+          "kind": "keyword-only",
+          "description": ""
+        },
+        {
+          "name": "tenant_bindings",
+          "annotation": "Mapping[str, str] | None",
+          "default": "None",
           "kind": "keyword-only",
           "description": ""
         }
@@ -6701,7 +6715,7 @@
         "Enum"
       ],
       "source": "src/feedback_intelligence_agent/auth.py",
-      "line": 12,
+      "line": 13,
       "public": true,
       "decorators": [],
       "summary": "API roles ordered from least to most privileged.",
@@ -10601,7 +10615,7 @@
       "path": "/answer-feedback",
       "operation": "list_answer_feedback",
       "source": "src/feedback_intelligence_agent/api.py",
-      "line": 507,
+      "line": 540,
       "status_code": "200",
       "response_model": "list[HumanFeedbackSummary]",
       "required_role": "reader",
@@ -10623,7 +10637,7 @@
       "path": "/answer-feedback",
       "operation": "submit_answer_feedback",
       "source": "src/feedback_intelligence_agent/api.py",
-      "line": 496,
+      "line": 525,
       "status_code": "201",
       "response_model": "HumanFeedbackRecord",
       "required_role": "writer",
@@ -10637,7 +10651,7 @@
       "path": "/answer-feedback/active-learning",
       "operation": "answer_feedback_active_learning",
       "source": "src/feedback_intelligence_agent/api.py",
-      "line": 525,
+      "line": 562,
       "status_code": "200",
       "response_model": "ActiveLearningQueue",
       "required_role": "reader",
@@ -10673,7 +10687,7 @@
       "path": "/answer-feedback/active-learning/states",
       "operation": "list_active_learning_states",
       "source": "src/feedback_intelligence_agent/api.py",
-      "line": 546,
+      "line": 584,
       "status_code": "200",
       "response_model": "list[ActiveLearningState]",
       "required_role": "reader",
@@ -10695,7 +10709,7 @@
       "path": "/answer-feedback/active-learning/{feedback_id}",
       "operation": "get_active_learning_state",
       "source": "src/feedback_intelligence_agent/api.py",
-      "line": 557,
+      "line": 602,
       "status_code": "200",
       "response_model": "ActiveLearningState",
       "required_role": "reader",
@@ -10717,7 +10731,7 @@
       "path": "/answer-feedback/active-learning/{feedback_id}",
       "operation": "update_active_learning_state",
       "source": "src/feedback_intelligence_agent/api.py",
-      "line": 572,
+      "line": 620,
       "status_code": "200",
       "response_model": "ActiveLearningState",
       "required_role": "writer",
@@ -10739,7 +10753,7 @@
       "path": "/answer-feedback/analytics",
       "operation": "answer_feedback_analytics",
       "source": "src/feedback_intelligence_agent/api.py",
-      "line": 516,
+      "line": 550,
       "status_code": "200",
       "response_model": "HumanFeedbackAnalytics",
       "required_role": "reader",
@@ -10761,7 +10775,7 @@
       "path": "/answer-feedback/{feedback_id}",
       "operation": "get_answer_feedback",
       "source": "src/feedback_intelligence_agent/api.py",
-      "line": 592,
+      "line": 638,
       "status_code": "200",
       "response_model": "HumanFeedbackRecord",
       "required_role": "reader",
@@ -10783,7 +10797,7 @@
       "path": "/chat",
       "operation": "chat",
       "source": "src/feedback_intelligence_agent/api.py",
-      "line": 365,
+      "line": 401,
       "status_code": "200",
       "response_model": "ChatResponse",
       "required_role": "writer",
@@ -10797,7 +10811,7 @@
       "path": "/conversations/{conversation_id}",
       "operation": "get_conversation",
       "source": "src/feedback_intelligence_agent/api.py",
-      "line": 399,
+      "line": 434,
       "status_code": "200",
       "response_model": "ConversationMemory",
       "required_role": "reader",
@@ -10819,7 +10833,7 @@
       "path": "/health",
       "operation": "health",
       "source": "src/feedback_intelligence_agent/api.py",
-      "line": 292,
+      "line": 324,
       "status_code": "200",
       "response_model": null,
       "required_role": null,
@@ -10833,7 +10847,7 @@
       "path": "/index",
       "operation": "index",
       "source": "src/feedback_intelligence_agent/api.py",
-      "line": 603,
+      "line": 645,
       "status_code": "200",
       "response_model": null,
       "required_role": "admin",
@@ -10847,7 +10861,7 @@
       "path": "/ingestion/jobs",
       "operation": "submit_ingestion_job",
       "source": "src/feedback_intelligence_agent/api.py",
-      "line": 624,
+      "line": 668,
       "status_code": "202",
       "response_model": "JobSubmitResponse",
       "required_role": "admin",
@@ -10861,7 +10875,7 @@
       "path": "/ingestion/jobs/{job_id}",
       "operation": "get_ingestion_job",
       "source": "src/feedback_intelligence_agent/api.py",
-      "line": 651,
+      "line": 697,
       "status_code": "200",
       "response_model": "JobResult",
       "required_role": "reader",
@@ -10883,7 +10897,7 @@
       "path": "/query",
       "operation": "query",
       "source": "src/feedback_intelligence_agent/api.py",
-      "line": 314,
+      "line": 346,
       "status_code": "200",
       "response_model": "QueryResponse",
       "required_role": "reader",
@@ -10897,7 +10911,7 @@
       "path": "/query/stream",
       "operation": "query_stream",
       "source": "src/feedback_intelligence_agent/api.py",
-      "line": 328,
+      "line": 361,
       "status_code": "200",
       "response_model": null,
       "required_role": "reader",
@@ -10911,7 +10925,7 @@
       "path": "/ready",
       "operation": "ready",
       "source": "src/feedback_intelligence_agent/api.py",
-      "line": 302,
+      "line": 334,
       "status_code": "200",
       "response_model": null,
       "required_role": null,
@@ -10925,7 +10939,7 @@
       "path": "/reports",
       "operation": "list_reports",
       "source": "src/feedback_intelligence_agent/api.py",
-      "line": 422,
+      "line": 460,
       "status_code": "200",
       "response_model": "list[InsightReportSummary]",
       "required_role": "reader",
@@ -10947,7 +10961,7 @@
       "path": "/reports",
       "operation": "save_report",
       "source": "src/feedback_intelligence_agent/api.py",
-      "line": 417,
+      "line": 451,
       "status_code": "201",
       "response_model": "SavedInsightReport",
       "required_role": "writer",
@@ -10961,7 +10975,7 @@
       "path": "/reports/email-summary",
       "operation": "email_report_summary",
       "source": "src/feedback_intelligence_agent/api.py",
-      "line": 431,
+      "line": 470,
       "status_code": "200",
       "response_model": "EmailSummaryDelivery",
       "required_role": "writer",
@@ -10975,7 +10989,7 @@
       "path": "/reports/{report_id}",
       "operation": "get_report",
       "source": "src/feedback_intelligence_agent/api.py",
-      "line": 480,
+      "line": 516,
       "status_code": "200",
       "response_model": "SavedInsightReport",
       "required_role": "reader",
@@ -10997,7 +11011,7 @@
       "path": "/reports/{report_id}/markdown",
       "operation": "export_report_markdown",
       "source": "src/feedback_intelligence_agent/api.py",
-      "line": 462,
+      "line": 504,
       "status_code": "200",
       "response_model": null,
       "required_role": "reader",
@@ -11566,6 +11580,19 @@
       "line": 82
     },
     {
+      "name": "api_tenant_bindings",
+      "env_var": "FEEDBACK_AGENT_API_TENANT_BINDINGS",
+      "annotation": "dict[str, str]",
+      "default": "dict()",
+      "required": false,
+      "constraints": {
+        "repr": "False"
+      },
+      "description": "",
+      "sensitive": true,
+      "line": 83
+    },
+    {
       "name": "api_rate_limit_enabled",
       "env_var": "FEEDBACK_AGENT_API_RATE_LIMIT_ENABLED",
       "annotation": "bool",
@@ -11574,7 +11601,7 @@
       "constraints": {},
       "description": "",
       "sensitive": false,
-      "line": 83
+      "line": 84
     },
     {
       "name": "api_rate_limit_max_requests",
@@ -11587,7 +11614,7 @@
       },
       "description": "",
       "sensitive": false,
-      "line": 84
+      "line": 85
     },
     {
       "name": "api_rate_limit_window_seconds",
@@ -11600,7 +11627,7 @@
       },
       "description": "",
       "sensitive": false,
-      "line": 85
+      "line": 86
     },
     {
       "name": "email_smtp_host",
@@ -11611,7 +11638,7 @@
       "constraints": {},
       "description": "",
       "sensitive": false,
-      "line": 86
+      "line": 87
     },
     {
       "name": "email_smtp_port",
@@ -11625,7 +11652,7 @@
       },
       "description": "",
       "sensitive": false,
-      "line": 87
+      "line": 88
     },
     {
       "name": "email_from_address",
@@ -11636,7 +11663,7 @@
       "constraints": {},
       "description": "",
       "sensitive": false,
-      "line": 88
+      "line": 89
     },
     {
       "name": "email_smtp_username",
@@ -11647,7 +11674,7 @@
       "constraints": {},
       "description": "",
       "sensitive": false,
-      "line": 89
+      "line": 90
     },
     {
       "name": "email_smtp_password",
@@ -11658,7 +11685,7 @@
       "constraints": {},
       "description": "",
       "sensitive": true,
-      "line": 90
+      "line": 91
     },
     {
       "name": "email_smtp_use_tls",
@@ -11669,7 +11696,7 @@
       "constraints": {},
       "description": "",
       "sensitive": false,
-      "line": 91
+      "line": 92
     },
     {
       "name": "cors_allow_origins",
@@ -11680,7 +11707,7 @@
       "constraints": {},
       "description": "",
       "sensitive": false,
-      "line": 92
+      "line": 93
     }
   ],
   "private_objects": {
@@ -11702,9 +11729,12 @@
       "feedback_intelligence_agent.api._confined_input_path",
       "feedback_intelligence_agent.api._rate_limit_headers",
       "feedback_intelligence_agent.api._rate_limit_key",
+      "feedback_intelligence_agent.api._require_global_access",
       "feedback_intelligence_agent.api._split_for_streaming",
       "feedback_intelligence_agent.api._sse_event",
+      "feedback_intelligence_agent.api._tenant_scope",
       "feedback_intelligence_agent.auth._configured_keys",
+      "feedback_intelligence_agent.auth._configured_tenants",
       "feedback_intelligence_agent.auth._subject_id",
       "feedback_intelligence_agent.benchmarking._time_calls",
       "feedback_intelligence_agent.cli._default_report_title",

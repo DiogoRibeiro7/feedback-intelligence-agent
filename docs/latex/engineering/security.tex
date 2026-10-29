@@ -22,6 +22,14 @@ appear in issues, pull requests, examples, or tests.
     no key configured raises \texttt{ApiAuthConfigurationError}, which maps to
     \texttt{500} --- a misconfiguration fails loudly rather than silently
     allowing traffic.
+  \item[Tenant authorization] An optional mapping binds configured API keys to
+    tenant identifiers. A nonempty policy requires authentication and a binding
+    for every non-admin key. Queries, streams, conversations, reports, feedback,
+    summaries, and review states enforce that scope; foreign resource IDs return
+    \texttt{404}. Global indexing and ingestion remain available only to an
+    unrestricted administrator when this policy is enabled. An empty mapping
+    preserves the original global role access. See \srcfile{README.md} for
+    configuration and conversation migration behavior.
   \item[Rate limiting] Optional, disabled by default. An in-process
     fixed-window limiter over all routes except the probes, keyed by API key
     when present and by client address otherwise. It is per worker, not per

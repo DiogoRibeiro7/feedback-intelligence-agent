@@ -146,6 +146,7 @@ def _auth_dependency(settings: Settings, role: ApiRole) -> Callable[..., ApiPrin
                 reader_key=settings.api_reader_key,
                 writer_key=settings.api_writer_key,
                 admin_key=settings.api_admin_key,
+                tenant_bindings=settings.api_tenant_bindings,
             )
         except ApiAuthConfigurationError as exc:
             raise HTTPException(status_code=500, detail=str(exc)) from exc
@@ -159,6 +160,19 @@ def _auth_dependency(settings: Settings, role: ApiRole) -> Callable[..., ApiPrin
             raise HTTPException(status_code=403, detail=str(exc)) from exc
 
     return dependency
+
+
+def _tenant_scope(principal: ApiPrincipal, requested: str | None) -> str | None:
+    """Resolve omitted tenants from credentials and reject explicit scope changes."""
+    if requested is not None and not principal.permits_tenant(requested):
+        raise HTTPException(status_code=403, detail="API key cannot access the requested tenant")
+    return principal.tenant_id if principal.tenant_id is not None else requested
+
+
+def _require_global_access(principal: ApiPrincipal) -> None:
+    """Keep shared indexing and ingestion artifacts unavailable to tenant-bound keys."""
+    if principal.tenant_id is not None:
+        raise HTTPException(status_code=403, detail="This operation requires global access")
 
 
 def _rate_limit_key(
@@ -239,6 +253,24 @@ def create_app() -> FastAPI:
             raise HTTPException(status_code=401, detail="missing authenticated identity")
         return build_conversation_store(settings, principal_id=principal.subject_id)
 
+    def caller_report(report_id: str, principal: ApiPrincipal) -> SavedInsightReport:
+        try:
+            report = report_store.get(report_id)
+        except ValueError as exc:
+            raise HTTPException(status_code=400, detail=str(exc)) from exc
+        if report is None or not principal.permits_tenant(report.tenant_id):
+            raise HTTPException(status_code=404, detail="report not found")
+        return report
+
+    def caller_feedback(feedback_id: str, principal: ApiPrincipal) -> HumanFeedbackRecord:
+        try:
+            record = human_feedback_store.get(feedback_id)
+        except ValueError as exc:
+            raise HTTPException(status_code=400, detail=str(exc)) from exc
+        if record is None or not principal.permits_tenant(record.tenant_id):
+            raise HTTPException(status_code=404, detail="answer feedback not found")
+        return record
+
     rate_limiter = InMemoryRateLimiter(
         max_requests=settings.api_rate_limit_max_requests,
         window_seconds=settings.api_rate_limit_window_seconds,
@@ -310,9 +342,10 @@ def create_app() -> FastAPI:
         """
         return {"status": "ready"}
 
-    @app.post("/query", response_model=QueryResponse, dependencies=[reader_access])
-    def query(request: QueryRequest) -> QueryResponse:
+    @app.post("/query", response_model=QueryResponse)
+    def query(request: QueryRequest, principal: ApiPrincipal = reader_access) -> QueryResponse:
         """Answer a question using the feedback insight agent."""
+        request.tenant_id = _tenant_scope(principal, request.tenant_id)
         try:
             result = agent.answer(
                 request.question,
@@ -324,8 +357,10 @@ def create_app() -> FastAPI:
             raise HTTPException(status_code=400, detail=str(exc)) from exc
         return QueryResponse(result=result)
 
-    @app.post("/query/stream", dependencies=[reader_access])
-    def query_stream(request: QueryRequest) -> StreamingResponse:
+    @app.post("/query/stream")
+    def query_stream(
+        request: QueryRequest, principal: ApiPrincipal = reader_access
+    ) -> StreamingResponse:
         """Answer a question as a Server-Sent Events stream.
 
         Emits ``content`` events whose JSON ``text`` fields concatenate to the
@@ -337,6 +372,7 @@ def create_app() -> FastAPI:
         local provider) are supported by replaying the final answer in small
         chunks, so the endpoint works without external LLM APIs.
         """
+        request.tenant_id = _tenant_scope(principal, request.tenant_id)
         started = time.perf_counter()
         try:
             result = agent.answer(
@@ -368,14 +404,13 @@ def create_app() -> FastAPI:
         Omit ``conversation_id`` to start a new conversation; pass it back to
         continue the same conversation with previous turns as context.
         """
+        request.tenant_id = _tenant_scope(principal, request.tenant_id)
         caller_store = caller_conversation_store(principal)
         try:
-            if (
-                principal.authenticated
-                and request.conversation_id is not None
-                and caller_store.get(request.conversation_id) is None
-            ):
-                raise HTTPException(status_code=404, detail="conversation not found")
+            if principal.authenticated and request.conversation_id is not None:
+                memory = caller_store.get(request.conversation_id)
+                if memory is None or not principal.permits_tenant(memory.tenant_id):
+                    raise HTTPException(status_code=404, detail="conversation not found")
             result, conversation_id = agent.chat(
                 request.message,
                 store=caller_store,
@@ -404,7 +439,7 @@ def create_app() -> FastAPI:
             memory = caller_conversation_store(principal).get(conversation_id)
         except ValueError as exc:
             raise HTTPException(status_code=400, detail=str(exc)) from exc
-        if memory is None:
+        if memory is None or not principal.permits_tenant(memory.tenant_id):
             raise HTTPException(status_code=404, detail="conversation not found")
         return memory
 
@@ -412,24 +447,31 @@ def create_app() -> FastAPI:
         "/reports",
         response_model=SavedInsightReport,
         status_code=201,
-        dependencies=[writer_access],
     )
-    def save_report(request: SaveInsightReportRequest) -> SavedInsightReport:
+    def save_report(
+        request: SaveInsightReportRequest, principal: ApiPrincipal = writer_access
+    ) -> SavedInsightReport:
         """Persist a generated insight answer as a saved report."""
+        requested = request.tenant_id if "tenant_id" in request.model_fields_set else None
+        request.tenant_id = _tenant_scope(principal, requested) or request.tenant_id
         return report_store.save(request)
 
-    @app.get("/reports", response_model=list[InsightReportSummary], dependencies=[reader_access])
-    def list_reports(tenant_id: str | None = None) -> list[InsightReportSummary]:
+    @app.get("/reports", response_model=list[InsightReportSummary])
+    def list_reports(
+        tenant_id: str | None = None, principal: ApiPrincipal = reader_access
+    ) -> list[InsightReportSummary]:
         """Return saved insight report summaries."""
-        return report_store.list(tenant_id=tenant_id)
+        return report_store.list(tenant_id=_tenant_scope(principal, tenant_id))
 
     @app.post(
         "/reports/email-summary",
         response_model=EmailSummaryDelivery,
-        dependencies=[writer_access],
     )
-    def email_report_summary(request: EmailSummaryRequest) -> EmailSummaryDelivery:
+    def email_report_summary(
+        request: EmailSummaryRequest, principal: ApiPrincipal = writer_access
+    ) -> EmailSummaryDelivery:
         """Render or send an email digest for saved insight reports."""
+        request.tenant_id = _tenant_scope(principal, request.tenant_id)
         try:
             reports = select_reports_for_summary(
                 report_store,
@@ -458,15 +500,10 @@ def create_app() -> FastAPI:
         except ValueError as exc:
             raise HTTPException(status_code=400, detail=str(exc)) from exc
 
-    @app.get("/reports/{report_id}/markdown", dependencies=[reader_access])
-    def export_report_markdown(report_id: str) -> Response:
+    @app.get("/reports/{report_id}/markdown")
+    def export_report_markdown(report_id: str, principal: ApiPrincipal = reader_access) -> Response:
         """Return one saved insight report as Markdown."""
-        try:
-            report = report_store.get(report_id)
-        except ValueError as exc:
-            raise HTTPException(status_code=400, detail=str(exc)) from exc
-        if report is None:
-            raise HTTPException(status_code=404, detail="report not found")
+        report = caller_report(report_id, principal)
         return Response(
             content=render_report_markdown(report),
             media_type="text/markdown; charset=utf-8",
@@ -475,59 +512,61 @@ def create_app() -> FastAPI:
     @app.get(
         "/reports/{report_id}",
         response_model=SavedInsightReport,
-        dependencies=[reader_access],
     )
-    def get_report(report_id: str) -> SavedInsightReport:
+    def get_report(report_id: str, principal: ApiPrincipal = reader_access) -> SavedInsightReport:
         """Return one saved insight report."""
-        try:
-            report = report_store.get(report_id)
-        except ValueError as exc:
-            raise HTTPException(status_code=400, detail=str(exc)) from exc
-        if report is None:
-            raise HTTPException(status_code=404, detail="report not found")
-        return report
+        return caller_report(report_id, principal)
 
     @app.post(
         "/answer-feedback",
         response_model=HumanFeedbackRecord,
         status_code=201,
-        dependencies=[writer_access],
     )
     def submit_answer_feedback(
         request: SubmitHumanFeedbackRequest,
+        principal: ApiPrincipal = writer_access,
     ) -> HumanFeedbackRecord:
         """Persist a human judgement on a generated answer."""
+        requested = request.tenant_id if "tenant_id" in request.model_fields_set else None
+        request.tenant_id = _tenant_scope(principal, requested) or request.tenant_id
+        if principal.tenant_id is not None and request.report_id is not None:
+            caller_report(request.report_id, principal)
         return human_feedback_store.save(request)
 
     @app.get(
         "/answer-feedback",
         response_model=list[HumanFeedbackSummary],
-        dependencies=[reader_access],
     )
-    def list_answer_feedback(tenant_id: str | None = None) -> list[HumanFeedbackSummary]:
+    def list_answer_feedback(
+        tenant_id: str | None = None, principal: ApiPrincipal = reader_access
+    ) -> list[HumanFeedbackSummary]:
         """Return human feedback summaries."""
-        return human_feedback_store.list(tenant_id=tenant_id)
+        return human_feedback_store.list(tenant_id=_tenant_scope(principal, tenant_id))
 
     @app.get(
         "/answer-feedback/analytics",
         response_model=HumanFeedbackAnalytics,
-        dependencies=[reader_access],
     )
-    def answer_feedback_analytics(tenant_id: str | None = None) -> HumanFeedbackAnalytics:
+    def answer_feedback_analytics(
+        tenant_id: str | None = None, principal: ApiPrincipal = reader_access
+    ) -> HumanFeedbackAnalytics:
         """Return aggregate human answer feedback metrics."""
-        return summarise_human_feedback(human_feedback_store.list(tenant_id=tenant_id))
+        return summarise_human_feedback(
+            human_feedback_store.list(tenant_id=_tenant_scope(principal, tenant_id))
+        )
 
     @app.get(
         "/answer-feedback/active-learning",
         response_model=ActiveLearningQueue,
-        dependencies=[reader_access],
     )
     def answer_feedback_active_learning(
         tenant_id: str | None = None,
         max_items: int = 20,
         low_confidence_threshold: float = 0.65,
+        principal: ApiPrincipal = reader_access,
     ) -> ActiveLearningQueue:
         """Return reviewed answers that should be queued for improvement work."""
+        tenant_id = _tenant_scope(principal, tenant_id)
         try:
             queue = build_active_learning_queue(
                 human_feedback_store.list(tenant_id=tenant_id),
@@ -541,21 +580,31 @@ def create_app() -> FastAPI:
     @app.get(
         "/answer-feedback/active-learning/states",
         response_model=list[ActiveLearningState],
-        dependencies=[reader_access],
     )
     def list_active_learning_states(
         status: ActiveLearningStatus | None = None,
+        principal: ApiPrincipal = reader_access,
     ) -> list[ActiveLearningState]:
         """Return persisted active-learning workflow states."""
-        return active_learning_state_store.list(status=status)
+        states = active_learning_state_store.list(status=status)
+        if principal.tenant_id is None:
+            return states
+        visible_ids = {
+            record.feedback_id
+            for record in human_feedback_store.list(tenant_id=principal.tenant_id)
+        }
+        return [state for state in states if state.feedback_id in visible_ids]
 
     @app.get(
         "/answer-feedback/active-learning/{feedback_id}",
         response_model=ActiveLearningState,
-        dependencies=[reader_access],
     )
-    def get_active_learning_state(feedback_id: str) -> ActiveLearningState:
+    def get_active_learning_state(
+        feedback_id: str, principal: ApiPrincipal = reader_access
+    ) -> ActiveLearningState:
         """Return workflow state for one active-learning queue item."""
+        if principal.tenant_id is not None:
+            caller_feedback(feedback_id, principal)
         try:
             state = active_learning_state_store.get(feedback_id)
         except ValueError as exc:
@@ -567,17 +616,15 @@ def create_app() -> FastAPI:
     @app.patch(
         "/answer-feedback/active-learning/{feedback_id}",
         response_model=ActiveLearningState,
-        dependencies=[writer_access],
     )
     def update_active_learning_state(
         feedback_id: str,
         request: UpdateActiveLearningStateRequest,
+        principal: ApiPrincipal = writer_access,
     ) -> ActiveLearningState:
         """Assign or transition one active-learning queue item."""
         try:
-            feedback = human_feedback_store.get(feedback_id)
-            if feedback is None:
-                raise HTTPException(status_code=404, detail="answer feedback not found")
+            caller_feedback(feedback_id, principal)
             return active_learning_state_store.update(feedback_id, request)
         except HTTPException:
             raise
@@ -587,21 +634,19 @@ def create_app() -> FastAPI:
     @app.get(
         "/answer-feedback/{feedback_id}",
         response_model=HumanFeedbackRecord,
-        dependencies=[reader_access],
     )
-    def get_answer_feedback(feedback_id: str) -> HumanFeedbackRecord:
+    def get_answer_feedback(
+        feedback_id: str, principal: ApiPrincipal = reader_access
+    ) -> HumanFeedbackRecord:
         """Return one human feedback record."""
-        try:
-            record = human_feedback_store.get(feedback_id)
-        except ValueError as exc:
-            raise HTTPException(status_code=400, detail=str(exc)) from exc
-        if record is None:
-            raise HTTPException(status_code=404, detail="answer feedback not found")
-        return record
+        return caller_feedback(feedback_id, principal)
 
-    @app.post("/index", dependencies=[admin_access])
-    def index(request: IndexRequest) -> dict[str, str | int]:
+    @app.post("/index")
+    def index(
+        request: IndexRequest, principal: ApiPrincipal = admin_access
+    ) -> dict[str, str | int]:
         """Rebuild the local vector index from a CSV path."""
+        _require_global_access(principal)
         index_path = _confined_index_path(request.index_path, settings.index_path)
         input_path = _confined_input_path(request.input_path, settings.data_path)
         try:
@@ -619,10 +664,11 @@ def create_app() -> FastAPI:
         "/ingestion/jobs",
         response_model=JobSubmitResponse,
         status_code=202,
-        dependencies=[admin_access],
     )
     def submit_ingestion_job(
-        request: JobRequest, background_tasks: BackgroundTasks
+        request: JobRequest,
+        background_tasks: BackgroundTasks,
+        principal: ApiPrincipal = admin_access,
     ) -> JobSubmitResponse:
         """Submit an asynchronous ingestion job.
 
@@ -631,6 +677,7 @@ def create_app() -> FastAPI:
         ``BackgroundTasks``, and returns the job id immediately. Poll
         ``GET /ingestion/jobs/{job_id}`` for the terminal status.
         """
+        _require_global_access(principal)
         request.index_path = _confined_index_path(request.index_path, settings.index_path)
         request.input_path = _confined_input_path(request.input_path, settings.data_path)
         job = job_store.create(request)
@@ -646,10 +693,10 @@ def create_app() -> FastAPI:
     @app.get(
         "/ingestion/jobs/{job_id}",
         response_model=JobResult,
-        dependencies=[reader_access],
     )
-    def get_ingestion_job(job_id: str) -> JobResult:
+    def get_ingestion_job(job_id: str, principal: ApiPrincipal = reader_access) -> JobResult:
         """Return the status and result of an ingestion job; 404 if unknown."""
+        _require_global_access(principal)
         job = job_store.get(job_id)
         if job is None:
             raise HTTPException(status_code=404, detail="job not found")
