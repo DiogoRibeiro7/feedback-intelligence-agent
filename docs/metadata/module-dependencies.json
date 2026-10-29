@@ -1741,7 +1741,7 @@
       "source": "qdrant_store",
       "target": "source_ids",
       "context": "eager",
-      "names": "SourceIdMigrationError, migrate_legacy_chunks"
+      "names": "SourceIdMigrationError, encode_source_id, migrate_legacy_chunks"
     },
     {
       "source": "record_ingestion",

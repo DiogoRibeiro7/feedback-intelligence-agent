@@ -29,9 +29,9 @@
     ],
     "date_released": "2026-10-29",
     "python_requires": ">=3.10,<3.13",
-    "revision": "6381d55ffc81161b9d963ccd83ce961509f444c0",
-    "revision_short": "6381d55ffc81",
-    "revision_date": "2026-10-29T18:17:24Z",
+    "revision": "1c86b0da13a924e224e4b977a2ec1e81756c4a52",
+    "revision_short": "1c86b0da13a9",
+    "revision_date": "2026-10-29T18:52:03Z",
     "packages": [
       {
         "include": "feedback_intelligence_agent",
@@ -43,7 +43,7 @@
     }
   },
   "files": {
-    "total": 229,
+    "total": 230,
     "excluded_generated_documentation": 329,
     "by_category": {
       "build-configuration": 1,
@@ -65,7 +65,7 @@
       "other": 2,
       "python-script": 3,
       "python-source": 49,
-      "python-test": 51,
+      "python-test": 52,
       "repository-configuration": 2,
       "repository-governance": 8,
       "test-fixture": 2
@@ -97,11 +97,11 @@
       },
       "Markdown": {
         "files": 17,
-        "lines": 3159
+        "lines": 3196
       },
       "Python": {
-        "files": 115,
-        "lines": 30599
+        "files": 116,
+        "lines": 31114
       },
       "TOML": {
         "files": 2,
@@ -113,7 +113,7 @@
       },
       "YAML": {
         "files": 16,
-        "lines": 737
+        "lines": 773
       }
     },
     "entries": [
@@ -198,8 +198,8 @@
         "path": ".github/workflows/ci.yml",
         "category": "ci-workflow",
         "language": "YAML",
-        "lines": 164,
-        "bytes": 4766
+        "lines": 200,
+        "bytes": 5830
       },
       {
         "path": ".github/workflows/dependency-review.yml",
@@ -254,8 +254,8 @@
         "path": "CHANGELOG.md",
         "category": "documentation",
         "language": "Markdown",
-        "lines": 195,
-        "bytes": 9981
+        "lines": 201,
+        "bytes": 10445
       },
       {
         "path": "CITATION.cff",
@@ -303,15 +303,15 @@
         "path": "README.md",
         "category": "documentation",
         "language": "Markdown",
-        "lines": 1402,
-        "bytes": 67284
+        "lines": 1432,
+        "bytes": 69088
       },
       {
         "path": "ROADMAP.md",
         "category": "documentation",
         "language": "Markdown",
-        "lines": 80,
-        "bytes": 3722
+        "lines": 81,
+        "bytes": 3805
       },
       {
         "path": "SECURITY.md",
@@ -1241,8 +1241,8 @@
         "path": "src/feedback_intelligence_agent/qdrant_store.py",
         "category": "python-source",
         "language": "Python",
-        "lines": 237,
-        "bytes": 9279
+        "lines": 351,
+        "bytes": 14505
       },
       {
         "path": "src/feedback_intelligence_agent/query_expansion.py",
@@ -1609,11 +1609,18 @@
         "bytes": 2835
       },
       {
+        "path": "tests/test_qdrant_integration.py",
+        "category": "python-test",
+        "language": "Python",
+        "lines": 121,
+        "bytes": 4735
+      },
+      {
         "path": "tests/test_qdrant_store.py",
         "category": "python-test",
         "language": "Python",
-        "lines": 420,
-        "bytes": 15658
+        "lines": 700,
+        "bytes": 26630
       },
       {
         "path": "tests/test_query_expansion.py",
@@ -2473,6 +2480,56 @@
           ]
         },
         {
+          "id": "qdrant-integration",
+          "name": "Qdrant source updates (${{ matrix.python-version }})",
+          "runs_on": "ubuntu-latest",
+          "needs": [],
+          "matrix": {
+            "python-version": [
+              "3.10",
+              "3.12"
+            ]
+          },
+          "steps": [
+            {
+              "name": "Checkout",
+              "uses": "actions/checkout@v7",
+              "run": "",
+              "working_directory": ""
+            },
+            {
+              "name": "Install Poetry",
+              "uses": "",
+              "run": "pipx install poetry==2.2.1",
+              "working_directory": ""
+            },
+            {
+              "name": "Set up Python",
+              "uses": "actions/setup-python@v7",
+              "run": "",
+              "working_directory": ""
+            },
+            {
+              "name": "Install Qdrant extra",
+              "uses": "",
+              "run": "poetry install --with dev --extras qdrant",
+              "working_directory": ""
+            },
+            {
+              "name": "Wait for Qdrant readiness",
+              "uses": "",
+              "run": "curl --fail --retry 20 --retry-connrefused --retry-delay 1 http://localhost:6333/readyz",
+              "working_directory": ""
+            },
+            {
+              "name": "Test Qdrant persistence and replacements",
+              "uses": "",
+              "run": "poetry run pytest tests/test_qdrant_store.py tests/test_qdrant_integration.py",
+              "working_directory": ""
+            }
+          ]
+        },
+        {
           "id": "windows-persistence",
           "name": "Windows index persistence",
           "runs_on": "windows-latest",
@@ -3260,11 +3317,18 @@
       "parametrized_cases": 0
     },
     {
+      "path": "tests/test_qdrant_integration.py",
+      "module_under_test": "qdrant_integration",
+      "category": "unit",
+      "test_functions": 3,
+      "parametrized_cases": 1
+    },
+    {
       "path": "tests/test_qdrant_store.py",
       "module_under_test": "qdrant_store",
       "category": "unit",
-      "test_functions": 13,
-      "parametrized_cases": 3
+      "test_functions": 21,
+      "parametrized_cases": 7
     },
     {
       "path": "tests/test_query_expansion.py",

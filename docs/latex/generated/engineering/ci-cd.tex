@@ -20,7 +20,7 @@ Workflow & File & Triggers & Jobs & Concurrency group \\
 \endfoot
 \bottomrule
 \endlastfoot
-CI & \texttt{.\allowbreak{}github/\allowbreak{}workflows/\allowbreak{}ci.\allowbreak{}yml} & pull\_request, push & 4 & yes \\
+CI & \texttt{.\allowbreak{}github/\allowbreak{}workflows/\allowbreak{}ci.\allowbreak{}yml} & pull\_request, push & 5 & yes \\
 Dependency Review & \texttt{.\allowbreak{}github/\allowbreak{}workflows/\allowbreak{}dependency-\allowbreak{}review.\allowbreak{}yml} & pull\_request & 1 & no \\
 Docker & \texttt{.\allowbreak{}github/\allowbreak{}workflows/\allowbreak{}docker.\allowbreak{}yml} & pull\_request, push & 1 & yes \\
 Frontend CI & \texttt{.\allowbreak{}github/\allowbreak{}workflows/\allowbreak{}frontend.\allowbreak{}yml} & pull\_request, push & 1 & yes \\
@@ -142,6 +142,36 @@ Security & \texttt{.\allowbreak{}github/\allowbreak{}workflows/\allowbreak{}secu
 3 & Set up Python & \texttt{actions/\allowbreak{}setup-\allowbreak{}python@v7} & -- \\
 4 & Install tracking extra & -- & \texttt{poetry install -\allowbreak{}-\allowbreak{}with dev -\allowbreak{}-\allowbreak{}extras mlflow} \\
 5 & Test local tracking backends & -- & \texttt{poetry run pytest tests/\allowbreak{}test\_\allowbreak{}mlflow\_\allowbreak{}integration.\allowbreak{}py} \\
+\end{longtable}
+
+\subsection*{Job \texttt{qdrant-integration}}
+\begin{itemize}[nosep]
+  \item Runner: ubuntu-latest
+  \item Matrix: python-version: 3.10, 3.12
+  \item Depends on: nothing
+  \item Steps: 6
+\end{itemize}
+
+\begin{longtable}{>{\raggedright\arraybackslash\small}p{0.04\textwidth} >{\raggedright\arraybackslash\small}p{0.24\textwidth} >{\raggedright\arraybackslash\small}p{0.26\textwidth} >{\raggedright\arraybackslash\small}p{0.36\textwidth}}
+\toprule
+\# & Step & Action & Command \\
+\midrule
+\endfirsthead
+\toprule
+\# & Step & Action & Command \\
+\midrule
+\endhead
+\midrule
+\multicolumn{4}{r}{\footnotesize continued on next page}\\
+\endfoot
+\bottomrule
+\endlastfoot
+1 & Checkout & \texttt{actions/\allowbreak{}checkout@v7} & -- \\
+2 & Install Poetry & -- & \texttt{pipx install poetry==2.\allowbreak{}2.\allowbreak{}1} \\
+3 & Set up Python & \texttt{actions/\allowbreak{}setup-\allowbreak{}python@v7} & -- \\
+4 & Install Qdrant extra & -- & \texttt{poetry install -\allowbreak{}-\allowbreak{}with dev -\allowbreak{}-\allowbreak{}extras qdrant} \\
+5 & Wait for Qdrant readiness & -- & \texttt{curl -\allowbreak{}-\allowbreak{}fail -\allowbreak{}-\allowbreak{}retry 20 -\allowbreak{}-\allowbreak{}retry-\allowbreak{}connrefused -\allowbreak{}-\allowbreak{}retry-\allowbreak{}delay 1 http:/\allowbreak{}/\allowbreak{}localhost:6333/\allowbreak{}readyz} \\
+6 & Test Qdrant persistence and replacements & -- & \texttt{poetry run pytest tests/\allowbreak{}test\_\allowbreak{}qdrant\_\allowbreak{}store.\allowbreak{}py tests/\allowbreak{}test\_\allowbreak{}qdrant\_\allowbreak{}integration.\allowbreak{}py} \\
 \end{longtable}
 
 \subsection*{Job \texttt{windows-persistence}}

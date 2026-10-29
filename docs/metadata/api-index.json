@@ -933,7 +933,7 @@
     {
       "name": "feedback_intelligence_agent.qdrant_store",
       "source": "src/feedback_intelligence_agent/qdrant_store.py",
-      "line_count": 237,
+      "line_count": 351,
       "public": true,
       "summary": "Optional Qdrant-backed vector store.",
       "description": "The store mirrors the semantics of the default ``InMemoryVectorStore`` but\npersists vectors in a running Qdrant instance instead of a local JSON file.\nIt satisfies the same ``VectorStore`` protocol, so the retrieval layer treats both\nstores identically.\n\n``qdrant-client`` is an *optional* dependency (poetry extra ``qdrant``) and is\nimported lazily, with an actionable error if it is not installed. This keeps the\ndefault install lean and the deterministic local path free of any external\nservice.",
@@ -11982,6 +11982,7 @@
       "feedback_intelligence_agent.qdrant_store._chunk_to_point_id",
       "feedback_intelligence_agent.qdrant_store._import_qdrant_client",
       "feedback_intelligence_agent.qdrant_store._payload_to_chunk",
+      "feedback_intelligence_agent.qdrant_store._validate_source_chunks",
       "feedback_intelligence_agent.rate_limit._reset_after",
       "feedback_intelligence_agent.reports._matches_tenant",
       "feedback_intelligence_agent.reports._report_from_request",

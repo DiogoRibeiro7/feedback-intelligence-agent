@@ -28,11 +28,11 @@ QdrantVectorStore(self, dim: int, *, url: str = 'http://localhost:6333', collect
   \item[\texttt{chunks}] Return all indexed chunks, reconstructed from point payloads.
 \end{arglist}
 \apifield{Details}The collection is created on demand using \texttt{Distance.\allowbreak{}COSINE} so the scoring orientation matches the in-memory store: higher scores mean more similar.
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}qdrant\_\allowbreak{}store.\allowbreak{}py:58}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/6381d55ffc81161b9d963ccd83ce961509f444c0/src/feedback_intelligence_agent/qdrant_store.py#L58}{online}), class, module \cref{module:feedback_intelligence_agent.qdrant_store}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}qdrant\_\allowbreak{}store.\allowbreak{}py:62}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/1c86b0da13a924e224e4b977a2ec1e81756c4a52/src/feedback_intelligence_agent/qdrant_store.py#L62}{online}), class, module \cref{module:feedback_intelligence_agent.qdrant_store}
 
 \subsection{\texttt{add}}
 \label{method:feedback_intelligence_agent.qdrant_store.QdrantVectorStore.add}\index{Methods!add}
-Upsert chunks and their vectors into the collection.
+Upsert chunk IDs and wait for completion; retain other chunks of each source.
 \apifield{Usage}
 \begin{lstlisting}[style=usage, language=Python]
 add(self, chunks: list[DocumentChunk], vectors: npt.NDArray[np.float64]) -> None
@@ -42,8 +42,28 @@ add(self, chunks: list[DocumentChunk], vectors: npt.NDArray[np.float64]) -> None
   \item[\texttt{chunks}] \texttt{list[DocumentChunk]\allowbreak{}}, required.
   \item[\texttt{vectors}] \texttt{npt.\allowbreak{}NDArray[np.\allowbreak{}float64]\allowbreak{}}, required.
 \end{arglist}
-\apifield{Raises}\texttt{ValueError}
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}qdrant\_\allowbreak{}store.\allowbreak{}py:134}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/6381d55ffc81161b9d963ccd83ce961509f444c0/src/feedback_intelligence_agent/qdrant_store.py#L134}{online})
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}qdrant\_\allowbreak{}store.\allowbreak{}py:138}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/1c86b0da13a924e224e4b977a2ec1e81756c4a52/src/feedback_intelligence_agent/qdrant_store.py#L138}{online})
+
+\subsection{\texttt{upsert\_sources}}
+\label{method:feedback_intelligence_agent.qdrant_store.QdrantVectorStore.upsert_sources}\index{Methods!upsert\_sources}
+Replace complete tenant-scoped sources, including obsolete trailing chunks.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+upsert_sources(self, chunks: list[DocumentChunk], vectors: npt.NDArray[np.float64]) -> int
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{chunks}] \texttt{list[DocumentChunk]\allowbreak{}}, required.
+  \item[\texttt{vectors}] \texttt{npt.\allowbreak{}NDArray[np.\allowbreak{}float64]\allowbreak{}}, required.
+\end{arglist}
+\apifield{Value}\texttt{int}
+\apifield{Raises}\texttt{QdrantStoreError}
+\apifield{Details}Supply chunks produced by \texttt{feedback\_\allowbreak{}to\_\allowbreak{}chunks} with canonical source, chunk, tenant, and feedback identities. All input is validated before any remote mutation. New points are upserted with \texttt{wait=True} before obsolete point IDs are deleted, also with \texttt{wait=True}. Other sources are untouched.
+
+This is not a transaction: readers can see intermediate state and a remote failure can leave a partial update. Retrying the identical batch converges. Callers must serialize concurrent writes to the same sources, including writes through other clients. Disjoint sources may be updated independently.
+
+Returns the number of previous chunks belonging to the supplied sources, including overwritten chunk IDs, matching the in-memory store's counts. An empty batch is a no-op, not a request to delete a source.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}qdrant\_\allowbreak{}store.\allowbreak{}py:173}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/1c86b0da13a924e224e4b977a2ec1e81756c4a52/src/feedback_intelligence_agent/qdrant_store.py#L173}{online})
 
 \subsection{\texttt{search}}
 \label{method:feedback_intelligence_agent.qdrant_store.QdrantVectorStore.search}\index{Methods!search}
@@ -61,4 +81,4 @@ search(self, query_vector: npt.NDArray[np.float64], *, top_k: int = 4, filters: 
 \apifield{Value}\texttt{list[SearchResult]\allowbreak{}}
 \apifield{Raises}\texttt{ValueError}
 \apifield{Details}Local matching preserves case-insensitive and legacy metadata semantics without requiring a payload migration. Selective filters may scan many pages; each page is bounded, but there is no fixed candidate cutoff.
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}qdrant\_\allowbreak{}store.\allowbreak{}py:156}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/6381d55ffc81161b9d963ccd83ce961509f444c0/src/feedback_intelligence_agent/qdrant_store.py#L156}{online})
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}qdrant\_\allowbreak{}store.\allowbreak{}py:241}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/1c86b0da13a924e224e4b977a2ec1e81756c4a52/src/feedback_intelligence_agent/qdrant_store.py#L241}{online})
