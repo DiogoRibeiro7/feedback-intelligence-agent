@@ -8,6 +8,7 @@ replaced before new chunks are appended.
 
 from __future__ import annotations
 
+from collections.abc import Callable
 from pathlib import Path
 
 from pydantic import BaseModel, Field
@@ -43,8 +44,14 @@ def update_json_index(
     chunk_size: int = 80,
     chunk_overlap: int = 16,
     telemetry: Telemetry | None = None,
+    prepare_snapshot: Callable[[InMemoryVectorStore], None] | None = None,
 ) -> IncrementalIndexResult:
-    """Merge records under a writer lock, then atomically replace the JSON index."""
+    """Merge records under a writer lock, then atomically replace the JSON index.
+
+    An optional consumer can prepare a retrieval snapshot before persistence.
+    If preparation raises, the previous index is preserved. The consumer must
+    not publish the snapshot until this function returns successfully.
+    """
     if embedding_dim <= 0:
         raise ValueError("embedding_dim must be positive")
     if chunk_overlap >= chunk_size:
@@ -85,6 +92,8 @@ def update_json_index(
                     [chunk_to_embedding_text(chunk) for chunk in chunks]
                 )
                 removed_chunks = store.upsert_sources(chunks, vectors)
+            if prepare_snapshot is not None:
+                prepare_snapshot(store)
             store.save(output_path)
             updated_records = sum(
                 1 for record in deduped if scoped_source_id(record) in existing_source_ids

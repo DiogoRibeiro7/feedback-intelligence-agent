@@ -27,7 +27,10 @@ appear in issues, pull requests, examples, or tests.
     for every non-admin key. Queries, streams, conversations, reports, feedback,
     summaries, and review states enforce that scope; foreign resource IDs return
     \texttt{404}. Global indexing and ingestion remain available only to an
-    unrestricted administrator when this policy is enabled. An empty mapping
+    unrestricted administrator when this policy is enabled. Tenant-bound writers
+    and admins can submit validated record batches to their own JSON index scope;
+    the endpoint accepts no filesystem paths and exposes only batch-local counts.
+    An empty mapping
     preserves the original global role access. See \srcfile{README.md} for
     configuration and conversation migration behavior.
   \item[Rate limiting] Optional, disabled by default. An in-process
