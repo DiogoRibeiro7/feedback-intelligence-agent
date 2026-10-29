@@ -1,0 +1,24 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{build\_agent\_snapshot}}
+\label{func:feedback_intelligence_agent.factory.build_agent_snapshot}\index{Functions!build\_agent\_snapshot}
+
+Rebuild retrieval and dataset tools while retaining provider and policy state.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+build_agent_snapshot(settings: Settings, vector_store: VectorStore, *, previous: FeedbackInsightAgent) -> FeedbackInsightAgent
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{settings}] \texttt{Settings}, required.
+  \item[\texttt{vector\_\allowbreak{}store}] \texttt{VectorStore}, required.
+  \item[\texttt{previous}] \texttt{FeedbackInsightAgent}, required, keyword-only.
+\end{arglist}
+\apifield{Value}\texttt{FeedbackInsightAgent}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}factory.\allowbreak{}py:341}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/6381d55ffc81161b9d963ccd83ce961509f444c0/src/feedback_intelligence_agent/factory.py#L341}{online}), module \cref{module:feedback_intelligence_agent.factory}

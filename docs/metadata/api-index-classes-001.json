@@ -1057,6 +1057,168 @@
       "notes": ""
     },
     {
+      "name": "AgentSnapshots",
+      "qualified_name": "feedback_intelligence_agent.agent_snapshots.AgentSnapshots",
+      "kind": "class",
+      "module": "feedback_intelligence_agent.agent_snapshots",
+      "bases": [],
+      "source": "src/feedback_intelligence_agent/agent_snapshots.py",
+      "line": 28,
+      "public": true,
+      "decorators": [],
+      "summary": "Keep one agent per committed JSON index version in each API worker.",
+      "description": "Cooperating writers use atomic replacement and the shared index writer lock.\nThe unchanged-file fast path needs only a stat call; it does not wait for a\nwriter preparing an update. Changed files are loaded and published under\nthat same lock, serializing reloads with ingestion and preventing stale\npublication. Each request retains its selected agent for its whole answer.\nQdrant keeps its existing startup behavior without touching a JSON path.",
+      "attributes": [],
+      "methods": [
+        {
+          "name": "get",
+          "qualified_name": "feedback_intelligence_agent.agent_snapshots.AgentSnapshots.get",
+          "kind": "method",
+          "module": "feedback_intelligence_agent.agent_snapshots",
+          "signature": "get(self) -> FeedbackInsightAgent",
+          "source": "src/feedback_intelligence_agent/agent_snapshots.py",
+          "line": 49,
+          "public": true,
+          "is_async": false,
+          "decorators": [],
+          "summary": "Return the current snapshot, or fail closed until an invalid index recovers.",
+          "description": "A failed reload leaves the last good snapshot intact for in-flight\nrequests but raises for new requests. It never rebuilds from the CSV;\nthe next request retries the committed file, even after preparation fails.",
+          "parameters": [
+            {
+              "name": "self",
+              "annotation": null,
+              "default": null,
+              "kind": "positional-or-keyword",
+              "description": ""
+            }
+          ],
+          "returns": {
+            "annotation": "FeedbackInsightAgent",
+            "description": ""
+          },
+          "raises": [
+            {
+              "exception": "IndexSnapshotUnavailableError",
+              "description": ""
+            }
+          ],
+          "examples": "",
+          "notes": "",
+          "see_also": []
+        },
+        {
+          "name": "ingest",
+          "qualified_name": "feedback_intelligence_agent.agent_snapshots.AgentSnapshots.ingest",
+          "kind": "method",
+          "module": "feedback_intelligence_agent.agent_snapshots",
+          "signature": "ingest(self, records: list[FeedbackRecord], tenant_id: str) -> RecordIngestionResult",
+          "source": "src/feedback_intelligence_agent/agent_snapshots.py",
+          "line": 75,
+          "public": true,
+          "is_async": false,
+          "decorators": [],
+          "summary": "Persist a tenant batch and publish its prepared snapshot before unlocking.",
+          "description": "",
+          "parameters": [
+            {
+              "name": "self",
+              "annotation": null,
+              "default": null,
+              "kind": "positional-or-keyword",
+              "description": ""
+            },
+            {
+              "name": "records",
+              "annotation": "list[FeedbackRecord]",
+              "default": null,
+              "kind": "positional-or-keyword",
+              "description": ""
+            },
+            {
+              "name": "tenant_id",
+              "annotation": "str",
+              "default": null,
+              "kind": "positional-or-keyword",
+              "description": ""
+            }
+          ],
+          "returns": {
+            "annotation": "RecordIngestionResult",
+            "description": ""
+          },
+          "raises": [
+            {
+              "exception": "ValueError",
+              "description": ""
+            }
+          ],
+          "examples": "",
+          "notes": "",
+          "see_also": []
+        }
+      ],
+      "properties": [],
+      "constructor": {
+        "name": "__init__",
+        "qualified_name": "feedback_intelligence_agent.agent_snapshots.AgentSnapshots.__init__",
+        "kind": "method",
+        "module": "feedback_intelligence_agent.agent_snapshots",
+        "signature": "__init__(self, settings: Settings) -> None",
+        "source": "src/feedback_intelligence_agent/agent_snapshots.py",
+        "line": 39,
+        "public": false,
+        "is_async": false,
+        "decorators": [],
+        "summary": "",
+        "description": "",
+        "parameters": [
+          {
+            "name": "self",
+            "annotation": null,
+            "default": null,
+            "kind": "positional-or-keyword",
+            "description": ""
+          },
+          {
+            "name": "settings",
+            "annotation": "Settings",
+            "default": null,
+            "kind": "positional-or-keyword",
+            "description": ""
+          }
+        ],
+        "returns": {
+          "annotation": "None",
+          "description": ""
+        },
+        "raises": [],
+        "examples": "",
+        "notes": "",
+        "see_also": []
+      },
+      "notes": ""
+    },
+    {
+      "name": "IndexSnapshotUnavailableError",
+      "qualified_name": "feedback_intelligence_agent.agent_snapshots.IndexSnapshotUnavailableError",
+      "kind": "exception",
+      "module": "feedback_intelligence_agent.agent_snapshots",
+      "bases": [
+        "RuntimeError"
+      ],
+      "source": "src/feedback_intelligence_agent/agent_snapshots.py",
+      "line": 24,
+      "public": true,
+      "decorators": [],
+      "summary": "The committed JSON index cannot currently supply a valid agent snapshot.",
+      "description": "",
+      "attributes": [],
+      "methods": [],
+      "properties": [],
+      "constructor": null,
+      "notes": ""
+    },
+    {
       "name": "ApiAuthConfigurationError",
       "qualified_name": "feedback_intelligence_agent.auth.ApiAuthConfigurationError",
       "kind": "class",
@@ -9651,46 +9813,6 @@
           "see_also": []
         }
       ],
-      "properties": [],
-      "constructor": null,
-      "notes": ""
-    },
-    {
-      "name": "PromptVariableError",
-      "qualified_name": "feedback_intelligence_agent.prompt_registry.PromptVariableError",
-      "kind": "exception",
-      "module": "feedback_intelligence_agent.prompt_registry",
-      "bases": [
-        "ValueError"
-      ],
-      "source": "src/feedback_intelligence_agent/prompt_registry.py",
-      "line": 23,
-      "public": true,
-      "decorators": [],
-      "summary": "Raised when render variables do not match a template's declared variables.",
-      "description": "",
-      "attributes": [],
-      "methods": [],
-      "properties": [],
-      "constructor": null,
-      "notes": ""
-    },
-    {
-      "name": "QdrantStoreError",
-      "qualified_name": "feedback_intelligence_agent.qdrant_store.QdrantStoreError",
-      "kind": "exception",
-      "module": "feedback_intelligence_agent.qdrant_store",
-      "bases": [
-        "RuntimeError"
-      ],
-      "source": "src/feedback_intelligence_agent/qdrant_store.py",
-      "line": 31,
-      "public": true,
-      "decorators": [],
-      "summary": "Raised when the Qdrant store cannot be configured or reached.",
-      "description": "",
-      "attributes": [],
-      "methods": [],
       "properties": [],
       "constructor": null,
       "notes": ""

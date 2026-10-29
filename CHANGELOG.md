@@ -6,6 +6,11 @@ All notable changes to this project are documented here.
 
 ### Added
 
+- API workers automatically reload changed JSON indexes before query, streaming,
+  and chat requests, including updates from other workers, CLI tools, and ingestion
+  jobs. Retrieval and dataset tools refresh together while preserving provider state.
+- Missing or invalid committed indexes return a generic `503` on new answer requests
+  and recover on the next request after repair, without rebuilding from source CSV.
 - Tenant-bound writers and admins can ingest validated record batches through
   `POST /ingestion/records`. JSON upserts preserve other tenants and refresh the
   handling API instance's retriever and aggregation tools after persistence.

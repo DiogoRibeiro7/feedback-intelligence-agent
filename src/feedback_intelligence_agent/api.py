@@ -21,6 +21,11 @@ from feedback_intelligence_agent.active_learning import (
     UpdateActiveLearningStateRequest,
     apply_active_learning_states,
 )
+from feedback_intelligence_agent.agent import FeedbackInsightAgent
+from feedback_intelligence_agent.agent_snapshots import (
+    AgentSnapshots,
+    IndexSnapshotUnavailableError,
+)
 from feedback_intelligence_agent.auth import (
     ApiAuthConfigurationError,
     ApiAuthenticationError,
@@ -39,7 +44,6 @@ from feedback_intelligence_agent.email_summaries import (
 )
 from feedback_intelligence_agent.factory import (
     build_active_learning_state_store,
-    build_agent,
     build_conversation_store,
     build_human_feedback_store,
     build_index,
@@ -55,14 +59,12 @@ from feedback_intelligence_agent.human_feedback import (
     build_active_learning_queue,
     summarise_human_feedback,
 )
-from feedback_intelligence_agent.index_persistence import index_write_lock
 from feedback_intelligence_agent.jobs import JobRequest, JobResult, run_ingestion_job
 from feedback_intelligence_agent.memory import ConversationMemory, JsonConversationStore
 from feedback_intelligence_agent.rate_limit import InMemoryRateLimiter, RateLimitDecision
 from feedback_intelligence_agent.record_ingestion import (
     RecordIngestionRequest,
     RecordIngestionResult,
-    ingest_record_batch,
 )
 from feedback_intelligence_agent.reports import (
     InsightReportSummary,
@@ -241,7 +243,7 @@ def create_app() -> FastAPI:
     """Create and configure the FastAPI application."""
     configure_logging()
     settings = Settings()
-    agent = build_agent(settings)
+    snapshots = AgentSnapshots(settings)
     conversation_store = build_conversation_store(settings)
     job_store = build_job_store(settings)
     report_store = build_report_store(settings)
@@ -250,6 +252,15 @@ def create_app() -> FastAPI:
     reader_access = Depends(_auth_dependency(settings, ApiRole.reader))
     writer_access = Depends(_auth_dependency(settings, ApiRole.writer))
     admin_access = Depends(_auth_dependency(settings, ApiRole.admin))
+
+    def current_agent() -> FeedbackInsightAgent:
+        try:
+            return snapshots.get()
+        except IndexSnapshotUnavailableError as exc:
+            log_event("index_reload_failed", {"error": str(exc.__cause__)})
+            raise HTTPException(
+                status_code=503, detail="Feedback index is temporarily unavailable"
+            ) from exc
 
     def caller_conversation_store(principal: ApiPrincipal) -> JsonConversationStore:
         """Select a history namespace from the authenticated identity only."""
@@ -352,6 +363,7 @@ def create_app() -> FastAPI:
     def query(request: QueryRequest, principal: ApiPrincipal = reader_access) -> QueryResponse:
         """Answer a question using the feedback insight agent."""
         request.tenant_id = _tenant_scope(principal, request.tenant_id)
+        agent = current_agent()
         try:
             result = agent.answer(
                 request.question,
@@ -380,6 +392,7 @@ def create_app() -> FastAPI:
         """
         request.tenant_id = _tenant_scope(principal, request.tenant_id)
         started = time.perf_counter()
+        agent = current_agent()
         try:
             result = agent.answer(
                 request.question,
@@ -417,7 +430,7 @@ def create_app() -> FastAPI:
                 memory = caller_store.get(request.conversation_id)
                 if memory is None or not principal.permits_tenant(memory.tenant_id):
                     raise HTTPException(status_code=404, detail="conversation not found")
-            result, conversation_id = agent.chat(
+            result, conversation_id = current_agent().chat(
                 request.message,
                 store=caller_store,
                 conversation_id=request.conversation_id,
@@ -652,7 +665,6 @@ def create_app() -> FastAPI:
         request: RecordIngestionRequest, principal: ApiPrincipal = writer_access
     ) -> RecordIngestionResult:
         """Merge one tenant's records and refresh this API instance's agent."""
-        nonlocal agent
         if principal.tenant_id is None and principal.role != ApiRole.admin:
             raise HTTPException(
                 status_code=403, detail="Record ingestion requires a tenant binding"
@@ -669,10 +681,7 @@ def create_app() -> FastAPI:
             )
         records = [record.model_copy(update={"tenant_id": tenant_id}) for record in request.records]
         try:
-            with index_write_lock(settings.index_path):
-                result, agent = ingest_record_batch(
-                    records, tenant_id, settings=settings, agent=agent
-                )
+            result = snapshots.ingest(records, tenant_id)
         except Exception as exc:  # noqa: BLE001 - hide paths and input contents from API errors.
             log_event("record_ingestion_failed", {"error": str(exc)})
             raise HTTPException(status_code=500, detail="Record ingestion failed") from exc

@@ -24,12 +24,12 @@ Module & Layer & Fan-in & Fan-out & External packages \\
 \endfoot
 \bottomrule
 \endlastfoot
-\texttt{schemas} & foundation & 29 & 1 & \texttt{pydantic} \\
+\texttt{schemas} & foundation & 30 & 1 & \texttt{pydantic} \\
 \texttt{telemetry} & infrastructure & 10 & 0 & \texttt{contextlib}, \texttt{opentelemetry} \\
-\texttt{factory} & application & 7 & 22 & -- \\
-\texttt{vector\_\allowbreak{}store} & data & 7 & 4 & \texttt{dataexcept}, \texttt{numpy}, \texttt{pydantic} \\
-\texttt{config} & foundation & 7 & 0 & \texttt{pydantic}, \texttt{pydantic\_\allowbreak{}settings} \\
-\texttt{agent} & application & 6 & 13 & -- \\
+\texttt{factory} & application & 8 & 22 & -- \\
+\texttt{agent} & application & 8 & 13 & -- \\
+\texttt{vector\_\allowbreak{}store} & data & 8 & 4 & \texttt{dataexcept}, \texttt{numpy}, \texttt{pydantic} \\
+\texttt{config} & foundation & 8 & 0 & \texttt{pydantic}, \texttt{pydantic\_\allowbreak{}settings} \\
 \texttt{embeddings} & domain & 6 & 0 & \texttt{numpy} \\
 \texttt{chunking} & domain & 5 & 3 & -- \\
 \texttt{ingestion} & data & 5 & 3 & -- \\
@@ -45,21 +45,22 @@ Module & Layer & Fan-in & Fan-out & External packages \\
 \texttt{index\_\allowbreak{}persistence} & data & 4 & 0 & \texttt{contextlib}, \texttt{dataexcept}, \texttt{portalocker}, \texttt{stat}, \texttt{weakref} \\
 \texttt{evaluation} & application & 3 & 5 & \texttt{dataexcept}, \texttt{pydantic} \\
 \texttt{retrieval} & domain & 3 & 4 & -- \\
-\texttt{tools} & domain & 3 & 3 & \texttt{pydantic} \\
 \texttt{hallucination} & domain & 3 & 2 & \texttt{pydantic} \\
 \texttt{memory} & domain & 3 & 2 & \texttt{pydantic} \\
 \texttt{privacy} & domain & 3 & 1 & -- \\
 \texttt{source\_\allowbreak{}ids} & domain & 3 & 1 & -- \\
 \texttt{query\_\allowbreak{}expansion} & domain & 3 & 0 & -- \\
 \texttt{index\_\allowbreak{}updates} & data & 2 & 7 & \texttt{pydantic} \\
+\texttt{record\_\allowbreak{}ingestion} & application & 2 & 6 & \texttt{pydantic} \\
 \texttt{prompts} & domain & 2 & 3 & -- \\
+\texttt{tools} & domain & 2 & 3 & \texttt{pydantic} \\
 \texttt{\_\allowbreak{}\_\allowbreak{}init\_\allowbreak{}\_\allowbreak{}} & interface & 2 & 2 & -- \\
 \texttt{email\_\allowbreak{}summaries} & application & 2 & 1 & \texttt{pydantic} \\
 \texttt{guardrails} & domain & 2 & 0 & \texttt{pydantic} \\
 \texttt{prompt\_\allowbreak{}registry} & domain & 2 & 0 & -- \\
 \texttt{experiments} & application & 1 & 9 & \texttt{mlflow}, \texttt{platform}, \texttt{pydantic}, \texttt{yaml} \\
 \texttt{benchmarking} & application & 1 & 8 & \texttt{pydantic} \\
-\texttt{record\_\allowbreak{}ingestion} & application & 1 & 7 & \texttt{pydantic} \\
+\texttt{agent\_\allowbreak{}snapshots} & application & 1 & 7 & -- \\
 \texttt{lakehouse} & data & 1 & 4 & \texttt{pydantic} \\
 \texttt{streaming\_\allowbreak{}ingestion} & data & 1 & 4 & \texttt{boto3}, \texttt{confluent\_\allowbreak{}kafka}, \texttt{dataexcept}, \texttt{pydantic} \\
 \texttt{lexical\_\allowbreak{}search} & domain & 1 & 3 & -- \\
@@ -71,7 +72,7 @@ Module & Layer & Fan-in & Fan-out & External packages \\
 \texttt{output\_\allowbreak{}parser} & domain & 1 & 0 & \texttt{pydantic} \\
 \texttt{rate\_\allowbreak{}limit} & infrastructure & 1 & 0 & \texttt{pydantic} \\
 \texttt{cli} & interface & 0 & 21 & \texttt{typer}, \texttt{uvicorn} \\
-\texttt{api} & interface & 0 & 15 & \texttt{fastapi} \\
+\texttt{api} & interface & 0 & 16 & \texttt{fastapi} \\
 \end{longtable}
 
 \section{Deferred imports}
@@ -132,93 +133,97 @@ Source & Imports & Context & Source & Imports & Context \\
 \endfoot
 \bottomrule
 \endlastfoot
-\texttt{\_\allowbreak{}\_\allowbreak{}init\_\allowbreak{}\_\allowbreak{}} & \texttt{agent} & eager & \texttt{factory} & \texttt{human\_\allowbreak{}feedback} & typing \\
-\texttt{\_\allowbreak{}\_\allowbreak{}init\_\allowbreak{}\_\allowbreak{}} & \texttt{config} & eager & \texttt{factory} & \texttt{index\_\allowbreak{}persistence} & eager \\
-\texttt{active\_\allowbreak{}learning} & \texttt{human\_\allowbreak{}feedback} & eager & \texttt{factory} & \texttt{ingestion} & eager \\
-\texttt{active\_\allowbreak{}learning} & \texttt{safe\_\allowbreak{}paths} & eager & \texttt{factory} & \texttt{jobs} & lazy \\
-\texttt{agent} & \texttt{citations} & eager & \texttt{factory} & \texttt{jobs} & typing \\
-\texttt{agent} & \texttt{guardrails} & eager & \texttt{factory} & \texttt{lexical\_\allowbreak{}search} & eager \\
-\texttt{agent} & \texttt{hallucination} & eager & \texttt{factory} & \texttt{llm} & eager \\
-\texttt{agent} & \texttt{llm} & eager & \texttt{factory} & \texttt{memory} & eager \\
-\texttt{agent} & \texttt{memory} & eager & \texttt{factory} & \texttt{qdrant\_\allowbreak{}store} & lazy \\
-\texttt{agent} & \texttt{metadata\_\allowbreak{}filters} & eager & \texttt{factory} & \texttt{query\_\allowbreak{}expansion} & eager \\
-\texttt{agent} & \texttt{output\_\allowbreak{}parser} & eager & \texttt{factory} & \texttt{reports} & lazy \\
-\texttt{agent} & \texttt{prompts} & eager & \texttt{factory} & \texttt{reports} & typing \\
-\texttt{agent} & \texttt{reranking} & eager & \texttt{factory} & \texttt{resilience} & eager \\
-\texttt{agent} & \texttt{retrieval} & eager & \texttt{factory} & \texttt{retrieval} & eager \\
-\texttt{agent} & \texttt{schemas} & eager & \texttt{factory} & \texttt{schemas} & eager \\
-\texttt{agent} & \texttt{telemetry} & eager & \texttt{factory} & \texttt{telemetry} & eager \\
-\texttt{agent} & \texttt{tools} & eager & \texttt{factory} & \texttt{tools} & eager \\
-\texttt{api} & \texttt{\_\allowbreak{}\_\allowbreak{}init\_\allowbreak{}\_\allowbreak{}} & eager & \texttt{factory} & \texttt{vector\_\allowbreak{}store} & eager \\
-\texttt{api} & \texttt{active\_\allowbreak{}learning} & eager & \texttt{hallucination} & \texttt{llm} & eager \\
-\texttt{api} & \texttt{auth} & eager & \texttt{hallucination} & \texttt{schemas} & eager \\
-\texttt{api} & \texttt{config} & eager & \texttt{human\_\allowbreak{}feedback} & \texttt{safe\_\allowbreak{}paths} & eager \\
-\texttt{api} & \texttt{email\_\allowbreak{}summaries} & eager & \texttt{human\_\allowbreak{}feedback} & \texttt{schemas} & eager \\
-\texttt{api} & \texttt{factory} & eager & \texttt{index\_\allowbreak{}updates} & \texttt{chunking} & eager \\
-\texttt{api} & \texttt{human\_\allowbreak{}feedback} & eager & \texttt{index\_\allowbreak{}updates} & \texttt{embeddings} & eager \\
-\texttt{api} & \texttt{index\_\allowbreak{}persistence} & eager & \texttt{index\_\allowbreak{}updates} & \texttt{factory} & eager \\
-\texttt{api} & \texttt{jobs} & eager & \texttt{index\_\allowbreak{}updates} & \texttt{index\_\allowbreak{}persistence} & eager \\
-\texttt{api} & \texttt{memory} & eager & \texttt{index\_\allowbreak{}updates} & \texttt{schemas} & eager \\
-\texttt{api} & \texttt{rate\_\allowbreak{}limit} & eager & \texttt{index\_\allowbreak{}updates} & \texttt{telemetry} & eager \\
-\texttt{api} & \texttt{record\_\allowbreak{}ingestion} & eager & \texttt{index\_\allowbreak{}updates} & \texttt{vector\_\allowbreak{}store} & eager \\
-\texttt{api} & \texttt{reports} & eager & \texttt{ingestion} & \texttt{data\_\allowbreak{}contracts} & eager \\
-\texttt{api} & \texttt{schemas} & eager & \texttt{ingestion} & \texttt{schemas} & eager \\
-\texttt{api} & \texttt{telemetry} & eager & \texttt{ingestion} & \texttt{telemetry} & eager \\
-\texttt{benchmarking} & \texttt{agent} & eager & \texttt{jobs} & \texttt{chunking} & eager \\
-\texttt{benchmarking} & \texttt{chunking} & eager & \texttt{jobs} & \texttt{data\_\allowbreak{}contracts} & eager \\
-\texttt{benchmarking} & \texttt{config} & eager & \texttt{jobs} & \texttt{embeddings} & eager \\
-\texttt{benchmarking} & \texttt{embeddings} & eager & \texttt{jobs} & \texttt{factory} & eager \\
-\texttt{benchmarking} & \texttt{evaluation} & eager & \texttt{jobs} & \texttt{ingestion} & eager \\
-\texttt{benchmarking} & \texttt{factory} & eager & \texttt{jobs} & \texttt{safe\_\allowbreak{}paths} & eager \\
-\texttt{benchmarking} & \texttt{ingestion} & eager & \texttt{jobs} & \texttt{telemetry} & eager \\
-\texttt{benchmarking} & \texttt{vector\_\allowbreak{}store} & eager & \texttt{jobs} & \texttt{vector\_\allowbreak{}store} & eager \\
-\texttt{chunking} & \texttt{privacy} & eager & \texttt{lakehouse} & \texttt{data\_\allowbreak{}contracts} & eager \\
-\texttt{chunking} & \texttt{schemas} & eager & \texttt{lakehouse} & \texttt{privacy} & eager \\
-\texttt{chunking} & \texttt{source\_\allowbreak{}ids} & eager & \texttt{lakehouse} & \texttt{schemas} & eager \\
-\texttt{citations} & \texttt{schemas} & eager & \texttt{lakehouse} & \texttt{telemetry} & eager \\
-\texttt{cli} & \texttt{active\_\allowbreak{}learning} & eager & \texttt{lexical\_\allowbreak{}search} & \texttt{metadata\_\allowbreak{}filters} & eager \\
-\texttt{cli} & \texttt{benchmarking} & eager & \texttt{lexical\_\allowbreak{}search} & \texttt{query\_\allowbreak{}expansion} & eager \\
-\texttt{cli} & \texttt{citations} & eager & \texttt{lexical\_\allowbreak{}search} & \texttt{schemas} & eager \\
-\texttt{cli} & \texttt{config} & eager & \texttt{llm} & \texttt{citations} & eager \\
-\texttt{cli} & \texttt{data\_\allowbreak{}contracts} & eager & \texttt{llm} & \texttt{schemas} & eager \\
-\texttt{cli} & \texttt{email\_\allowbreak{}summaries} & eager & \texttt{memory} & \texttt{llm} & eager \\
-\texttt{cli} & \texttt{evaluation} & eager & \texttt{memory} & \texttt{safe\_\allowbreak{}paths} & eager \\
-\texttt{cli} & \texttt{experiments} & eager & \texttt{metadata\_\allowbreak{}filters} & \texttt{schemas} & eager \\
-\texttt{cli} & \texttt{factory} & eager & \texttt{privacy} & \texttt{schemas} & eager \\
-\texttt{cli} & \texttt{human\_\allowbreak{}feedback} & eager & \texttt{prompts} & \texttt{citations} & eager \\
-\texttt{cli} & \texttt{index\_\allowbreak{}updates} & eager & \texttt{prompts} & \texttt{prompt\_\allowbreak{}registry} & eager \\
-\texttt{cli} & \texttt{ingestion} & eager & \texttt{prompts} & \texttt{schemas} & eager \\
-\texttt{cli} & \texttt{jobs} & eager & \texttt{qdrant\_\allowbreak{}store} & \texttt{metadata\_\allowbreak{}filters} & eager \\
-\texttt{cli} & \texttt{lakehouse} & eager & \texttt{qdrant\_\allowbreak{}store} & \texttt{schemas} & eager \\
-\texttt{cli} & \texttt{prompt\_\allowbreak{}registry} & eager & \texttt{qdrant\_\allowbreak{}store} & \texttt{source\_\allowbreak{}ids} & eager \\
-\texttt{cli} & \texttt{prompts} & eager & \texttt{record\_\allowbreak{}ingestion} & \texttt{agent} & eager \\
-\texttt{cli} & \texttt{reports} & eager & \texttt{record\_\allowbreak{}ingestion} & \texttt{config} & eager \\
-\texttt{cli} & \texttt{schemas} & eager & \texttt{record\_\allowbreak{}ingestion} & \texttt{factory} & eager \\
-\texttt{cli} & \texttt{streaming\_\allowbreak{}ingestion} & eager & \texttt{record\_\allowbreak{}ingestion} & \texttt{index\_\allowbreak{}updates} & eager \\
-\texttt{cli} & \texttt{synthetic\_\allowbreak{}data} & eager & \texttt{record\_\allowbreak{}ingestion} & \texttt{schemas} & eager \\
-\texttt{cli} & \texttt{telemetry} & eager & \texttt{record\_\allowbreak{}ingestion} & \texttt{tools} & eager \\
-\texttt{data\_\allowbreak{}contracts} & \texttt{schemas} & eager & \texttt{record\_\allowbreak{}ingestion} & \texttt{vector\_\allowbreak{}store} & eager \\
-\texttt{email\_\allowbreak{}summaries} & \texttt{reports} & eager & \texttt{reports} & \texttt{safe\_\allowbreak{}paths} & eager \\
-\texttt{evaluation} & \texttt{agent} & eager & \texttt{reports} & \texttt{schemas} & eager \\
-\texttt{evaluation} & \texttt{hallucination} & eager & \texttt{reranking} & \texttt{schemas} & eager \\
-\texttt{evaluation} & \texttt{retrieval} & eager & \texttt{resilience} & \texttt{llm} & eager \\
-\texttt{evaluation} & \texttt{schemas} & eager & \texttt{resilience} & \texttt{schemas} & eager \\
-\texttt{evaluation} & \texttt{telemetry} & eager & \texttt{retrieval} & \texttt{embeddings} & eager \\
-\texttt{experiments} & \texttt{\_\allowbreak{}\_\allowbreak{}init\_\allowbreak{}\_\allowbreak{}} & eager & \texttt{retrieval} & \texttt{query\_\allowbreak{}expansion} & eager \\
-\texttt{experiments} & \texttt{agent} & eager & \texttt{retrieval} & \texttt{schemas} & eager \\
-\texttt{experiments} & \texttt{chunking} & eager & \texttt{retrieval} & \texttt{vector\_\allowbreak{}store} & eager \\
-\texttt{experiments} & \texttt{config} & eager & \texttt{schemas} & \texttt{guardrails} & eager \\
-\texttt{experiments} & \texttt{embeddings} & eager & \texttt{source\_\allowbreak{}ids} & \texttt{schemas} & eager \\
-\texttt{experiments} & \texttt{evaluation} & eager & \texttt{streaming\_\allowbreak{}ingestion} & \texttt{data\_\allowbreak{}contracts} & eager \\
-\texttt{experiments} & \texttt{factory} & eager & \texttt{streaming\_\allowbreak{}ingestion} & \texttt{privacy} & eager \\
-\texttt{experiments} & \texttt{ingestion} & eager & \texttt{streaming\_\allowbreak{}ingestion} & \texttt{schemas} & eager \\
-\texttt{experiments} & \texttt{vector\_\allowbreak{}store} & eager & \texttt{streaming\_\allowbreak{}ingestion} & \texttt{telemetry} & eager \\
-\texttt{factory} & \texttt{active\_\allowbreak{}learning} & lazy & \texttt{synthetic\_\allowbreak{}data} & \texttt{schemas} & eager \\
-\texttt{factory} & \texttt{active\_\allowbreak{}learning} & typing & \texttt{tools} & \texttt{citations} & eager \\
-\texttt{factory} & \texttt{agent} & eager & \texttt{tools} & \texttt{metadata\_\allowbreak{}filters} & eager \\
-\texttt{factory} & \texttt{chunking} & eager & \texttt{tools} & \texttt{schemas} & eager \\
-\texttt{factory} & \texttt{config} & eager & \texttt{vector\_\allowbreak{}store} & \texttt{index\_\allowbreak{}persistence} & eager \\
-\texttt{factory} & \texttt{embeddings} & eager & \texttt{vector\_\allowbreak{}store} & \texttt{metadata\_\allowbreak{}filters} & eager \\
-\texttt{factory} & \texttt{hallucination} & eager & \texttt{vector\_\allowbreak{}store} & \texttt{schemas} & eager \\
-\texttt{factory} & \texttt{human\_\allowbreak{}feedback} & lazy & \texttt{vector\_\allowbreak{}store} & \texttt{source\_\allowbreak{}ids} & eager \\
+\texttt{\_\allowbreak{}\_\allowbreak{}init\_\allowbreak{}\_\allowbreak{}} & \texttt{agent} & eager & \texttt{factory} & \texttt{config} & eager \\
+\texttt{\_\allowbreak{}\_\allowbreak{}init\_\allowbreak{}\_\allowbreak{}} & \texttt{config} & eager & \texttt{factory} & \texttt{embeddings} & eager \\
+\texttt{active\_\allowbreak{}learning} & \texttt{human\_\allowbreak{}feedback} & eager & \texttt{factory} & \texttt{hallucination} & eager \\
+\texttt{active\_\allowbreak{}learning} & \texttt{safe\_\allowbreak{}paths} & eager & \texttt{factory} & \texttt{human\_\allowbreak{}feedback} & lazy \\
+\texttt{agent} & \texttt{citations} & eager & \texttt{factory} & \texttt{human\_\allowbreak{}feedback} & typing \\
+\texttt{agent} & \texttt{guardrails} & eager & \texttt{factory} & \texttt{index\_\allowbreak{}persistence} & eager \\
+\texttt{agent} & \texttt{hallucination} & eager & \texttt{factory} & \texttt{ingestion} & eager \\
+\texttt{agent} & \texttt{llm} & eager & \texttt{factory} & \texttt{jobs} & lazy \\
+\texttt{agent} & \texttt{memory} & eager & \texttt{factory} & \texttt{jobs} & typing \\
+\texttt{agent} & \texttt{metadata\_\allowbreak{}filters} & eager & \texttt{factory} & \texttt{lexical\_\allowbreak{}search} & eager \\
+\texttt{agent} & \texttt{output\_\allowbreak{}parser} & eager & \texttt{factory} & \texttt{llm} & eager \\
+\texttt{agent} & \texttt{prompts} & eager & \texttt{factory} & \texttt{memory} & eager \\
+\texttt{agent} & \texttt{reranking} & eager & \texttt{factory} & \texttt{qdrant\_\allowbreak{}store} & lazy \\
+\texttt{agent} & \texttt{retrieval} & eager & \texttt{factory} & \texttt{query\_\allowbreak{}expansion} & eager \\
+\texttt{agent} & \texttt{schemas} & eager & \texttt{factory} & \texttt{reports} & lazy \\
+\texttt{agent} & \texttt{telemetry} & eager & \texttt{factory} & \texttt{reports} & typing \\
+\texttt{agent} & \texttt{tools} & eager & \texttt{factory} & \texttt{resilience} & eager \\
+\texttt{agent\_\allowbreak{}snapshots} & \texttt{agent} & eager & \texttt{factory} & \texttt{retrieval} & eager \\
+\texttt{agent\_\allowbreak{}snapshots} & \texttt{config} & eager & \texttt{factory} & \texttt{schemas} & eager \\
+\texttt{agent\_\allowbreak{}snapshots} & \texttt{factory} & eager & \texttt{factory} & \texttt{telemetry} & eager \\
+\texttt{agent\_\allowbreak{}snapshots} & \texttt{index\_\allowbreak{}persistence} & eager & \texttt{factory} & \texttt{tools} & eager \\
+\texttt{agent\_\allowbreak{}snapshots} & \texttt{record\_\allowbreak{}ingestion} & eager & \texttt{factory} & \texttt{vector\_\allowbreak{}store} & eager \\
+\texttt{agent\_\allowbreak{}snapshots} & \texttt{schemas} & eager & \texttt{hallucination} & \texttt{llm} & eager \\
+\texttt{agent\_\allowbreak{}snapshots} & \texttt{vector\_\allowbreak{}store} & eager & \texttt{hallucination} & \texttt{schemas} & eager \\
+\texttt{api} & \texttt{\_\allowbreak{}\_\allowbreak{}init\_\allowbreak{}\_\allowbreak{}} & eager & \texttt{human\_\allowbreak{}feedback} & \texttt{safe\_\allowbreak{}paths} & eager \\
+\texttt{api} & \texttt{active\_\allowbreak{}learning} & eager & \texttt{human\_\allowbreak{}feedback} & \texttt{schemas} & eager \\
+\texttt{api} & \texttt{agent} & eager & \texttt{index\_\allowbreak{}updates} & \texttt{chunking} & eager \\
+\texttt{api} & \texttt{agent\_\allowbreak{}snapshots} & eager & \texttt{index\_\allowbreak{}updates} & \texttt{embeddings} & eager \\
+\texttt{api} & \texttt{auth} & eager & \texttt{index\_\allowbreak{}updates} & \texttt{factory} & eager \\
+\texttt{api} & \texttt{config} & eager & \texttt{index\_\allowbreak{}updates} & \texttt{index\_\allowbreak{}persistence} & eager \\
+\texttt{api} & \texttt{email\_\allowbreak{}summaries} & eager & \texttt{index\_\allowbreak{}updates} & \texttt{schemas} & eager \\
+\texttt{api} & \texttt{factory} & eager & \texttt{index\_\allowbreak{}updates} & \texttt{telemetry} & eager \\
+\texttt{api} & \texttt{human\_\allowbreak{}feedback} & eager & \texttt{index\_\allowbreak{}updates} & \texttt{vector\_\allowbreak{}store} & eager \\
+\texttt{api} & \texttt{jobs} & eager & \texttt{ingestion} & \texttt{data\_\allowbreak{}contracts} & eager \\
+\texttt{api} & \texttt{memory} & eager & \texttt{ingestion} & \texttt{schemas} & eager \\
+\texttt{api} & \texttt{rate\_\allowbreak{}limit} & eager & \texttt{ingestion} & \texttt{telemetry} & eager \\
+\texttt{api} & \texttt{record\_\allowbreak{}ingestion} & eager & \texttt{jobs} & \texttt{chunking} & eager \\
+\texttt{api} & \texttt{reports} & eager & \texttt{jobs} & \texttt{data\_\allowbreak{}contracts} & eager \\
+\texttt{api} & \texttt{schemas} & eager & \texttt{jobs} & \texttt{embeddings} & eager \\
+\texttt{api} & \texttt{telemetry} & eager & \texttt{jobs} & \texttt{factory} & eager \\
+\texttt{benchmarking} & \texttt{agent} & eager & \texttt{jobs} & \texttt{ingestion} & eager \\
+\texttt{benchmarking} & \texttt{chunking} & eager & \texttt{jobs} & \texttt{safe\_\allowbreak{}paths} & eager \\
+\texttt{benchmarking} & \texttt{config} & eager & \texttt{jobs} & \texttt{telemetry} & eager \\
+\texttt{benchmarking} & \texttt{embeddings} & eager & \texttt{jobs} & \texttt{vector\_\allowbreak{}store} & eager \\
+\texttt{benchmarking} & \texttt{evaluation} & eager & \texttt{lakehouse} & \texttt{data\_\allowbreak{}contracts} & eager \\
+\texttt{benchmarking} & \texttt{factory} & eager & \texttt{lakehouse} & \texttt{privacy} & eager \\
+\texttt{benchmarking} & \texttt{ingestion} & eager & \texttt{lakehouse} & \texttt{schemas} & eager \\
+\texttt{benchmarking} & \texttt{vector\_\allowbreak{}store} & eager & \texttt{lakehouse} & \texttt{telemetry} & eager \\
+\texttt{chunking} & \texttt{privacy} & eager & \texttt{lexical\_\allowbreak{}search} & \texttt{metadata\_\allowbreak{}filters} & eager \\
+\texttt{chunking} & \texttt{schemas} & eager & \texttt{lexical\_\allowbreak{}search} & \texttt{query\_\allowbreak{}expansion} & eager \\
+\texttt{chunking} & \texttt{source\_\allowbreak{}ids} & eager & \texttt{lexical\_\allowbreak{}search} & \texttt{schemas} & eager \\
+\texttt{citations} & \texttt{schemas} & eager & \texttt{llm} & \texttt{citations} & eager \\
+\texttt{cli} & \texttt{active\_\allowbreak{}learning} & eager & \texttt{llm} & \texttt{schemas} & eager \\
+\texttt{cli} & \texttt{benchmarking} & eager & \texttt{memory} & \texttt{llm} & eager \\
+\texttt{cli} & \texttt{citations} & eager & \texttt{memory} & \texttt{safe\_\allowbreak{}paths} & eager \\
+\texttt{cli} & \texttt{config} & eager & \texttt{metadata\_\allowbreak{}filters} & \texttt{schemas} & eager \\
+\texttt{cli} & \texttt{data\_\allowbreak{}contracts} & eager & \texttt{privacy} & \texttt{schemas} & eager \\
+\texttt{cli} & \texttt{email\_\allowbreak{}summaries} & eager & \texttt{prompts} & \texttt{citations} & eager \\
+\texttt{cli} & \texttt{evaluation} & eager & \texttt{prompts} & \texttt{prompt\_\allowbreak{}registry} & eager \\
+\texttt{cli} & \texttt{experiments} & eager & \texttt{prompts} & \texttt{schemas} & eager \\
+\texttt{cli} & \texttt{factory} & eager & \texttt{qdrant\_\allowbreak{}store} & \texttt{metadata\_\allowbreak{}filters} & eager \\
+\texttt{cli} & \texttt{human\_\allowbreak{}feedback} & eager & \texttt{qdrant\_\allowbreak{}store} & \texttt{schemas} & eager \\
+\texttt{cli} & \texttt{index\_\allowbreak{}updates} & eager & \texttt{qdrant\_\allowbreak{}store} & \texttt{source\_\allowbreak{}ids} & eager \\
+\texttt{cli} & \texttt{ingestion} & eager & \texttt{record\_\allowbreak{}ingestion} & \texttt{agent} & eager \\
+\texttt{cli} & \texttt{jobs} & eager & \texttt{record\_\allowbreak{}ingestion} & \texttt{config} & eager \\
+\texttt{cli} & \texttt{lakehouse} & eager & \texttt{record\_\allowbreak{}ingestion} & \texttt{factory} & eager \\
+\texttt{cli} & \texttt{prompt\_\allowbreak{}registry} & eager & \texttt{record\_\allowbreak{}ingestion} & \texttt{index\_\allowbreak{}updates} & eager \\
+\texttt{cli} & \texttt{prompts} & eager & \texttt{record\_\allowbreak{}ingestion} & \texttt{schemas} & eager \\
+\texttt{cli} & \texttt{reports} & eager & \texttt{record\_\allowbreak{}ingestion} & \texttt{vector\_\allowbreak{}store} & eager \\
+\texttt{cli} & \texttt{schemas} & eager & \texttt{reports} & \texttt{safe\_\allowbreak{}paths} & eager \\
+\texttt{cli} & \texttt{streaming\_\allowbreak{}ingestion} & eager & \texttt{reports} & \texttt{schemas} & eager \\
+\texttt{cli} & \texttt{synthetic\_\allowbreak{}data} & eager & \texttt{reranking} & \texttt{schemas} & eager \\
+\texttt{cli} & \texttt{telemetry} & eager & \texttt{resilience} & \texttt{llm} & eager \\
+\texttt{data\_\allowbreak{}contracts} & \texttt{schemas} & eager & \texttt{resilience} & \texttt{schemas} & eager \\
+\texttt{email\_\allowbreak{}summaries} & \texttt{reports} & eager & \texttt{retrieval} & \texttt{embeddings} & eager \\
+\texttt{evaluation} & \texttt{agent} & eager & \texttt{retrieval} & \texttt{query\_\allowbreak{}expansion} & eager \\
+\texttt{evaluation} & \texttt{hallucination} & eager & \texttt{retrieval} & \texttt{schemas} & eager \\
+\texttt{evaluation} & \texttt{retrieval} & eager & \texttt{retrieval} & \texttt{vector\_\allowbreak{}store} & eager \\
+\texttt{evaluation} & \texttt{schemas} & eager & \texttt{schemas} & \texttt{guardrails} & eager \\
+\texttt{evaluation} & \texttt{telemetry} & eager & \texttt{source\_\allowbreak{}ids} & \texttt{schemas} & eager \\
+\texttt{experiments} & \texttt{\_\allowbreak{}\_\allowbreak{}init\_\allowbreak{}\_\allowbreak{}} & eager & \texttt{streaming\_\allowbreak{}ingestion} & \texttt{data\_\allowbreak{}contracts} & eager \\
+\texttt{experiments} & \texttt{agent} & eager & \texttt{streaming\_\allowbreak{}ingestion} & \texttt{privacy} & eager \\
+\texttt{experiments} & \texttt{chunking} & eager & \texttt{streaming\_\allowbreak{}ingestion} & \texttt{schemas} & eager \\
+\texttt{experiments} & \texttt{config} & eager & \texttt{streaming\_\allowbreak{}ingestion} & \texttt{telemetry} & eager \\
+\texttt{experiments} & \texttt{embeddings} & eager & \texttt{synthetic\_\allowbreak{}data} & \texttt{schemas} & eager \\
+\texttt{experiments} & \texttt{evaluation} & eager & \texttt{tools} & \texttt{citations} & eager \\
+\texttt{experiments} & \texttt{factory} & eager & \texttt{tools} & \texttt{metadata\_\allowbreak{}filters} & eager \\
+\texttt{experiments} & \texttt{ingestion} & eager & \texttt{tools} & \texttt{schemas} & eager \\
+\texttt{experiments} & \texttt{vector\_\allowbreak{}store} & eager & \texttt{vector\_\allowbreak{}store} & \texttt{index\_\allowbreak{}persistence} & eager \\
+\texttt{factory} & \texttt{active\_\allowbreak{}learning} & lazy & \texttt{vector\_\allowbreak{}store} & \texttt{metadata\_\allowbreak{}filters} & eager \\
+\texttt{factory} & \texttt{active\_\allowbreak{}learning} & typing & \texttt{vector\_\allowbreak{}store} & \texttt{schemas} & eager \\
+\texttt{factory} & \texttt{agent} & eager & \texttt{vector\_\allowbreak{}store} & \texttt{source\_\allowbreak{}ids} & eager \\
+\texttt{factory} & \texttt{chunking} & eager &  &  &  \\
 \end{longtable}

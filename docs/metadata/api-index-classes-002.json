@@ -1,6 +1,46 @@
 {
   "classes": [
     {
+      "name": "PromptVariableError",
+      "qualified_name": "feedback_intelligence_agent.prompt_registry.PromptVariableError",
+      "kind": "exception",
+      "module": "feedback_intelligence_agent.prompt_registry",
+      "bases": [
+        "ValueError"
+      ],
+      "source": "src/feedback_intelligence_agent/prompt_registry.py",
+      "line": 23,
+      "public": true,
+      "decorators": [],
+      "summary": "Raised when render variables do not match a template's declared variables.",
+      "description": "",
+      "attributes": [],
+      "methods": [],
+      "properties": [],
+      "constructor": null,
+      "notes": ""
+    },
+    {
+      "name": "QdrantStoreError",
+      "qualified_name": "feedback_intelligence_agent.qdrant_store.QdrantStoreError",
+      "kind": "exception",
+      "module": "feedback_intelligence_agent.qdrant_store",
+      "bases": [
+        "RuntimeError"
+      ],
+      "source": "src/feedback_intelligence_agent/qdrant_store.py",
+      "line": 31,
+      "public": true,
+      "decorators": [],
+      "summary": "Raised when the Qdrant store cannot be configured or reached.",
+      "description": "",
+      "attributes": [],
+      "methods": [],
+      "properties": [],
+      "constructor": null,
+      "notes": ""
+    },
+    {
       "name": "QdrantVectorStore",
       "qualified_name": "feedback_intelligence_agent.qdrant_store.QdrantVectorStore",
       "kind": "class",
@@ -673,7 +713,7 @@
         "BaseModel"
       ],
       "source": "src/feedback_intelligence_agent/record_ingestion.py",
-      "line": 16,
+      "line": 15,
       "public": true,
       "decorators": [],
       "summary": "A single tenant's records, with no client-selectable filesystem paths.",
@@ -717,7 +757,7 @@
           "module": "feedback_intelligence_agent.record_ingestion",
           "signature": "normalise_tenant_id(cls, value: str | None) -> str | None",
           "source": "src/feedback_intelligence_agent/record_ingestion.py",
-          "line": 26,
+          "line": 25,
           "public": true,
           "is_async": false,
           "decorators": [
@@ -770,7 +810,7 @@
         "BaseModel"
       ],
       "source": "src/feedback_intelligence_agent/record_ingestion.py",
-      "line": 36,
+      "line": 35,
       "public": true,
       "decorators": [],
       "summary": "Batch-local counts without global index totals or server paths.",
