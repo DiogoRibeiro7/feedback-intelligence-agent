@@ -338,6 +338,21 @@ def _with_resilience(provider: LLMProvider, settings: Settings) -> LLMProvider:
     )
 
 
+def build_agent_snapshot(
+    settings: Settings, vector_store: VectorStore, *, previous: FeedbackInsightAgent
+) -> FeedbackInsightAgent:
+    """Rebuild retrieval and dataset tools while retaining provider and policy state."""
+    return FeedbackInsightAgent(
+        query_engine=build_retriever(settings, vector_store),
+        llm=previous.llm,
+        telemetry=previous.telemetry,
+        tools=build_default_tools(vector_store.chunks),
+        query_rewriter=previous.query_rewriter,
+        reranker=previous.reranker,
+        hallucination_checker=previous.hallucination_checker,
+    )
+
+
 def build_agent(settings: Settings, *, telemetry: Telemetry | None = None) -> FeedbackInsightAgent:
     """Construct a fully wired feedback insight agent.
 

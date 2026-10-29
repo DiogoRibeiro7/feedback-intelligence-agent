@@ -6,10 +6,9 @@ from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 from feedback_intelligence_agent.agent import FeedbackInsightAgent
 from feedback_intelligence_agent.config import Settings
-from feedback_intelligence_agent.factory import build_retriever
+from feedback_intelligence_agent.factory import build_agent_snapshot
 from feedback_intelligence_agent.index_updates import update_json_index
 from feedback_intelligence_agent.schemas import FeedbackRecord
-from feedback_intelligence_agent.tools import build_default_tools
 from feedback_intelligence_agent.vector_store import InMemoryVectorStore
 
 
@@ -68,15 +67,7 @@ def ingest_record_batch(
 
     def prepare_snapshot(store: InMemoryVectorStore) -> None:
         nonlocal prepared_agent
-        prepared_agent = FeedbackInsightAgent(
-            query_engine=build_retriever(settings, store),
-            llm=agent.llm,
-            telemetry=agent.telemetry,
-            tools=build_default_tools(store.chunks),
-            query_rewriter=agent.query_rewriter,
-            reranker=agent.reranker,
-            hallucination_checker=agent.hallucination_checker,
-        )
+        prepared_agent = build_agent_snapshot(settings, store, previous=agent)
 
     result = update_json_index(
         records,

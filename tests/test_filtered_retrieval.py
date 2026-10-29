@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
+from types import SimpleNamespace
 
 import pytest
 from fastapi.testclient import TestClient
@@ -156,7 +157,9 @@ def test_api_returns_filtered_evidence_beyond_original_candidate_pool(
         DeterministicLLM(),
         telemetry=Telemetry(sink=sink),
     )
-    monkeypatch.setattr(api_module, "build_agent", lambda settings: agent)
+    monkeypatch.setattr(
+        api_module, "AgentSnapshots", lambda settings: SimpleNamespace(get=lambda: agent)
+    )
     for store_name in ("CONVERSATION", "JOB", "REPORT", "HUMAN_FEEDBACK", "ACTIVE_LEARNING"):
         monkeypatch.setenv(f"FEEDBACK_AGENT_{store_name}_STORE_PATH", str(tmp_path / store_name))
     monkeypatch.setenv("FEEDBACK_AGENT_API_AUTH_ENABLED", "false")

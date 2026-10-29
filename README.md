@@ -829,12 +829,28 @@ lexical, or hybrid retrieval, streaming, chat, and aggregation tools see the
 updated data after a successful response. Provider and circuit-breaker objects
 are retained during refresh.
 
-This endpoint supports the JSON backend; Qdrant returns `409`. Other API workers
-do not receive automatic invalidation, and external CLI updates do not refresh
-running agents. Use a single serving instance for immediate visibility, or
-restart other workers to load the updated snapshot. Records are persisted in the
-index, not appended to the source CSV: retain the original batches or update your
-source dataset before performing a full index rebuild.
+This endpoint supports the JSON backend; Qdrant returns `409`. Each API worker
+automatically loads shared JSON index changes on its next query, streaming query,
+or chat request. This also covers CLI updates, full rebuilds, and completed
+ingestion jobs targeting the configured index. Records are persisted in the index,
+not appended to the source CSV: retain the original batches or update your source
+dataset before performing a full index rebuild.
+
+Workers check file identity, size, and nanosecond timestamps before selecting an
+agent. An unchanged index requires only a filesystem stat; a changed index is
+loaded and prepared under the shared writer lock. Concurrent reloads within one
+worker reuse the same prepared snapshot. Requests that already selected an agent
+finish with that snapshot, including its dataset tools; provider, circuit-breaker,
+and policy state survives a reload. The first request after a change pays the
+reload cost and can wait for the writer lock (up to 60 seconds).
+
+If the committed index is missing, unreadable, invalid, or cannot be prepared,
+new query, streaming, and chat requests return `503` with a generic message.
+They retry on the next request; restoring a valid index recovers service without
+a restart. Reload never silently rebuilds from the original CSV. `/health` and
+`/ready` retain their existing process/startup checks. Automatic reload covers
+cooperating atomic writers on a shared local filesystem; Qdrant and standalone
+agents constructed with `build_agent()` retain their existing behavior.
 
 ## Asynchronous ingestion jobs
 
@@ -936,7 +952,8 @@ Full rebuilds and direct `save()` calls use the same writer lock but intentional
 replace the entire snapshot; they do not merge an older in-memory snapshot.
 Use `update-index` for concurrent incremental ingestion.
 
-These guarantees cover cooperating writers on local filesystems. Existing
+These guarantees cover cooperating writers on local filesystems. API workers
+reload changed JSON indexes on their next query or chat request; standalone
 in-memory retrievers keep their loaded snapshot until rebuilt. An abrupt
 process exit releases the OS lock but can leave an unused temporary file;
 atomic replacement does not promise power-loss durability on every filesystem.

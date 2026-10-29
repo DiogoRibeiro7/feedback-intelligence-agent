@@ -11,8 +11,8 @@ import pytest
 from fastapi.testclient import TestClient
 
 import feedback_intelligence_agent.api as api_module
+import feedback_intelligence_agent.factory as factory_module
 import feedback_intelligence_agent.index_persistence as persistence_module
-import feedback_intelligence_agent.record_ingestion as ingestion_module
 from feedback_intelligence_agent.config import Settings
 from feedback_intelligence_agent.embeddings import HashingEmbeddingModel
 from feedback_intelligence_agent.factory import build_agent
@@ -341,7 +341,7 @@ def test_failed_ingestion_preserves_disk_and_serving_agent_without_leaking_error
         if failure == "embedding":
             patch.setattr(HashingEmbeddingModel, "embed", fail)
         elif failure == "snapshot":
-            patch.setattr(ingestion_module, "build_retriever", fail)
+            patch.setattr(factory_module, "build_retriever", fail)
         else:
             patch.setattr(persistence_module.os, "replace", fail)
         response = client.post("/ingestion/records", json={"records": [record()]}, headers=WRITE)
@@ -396,7 +396,7 @@ def test_queries_keep_the_old_snapshot_until_ingestion_commits(
 ) -> None:
     client, _ = context
     entered, release = Event(), Event()
-    build_retriever = ingestion_module.build_retriever
+    build_retriever = factory_module.build_retriever
 
     def paused_build(settings: Settings, store: VectorStore) -> Retriever:
         snapshot = build_retriever(settings, store)
@@ -404,7 +404,7 @@ def test_queries_keep_the_old_snapshot_until_ingestion_commits(
         assert release.wait(10), "snapshot test timed out"
         return snapshot
 
-    monkeypatch.setattr(ingestion_module, "build_retriever", paused_build)
+    monkeypatch.setattr(factory_module, "build_retriever", paused_build)
     with ThreadPoolExecutor(max_workers=1) as executor:
         pending = executor.submit(
             client.post, "/ingestion/records", json={"records": [record()]}, headers=WRITE
