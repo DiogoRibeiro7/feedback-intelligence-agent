@@ -17,5 +17,5 @@ lexical_weight: 0.4
 tracking_provider: none
 # Optional MLflow tracking:
 # tracking_provider: mlflow
-# tracking_uri: file:.artifacts/mlruns
+# tracking_uri: sqlite:///.artifacts/mlflow.db
 # tracking_experiment_name: feedback-intelligence-agent

@@ -55,13 +55,15 @@ Distribution & Version constraint & Extras requested \\
 \endfoot
 \bottomrule
 \endlastfoot
+\texttt{alembic} & \texttt{\textgreater{}=1.\allowbreak{}18,\allowbreak{}\textless{}2.\allowbreak{}0} & -- \\
 \texttt{anthropic} & \texttt{\textgreater{}=0.\allowbreak{}40,\allowbreak{}\textless{}2.\allowbreak{}0} & -- \\
 \texttt{boto3} & \texttt{\textgreater{}=1.\allowbreak{}34,\allowbreak{}\textless{}2.\allowbreak{}0} & -- \\
 \texttt{confluent-\allowbreak{}kafka} & \texttt{\textgreater{}=2.\allowbreak{}3,\allowbreak{}\textless{}3.\allowbreak{}0} & -- \\
-\texttt{mlflow} & \texttt{\textgreater{}=3.\allowbreak{}0,\allowbreak{}\textless{}4.\allowbreak{}0} & -- \\
-\texttt{opentelemetry-\allowbreak{}api} & \texttt{\textgreater{}=1.\allowbreak{}27,\allowbreak{}\textless{}2.\allowbreak{}0} & -- \\
-\texttt{opentelemetry-\allowbreak{}sdk} & \texttt{\textgreater{}=1.\allowbreak{}27,\allowbreak{}\textless{}2.\allowbreak{}0} & -- \\
+\texttt{mlflow-\allowbreak{}skinny} & \texttt{\textgreater{}=3.\allowbreak{}17.\allowbreak{}2,\allowbreak{}\textless{}4.\allowbreak{}0} & -- \\
+\texttt{opentelemetry-\allowbreak{}api} & \texttt{\textgreater{}=1.\allowbreak{}45.\allowbreak{}1,\allowbreak{}\textless{}2.\allowbreak{}0} & -- \\
+\texttt{opentelemetry-\allowbreak{}sdk} & \texttt{\textgreater{}=1.\allowbreak{}45.\allowbreak{}1,\allowbreak{}\textless{}2.\allowbreak{}0} & -- \\
 \texttt{qdrant-\allowbreak{}client} & \texttt{\textgreater{}=1.\allowbreak{}7,\allowbreak{}\textless{}2.\allowbreak{}0} & -- \\
+\texttt{sqlalchemy} & \texttt{\textgreater{}=2.\allowbreak{}0,\allowbreak{}\textless{}3.\allowbreak{}0} & -- \\
 \end{longtable}
 
 \begin{longtable}{>{\raggedright\arraybackslash\small}p{0.35\textwidth} >{\raggedright\arraybackslash\small}p{0.55\textwidth}}
@@ -81,7 +83,7 @@ Extra & Distributions \\
 \endlastfoot
 \texttt{anthropic} & \texttt{anthropic} \\
 \texttt{bedrock} & \texttt{boto3} \\
-\texttt{mlflow} & \texttt{mlflow} \\
+\texttt{mlflow} & \texttt{alembic}, \texttt{mlflow-\allowbreak{}skinny}, \texttt{sqlalchemy} \\
 \texttt{otel} & \texttt{opentelemetry-\allowbreak{}api}, \texttt{opentelemetry-\allowbreak{}sdk} \\
 \texttt{qdrant} & \texttt{qdrant-\allowbreak{}client} \\
 \texttt{streaming} & \texttt{boto3}, \texttt{confluent-\allowbreak{}kafka} \\
@@ -113,7 +115,7 @@ Distribution & Version constraint & Extras requested \\
 
 \section{Dependency locking}
 
-Exact resolved versions are pinned in \texttt{poetry.\allowbreak{}lock}, which locks 144 packages. The lock file is version controlled, so a checkout of a given revision resolves to the same dependency set.
+Exact resolved versions are pinned in \texttt{poetry.\allowbreak{}lock}, which locks 101 packages. The lock file is version controlled, so a checkout of a given revision resolves to the same dependency set.
 
 \section{Frontend dependencies}
 

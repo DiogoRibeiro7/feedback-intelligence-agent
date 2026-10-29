@@ -57,6 +57,34 @@ jobs:
       - name: Build package
         run: poetry build
 
+  mlflow-integration:
+    name: MLflow tracking (${{ matrix.python-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.10", "3.12"]
+    env:
+      FEEDBACK_AGENT_MLFLOW_TEST: "1"
+      MLFLOW_ENABLE_TELEMETRY: "false"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Install Poetry
+        run: pipx install poetry==2.2.1
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: poetry
+
+      - name: Install tracking extra
+        run: poetry install --with dev --extras mlflow
+
+      - name: Test local tracking backends
+        run: poetry run pytest tests/test_mlflow_integration.py
+
   windows-persistence:
     name: Windows index persistence
     runs-on: windows-latest

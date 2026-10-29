@@ -264,8 +264,9 @@ def _import_mlflow() -> ModuleType:
         import mlflow
     except ImportError as exc:
         raise ExperimentTrackingError(
-            "The 'mlflow' package is required for experiment tracking. "
-            "Install it with: poetry install --extras mlflow (or: pip install mlflow)."
+            "The MLflow tracking client is required for experiment tracking. "
+            "Install it with: poetry install --extras mlflow "
+            "(or: pip install 'feedback-intelligence-agent[mlflow]')."
         ) from exc
     module: ModuleType = mlflow
     return module

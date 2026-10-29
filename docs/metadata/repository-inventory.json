@@ -43,7 +43,7 @@
     }
   },
   "files": {
-    "total": 219,
+    "total": 220,
     "excluded_generated_documentation": 323,
     "by_category": {
       "build-configuration": 1,
@@ -65,7 +65,7 @@
       "other": 2,
       "python-script": 2,
       "python-source": 47,
-      "python-test": 46,
+      "python-test": 47,
       "repository-configuration": 2,
       "repository-governance": 8,
       "test-fixture": 2
@@ -97,15 +97,15 @@
       },
       "Markdown": {
         "files": 15,
-        "lines": 2812
+        "lines": 2840
       },
       "Python": {
-        "files": 107,
-        "lines": 28755
+        "files": 108,
+        "lines": 28832
       },
       "TOML": {
         "files": 2,
-        "lines": 165
+        "lines": 168
       },
       "TypeScript": {
         "files": 4,
@@ -113,7 +113,7 @@
       },
       "YAML": {
         "files": 16,
-        "lines": 708
+        "lines": 736
       }
     },
     "entries": [
@@ -198,8 +198,8 @@
         "path": ".github/workflows/ci.yml",
         "category": "ci-workflow",
         "language": "YAML",
-        "lines": 132,
-        "bytes": 3837
+        "lines": 160,
+        "bytes": 4598
       },
       {
         "path": ".github/workflows/dependency-review.yml",
@@ -254,8 +254,8 @@
         "path": "CHANGELOG.md",
         "category": "documentation",
         "language": "Markdown",
-        "lines": 148,
-        "bytes": 7358
+        "lines": 160,
+        "bytes": 8061
       },
       {
         "path": "CITATION.cff",
@@ -303,8 +303,8 @@
         "path": "README.md",
         "category": "documentation",
         "language": "Markdown",
-        "lines": 1284,
-        "bytes": 60464
+        "lines": 1293,
+        "bytes": 61108
       },
       {
         "path": "ROADMAP.md",
@@ -387,8 +387,8 @@
         "path": "docs/architecture.md",
         "category": "documentation",
         "language": "Markdown",
-        "lines": 185,
-        "bytes": 14509
+        "lines": 192,
+        "bytes": 14976
       },
       {
         "path": "docs/case_study.md",
@@ -843,7 +843,7 @@
         "category": "example-data",
         "language": "YAML",
         "lines": 21,
-        "bytes": 717
+        "bytes": 725
       },
       {
         "path": "examples/queries.jsonl",
@@ -962,14 +962,14 @@
         "category": "dependency-lock",
         "language": null,
         "lines": null,
-        "bytes": 569795
+        "bytes": 346595
       },
       {
         "path": "pyproject.toml",
         "category": "build-configuration",
         "language": "TOML",
-        "lines": 113,
-        "bytes": 3632
+        "lines": 116,
+        "bytes": 3888
       },
       {
         "path": "scripts/benchmark.py",
@@ -1087,8 +1087,8 @@
         "path": "src/feedback_intelligence_agent/experiments.py",
         "category": "python-source",
         "language": "Python",
-        "lines": 346,
-        "bytes": 13202
+        "lines": 347,
+        "bytes": 13254
       },
       {
         "path": "src/feedback_intelligence_agent/factory.py",
@@ -1525,6 +1525,13 @@
         "bytes": 7427
       },
       {
+        "path": "tests/test_mlflow_integration.py",
+        "category": "python-test",
+        "language": "Python",
+        "lines": 76,
+        "bytes": 2981
+      },
+      {
         "path": "tests/test_output_parser.py",
         "category": "python-test",
         "language": "Python",
@@ -1846,6 +1853,12 @@
     ],
     "optional": [
       {
+        "name": "alembic",
+        "constraint": ">=1.18,<2.0",
+        "optional": true,
+        "extras": []
+      },
+      {
         "name": "anthropic",
         "constraint": ">=0.40,<2.0",
         "optional": true,
@@ -1864,26 +1877,32 @@
         "extras": []
       },
       {
-        "name": "mlflow",
-        "constraint": ">=3.0,<4.0",
+        "name": "mlflow-skinny",
+        "constraint": ">=3.17.2,<4.0",
         "optional": true,
         "extras": []
       },
       {
         "name": "opentelemetry-api",
-        "constraint": ">=1.27,<2.0",
+        "constraint": ">=1.45.1,<2.0",
         "optional": true,
         "extras": []
       },
       {
         "name": "opentelemetry-sdk",
-        "constraint": ">=1.27,<2.0",
+        "constraint": ">=1.45.1,<2.0",
         "optional": true,
         "extras": []
       },
       {
         "name": "qdrant-client",
         "constraint": ">=1.7,<2.0",
+        "optional": true,
+        "extras": []
+      },
+      {
+        "name": "sqlalchemy",
+        "constraint": ">=2.0,<3.0",
         "optional": true,
         "extras": []
       }
@@ -1940,7 +1959,9 @@
         "boto3"
       ],
       "mlflow": [
-        "mlflow"
+        "alembic",
+        "mlflow-skinny",
+        "sqlalchemy"
       ],
       "otel": [
         "opentelemetry-api",
@@ -1957,7 +1978,7 @@
     "lock_file": {
       "path": "poetry.lock",
       "present": true,
-      "locked_packages": 144
+      "locked_packages": 101
     },
     "frontend": {
       "name": "feedback-intelligence-agent-frontend",
@@ -2334,6 +2355,50 @@
               "name": "Build package",
               "uses": "",
               "run": "poetry build",
+              "working_directory": ""
+            }
+          ]
+        },
+        {
+          "id": "mlflow-integration",
+          "name": "MLflow tracking (${{ matrix.python-version }})",
+          "runs_on": "ubuntu-latest",
+          "needs": [],
+          "matrix": {
+            "python-version": [
+              "3.10",
+              "3.12"
+            ]
+          },
+          "steps": [
+            {
+              "name": "Checkout",
+              "uses": "actions/checkout@v7",
+              "run": "",
+              "working_directory": ""
+            },
+            {
+              "name": "Install Poetry",
+              "uses": "",
+              "run": "pipx install poetry==2.2.1",
+              "working_directory": ""
+            },
+            {
+              "name": "Set up Python",
+              "uses": "actions/setup-python@v7",
+              "run": "",
+              "working_directory": ""
+            },
+            {
+              "name": "Install tracking extra",
+              "uses": "",
+              "run": "poetry install --with dev --extras mlflow",
+              "working_directory": ""
+            },
+            {
+              "name": "Test local tracking backends",
+              "uses": "",
+              "run": "poetry run pytest tests/test_mlflow_integration.py",
               "working_directory": ""
             }
           ]
@@ -3083,6 +3148,13 @@
       "parametrized_cases": 0
     },
     {
+      "path": "tests/test_mlflow_integration.py",
+      "module_under_test": "mlflow_integration",
+      "category": "unit",
+      "test_functions": 1,
+      "parametrized_cases": 1
+    },
+    {
       "path": "tests/test_output_parser.py",
       "module_under_test": "output_parser",
       "category": "unit",
@@ -3227,7 +3299,7 @@
     {
       "path": "examples/experiment_config.yaml",
       "format": "yaml",
-      "bytes": 717,
+      "bytes": 725,
       "records": null,
       "columns": []
     },

@@ -4,8 +4,20 @@ All notable changes to this project are documented here.
 
 ## Unreleased
 
+### Changed
+
+- The `mlflow` extra installs the tracking client (`mlflow-skinny`) with SQLite
+  support, removing unused server, model-training, and image dependencies while
+  retaining Python 3.10 support. Host the MLflow server/UI in a separate environment.
+- MLflow 3.17 requires `MLFLOW_ALLOW_FILE_STORE=true` for existing `file:` tracking
+  URIs; the documented local setup now uses SQLite.
+
 ### Fixed
 
+- Refresh vulnerable Python dependencies, including AnyIO, Certifi, Cryptography,
+  GitPython, SQLParse, Mako, MLflow's tracking client, OpenTelemetry, and urllib3.
+- Exercise real MLflow parameter, metric, tag, and artifact round trips against
+  local file and SQLite stores in CI on Python 3.10 and 3.12.
 - Sentiment and issue-cluster tools apply request metadata filters before
   aggregation, keeping counts, distributions, document IDs, and example quotes
   within the selected tenant and cohort, including inherited chat tenant scope.
