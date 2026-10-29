@@ -1,4 +1,4 @@
-"""Shared metadata matching for retrieval and the agent's final evidence check."""
+"""Shared metadata matching for retrieval, dataset tools, and final evidence checks."""
 
 from __future__ import annotations
 

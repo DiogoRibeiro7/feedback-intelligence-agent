@@ -162,7 +162,7 @@ class FeedbackInsightAgent:
                 results = safe_results
                 run_span["guardrail_context_dropped"] = context_chunks_dropped
             tool_record = self._maybe_run_tool(
-                effective_question, results, correlation_id=correlation_id
+                effective_question, results, correlation_id=correlation_id, filters=filters
             )
             run_span["tool_used"] = tool_record.tool_name if tool_record is not None else None
             run_span["tool_status"] = (
@@ -322,6 +322,7 @@ class FeedbackInsightAgent:
         results: list[SearchResult],
         *,
         correlation_id: str,
+        filters: MetadataFilters | None = None,
     ) -> ToolRunRecord | None:
         """Route the question to a local tool and run it with telemetry.
 
@@ -354,7 +355,7 @@ class FeedbackInsightAgent:
         tool = self.tools.get(selection.tool_name or "")
         if tool is None:  # Defensive: the router only selects registered tools.
             return None
-        payload = tool.build_payload(question, results)
+        payload = tool.build_payload(question, results, filters=filters)
         try:
             with self.telemetry.span(
                 "tool_run_started",

@@ -6,6 +6,10 @@ All notable changes to this project are documented here.
 
 ### Fixed
 
+- Sentiment and issue-cluster tools apply request metadata filters before
+  aggregation, keeping counts, distributions, document IDs, and example quotes
+  within the selected tenant and cohort, including inherited chat tenant scope.
+- Ticket evidence applies the same filters before deduplication and limiting.
 - Authenticated conversation reads and follow-ups use a private namespace per
   API key, returning 404 for unknown or another caller's conversation IDs.
 - API-key conversation identities use PBKDF2-HMAC-SHA256 with 600,000 iterations

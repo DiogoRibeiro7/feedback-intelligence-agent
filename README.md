@@ -617,9 +617,15 @@ fixed application-specific domain separator so they survive restarts. Successful
 derivations are cached in memory for up to three keys; each request still checks
 the current key configuration and role. Use randomly generated API keys.
 
+Sentiment summaries and issue clusters apply the request's tenant, segment,
+channel, rating, and date filters to the full indexed dataset before counting
+records or selecting example quotes. Aggregates count each matching source
+document once and are independent of the retrieval `top_k` limit. Chat follow-ups
+also apply their saved tenant to these tools. Ticket drafts use filtered evidence.
+
 This ownership check protects conversation history. Tenant authorization for
-queries, reports, feedback, and ingestion, plus tenant filtering in aggregate
-tools, remains on the roadmap.
+queries, reports, feedback, and ingestion remains on the roadmap; callers can
+still select their requested tenant, and omitting filters queries all tenants.
 
 Optional rate limiting can be enabled independently:
 

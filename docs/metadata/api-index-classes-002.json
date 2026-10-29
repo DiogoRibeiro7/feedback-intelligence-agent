@@ -5809,7 +5809,7 @@
         "BaseModel"
       ],
       "source": "src/feedback_intelligence_agent/tools.py",
-      "line": 226,
+      "line": 239,
       "public": true,
       "decorators": [],
       "summary": "One recurring issue cluster with supporting documents.",
@@ -5870,12 +5870,20 @@
         "BaseModel"
       ],
       "source": "src/feedback_intelligence_agent/tools.py",
-      "line": 219,
+      "line": 231,
       "public": true,
       "decorators": [],
-      "summary": "Controls for the issue clustering output size.",
+      "summary": "Metadata filters and controls for the issue clustering output size.",
       "description": "",
       "attributes": [
+        {
+          "name": "filters",
+          "annotation": "MetadataFilters",
+          "default": "MetadataFilters()",
+          "required": false,
+          "description": "",
+          "constraints": {}
+        },
         {
           "name": "max_clusters",
           "annotation": "int",
@@ -5912,7 +5920,7 @@
         "ToolOutput"
       ],
       "source": "src/feedback_intelligence_agent/tools.py",
-      "line": 236,
+      "line": 249,
       "public": true,
       "decorators": [],
       "summary": "Recurring issue clusters detected in the feedback dataset.",
@@ -5943,7 +5951,7 @@
           "module": "feedback_intelligence_agent.tools",
           "signature": "render(self) -> str",
           "source": "src/feedback_intelligence_agent/tools.py",
-          "line": 242,
+          "line": 255,
           "public": true,
           "is_async": false,
           "decorators": [],
@@ -5981,7 +5989,7 @@
         "Tool"
       ],
       "source": "src/feedback_intelligence_agent/tools.py",
-      "line": 253,
+      "line": 266,
       "public": true,
       "decorators": [],
       "summary": "Group recurring customer issues with deterministic keyword clustering.",
@@ -6029,7 +6037,7 @@
         "module": "feedback_intelligence_agent.tools",
         "signature": "__init__(self, chunks: Sequence[DocumentChunk]) -> None",
         "source": "src/feedback_intelligence_agent/tools.py",
-        "line": 261,
+        "line": 274,
         "public": false,
         "is_async": false,
         "decorators": [],
@@ -6071,12 +6079,20 @@
         "BaseModel"
       ],
       "source": "src/feedback_intelligence_agent/tools.py",
-      "line": 117,
+      "line": 128,
       "public": true,
       "decorators": [],
       "summary": "Optional filters applied before summarising sentiment.",
       "description": "",
       "attributes": [
+        {
+          "name": "filters",
+          "annotation": "MetadataFilters",
+          "default": "MetadataFilters()",
+          "required": false,
+          "description": "",
+          "constraints": {}
+        },
         {
           "name": "segment",
           "annotation": "str | None",
@@ -6108,7 +6124,7 @@
         "ToolOutput"
       ],
       "source": "src/feedback_intelligence_agent/tools.py",
-      "line": 124,
+      "line": 136,
       "public": true,
       "decorators": [],
       "summary": "Aggregated sentiment and rating distribution over the feedback dataset.",
@@ -6163,7 +6179,7 @@
           "module": "feedback_intelligence_agent.tools",
           "signature": "render(self) -> str",
           "source": "src/feedback_intelligence_agent/tools.py",
-          "line": 133,
+          "line": 145,
           "public": true,
           "is_async": false,
           "decorators": [],
@@ -6201,7 +6217,7 @@
         "Tool"
       ],
       "source": "src/feedback_intelligence_agent/tools.py",
-      "line": 146,
+      "line": 158,
       "public": true,
       "decorators": [],
       "summary": "Summarise the sentiment and rating distribution of the indexed feedback.",
@@ -6249,7 +6265,7 @@
         "module": "feedback_intelligence_agent.tools",
         "signature": "__init__(self, chunks: Sequence[DocumentChunk]) -> None",
         "source": "src/feedback_intelligence_agent/tools.py",
-        "line": 158,
+        "line": 170,
         "public": false,
         "is_async": false,
         "decorators": [],
@@ -6291,7 +6307,7 @@
         "BaseModel"
       ],
       "source": "src/feedback_intelligence_agent/tools.py",
-      "line": 311,
+      "line": 325,
       "public": true,
       "decorators": [],
       "summary": "Question and retrieved evidence used to draft a support ticket.",
@@ -6330,7 +6346,7 @@
         "ToolOutput"
       ],
       "source": "src/feedback_intelligence_agent/tools.py",
-      "line": 318,
+      "line": 332,
       "public": true,
       "decorators": [],
       "summary": "A drafted support ticket grounded in retrieved feedback.",
@@ -6385,7 +6401,7 @@
           "module": "feedback_intelligence_agent.tools",
           "signature": "render(self) -> str",
           "source": "src/feedback_intelligence_agent/tools.py",
-          "line": 327,
+          "line": 341,
           "public": true,
           "is_async": false,
           "decorators": [],
@@ -6423,7 +6439,7 @@
         "Tool"
       ],
       "source": "src/feedback_intelligence_agent/tools.py",
-      "line": 336,
+      "line": 350,
       "public": true,
       "decorators": [],
       "summary": "Draft a support ticket from the question and retrieved feedback context.",
@@ -6476,13 +6492,13 @@
           "qualified_name": "feedback_intelligence_agent.tools.TicketDraftTool.build_payload",
           "kind": "method",
           "module": "feedback_intelligence_agent.tools",
-          "signature": "build_payload(self, question: str, results: Sequence[SearchResult]) -> dict[str, Any]",
+          "signature": "build_payload(self, question: str, results: Sequence[SearchResult], *, filters: MetadataFilters | None = None) -> dict[str, Any]",
           "source": "src/feedback_intelligence_agent/tools.py",
-          "line": 350,
+          "line": 364,
           "public": true,
           "is_async": false,
           "decorators": [],
-          "summary": "Convert retrieved chunks into deduplicated ticket evidence.",
+          "summary": "Filter retrieved chunks before deduplicating and limiting ticket evidence.",
           "description": "",
           "parameters": [
             {
@@ -6504,6 +6520,13 @@
               "annotation": "Sequence[SearchResult]",
               "default": null,
               "kind": "positional-or-keyword",
+              "description": ""
+            },
+            {
+              "name": "filters",
+              "annotation": "MetadataFilters | None",
+              "default": "None",
+              "kind": "keyword-only",
               "description": ""
             }
           ],
@@ -6530,7 +6553,7 @@
         "BaseModel"
       ],
       "source": "src/feedback_intelligence_agent/tools.py",
-      "line": 303,
+      "line": 317,
       "public": true,
       "decorators": [],
       "summary": "One retrieved evidence item attached to a ticket draft.",
@@ -6575,7 +6598,7 @@
         "ABC"
       ],
       "source": "src/feedback_intelligence_agent/tools.py",
-      "line": 44,
+      "line": 45,
       "public": true,
       "decorators": [],
       "summary": "Typed interface implemented by all local tools.",
@@ -6620,13 +6643,13 @@
           "qualified_name": "feedback_intelligence_agent.tools.Tool.build_payload",
           "kind": "method",
           "module": "feedback_intelligence_agent.tools",
-          "signature": "build_payload(self, question: str, results: Sequence[SearchResult]) -> dict[str, Any]",
+          "signature": "build_payload(self, question: str, results: Sequence[SearchResult], *, filters: MetadataFilters | None = None) -> dict[str, Any]",
           "source": "src/feedback_intelligence_agent/tools.py",
-          "line": 58,
+          "line": 59,
           "public": true,
           "is_async": false,
           "decorators": [],
-          "summary": "Build the tool input payload from the question and retrieved context.",
+          "summary": "Build tool input with request filters, independently of retrieval limits.",
           "description": "",
           "parameters": [
             {
@@ -6649,6 +6672,13 @@
               "default": null,
               "kind": "positional-or-keyword",
               "description": ""
+            },
+            {
+              "name": "filters",
+              "annotation": "MetadataFilters | None",
+              "default": "None",
+              "kind": "keyword-only",
+              "description": ""
             }
           ],
           "returns": {
@@ -6667,7 +6697,7 @@
           "module": "feedback_intelligence_agent.tools",
           "signature": "execute(self, payload: Mapping[str, Any]) -> ToolOutput",
           "source": "src/feedback_intelligence_agent/tools.py",
-          "line": 63,
+          "line": 70,
           "public": true,
           "is_async": false,
           "decorators": [],
@@ -6717,7 +6747,7 @@
         "RuntimeError"
       ],
       "source": "src/feedback_intelligence_agent/tools.py",
-      "line": 32,
+      "line": 33,
       "public": true,
       "decorators": [],
       "summary": "Raised when a tool receives invalid input or cannot complete its run.",
@@ -6737,7 +6767,7 @@
         "BaseModel"
       ],
       "source": "src/feedback_intelligence_agent/tools.py",
-      "line": 36,
+      "line": 37,
       "public": true,
       "decorators": [],
       "summary": "Base class for tool outputs that can render a human-readable summary.",
@@ -6751,7 +6781,7 @@
           "module": "feedback_intelligence_agent.tools",
           "signature": "render(self) -> str",
           "source": "src/feedback_intelligence_agent/tools.py",
-          "line": 39,
+          "line": 40,
           "public": true,
           "is_async": false,
           "decorators": [],
@@ -6792,7 +6822,7 @@
       "module": "feedback_intelligence_agent.tools",
       "bases": [],
       "source": "src/feedback_intelligence_agent/tools.py",
-      "line": 420,
+      "line": 442,
       "public": true,
       "decorators": [],
       "summary": "Registry of available tools keyed by their stable names.",
@@ -6806,7 +6836,7 @@
           "module": "feedback_intelligence_agent.tools",
           "signature": "register(self, tool: Tool) -> None",
           "source": "src/feedback_intelligence_agent/tools.py",
-          "line": 429,
+          "line": 451,
           "public": true,
           "is_async": false,
           "decorators": [],
@@ -6849,7 +6879,7 @@
           "module": "feedback_intelligence_agent.tools",
           "signature": "get(self, name: str) -> Tool | None",
           "source": "src/feedback_intelligence_agent/tools.py",
-          "line": 435,
+          "line": 457,
           "public": true,
           "is_async": false,
           "decorators": [],
@@ -6887,7 +6917,7 @@
           "module": "feedback_intelligence_agent.tools",
           "signature": "names(self) -> list[str]",
           "source": "src/feedback_intelligence_agent/tools.py",
-          "line": 439,
+          "line": 461,
           "public": true,
           "is_async": false,
           "decorators": [],
@@ -6920,7 +6950,7 @@
         "module": "feedback_intelligence_agent.tools",
         "signature": "__init__(self, tools: Sequence[Tool] = ()) -> None",
         "source": "src/feedback_intelligence_agent/tools.py",
-        "line": 423,
+        "line": 445,
         "public": false,
         "is_async": false,
         "decorators": [],
@@ -6960,7 +6990,7 @@
       "module": "feedback_intelligence_agent.tools",
       "bases": [],
       "source": "src/feedback_intelligence_agent/tools.py",
-      "line": 463,
+      "line": 485,
       "public": true,
       "decorators": [
         "dataclass(frozen=True)"
@@ -6997,7 +7027,7 @@
       "module": "feedback_intelligence_agent.tools",
       "bases": [],
       "source": "src/feedback_intelligence_agent/tools.py",
-      "line": 511,
+      "line": 533,
       "public": true,
       "decorators": [],
       "summary": "Deterministic keyword router that selects at most one tool per query.",
@@ -7011,7 +7041,7 @@
           "module": "feedback_intelligence_agent.tools",
           "signature": "select(self, question: str) -> ToolSelection",
           "source": "src/feedback_intelligence_agent/tools.py",
-          "line": 524,
+          "line": 546,
           "public": true,
           "is_async": false,
           "decorators": [],
@@ -7051,7 +7081,7 @@
         "module": "feedback_intelligence_agent.tools",
         "signature": "__init__(self, registry: ToolRegistry) -> None",
         "source": "src/feedback_intelligence_agent/tools.py",
-        "line": 520,
+        "line": 542,
         "public": false,
         "is_async": false,
         "decorators": [],
@@ -7093,7 +7123,7 @@
         "BaseModel"
       ],
       "source": "src/feedback_intelligence_agent/tools.py",
-      "line": 444,
+      "line": 466,
       "public": true,
       "decorators": [],
       "summary": "Outcome of routing one user query to a tool.",

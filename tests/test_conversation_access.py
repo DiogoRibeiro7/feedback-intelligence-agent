@@ -264,3 +264,52 @@ def test_namespaces_cannot_escape_the_conversation_root(tmp_path: Path) -> None:
     assert first.root.is_relative_to(settings.conversation_store_path)
     assert first.root != second.root
     assert "outside" not in str(first.root)
+
+
+@pytest.mark.parametrize(
+    "question", ["What is the sentiment distribution?", "What are the most common issues?"]
+)
+def test_query_and_stream_tools_respect_tenant_filters(
+    private_client: TestClient, question: str
+) -> None:
+    payload = {"question": question, "tenant_id": " ACME ", "top_k": 1}
+    response = private_client.post("/query", headers=headers("reader"), json=payload)
+    assert response.status_code == 200
+    output = response.json()["result"]["tool_run"]
+    assert output["status"] == "ok"
+    assert output["output"]["total_records"] == 1
+    assert "cobalt" not in json.dumps(output).lower()
+
+    streamed = private_client.post("/query/stream", headers=headers("reader"), json=payload)
+    assert streamed.status_code == 200
+    content = "".join(
+        json.loads(line.removeprefix("data: ")).get("text", "")
+        for line in streamed.text.splitlines()
+        if line.startswith("data: ")
+    )
+    assert content == response.json()["result"]["answer"]
+    assert "across 1 feedback records" in content
+
+
+@pytest.mark.parametrize(
+    "question", ["What is the sentiment distribution?", "What are the most common issues?"]
+)
+def test_chat_tools_inherit_tenant_and_apply_followup_filters(
+    private_client: TestClient, question: str
+) -> None:
+    conversation_id = start_conversation(private_client, tenant_id="acme")
+    payload = {"message": question, "conversation_id": conversation_id, "top_k": 1}
+    response = private_client.post("/chat", headers=headers("writer"), json=payload)
+    assert response.status_code == 200
+    output = response.json()["result"]["tool_run"]
+    assert output["status"] == "ok"
+    assert output["output"]["total_records"] == 1
+    assert "cobalt" not in json.dumps(output).lower()
+
+    empty = private_client.post(
+        "/chat", headers=headers("writer"), json={**payload, "min_rating": 2}
+    )
+    assert empty.status_code == 200
+    assert empty.json()["result"]["tool_run"]["output"]["total_records"] == 0
+    stored = private_client.get(f"/conversations/{conversation_id}", headers=headers("writer"))
+    assert "cobalt" not in stored.text.lower()

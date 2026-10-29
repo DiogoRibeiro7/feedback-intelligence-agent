@@ -112,11 +112,21 @@ The full agent flow per question is:
 
 `tools.py` implements a small deterministic tool-use framework. Every tool conforms to a typed interface: a stable `name`, a `description`, a Pydantic `input_schema`, a Pydantic `output_schema`, and a validated `execute` entry point. Three local tools ship by default:
 
-- **`sentiment_summary`** (`SentimentSummaryTool`): aggregates the rating and sentiment distribution (positive ≥ 4, neutral = 3, negative ≤ 2) over the indexed feedback, with optional segment and channel filters.
+- **`sentiment_summary`** (`SentimentSummaryTool`): aggregates the rating and sentiment distribution (positive ≥ 4, neutral = 3, negative ≤ 2) over the indexed feedback matching request metadata filters. Direct callers can also use the existing segment and channel controls.
 - **`issue_cluster`** (`IssueClusterTool`): groups recurring customer issues using deterministic keyword/term clusters (onboarding, integrations, reporting, pricing, support, performance, documentation) and reports counts, supporting documents, and example quotes.
 - **`ticket_draft`** (`TicketDraftTool`): drafts a support ticket (title, body, priority, references, tags) from the question and the retrieved evidence chunks.
 
 Routing is keyword/intent based (`TOOL_ROUTES`) with no function-calling API, so tool selection is reproducible in tests and CI. Tools run against the same indexed chunks used for retrieval, so they need no extra data source. Example tool queries live in `examples/tool_queries.jsonl`.
+
+The agent passes `MetadataFilters` to `Tool.build_payload` for each run. Dataset
+tools validate them through a nested `filters` field in their input schemas and
+use `matches_metadata_filters` before source-document deduplication, counts,
+distributions, cluster thresholds, and example selection. They aggregate all
+eligible indexed documents, independently of retrieval limits, without retaining
+request scope on the shared tool instance. Ticket payloads filter retrieved
+evidence before deduplication and limiting. Chat uses its inherited tenant scope.
+Unfiltered calls retain the complete-dataset behavior; these filters do not grant
+or restrict a caller's tenant permissions.
 
 ### Guardrails
 
@@ -134,7 +144,7 @@ Routing is keyword/intent based (`TOOL_ROUTES`) with no function-calling API, so
 
 `api.py` exposes the system through FastAPI. The API validates input and returns typed responses. Optional API-key authorization in `auth.py` protects routes with `reader`, `writer`, and `admin` roles when `FEEDBACK_AGENT_API_AUTH_ENABLED=true`, while leaving health and readiness probes open. Optional fixed-window rate limiting in `rate_limit.py` protects non-probe routes per API key or client IP when `FEEDBACK_AGENT_API_RATE_LIMIT_ENABLED=true`.
 
-Conversation history is isolated by the authenticated API-key identity. `auth.py` derives a stable fingerprint independent of its role; `factory.build_conversation_store` selects a hashed namespace under the configured conversation root. Other keys receive 404 when reading or continuing a conversation, and only server-generated IDs can start authenticated sessions. Legacy local histories remain in the original root. `ConversationMemory` retains its tenant scope: follow-ups inherit it when omitted and reject an explicit change before query rewriting. Tenant authorization for other resources and tenant filtering of dataset aggregation tools remain separate roadmap work.
+Conversation history is isolated by the authenticated API-key identity. `auth.py` derives a stable fingerprint independent of its role; `factory.build_conversation_store` selects a hashed namespace under the configured conversation root. Other keys receive 404 when reading or continuing a conversation, and only server-generated IDs can start authenticated sessions. Legacy local histories remain in the original root. `ConversationMemory` retains its tenant scope: follow-ups inherit it when omitted and reject an explicit change before query rewriting. Tenant authorization for other resources remains separate roadmap work.
 
 ### Saved reports
 

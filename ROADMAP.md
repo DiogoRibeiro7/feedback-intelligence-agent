@@ -73,5 +73,5 @@ This roadmap is designed to evolve the repository from a compact portfolio proje
 - [x] Apply metadata filters before limiting retrieval candidates, including tenant filters.
 - [x] Isolate conversation history by authenticated API key and retain its tenant context.
 - [ ] Bind tenant access on query, report, feedback, and ingestion routes to authenticated identities.
-- [ ] Apply tenant filters to dataset aggregation tools.
+- [x] Apply tenant and metadata filters to dataset aggregation tools.
 - [x] Make JSON index persistence atomic and serialize concurrent updates.
