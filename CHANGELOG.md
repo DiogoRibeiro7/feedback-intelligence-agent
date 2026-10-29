@@ -6,6 +6,10 @@ All notable changes to this project are documented here.
 
 ### Fixed
 
+- Authenticated conversation reads and follow-ups use a private namespace per
+  API key, returning 404 for unknown or another caller's conversation IDs.
+- Conversation follow-ups inherit their saved tenant filter and reject changes
+  to that tenant before rewriting or answer generation.
 - Use `portalocker` for JSON writer locks to retain Python 3.10 support without
   the vulnerable `filelock` dependency flagged by dependency review.
 - JSON index saves flush a sibling temporary file before atomic replacement,

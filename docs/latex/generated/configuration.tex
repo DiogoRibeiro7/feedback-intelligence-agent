@@ -57,7 +57,7 @@ Variable & Type & Default & Secret & Purpose / Constraints \\
 \texttt{FEEDBACK\_\allowbreak{}AGENT\_\allowbreak{}REPORT\_\allowbreak{}STORE\_\allowbreak{}PATH} & \texttt{Path} & \texttt{Path('.\allowbreak{}artifacts/\allowbreak{}reports')\allowbreak{}} & no & -- \\
 \texttt{FEEDBACK\_\allowbreak{}AGENT\_\allowbreak{}HUMAN\_\allowbreak{}FEEDBACK\_\allowbreak{}STORE\_\allowbreak{}PATH} & \texttt{Path} & \texttt{Path('.\allowbreak{}artifacts/\allowbreak{}human\_\allowbreak{}feedback')\allowbreak{}} & no & -- \\
 \texttt{FEEDBACK\_\allowbreak{}AGENT\_\allowbreak{}ACTIVE\_\allowbreak{}LEARNING\_\allowbreak{}STATE\_\allowbreak{}STORE\_\allowbreak{}PATH} & \texttt{Path} & \texttt{Path('.\allowbreak{}artifacts/\allowbreak{}active\_\allowbreak{}learning')\allowbreak{}} & no & -- \\
-\texttt{FEEDBACK\_\allowbreak{}AGENT\_\allowbreak{}API\_\allowbreak{}AUTH\_\allowbreak{}ENABLED} & \texttt{bool} & \texttt{False} & no & Optional API-key authorization. Health and readiness remain open. \\
+\texttt{FEEDBACK\_\allowbreak{}AGENT\_\allowbreak{}API\_\allowbreak{}AUTH\_\allowbreak{}ENABLED} & \texttt{bool} & \texttt{False} & no & Optional API-key authorization. Health and readiness remain open. Authenticated conversation history belongs to the key; rotating it creates a new namespace. \\
 \texttt{FEEDBACK\_\allowbreak{}AGENT\_\allowbreak{}API\_\allowbreak{}READER\_\allowbreak{}KEY} & \texttt{str \textbar{} None} & \texttt{None} & yes & -- \\
 \texttt{FEEDBACK\_\allowbreak{}AGENT\_\allowbreak{}API\_\allowbreak{}WRITER\_\allowbreak{}KEY} & \texttt{str \textbar{} None} & \texttt{None} & yes & -- \\
 \texttt{FEEDBACK\_\allowbreak{}AGENT\_\allowbreak{}API\_\allowbreak{}ADMIN\_\allowbreak{}KEY} & \texttt{str \textbar{} None} & \texttt{None} & yes & -- \\

@@ -367,7 +367,7 @@ def test_extract_cli_commands_matches_the_real_cli() -> None:
 
 
 def test_extract_endpoints_matches_the_real_api() -> None:
-    """Routes, status codes, and required roles are extracted from decorators."""
+    """Routes and roles include decorator and injected-parameter dependencies."""
     endpoints = extract_api.extract_endpoints(PACKAGE_DIR / "api.py", REPO_ROOT)
     by_key = {(endpoint.method, endpoint.path): endpoint for endpoint in endpoints}
 
@@ -375,9 +375,29 @@ def test_extract_endpoints_matches_the_real_api() -> None:
     assert by_key[("GET", "/ready")].required_role is None
     assert by_key[("POST", "/query")].required_role == "reader"
     assert by_key[("POST", "/chat")].required_role == "writer"
+    assert by_key[("GET", "/conversations/{conversation_id}")].required_role == "reader"
+    assert all(
+        parameter.name != "principal" for parameter in by_key[("POST", "/chat")].query_parameters
+    )
     assert by_key[("POST", "/index")].required_role == "admin"
     assert by_key[("POST", "/ingestion/jobs")].status_code == "202"
     assert by_key[("POST", "/query")].request_model == "QueryRequest"
+
+
+def test_endpoint_dependencies_preserve_the_strongest_required_role(tmp_path: Path) -> None:
+    source = tmp_path / "api.py"
+    source.write_text(
+        "def create_app():\n"
+        "    reader_access = Depends(_auth_dependency(settings, ApiRole.reader))\n"
+        "    admin_access = Depends(_auth_dependency(settings, ApiRole.admin))\n"
+        "    @app.get('/mixed', dependencies=[admin_access])\n"
+        "    def mixed(*, principal: ApiPrincipal = reader_access, limit: int = 4):\n"
+        "        pass\n",
+        encoding="utf-8",
+    )
+    endpoint = extract_api.extract_endpoints(source, tmp_path)[0]
+    assert endpoint.required_role == "admin"
+    assert [parameter.name for parameter in endpoint.query_parameters] == ["limit"]
 
 
 def test_extract_settings_fields_reports_aliases_and_sensitivity() -> None:

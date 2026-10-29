@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from enum import Enum
+from hashlib import sha256
 
 from pydantic import BaseModel
 
@@ -16,10 +17,11 @@ class ApiRole(str, Enum):
 
 
 class ApiPrincipal(BaseModel):
-    """Resolved API caller identity."""
+    """Resolved role and opaque API-key identity, independent of role assignment."""
 
     role: ApiRole
     authenticated: bool
+    subject_id: str | None = None
 
 
 class ApiAuthError(ValueError):
@@ -57,6 +59,8 @@ def resolve_api_principal(
 
     When auth is disabled, local callers receive an unauthenticated admin
     principal so route-level dependencies become no-ops.
+    Authenticated identities are fingerprints of the normalized API key; key
+    rotation changes identity, while changing its role preserves identity.
     """
     if not auth_enabled:
         return ApiPrincipal(role=ApiRole.admin, authenticated=False)
@@ -75,7 +79,11 @@ def resolve_api_principal(
     role = keys.get(api_key.strip())
     if role is None:
         raise ApiAuthenticationError("invalid API key")
-    return ApiPrincipal(role=role, authenticated=True)
+    return ApiPrincipal(
+        role=role,
+        authenticated=True,
+        subject_id=sha256(api_key.strip().encode("utf-8")).hexdigest(),
+    )
 
 
 def require_api_role(

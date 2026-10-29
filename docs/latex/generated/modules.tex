@@ -22,9 +22,9 @@ Module & Lines & Objects & Summary \\
 \endlastfoot
 \texttt{feedback\_\allowbreak{}intelligence\_\allowbreak{}agent} & 7 & 0 & Feedback Intelligence Agent package. \\
 \texttt{active\_\allowbreak{}learning} & 215 & 8 & Workflow state for active-learning follow-up items. \\
-\texttt{agent} & 510 & 3 & Agent orchestration for the feedback intelligence agent. \\
-\texttt{api} & 639 & 1 & FastAPI application. \\
-\texttt{auth} & 121 & 8 & Optional API-key authorization for the FastAPI service. \\
+\texttt{agent} & 521 & 3 & Agent orchestration for the feedback intelligence agent. \\
+\texttt{api} & 658 & 1 & FastAPI application. \\
+\texttt{auth} & 129 & 8 & Optional API-key authorization for the FastAPI service. \\
 \texttt{benchmarking} & 286 & 13 & Latency and throughput benchmarks for the RAG pipeline. \\
 \texttt{chunking} & 92 & 3 & Text chunking utilities. \\
 \texttt{citations} & 65 & 4 & Citation construction shared by the agent and the deterministic LLM provider. \\
@@ -35,7 +35,7 @@ Module & Lines & Objects & Summary \\
 \texttt{embeddings} & 78 & 3 & Embedding models. \\
 \texttt{evaluation} & 417 & 18 & Offline evaluation for retrieval quality and answer quality. \\
 \texttt{experiments} & 346 & 14 & Repeatable experiment runner for comparing RAG configurations. \\
-\texttt{factory} & 355 & 13 & Factories for constructing the application components. \\
+\texttt{factory} & 364 & 13 & Factories for constructing the application components. \\
 \texttt{guardrails} & 220 & 8 & Deterministic safety guardrails for the feedback intelligence agent. \\
 \texttt{hallucination} & 285 & 9 & Hallucination checks for evidence-grounded answers. \\
 \texttt{human\_\allowbreak{}feedback} & 408 & 14 & Human review feedback on generated agent answers. \\
@@ -46,7 +46,7 @@ Module & Lines & Objects & Summary \\
 \texttt{lakehouse} & 398 & 7 & Local lakehouse-style feedback exports. \\
 \texttt{lexical\_\allowbreak{}search} & 120 & 3 & Lexical BM25 search implemented from scratch. \\
 \texttt{llm} & 657 & 11 & LLM provider abstraction. \\
-\texttt{memory} & 345 & 11 & Conversation memory and follow-up query rewriting. \\
+\texttt{memory} & 357 & 11 & Conversation memory and follow-up query rewriting. \\
 \texttt{metadata\_\allowbreak{}filters} & 76 & 1 & Shared metadata matching for retrieval and the agent's final evidence check. \\
 \texttt{output\_\allowbreak{}parser} & 181 & 4 & Structured LLM output parsing and deterministic repair. \\
 \texttt{privacy} & 59 & 6 & Deterministic PII redaction helpers. \\
@@ -93,7 +93,7 @@ Workflow state for active-learning follow-up items.
 \label{module:feedback_intelligence_agent.agent}\index{Modules!agent}
 
 Agent orchestration for the feedback intelligence agent.
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}agent.\allowbreak{}py}, 510 lines
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}agent.\allowbreak{}py}, 521 lines
 \apifield{Imports}\texttt{citations}, \texttt{guardrails}, \texttt{hallucination}, \texttt{llm}, \texttt{memory}, \texttt{metadata\_\allowbreak{}filters}, \texttt{output\_\allowbreak{}parser}, \texttt{prompts}, \texttt{reranking}, \texttt{retrieval}, \texttt{schemas}, \texttt{telemetry}, \texttt{tools}
 \apifield{Classes}\cref{class:feedback_intelligence_agent.agent.RouteRule}, \cref{class:feedback_intelligence_agent.agent.FeedbackInsightAgent}
 \apifield{Constants}\texttt{ROUTE\_\allowbreak{}RULES}
@@ -103,7 +103,7 @@ Agent orchestration for the feedback intelligence agent.
 \label{module:feedback_intelligence_agent.api}\index{Modules!api}
 
 FastAPI application.
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}api.\allowbreak{}py}, 639 lines
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}api.\allowbreak{}py}, 658 lines
 \apifield{Imports}\texttt{active\_\allowbreak{}learning}, \texttt{auth}, \texttt{config}, \texttt{email\_\allowbreak{}summaries}, \texttt{factory}, \texttt{human\_\allowbreak{}feedback}, \texttt{jobs}, \texttt{memory}, \texttt{rate\_\allowbreak{}limit}, \texttt{reports}, \texttt{schemas}, \texttt{telemetry}
 \apifield{Functions}\cref{func:feedback_intelligence_agent.api.create_app}
 
@@ -112,7 +112,7 @@ FastAPI application.
 \label{module:feedback_intelligence_agent.auth}\index{Modules!auth}
 
 Optional API-key authorization for the FastAPI service.
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}auth.\allowbreak{}py}, 121 lines
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}auth.\allowbreak{}py}, 129 lines
 \apifield{Classes}\cref{class:feedback_intelligence_agent.auth.ApiRole}, \cref{class:feedback_intelligence_agent.auth.ApiPrincipal}, \cref{class:feedback_intelligence_agent.auth.ApiAuthError}, \cref{class:feedback_intelligence_agent.auth.ApiAuthConfigurationError}, \cref{class:feedback_intelligence_agent.auth.ApiAuthenticationError}, \cref{class:feedback_intelligence_agent.auth.ApiPermissionError}
 \apifield{Functions}\cref{func:feedback_intelligence_agent.auth.resolve_api_principal}, \cref{func:feedback_intelligence_agent.auth.require_api_role}
 
@@ -239,7 +239,7 @@ With the deterministic local LLM provider, \texttt{results.\allowbreak{}json} an
 \label{module:feedback_intelligence_agent.factory}\index{Modules!factory}
 
 Factories for constructing the application components.
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}factory.\allowbreak{}py}, 355 lines
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}factory.\allowbreak{}py}, 364 lines
 \apifield{Imports}\texttt{active\_\allowbreak{}learning}, \texttt{agent}, \texttt{chunking}, \texttt{config}, \texttt{embeddings}, \texttt{hallucination}, \texttt{human\_\allowbreak{}feedback}, \texttt{index\_\allowbreak{}persistence}, \texttt{ingestion}, \texttt{jobs}, \texttt{lexical\_\allowbreak{}search}, \texttt{llm}, \texttt{memory}, \texttt{qdrant\_\allowbreak{}store}, \texttt{query\_\allowbreak{}expansion}, \texttt{reports}, \texttt{resilience}, \texttt{retrieval}, \texttt{schemas}, \texttt{telemetry}, \texttt{tools}, \texttt{vector\_\allowbreak{}store}
 \apifield{Functions}\cref{func:feedback_intelligence_agent.factory.build_telemetry}, \cref{func:feedback_intelligence_agent.factory.build_conversation_store}, \cref{func:feedback_intelligence_agent.factory.build_job_store}, \cref{func:feedback_intelligence_agent.factory.build_report_store}, \cref{func:feedback_intelligence_agent.factory.build_human_feedback_store}, \cref{func:feedback_intelligence_agent.factory.build_active_learning_state_store}, \cref{func:feedback_intelligence_agent.factory.chunk_to_embedding_text}, \cref{func:feedback_intelligence_agent.factory.build_index}, \cref{func:feedback_intelligence_agent.factory.build_qdrant_index}, \cref{func:feedback_intelligence_agent.factory.load_or_build_index}, \cref{func:feedback_intelligence_agent.factory.build_retriever}, \cref{func:feedback_intelligence_agent.factory.build_llm}, \cref{func:feedback_intelligence_agent.factory.build_agent}
 
@@ -367,7 +367,7 @@ LLM provider abstraction.
 \label{module:feedback_intelligence_agent.memory}\index{Modules!memory}
 
 Conversation memory and follow-up query rewriting.
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}memory.\allowbreak{}py}, 345 lines
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}memory.\allowbreak{}py}, 357 lines
 \apifield{Imports}\texttt{llm}, \texttt{safe\_\allowbreak{}paths}
 \apifield{Classes}\cref{class:feedback_intelligence_agent.memory.ConversationTurn}, \cref{class:feedback_intelligence_agent.memory.ConversationMemory}, \cref{class:feedback_intelligence_agent.memory.ConversationStore}, \cref{class:feedback_intelligence_agent.memory.InMemoryConversationStore}, \cref{class:feedback_intelligence_agent.memory.JsonConversationStore}, \cref{class:feedback_intelligence_agent.memory.QueryRewrite}, \cref{class:feedback_intelligence_agent.memory.QueryRewriter}, \cref{class:feedback_intelligence_agent.memory.DeterministicQueryRewriter}, \cref{class:feedback_intelligence_agent.memory.LLMQueryRewriter}
 \apifield{Functions}\cref{func:feedback_intelligence_agent.memory.new_conversation_id}, \cref{func:feedback_intelligence_agent.memory.extract_entities}

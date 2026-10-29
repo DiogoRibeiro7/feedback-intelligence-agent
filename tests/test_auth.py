@@ -23,6 +23,7 @@ def test_resolve_api_principal_returns_admin_when_auth_is_disabled() -> None:
 
     assert principal.role == ApiRole.admin
     assert principal.authenticated is False
+    assert principal.subject_id is None
 
 
 def test_resolve_api_principal_requires_configured_keys_when_enabled() -> None:
@@ -92,3 +93,18 @@ def test_duplicate_api_keys_resolve_to_highest_configured_role() -> None:
     )
 
     assert principal.role == ApiRole.admin
+
+
+def test_caller_identity_is_key_specific_and_stable_across_role_changes() -> None:
+    writer = resolve_api_principal(
+        " shared ", auth_enabled=True, reader_key=None, writer_key="shared", admin_key=None
+    )
+    promoted = resolve_api_principal(
+        "shared", auth_enabled=True, reader_key=None, writer_key=None, admin_key="shared"
+    )
+    other = resolve_api_principal(
+        "other", auth_enabled=True, reader_key=None, writer_key="other", admin_key=None
+    )
+    assert writer.subject_id == promoted.subject_id
+    assert writer.subject_id and writer.subject_id != "shared"
+    assert other.subject_id != writer.subject_id

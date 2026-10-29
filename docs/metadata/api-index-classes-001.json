@@ -838,7 +838,7 @@
           "is_async": false,
           "decorators": [],
           "summary": "Answer a message inside a stored conversation and persist the turn.",
-          "description": "Loads the conversation from ``store`` (or starts a new one when\n``conversation_id`` is ``None``), answers with the previous turns as\ncontext, records the new turn (user message, answer, cited document\nIDs, route, and confidence), and saves the conversation back.",
+          "description": "Loads the conversation from ``store`` (or starts a new one when\n``conversation_id`` is ``None``), answers with the previous turns as\ncontext, records the new turn (user message, answer, cited document\nIDs, route, and confidence), and saves the conversation back.\nFollow-ups inherit the stored tenant when omitted. Changing a stored\nconversation's tenant requires starting a new conversation.",
           "parameters": [
             {
               "name": "self",
@@ -887,7 +887,12 @@
             "annotation": "tuple[AgentAnswer, str]",
             "description": "The agent answer and the conversation identifier (newly generated\n    when none was supplied)."
           },
-          "raises": [],
+          "raises": [
+            {
+              "exception": "ValueError",
+              "description": ""
+            }
+          ],
           "examples": "",
           "notes": "",
           "see_also": []
@@ -899,7 +904,7 @@
           "module": "feedback_intelligence_agent.agent",
           "signature": "route(self, question: str) -> str",
           "source": "src/feedback_intelligence_agent/agent.py",
-          "line": 435,
+          "line": 446,
           "public": true,
           "is_async": false,
           "decorators": [],
@@ -1060,7 +1065,7 @@
         "ApiAuthError"
       ],
       "source": "src/feedback_intelligence_agent/auth.py",
-      "line": 29,
+      "line": 31,
       "public": true,
       "decorators": [],
       "summary": "Raised when auth is enabled without any configured keys.",
@@ -1080,7 +1085,7 @@
         "ValueError"
       ],
       "source": "src/feedback_intelligence_agent/auth.py",
-      "line": 25,
+      "line": 27,
       "public": true,
       "decorators": [],
       "summary": "Base class for API authorization failures.",
@@ -1100,7 +1105,7 @@
         "ApiAuthError"
       ],
       "source": "src/feedback_intelligence_agent/auth.py",
-      "line": 33,
+      "line": 35,
       "public": true,
       "decorators": [],
       "summary": "Raised when the request does not provide a valid API key.",
@@ -1120,7 +1125,7 @@
         "ApiAuthError"
       ],
       "source": "src/feedback_intelligence_agent/auth.py",
-      "line": 37,
+      "line": 39,
       "public": true,
       "decorators": [],
       "summary": "Raised when a valid API key lacks the required role.",
@@ -1140,10 +1145,10 @@
         "BaseModel"
       ],
       "source": "src/feedback_intelligence_agent/auth.py",
-      "line": 18,
+      "line": 19,
       "public": true,
       "decorators": [],
-      "summary": "Resolved API caller identity.",
+      "summary": "Resolved role and opaque API-key identity, independent of role assignment.",
       "description": "",
       "attributes": [
         {
@@ -1159,6 +1164,14 @@
           "annotation": "bool",
           "default": null,
           "required": true,
+          "description": "",
+          "constraints": {}
+        },
+        {
+          "name": "subject_id",
+          "annotation": "str | None",
+          "default": "None",
+          "required": false,
           "description": "",
           "constraints": {}
         }
@@ -1178,7 +1191,7 @@
         "Enum"
       ],
       "source": "src/feedback_intelligence_agent/auth.py",
-      "line": 10,
+      "line": 11,
       "public": true,
       "decorators": [],
       "summary": "API roles ordered from least to most privileged.",
@@ -7975,6 +7988,16 @@
           }
         },
         {
+          "name": "tenant_id",
+          "annotation": "str | None",
+          "default": "None",
+          "required": false,
+          "description": "",
+          "constraints": {
+            "min_length": "1"
+          }
+        },
+        {
           "name": "turns",
           "annotation": "list[ConversationTurn]",
           "default": "list()",
@@ -7985,13 +8008,59 @@
       ],
       "methods": [
         {
+          "name": "normalise_tenant_id",
+          "qualified_name": "feedback_intelligence_agent.memory.ConversationMemory.normalise_tenant_id",
+          "kind": "class method",
+          "module": "feedback_intelligence_agent.memory",
+          "signature": "normalise_tenant_id(cls, value: str | None) -> str | None",
+          "source": "src/feedback_intelligence_agent/memory.py",
+          "line": 127,
+          "public": true,
+          "is_async": false,
+          "decorators": [
+            "field_validator('tenant_id')",
+            "classmethod"
+          ],
+          "summary": "Keep the conversation's retrieval scope canonical; None is unscoped.",
+          "description": "",
+          "parameters": [
+            {
+              "name": "cls",
+              "annotation": null,
+              "default": null,
+              "kind": "positional-or-keyword",
+              "description": ""
+            },
+            {
+              "name": "value",
+              "annotation": "str | None",
+              "default": null,
+              "kind": "positional-or-keyword",
+              "description": ""
+            }
+          ],
+          "returns": {
+            "annotation": "str | None",
+            "description": ""
+          },
+          "raises": [
+            {
+              "exception": "ValueError",
+              "description": ""
+            }
+          ],
+          "examples": "",
+          "notes": "",
+          "see_also": []
+        },
+        {
           "name": "add_turn",
           "qualified_name": "feedback_intelligence_agent.memory.ConversationMemory.add_turn",
           "kind": "method",
           "module": "feedback_intelligence_agent.memory",
           "signature": "add_turn(self, turn: ConversationTurn) -> None",
           "source": "src/feedback_intelligence_agent/memory.py",
-          "line": 124,
+          "line": 136,
           "public": true,
           "is_async": false,
           "decorators": [],
@@ -8029,7 +8098,7 @@
           "module": "feedback_intelligence_agent.memory",
           "signature": "last_turn(self) -> ConversationTurn | None",
           "source": "src/feedback_intelligence_agent/memory.py",
-          "line": 128,
+          "line": 140,
           "public": true,
           "is_async": false,
           "decorators": [],
@@ -8067,7 +8136,7 @@
         "Protocol"
       ],
       "source": "src/feedback_intelligence_agent/memory.py",
-      "line": 133,
+      "line": 145,
       "public": true,
       "decorators": [],
       "summary": "Protocol implemented by conversation persistence backends.",
@@ -8081,7 +8150,7 @@
           "module": "feedback_intelligence_agent.memory",
           "signature": "get(self, conversation_id: str) -> ConversationMemory | None",
           "source": "src/feedback_intelligence_agent/memory.py",
-          "line": 136,
+          "line": 148,
           "public": true,
           "is_async": false,
           "decorators": [],
@@ -8119,7 +8188,7 @@
           "module": "feedback_intelligence_agent.memory",
           "signature": "save(self, memory: ConversationMemory) -> None",
           "source": "src/feedback_intelligence_agent/memory.py",
-          "line": 140,
+          "line": 152,
           "public": true,
           "is_async": false,
           "decorators": [],
@@ -8157,7 +8226,7 @@
           "module": "feedback_intelligence_agent.memory",
           "signature": "conversation_ids(self) -> list[str]",
           "source": "src/feedback_intelligence_agent/memory.py",
-          "line": 144,
+          "line": 156,
           "public": true,
           "is_async": false,
           "decorators": [],
@@ -8254,7 +8323,7 @@
       "module": "feedback_intelligence_agent.memory",
       "bases": [],
       "source": "src/feedback_intelligence_agent/memory.py",
-      "line": 258,
+      "line": 270,
       "public": true,
       "decorators": [],
       "summary": "Local, deterministic follow-up rewriter with two transparent rules.",
@@ -8277,7 +8346,7 @@
           "module": "feedback_intelligence_agent.memory",
           "signature": "rewrite(self, question: str, previous_turn: ConversationTurn | None) -> QueryRewrite",
           "source": "src/feedback_intelligence_agent/memory.py",
-          "line": 274,
+          "line": 286,
           "public": true,
           "is_async": false,
           "decorators": [],
@@ -8327,7 +8396,7 @@
       "module": "feedback_intelligence_agent.memory",
       "bases": [],
       "source": "src/feedback_intelligence_agent/memory.py",
-      "line": 163,
+      "line": 175,
       "public": true,
       "decorators": [],
       "summary": "Dict-backed conversation store intended for tests and ephemeral use.",
@@ -8341,7 +8410,7 @@
           "module": "feedback_intelligence_agent.memory",
           "signature": "get(self, conversation_id: str) -> ConversationMemory | None",
           "source": "src/feedback_intelligence_agent/memory.py",
-          "line": 170,
+          "line": 182,
           "public": true,
           "is_async": false,
           "decorators": [],
@@ -8379,7 +8448,7 @@
           "module": "feedback_intelligence_agent.memory",
           "signature": "save(self, memory: ConversationMemory) -> None",
           "source": "src/feedback_intelligence_agent/memory.py",
-          "line": 176,
+          "line": 188,
           "public": true,
           "is_async": false,
           "decorators": [],
@@ -8417,7 +8486,7 @@
           "module": "feedback_intelligence_agent.memory",
           "signature": "conversation_ids(self) -> list[str]",
           "source": "src/feedback_intelligence_agent/memory.py",
-          "line": 181,
+          "line": 193,
           "public": true,
           "is_async": false,
           "decorators": [],
@@ -8450,7 +8519,7 @@
         "module": "feedback_intelligence_agent.memory",
         "signature": "__init__(self) -> None",
         "source": "src/feedback_intelligence_agent/memory.py",
-        "line": 166,
+        "line": 178,
         "public": false,
         "is_async": false,
         "decorators": [],
@@ -8483,7 +8552,7 @@
       "module": "feedback_intelligence_agent.memory",
       "bases": [],
       "source": "src/feedback_intelligence_agent/memory.py",
-      "line": 186,
+      "line": 198,
       "public": true,
       "decorators": [],
       "summary": "Conversation store that persists one JSON file per conversation.",
@@ -8497,7 +8566,7 @@
           "module": "feedback_intelligence_agent.memory",
           "signature": "get(self, conversation_id: str) -> ConversationMemory | None",
           "source": "src/feedback_intelligence_agent/memory.py",
-          "line": 202,
+          "line": 214,
           "public": true,
           "is_async": false,
           "decorators": [],
@@ -8535,7 +8604,7 @@
           "module": "feedback_intelligence_agent.memory",
           "signature": "save(self, memory: ConversationMemory) -> None",
           "source": "src/feedback_intelligence_agent/memory.py",
-          "line": 209,
+          "line": 221,
           "public": true,
           "is_async": false,
           "decorators": [],
@@ -8573,7 +8642,7 @@
           "module": "feedback_intelligence_agent.memory",
           "signature": "conversation_ids(self) -> list[str]",
           "source": "src/feedback_intelligence_agent/memory.py",
-          "line": 214,
+          "line": 226,
           "public": true,
           "is_async": false,
           "decorators": [],
@@ -8606,7 +8675,7 @@
         "module": "feedback_intelligence_agent.memory",
         "signature": "__init__(self, root: str | Path) -> None",
         "source": "src/feedback_intelligence_agent/memory.py",
-        "line": 193,
+        "line": 205,
         "public": false,
         "is_async": false,
         "decorators": [],
@@ -8646,7 +8715,7 @@
       "module": "feedback_intelligence_agent.memory",
       "bases": [],
       "source": "src/feedback_intelligence_agent/memory.py",
-      "line": 312,
+      "line": 324,
       "public": true,
       "decorators": [],
       "summary": "Optional rewriter that delegates follow-up rewriting to an LLM provider.",
@@ -8660,7 +8729,7 @@
           "module": "feedback_intelligence_agent.memory",
           "signature": "rewrite(self, question: str, previous_turn: ConversationTurn | None) -> QueryRewrite",
           "source": "src/feedback_intelligence_agent/memory.py",
-          "line": 324,
+          "line": 336,
           "public": true,
           "is_async": false,
           "decorators": [],
@@ -8707,7 +8776,7 @@
         "module": "feedback_intelligence_agent.memory",
         "signature": "__init__(self, llm: LLMProvider) -> None",
         "source": "src/feedback_intelligence_agent/memory.py",
-        "line": 320,
+        "line": 332,
         "public": false,
         "is_async": false,
         "decorators": [],
@@ -8749,7 +8818,7 @@
         "BaseModel"
       ],
       "source": "src/feedback_intelligence_agent/memory.py",
-      "line": 219,
+      "line": 231,
       "public": true,
       "decorators": [],
       "summary": "Result of rewriting a follow-up question into a standalone question.",
@@ -8802,7 +8871,7 @@
         "Protocol"
       ],
       "source": "src/feedback_intelligence_agent/memory.py",
-      "line": 233,
+      "line": 245,
       "public": true,
       "decorators": [],
       "summary": "Protocol for converting follow-up questions into standalone questions.",
@@ -8816,7 +8885,7 @@
           "module": "feedback_intelligence_agent.memory",
           "signature": "rewrite(self, question: str, previous_turn: ConversationTurn | None) -> QueryRewrite",
           "source": "src/feedback_intelligence_agent/memory.py",
-          "line": 236,
+          "line": 248,
           "public": true,
           "is_async": false,
           "decorators": [],

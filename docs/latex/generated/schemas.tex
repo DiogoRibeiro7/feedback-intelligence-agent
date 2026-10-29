@@ -22,7 +22,7 @@ Model & Fields & Module & Purpose \\
 \endlastfoot
 \cref{class:feedback_intelligence_agent.active_learning.ActiveLearningState} & 6 & \texttt{active\_\allowbreak{}learning} & Persisted workflow state for one reviewed answer. \\
 \cref{class:feedback_intelligence_agent.active_learning.UpdateActiveLearningStateRequest} & 3 & \texttt{active\_\allowbreak{}learning} & Request to assign or transition one active-learning queue item. \\
-\cref{class:feedback_intelligence_agent.auth.ApiPrincipal} & 2 & \texttt{auth} & Resolved API caller identity. \\
+\cref{class:feedback_intelligence_agent.auth.ApiPrincipal} & 3 & \texttt{auth} & Resolved role and opaque API-key identity, independent of role assignment. \\
 \cref{class:feedback_intelligence_agent.benchmarking.BenchmarkReport} & 8 & \texttt{benchmarking} & Full benchmark report: configuration plus per-phase statistics. \\
 \cref{class:feedback_intelligence_agent.benchmarking.PhaseStats} & 7 & \texttt{benchmarking} & Summary statistics for one benchmarked phase, in milliseconds. \\
 \cref{class:feedback_intelligence_agent.config.Settings} & 52 & \texttt{config} & Runtime settings loaded from environment variables. \\
@@ -56,7 +56,7 @@ Model & Fields & Module & Purpose \\
 \cref{class:feedback_intelligence_agent.jobs.JobResult} & 8 & \texttt{jobs} & Status and outcome of an ingestion job. \\
 \cref{class:feedback_intelligence_agent.lakehouse.LakehouseDataFile} & 5 & \texttt{lakehouse} & One data file produced by a lakehouse export. \\
 \cref{class:feedback_intelligence_agent.lakehouse.LakehouseExportResult} & 9 & \texttt{lakehouse} & Summary of a local lakehouse export. \\
-\cref{class:feedback_intelligence_agent.memory.ConversationMemory} & 2 & \texttt{memory} & Ordered turns of one conversation identified by \texttt{conversation\_\allowbreak{}id}. \\
+\cref{class:feedback_intelligence_agent.memory.ConversationMemory} & 3 & \texttt{memory} & Ordered turns of one conversation identified by \texttt{conversation\_\allowbreak{}id}. \\
 \cref{class:feedback_intelligence_agent.memory.ConversationTurn} & 5 & \texttt{memory} & One user/assistant exchange recorded in conversation memory. \\
 \cref{class:feedback_intelligence_agent.memory.QueryRewrite} & 4 & \texttt{memory} & Result of rewriting a follow-up question into a standalone question. \\
 \cref{class:feedback_intelligence_agent.output_parser.GeneratedAnswerPayload} & 3 & \texttt{output\_\allowbreak{}parser} & Validated answer payload expected from an LLM provider. \\

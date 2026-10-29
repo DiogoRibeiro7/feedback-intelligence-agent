@@ -888,15 +888,16 @@ def extract_endpoints(path: Path, repo_root: Path) -> list[EndpointDoc]:
                 for keyword in decorator.keywords
                 if keyword.arg is not None
             }
-            required_role = None
             dependencies = keywords.get("dependencies", "")
-            for variable, role in roles.items():
-                if variable in dependencies:
-                    required_role = role
+            required_roles = [role for variable, role in roles.items() if variable in dependencies]
             parsed = split_docstring(ast.get_docstring(node))
             request_model = None
             query_parameters: list[Parameter] = []
             for parameter in extract_parameters(node):
+                parameter_role = roles.get(parameter.default or "")
+                if parameter_role is not None:
+                    required_roles.append(parameter_role)
+                    continue
                 annotation = parameter.annotation or ""
                 if annotation.endswith(("Request", "BackgroundTasks")):
                     if annotation != "BackgroundTasks":
@@ -912,7 +913,9 @@ def extract_endpoints(path: Path, repo_root: Path) -> list[EndpointDoc]:
                     line=node.lineno,
                     status_code=keywords.get("status_code", "200"),
                     response_model=keywords.get("response_model"),
-                    required_role=required_role,
+                    required_role=max(
+                        required_roles, key=("reader", "writer", "admin").index, default=None
+                    ),
                     summary=parsed["summary"],
                     description=parsed["description"],
                     request_model=request_model,

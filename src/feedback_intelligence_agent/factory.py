@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from hashlib import sha256
 from pathlib import Path
 from typing import TYPE_CHECKING
 
@@ -60,13 +61,21 @@ def build_telemetry(settings: Settings) -> Telemetry:
     return Telemetry(sink=JsonlTelemetrySink(settings.telemetry_path))
 
 
-def build_conversation_store(settings: Settings) -> JsonConversationStore:
+def build_conversation_store(
+    settings: Settings, *, principal_id: str | None = None
+) -> JsonConversationStore:
     """Construct the JSON-backed conversation store configured by the settings.
 
     Conversations are persisted as one JSON file each under
     ``FEEDBACK_AGENT_CONVERSATION_STORE_PATH`` (default ``.artifacts/conversations``).
+    Authenticated callers use a separate hashed namespace per principal. The
+    legacy root remains available to local callers when authentication is off.
     """
-    return JsonConversationStore(settings.conversation_store_path)
+    root = settings.conversation_store_path
+    if principal_id is not None:
+        namespace = sha256(principal_id.encode("utf-8")).hexdigest()
+        root = root / "authenticated" / namespace
+    return JsonConversationStore(root)
 
 
 def build_job_store(settings: Settings) -> JsonJobStore:

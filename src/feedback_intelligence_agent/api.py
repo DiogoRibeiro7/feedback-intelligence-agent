@@ -56,7 +56,7 @@ from feedback_intelligence_agent.human_feedback import (
     summarise_human_feedback,
 )
 from feedback_intelligence_agent.jobs import JobRequest, JobResult, run_ingestion_job
-from feedback_intelligence_agent.memory import ConversationMemory
+from feedback_intelligence_agent.memory import ConversationMemory, JsonConversationStore
 from feedback_intelligence_agent.rate_limit import InMemoryRateLimiter, RateLimitDecision
 from feedback_intelligence_agent.reports import (
     InsightReportSummary,
@@ -230,6 +230,15 @@ def create_app() -> FastAPI:
     reader_access = Depends(_auth_dependency(settings, ApiRole.reader))
     writer_access = Depends(_auth_dependency(settings, ApiRole.writer))
     admin_access = Depends(_auth_dependency(settings, ApiRole.admin))
+
+    def caller_conversation_store(principal: ApiPrincipal) -> JsonConversationStore:
+        """Select a history namespace from the authenticated identity only."""
+        if not principal.authenticated:
+            return conversation_store
+        if principal.subject_id is None:
+            raise HTTPException(status_code=401, detail="missing authenticated identity")
+        return build_conversation_store(settings, principal_id=principal.subject_id)
+
     rate_limiter = InMemoryRateLimiter(
         max_requests=settings.api_rate_limit_max_requests,
         window_seconds=settings.api_rate_limit_window_seconds,
@@ -352,21 +361,30 @@ def create_app() -> FastAPI:
 
         return StreamingResponse(event_stream(), media_type="text/event-stream")
 
-    @app.post("/chat", response_model=ChatResponse, dependencies=[writer_access])
-    def chat(request: ChatRequest) -> ChatResponse:
+    @app.post("/chat", response_model=ChatResponse)
+    def chat(request: ChatRequest, principal: ApiPrincipal = writer_access) -> ChatResponse:
         """Answer a message within a stored conversation.
 
         Omit ``conversation_id`` to start a new conversation; pass it back to
         continue the same conversation with previous turns as context.
         """
+        caller_store = caller_conversation_store(principal)
         try:
+            if (
+                principal.authenticated
+                and request.conversation_id is not None
+                and caller_store.get(request.conversation_id) is None
+            ):
+                raise HTTPException(status_code=404, detail="conversation not found")
             result, conversation_id = agent.chat(
                 request.message,
-                store=conversation_store,
+                store=caller_store,
                 conversation_id=request.conversation_id,
                 top_k=request.top_k,
                 filters=request.metadata_filters(),
             )
+        except HTTPException:
+            raise
         except ValueError as exc:
             raise HTTPException(status_code=400, detail=str(exc)) from exc
         except Exception as exc:  # noqa: BLE001 - convert to API-safe response.
@@ -377,12 +395,13 @@ def create_app() -> FastAPI:
     @app.get(
         "/conversations/{conversation_id}",
         response_model=ConversationMemory,
-        dependencies=[reader_access],
     )
-    def get_conversation(conversation_id: str) -> ConversationMemory:
+    def get_conversation(
+        conversation_id: str, principal: ApiPrincipal = reader_access
+    ) -> ConversationMemory:
         """Return the stored turns of one conversation."""
         try:
-            memory = conversation_store.get(conversation_id)
+            memory = caller_conversation_store(principal).get(conversation_id)
         except ValueError as exc:
             raise HTTPException(status_code=400, detail=str(exc)) from exc
         if memory is None:

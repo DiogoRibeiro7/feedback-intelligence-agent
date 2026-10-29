@@ -25,7 +25,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Protocol
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 
 from feedback_intelligence_agent.llm import LLMProvider
 from feedback_intelligence_agent.safe_paths import json_record_path
@@ -119,7 +119,19 @@ class ConversationMemory(BaseModel):
     """Ordered turns of one conversation identified by ``conversation_id``."""
 
     conversation_id: str = Field(min_length=1)
+    tenant_id: str | None = Field(default=None, min_length=1)
     turns: list[ConversationTurn] = Field(default_factory=list)
+
+    @field_validator("tenant_id")
+    @classmethod
+    def normalise_tenant_id(cls, value: str | None) -> str | None:
+        """Keep the conversation's retrieval scope canonical; None is unscoped."""
+        if value is None:
+            return None
+        clean = value.strip().lower()
+        if not clean:
+            raise ValueError("tenant_id cannot be blank")
+        return clean
 
     def add_turn(self, turn: ConversationTurn) -> None:
         """Append one completed turn to the conversation."""

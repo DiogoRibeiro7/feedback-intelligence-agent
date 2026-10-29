@@ -134,6 +134,8 @@ Routing is keyword/intent based (`TOOL_ROUTES`) with no function-calling API, so
 
 `api.py` exposes the system through FastAPI. The API validates input and returns typed responses. Optional API-key authorization in `auth.py` protects routes with `reader`, `writer`, and `admin` roles when `FEEDBACK_AGENT_API_AUTH_ENABLED=true`, while leaving health and readiness probes open. Optional fixed-window rate limiting in `rate_limit.py` protects non-probe routes per API key or client IP when `FEEDBACK_AGENT_API_RATE_LIMIT_ENABLED=true`.
 
+Conversation history is isolated by the authenticated API-key identity. `auth.py` derives a stable fingerprint independent of its role; `factory.build_conversation_store` selects a hashed namespace under the configured conversation root. Other keys receive 404 when reading or continuing a conversation, and only server-generated IDs can start authenticated sessions. Legacy local histories remain in the original root. `ConversationMemory` retains its tenant scope: follow-ups inherit it when omitted and reject an explicit change before query rewriting. Tenant authorization for other resources and tenant filtering of dataset aggregation tools remain separate roadmap work.
+
 ### Saved reports
 
 `reports.py` persists generated `AgentAnswer` payloads as saved insight reports with a tenant ID, title, tags, notes, citations, diagnostics, and creation time. The default `JsonInsightReportStore` writes one report file per ID under `.artifacts/reports`, and the API exposes create, tenant-filtered list, fetch, and Markdown export endpoints for the frontend and stakeholder handoff.
