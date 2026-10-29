@@ -8,14 +8,22 @@ from contextlib import contextmanager, suppress
 from pathlib import Path
 from stat import S_IMODE
 from tempfile import NamedTemporaryFile
-from threading import Lock
+from threading import local
 from weakref import WeakValueDictionary
 
 from dataexcept import FileWriteError, wrapping
-from filelock import BaseFileLock, FileLock, Timeout
+from portalocker import RLock
+from portalocker.exceptions import LockException
 
-_LOCKS: WeakValueDictionary[str, BaseFileLock] = WeakValueDictionary()
-_REGISTRY_LOCK = Lock()
+
+class _ThreadLocks(local):
+    """Reuse reentrant locks within a thread without sharing their hold counts."""
+
+    def __init__(self) -> None:
+        self.by_path: WeakValueDictionary[str, RLock] = WeakValueDictionary()
+
+
+_LOCKS = _ThreadLocks()
 
 
 @contextmanager
@@ -34,14 +42,13 @@ def index_write_lock(path: str | Path, *, timeout: float = 60.0) -> Iterator[Pat
     with wrapping(OSError, FileWriteError, path=str(output_path)):
         output_path = output_path.resolve()
     key = os.path.normcase(str(output_path))
-    # Serialize registry creation as well as writes: two first-time callers
-    # must share the same reentrant object when a save nests inside an update.
-    with _REGISTRY_LOCK:
-        lock = _LOCKS.get(key)
-        if lock is None:
-            lock = FileLock(f"{key}.lock", mode=0o600, thread_local=True)
-            _LOCKS[key] = lock
-    with wrapping((OSError, Timeout), FileWriteError, path=str(output_path)):
+    # Nested saves reuse this thread's hold count. Other threads use separate
+    # handles and must acquire the OS lock, just like other processes.
+    lock = _LOCKS.by_path.get(key)
+    if lock is None:
+        lock = RLock(f"{key}.lock", mode="a", timeout=60.0, check_interval=0.05)
+        _LOCKS.by_path[key] = lock
+    with wrapping((OSError, LockException), FileWriteError, path=str(output_path)):
         lock.acquire(timeout=timeout)
     try:
         yield output_path

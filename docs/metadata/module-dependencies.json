@@ -393,7 +393,7 @@
       "external_dependencies": [
         "contextlib",
         "dataexcept",
-        "filelock",
+        "portalocker",
         "stat",
         "weakref"
       ],

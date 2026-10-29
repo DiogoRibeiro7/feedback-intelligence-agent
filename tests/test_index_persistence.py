@@ -15,7 +15,7 @@ import numpy as np
 import numpy.typing as npt
 import pytest
 from dataexcept import FileWriteError
-from filelock import Timeout
+from portalocker.exceptions import LockException
 
 import feedback_intelligence_agent.factory as factory_module
 import feedback_intelligence_agent.index_persistence as persistence_module
@@ -207,7 +207,7 @@ def test_lock_timeout_and_unrelated_index_progress(tmp_path: Path) -> None:
         with pytest.raises(FileWriteError) as error:
             attempt.result(timeout=5)
         assert error.value.path == str(path)
-        assert isinstance(error.value.original, Timeout)
+        assert isinstance(error.value.original, LockException)
         unrelated = executor.submit(
             update_json_index, [record("other")], tmp_path / "other.json", embedding_dim=16
         )
@@ -232,7 +232,7 @@ def test_process_exit_releases_lock(tmp_path: Path) -> None:
         assert acquired.wait(15)
         with pytest.raises(FileWriteError) as error, index_write_lock(path, timeout=0):
             pytest.fail("another process acquired the held lock")
-        assert isinstance(error.value.original, Timeout)
+        assert isinstance(error.value.original, LockException)
     finally:
         process.terminate()
         process.join(timeout=10)

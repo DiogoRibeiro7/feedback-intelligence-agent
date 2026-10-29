@@ -575,7 +575,7 @@
     {
       "name": "feedback_intelligence_agent.index_persistence",
       "source": "src/feedback_intelligence_agent/index_persistence.py",
-      "line_count": 82,
+      "line_count": 89,
       "public": true,
       "summary": "Atomic JSON index replacement and cooperative locking on local filesystems.",
       "description": "",
@@ -5299,7 +5299,7 @@
       "module": "feedback_intelligence_agent.index_persistence",
       "signature": "index_write_lock(path: str | Path, *, timeout: float = 60.0) -> Iterator[Path]",
       "source": "src/feedback_intelligence_agent/index_persistence.py",
-      "line": 22,
+      "line": 30,
       "public": true,
       "is_async": false,
       "decorators": [
@@ -5339,7 +5339,7 @@
       "module": "feedback_intelligence_agent.index_persistence",
       "signature": "write_index_json(path: str | Path, contents: str) -> None",
       "source": "src/feedback_intelligence_agent/index_persistence.py",
-      "line": 52,
+      "line": 59,
       "public": true,
       "is_async": false,
       "decorators": [],
@@ -11677,6 +11677,7 @@
   ],
   "private_objects": {
     "classes": [
+      "feedback_intelligence_agent.index_persistence._ThreadLocks",
       "feedback_intelligence_agent.rate_limit._Window",
       "feedback_intelligence_agent.streaming_ingestion.KafkaConsumerProtocol",
       "feedback_intelligence_agent.streaming_ingestion.KafkaMessageProtocol",

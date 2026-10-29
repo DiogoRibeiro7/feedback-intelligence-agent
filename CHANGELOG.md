@@ -6,6 +6,8 @@ All notable changes to this project are documented here.
 
 ### Fixed
 
+- Use `portalocker` for JSON writer locks to retain Python 3.10 support without
+  the vulnerable `filelock` dependency flagged by dependency review.
 - JSON index saves flush a sibling temporary file before atomic replacement,
   keeping the last committed snapshot intact when writes fail.
 - Incremental JSON updates lock the full load/merge/save transaction across

@@ -1279,18 +1279,6 @@ standard = ["email-validator (>=2.0.0)", "fastapi-cli[standard] (>=0.0.32)", "fa
 standard-no-fastapi-cloud-cli = ["email-validator (>=2.0.0)", "fastapi-cli[standard-no-fastapi-cloud-cli] (>=0.0.32)", "httpx (>=0.23.0,<1.0.0)", "jinja2 (>=3.1.5)", "pydantic-extra-types (>=2.0.0)", "pydantic-settings (>=2.0.0)", "python-multipart (>=0.0.18)", "uvicorn[standard] (>=0.12.0)"]
 
 [[package]]
-name = "filelock"
-version = "3.32.7"
-description = "A platform independent file lock."
-optional = false
-python-versions = ">=3.10"
-groups = ["main"]
-files = [
-    {file = "filelock-3.32.7-py3-none-any.whl", hash = "sha256:65ff0d0190ea42038b32bda4b77834fb05be2cad4c5b9b01aa4dfb3614536e52"},
-    {file = "filelock-3.32.7.tar.gz", hash = "sha256:37b8a3d9811b0f9aef7e5ec5c71bb320de52df51e6ca9bcd6f5ad81187660da7"},
-]
-
-[[package]]
 name = "flask"
 version = "3.1.3"
 description = "A simple framework for building complex web applications."
@@ -3644,10 +3632,9 @@ testing = ["coverage", "pytest", "pytest-benchmark"]
 name = "portalocker"
 version = "3.2.0"
 description = "Wraps the portalocker recipe for easy usage"
-optional = true
+optional = false
 python-versions = ">=3.9"
 groups = ["main"]
-markers = "extra == \"qdrant\""
 files = [
     {file = "portalocker-3.2.0-py3-none-any.whl", hash = "sha256:3cdc5f565312224bc570c49337bd21428bba0ef363bbcf58b9ef4a9f11779968"},
     {file = "portalocker-3.2.0.tar.gz", hash = "sha256:1f3002956a54a8c3730586c5c77bf18fae4149e07eaf1c29fc3faf4d5a3f89ac"},
@@ -4227,10 +4214,10 @@ files = [
 name = "pywin32"
 version = "312"
 description = "Python for Windows Extensions"
-optional = true
+optional = false
 python-versions = ">=3.9"
 groups = ["main"]
-markers = "extra == \"mlflow\" and sys_platform == \"win32\" or extra == \"qdrant\" and platform_system == \"Windows\""
+markers = "extra == \"mlflow\" and sys_platform == \"win32\" or platform_system == \"Windows\""
 files = [
     {file = "pywin32-312-cp310-cp310-win32.whl", hash = "sha256:772235332b5d1024c696f11cea1ae4be7930f0a8b894bb43db14e3f435f1ff7e"},
     {file = "pywin32-312-cp310-cp310-win_amd64.whl", hash = "sha256:5dbc35d2b5320dc07f25fa31269cfb767471002b17de5eb067d03da68c7cb2db"},
@@ -5578,4 +5565,4 @@ streaming = ["boto3", "confluent-kafka"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.10,<3.13"
-content-hash = "6e792b22d6634b79a08444d8f99d7761e74067bf171d2ce02b31cd1234048880"
+content-hash = "318733a33a1a2b122c1b8526f8dee92c56649abdd220708c0cd0c1c38e0e7110"

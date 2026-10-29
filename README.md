@@ -810,9 +810,9 @@ merging, and saving, so cooperating threads and processes cannot overwrite
 each other's batches. First-time index creation checks again after acquiring
 the lock to preserve an index created by another caller.
 
-The lock uses [filelock](https://py-filelock.readthedocs.io/en/stable/) with a
+The lock uses [portalocker](https://portalocker.readthedocs.io/en/latest/) with a
 60-second acquisition timeout and a sibling `<index>.lock` file. Keep the
-index directory writable and let the library manage its lock file. Different
+index directory writable and retain the lock file while callers may use it. Different
 indexes can be updated independently. Lock failures raise `FileWriteError`.
 Full rebuilds and direct `save()` calls use the same writer lock but intentionally
 replace the entire snapshot; they do not merge an older in-memory snapshot.

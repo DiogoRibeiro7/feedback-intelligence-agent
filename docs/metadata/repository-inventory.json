@@ -97,11 +97,11 @@
       },
       "Markdown": {
         "files": 15,
-        "lines": 2749
+        "lines": 2751
       },
       "Python": {
         "files": 105,
-        "lines": 28024
+        "lines": 28031
       },
       "TOML": {
         "files": 2,
@@ -254,8 +254,8 @@
         "path": "CHANGELOG.md",
         "category": "documentation",
         "language": "Markdown",
-        "lines": 135,
-        "bytes": 6412
+        "lines": 137,
+        "bytes": 6561
       },
       {
         "path": "CITATION.cff",
@@ -304,7 +304,7 @@
         "category": "documentation",
         "language": "Markdown",
         "lines": 1248,
-        "bytes": 58234
+        "bytes": 58246
       },
       {
         "path": "ROADMAP.md",
@@ -962,7 +962,7 @@
         "category": "dependency-lock",
         "language": null,
         "lines": null,
-        "bytes": 570275
+        "bytes": 569795
       },
       {
         "path": "pyproject.toml",
@@ -1122,8 +1122,8 @@
         "path": "src/feedback_intelligence_agent/index_persistence.py",
         "category": "python-source",
         "language": "Python",
-        "lines": 82,
-        "bytes": 3519
+        "lines": 89,
+        "bytes": 3685
       },
       {
         "path": "src/feedback_intelligence_agent/index_updates.py",
@@ -1466,7 +1466,7 @@
         "category": "python-test",
         "language": "Python",
         "lines": 330,
-        "bytes": 12867
+        "bytes": 12899
       },
       {
         "path": "tests/test_index_updates.py",
@@ -1760,12 +1760,6 @@
         "extras": []
       },
       {
-        "name": "filelock",
-        "constraint": ">=3.20.3,<4",
-        "optional": false,
-        "extras": []
-      },
-      {
         "name": "httpx",
         "constraint": ">=0.27,<0.29",
         "optional": false,
@@ -1780,6 +1774,12 @@
       {
         "name": "pandas",
         "constraint": "^2.2.0",
+        "optional": false,
+        "extras": []
+      },
+      {
+        "name": "portalocker",
+        "constraint": ">=3.2,<4",
         "optional": false,
         "extras": []
       },
@@ -1943,7 +1943,7 @@
     "lock_file": {
       "path": "poetry.lock",
       "present": true,
-      "locked_packages": 145
+      "locked_packages": 144
     },
     "frontend": {
       "name": "feedback-intelligence-agent-frontend",
