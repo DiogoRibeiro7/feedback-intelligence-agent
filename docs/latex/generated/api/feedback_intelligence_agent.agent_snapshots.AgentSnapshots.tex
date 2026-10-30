@@ -19,7 +19,7 @@ AgentSnapshots(self, settings: Settings) -> None
   \item[\texttt{settings}] \texttt{Settings}, required.
 \end{arglist}
 \apifield{Details}Cooperating writers use atomic replacement and the shared index writer lock. The unchanged-file fast path needs only a stat call; it does not wait for a writer preparing an update. Changed files are loaded and published under that same lock, serializing reloads with ingestion and preventing stale publication. Each request retains its selected agent for its whole answer. Qdrant with a configured ingestion lock delegates to coordinated snapshots; without it, Qdrant retains its startup behavior without touching a JSON path.
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}agent\_\allowbreak{}snapshots.\allowbreak{}py:29}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/5c2bef33716855cb87a58aa08b6fe8f23758c4e0/src/feedback_intelligence_agent/agent_snapshots.py#L29}{online}), class, module \cref{module:feedback_intelligence_agent.agent_snapshots}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}agent\_\allowbreak{}snapshots.\allowbreak{}py:29}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/46813b067e21ac5d947a7bf539b1e3f81b78149f/src/feedback_intelligence_agent/agent_snapshots.py#L29}{online}), class, module \cref{module:feedback_intelligence_agent.agent_snapshots}
 
 \subsection{\texttt{get}}
 \label{method:feedback_intelligence_agent.agent_snapshots.AgentSnapshots.get}\index{Methods!get}
@@ -31,7 +31,7 @@ get(self) -> FeedbackInsightAgent
 \apifield{Value}\texttt{FeedbackInsightAgent}
 \apifield{Raises}\texttt{IndexSnapshotUnavailableError}
 \apifield{Details}A failed reload leaves the last good snapshot intact for in-flight requests but raises for new requests. It never rebuilds from the CSV; the next request retries the committed file, even after preparation fails.
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}agent\_\allowbreak{}snapshots.\allowbreak{}py:55}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/5c2bef33716855cb87a58aa08b6fe8f23758c4e0/src/feedback_intelligence_agent/agent_snapshots.py#L55}{online})
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}agent\_\allowbreak{}snapshots.\allowbreak{}py:55}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/46813b067e21ac5d947a7bf539b1e3f81b78149f/src/feedback_intelligence_agent/agent_snapshots.py#L55}{online})
 
 \subsection{\texttt{ingest}}
 \label{method:feedback_intelligence_agent.agent_snapshots.AgentSnapshots.ingest}\index{Methods!ingest}
@@ -47,4 +47,4 @@ ingest(self, records: list[FeedbackRecord], tenant_id: str) -> RecordIngestionRe
 \end{arglist}
 \apifield{Value}\texttt{RecordIngestionResult}
 \apifield{Raises}\texttt{ValueError}
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}agent\_\allowbreak{}snapshots.\allowbreak{}py:83}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/5c2bef33716855cb87a58aa08b6fe8f23758c4e0/src/feedback_intelligence_agent/agent_snapshots.py#L83}{online})
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}agent\_\allowbreak{}snapshots.\allowbreak{}py:83}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/46813b067e21ac5d947a7bf539b1e3f81b78149f/src/feedback_intelligence_agent/agent_snapshots.py#L83}{online})

@@ -21,7 +21,7 @@ Interface shared by every vector store backend.
   \item[\texttt{chunks}] Return the indexed chunks.
 \end{arglist}
 \apifield{Details}Both the default \texttt{InMemoryVectorStore} (JSON persistence) and the optional Qdrant-backed store satisfy this protocol, so the retrieval layer can treat them interchangeably. Vectors are assumed to be L2-normalised and scored by cosine similarity, with higher scores meaning more similar.
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}vector\_\allowbreak{}store.\allowbreak{}py:21}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/5c2bef33716855cb87a58aa08b6fe8f23758c4e0/src/feedback_intelligence_agent/vector_store.py#L21}{online}), protocol, module \cref{module:feedback_intelligence_agent.vector_store}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}vector\_\allowbreak{}store.\allowbreak{}py:21}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/46813b067e21ac5d947a7bf539b1e3f81b78149f/src/feedback_intelligence_agent/vector_store.py#L21}{online}), protocol, module \cref{module:feedback_intelligence_agent.vector_store}
 
 \subsection{\texttt{add}}
 \label{method:feedback_intelligence_agent.vector_store.VectorStore.add}\index{Methods!add}
@@ -35,7 +35,7 @@ add(self, chunks: list[DocumentChunk], vectors: npt.NDArray[np.float64]) -> None
   \item[\texttt{chunks}] \texttt{list[DocumentChunk]\allowbreak{}}, required.
   \item[\texttt{vectors}] \texttt{npt.\allowbreak{}NDArray[np.\allowbreak{}float64]\allowbreak{}}, required.
 \end{arglist}
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}vector\_\allowbreak{}store.\allowbreak{}py:40}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/5c2bef33716855cb87a58aa08b6fe8f23758c4e0/src/feedback_intelligence_agent/vector_store.py#L40}{online})
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}vector\_\allowbreak{}store.\allowbreak{}py:40}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/46813b067e21ac5d947a7bf539b1e3f81b78149f/src/feedback_intelligence_agent/vector_store.py#L40}{online})
 
 \subsection{\texttt{search}}
 \label{method:feedback_intelligence_agent.vector_store.VectorStore.search}\index{Methods!search}
@@ -51,4 +51,4 @@ search(self, query_vector: npt.NDArray[np.float64], *, top_k: int = 4, filters: 
   \item[\texttt{filters}] \texttt{MetadataFilters \textbar{} None}, default \texttt{None}, keyword-only.
 \end{arglist}
 \apifield{Value}\texttt{list[SearchResult]\allowbreak{}}
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}vector\_\allowbreak{}store.\allowbreak{}py:43}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/5c2bef33716855cb87a58aa08b6fe8f23758c4e0/src/feedback_intelligence_agent/vector_store.py#L43}{online})
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}vector\_\allowbreak{}store.\allowbreak{}py:43}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/46813b067e21ac5d947a7bf539b1e3f81b78149f/src/feedback_intelligence_agent/vector_store.py#L43}{online})

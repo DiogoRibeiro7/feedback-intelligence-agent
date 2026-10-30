@@ -1,5 +1,5 @@
 {
-  "title": "Feedback Intelligence Agent",
+  "title": "Feedback Intelligence Agent: Agentic Retrieval-Augmented Generation for Customer Feedback Analysis.",
   "upload_type": "software",
   "description": "A production-style AI engineering repository that demonstrates how to build, evaluate, and serve an LLM-powered customer feedback intelligence system. The project implements an agentic RAG workflow with retrieval, evidence selection, cited responses, FastAPI serving, deterministic local fallback behavior, offline evaluation, data engineering pipelines, product workflows, and multi-tenant scoping.",
   "creators": [
