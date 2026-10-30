@@ -12,13 +12,14 @@
 Construct a fully wired feedback insight agent.
 \apifield{Usage}
 \begin{lstlisting}[style=usage, language=Python]
-build_agent(settings: Settings, *, telemetry: Telemetry | None = None) -> FeedbackInsightAgent
+build_agent(settings: Settings, *, telemetry: Telemetry | None = None, vector_store: VectorStore | None = None) -> FeedbackInsightAgent
 \end{lstlisting}
 \apifield{Arguments}
 \begin{arglist}
   \item[\texttt{settings}] \texttt{Settings}, required.
   \item[\texttt{telemetry}] \texttt{Telemetry \textbar{} None}, default \texttt{None}, keyword-only.
+  \item[\texttt{vector\_\allowbreak{}store}] \texttt{VectorStore \textbar{} None}, default \texttt{None}, keyword-only.
 \end{arglist}
 \apifield{Value}\texttt{FeedbackInsightAgent}
-\apifield{Details}When no telemetry emitter is supplied, one is built from the settings (a no-op unless telemetry is enabled via the environment). The agent is equipped with the default local tool registry built over the indexed feedback chunks.
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}factory.\allowbreak{}py:356}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/1c86b0da13a924e224e4b977a2ec1e81756c4a52/src/feedback_intelligence_agent/factory.py#L356}{online}), module \cref{module:feedback_intelligence_agent.factory}
+\apifield{Details}When no telemetry emitter is supplied, one is built from the settings (a no-op unless telemetry is enabled via the environment). The agent is equipped with the default local tool registry built over the indexed feedback chunks. An explicitly supplied store avoids loading or rebuilding the configured backend, allowing callers to supply a coordinated snapshot.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}factory.\allowbreak{}py:359}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/8b368cc9cacfeeb963e13557b856067186e3b59f/src/feedback_intelligence_agent/factory.py#L359}{online}), module \cref{module:feedback_intelligence_agent.factory}

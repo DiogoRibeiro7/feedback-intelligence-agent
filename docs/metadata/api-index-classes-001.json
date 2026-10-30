@@ -1063,11 +1063,11 @@
       "module": "feedback_intelligence_agent.agent_snapshots",
       "bases": [],
       "source": "src/feedback_intelligence_agent/agent_snapshots.py",
-      "line": 28,
+      "line": 29,
       "public": true,
       "decorators": [],
       "summary": "Keep one agent per committed JSON index version in each API worker.",
-      "description": "Cooperating writers use atomic replacement and the shared index writer lock.\nThe unchanged-file fast path needs only a stat call; it does not wait for a\nwriter preparing an update. Changed files are loaded and published under\nthat same lock, serializing reloads with ingestion and preventing stale\npublication. Each request retains its selected agent for its whole answer.\nQdrant keeps its existing startup behavior without touching a JSON path.",
+      "description": "Cooperating writers use atomic replacement and the shared index writer lock.\nThe unchanged-file fast path needs only a stat call; it does not wait for a\nwriter preparing an update. Changed files are loaded and published under\nthat same lock, serializing reloads with ingestion and preventing stale\npublication. Each request retains its selected agent for its whole answer.\nQdrant with a configured ingestion lock delegates to coordinated snapshots;\nwithout it, Qdrant retains its startup behavior without touching a JSON path.",
       "attributes": [],
       "methods": [
         {
@@ -1077,7 +1077,7 @@
           "module": "feedback_intelligence_agent.agent_snapshots",
           "signature": "get(self) -> FeedbackInsightAgent",
           "source": "src/feedback_intelligence_agent/agent_snapshots.py",
-          "line": 49,
+          "line": 55,
           "public": true,
           "is_async": false,
           "decorators": [],
@@ -1113,7 +1113,7 @@
           "module": "feedback_intelligence_agent.agent_snapshots",
           "signature": "ingest(self, records: list[FeedbackRecord], tenant_id: str) -> RecordIngestionResult",
           "source": "src/feedback_intelligence_agent/agent_snapshots.py",
-          "line": 75,
+          "line": 83,
           "public": true,
           "is_async": false,
           "decorators": [],
@@ -1165,7 +1165,7 @@
         "module": "feedback_intelligence_agent.agent_snapshots",
         "signature": "__init__(self, settings: Settings) -> None",
         "source": "src/feedback_intelligence_agent/agent_snapshots.py",
-        "line": 39,
+        "line": 41,
         "public": false,
         "is_async": false,
         "decorators": [],
@@ -1207,10 +1207,10 @@
         "RuntimeError"
       ],
       "source": "src/feedback_intelligence_agent/agent_snapshots.py",
-      "line": 24,
+      "line": 25,
       "public": true,
       "decorators": [],
-      "summary": "The committed JSON index cannot currently supply a valid agent snapshot.",
+      "summary": "The configured index cannot currently supply a valid agent snapshot.",
       "description": "",
       "attributes": [],
       "methods": [],
@@ -1761,6 +1761,14 @@
           "constraints": {}
         },
         {
+          "name": "qdrant_ingestion_lock_path",
+          "annotation": "Path | None",
+          "default": "None",
+          "required": false,
+          "description": "",
+          "constraints": {}
+        },
+        {
           "name": "retriever_type",
           "annotation": "RetrieverType",
           "default": "'dense'",
@@ -2178,13 +2186,59 @@
       ],
       "methods": [
         {
+          "name": "validate_qdrant_ingestion_lock_path",
+          "qualified_name": "feedback_intelligence_agent.config.Settings.validate_qdrant_ingestion_lock_path",
+          "kind": "class method",
+          "module": "feedback_intelligence_agent.config",
+          "signature": "validate_qdrant_ingestion_lock_path(cls, value: object) -> object",
+          "source": "src/feedback_intelligence_agent/config.py",
+          "line": 103,
+          "public": true,
+          "is_async": false,
+          "decorators": [
+            "field_validator('qdrant_ingestion_lock_path', mode='before')",
+            "classmethod"
+          ],
+          "summary": "Require an explicit nonblank path when opting into coordinated Qdrant ingestion.",
+          "description": "",
+          "parameters": [
+            {
+              "name": "cls",
+              "annotation": null,
+              "default": null,
+              "kind": "positional-or-keyword",
+              "description": ""
+            },
+            {
+              "name": "value",
+              "annotation": "object",
+              "default": null,
+              "kind": "positional-or-keyword",
+              "description": ""
+            }
+          ],
+          "returns": {
+            "annotation": "object",
+            "description": ""
+          },
+          "raises": [
+            {
+              "exception": "ValueError",
+              "description": ""
+            }
+          ],
+          "examples": "",
+          "notes": "",
+          "see_also": []
+        },
+        {
           "name": "ensure_artifact_dir",
           "qualified_name": "feedback_intelligence_agent.config.Settings.ensure_artifact_dir",
           "kind": "method",
           "module": "feedback_intelligence_agent.config",
           "signature": "ensure_artifact_dir(self) -> None",
           "source": "src/feedback_intelligence_agent/config.py",
-          "line": 112,
+          "line": 121,
           "public": true,
           "is_async": false,
           "decorators": [],
@@ -2217,7 +2271,7 @@
           "module": "feedback_intelligence_agent.config",
           "signature": "cors_origins(self) -> list[str]",
           "source": "src/feedback_intelligence_agent/config.py",
-          "line": 101,
+          "line": 110,
           "public": true,
           "is_async": false,
           "decorators": [
@@ -9702,119 +9756,6 @@
         "notes": "",
         "see_also": []
       },
-      "notes": ""
-    },
-    {
-      "name": "PromptTemplate",
-      "qualified_name": "feedback_intelligence_agent.prompt_registry.PromptTemplate",
-      "kind": "dataclass",
-      "module": "feedback_intelligence_agent.prompt_registry",
-      "bases": [],
-      "source": "src/feedback_intelligence_agent/prompt_registry.py",
-      "line": 42,
-      "public": true,
-      "decorators": [
-        "dataclass(frozen=True)"
-      ],
-      "summary": "A named, versioned prompt template with declared variables.",
-      "description": "``required_variables`` must be provided on every render. ``optional_variables``\nmap variable names to default values used when the caller omits them. The\nunion of both must exactly match the placeholders found in ``template``.",
-      "attributes": [
-        {
-          "name": "name",
-          "annotation": "str",
-          "default": null,
-          "required": true,
-          "description": "",
-          "constraints": {}
-        },
-        {
-          "name": "version",
-          "annotation": "str",
-          "default": null,
-          "required": true,
-          "description": "",
-          "constraints": {}
-        },
-        {
-          "name": "template",
-          "annotation": "str",
-          "default": null,
-          "required": true,
-          "description": "",
-          "constraints": {}
-        },
-        {
-          "name": "required_variables",
-          "annotation": "tuple[str, ...]",
-          "default": "()",
-          "required": false,
-          "description": "",
-          "constraints": {}
-        },
-        {
-          "name": "optional_variables",
-          "annotation": "Mapping[str, str]",
-          "default": "field(default_factory=dict)",
-          "required": false,
-          "description": "",
-          "constraints": {}
-        },
-        {
-          "name": "changelog",
-          "annotation": "str",
-          "default": "''",
-          "required": false,
-          "description": "",
-          "constraints": {}
-        }
-      ],
-      "methods": [
-        {
-          "name": "render",
-          "qualified_name": "feedback_intelligence_agent.prompt_registry.PromptTemplate.render",
-          "kind": "method",
-          "module": "feedback_intelligence_agent.prompt_registry",
-          "signature": "render(self, **variables: str) -> str",
-          "source": "src/feedback_intelligence_agent/prompt_registry.py",
-          "line": 80,
-          "public": true,
-          "is_async": false,
-          "decorators": [],
-          "summary": "Render the template, raising a clear error on missing or unknown variables.",
-          "description": "",
-          "parameters": [
-            {
-              "name": "self",
-              "annotation": null,
-              "default": null,
-              "kind": "positional-or-keyword",
-              "description": ""
-            },
-            {
-              "name": "variables",
-              "annotation": "str",
-              "default": null,
-              "kind": "var-keyword",
-              "description": ""
-            }
-          ],
-          "returns": {
-            "annotation": "str",
-            "description": ""
-          },
-          "raises": [
-            {
-              "exception": "PromptVariableError",
-              "description": ""
-            }
-          ],
-          "examples": "",
-          "notes": "",
-          "see_also": []
-        }
-      ],
-      "properties": [],
-      "constructor": null,
       "notes": ""
     }
   ]

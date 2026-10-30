@@ -81,9 +81,9 @@
     {
       "name": "feedback_intelligence_agent.agent_snapshots",
       "source": "src/feedback_intelligence_agent/agent_snapshots.py",
-      "line_count": 84,
+      "line_count": 94,
       "public": true,
-      "summary": "Request-time JSON index refresh with immutable, process-local agent snapshots.",
+      "summary": "Request-time index refresh with immutable, process-local agent snapshots.",
       "description": "",
       "exports": [],
       "imports_internal": [
@@ -91,6 +91,7 @@
         "config",
         "factory",
         "index_persistence",
+        "qdrant_ingestion",
         "record_ingestion",
         "schemas",
         "vector_store"
@@ -304,7 +305,7 @@
     {
       "name": "feedback_intelligence_agent.config",
       "source": "src/feedback_intelligence_agent/config.py",
-      "line_count": 114,
+      "line_count": 123,
       "public": true,
       "summary": "Application configuration.",
       "description": "",
@@ -468,7 +469,7 @@
     {
       "name": "feedback_intelligence_agent.factory",
       "source": "src/feedback_intelligence_agent/factory.py",
-      "line_count": 379,
+      "line_count": 389,
       "public": true,
       "summary": "Factories for constructing the application components.",
       "description": "",
@@ -931,9 +932,33 @@
       ]
     },
     {
+      "name": "feedback_intelligence_agent.qdrant_ingestion",
+      "source": "src/feedback_intelligence_agent/qdrant_ingestion.py",
+      "line_count": 81,
+      "public": true,
+      "summary": "Coordinated Qdrant record ingestion and immutable API retrieval snapshots.",
+      "description": "",
+      "exports": [],
+      "imports_internal": [
+        "agent",
+        "chunking",
+        "config",
+        "embeddings",
+        "factory",
+        "index_persistence",
+        "record_ingestion",
+        "schemas"
+      ],
+      "class_names": [
+        "QdrantAgentSnapshots"
+      ],
+      "function_names": [],
+      "constant_names": []
+    },
+    {
       "name": "feedback_intelligence_agent.qdrant_store",
       "source": "src/feedback_intelligence_agent/qdrant_store.py",
-      "line_count": 351,
+      "line_count": 385,
       "public": true,
       "summary": "Optional Qdrant-backed vector store.",
       "description": "The store mirrors the semantics of the default ``InMemoryVectorStore`` but\npersists vectors in a running Qdrant instance instead of a local JSON file.\nIt satisfies the same ``VectorStore`` protocol, so the retrieval layer treats both\nstores identically.\n\n``qdrant-client`` is an *optional* dependency (poetry extra ``qdrant``) and is\nimported lazily, with an actionable error if it is not installed. This keeps the\ndefault install lean and the deterministic local path free of any external\nservice.",
@@ -941,7 +966,8 @@
       "imports_internal": [
         "metadata_filters",
         "schemas",
-        "source_ids"
+        "source_ids",
+        "vector_store"
       ],
       "class_names": [
         "QdrantStoreError",
@@ -4661,7 +4687,7 @@
       "module": "feedback_intelligence_agent.factory",
       "signature": "build_active_learning_state_store(settings: Settings) -> JsonActiveLearningStateStore",
       "source": "src/feedback_intelligence_agent/factory.py",
-      "line": 108,
+      "line": 109,
       "public": true,
       "is_async": false,
       "decorators": [],
@@ -4690,14 +4716,14 @@
       "qualified_name": "feedback_intelligence_agent.factory.build_agent",
       "kind": "function",
       "module": "feedback_intelligence_agent.factory",
-      "signature": "build_agent(settings: Settings, *, telemetry: Telemetry | None = None) -> FeedbackInsightAgent",
+      "signature": "build_agent(settings: Settings, *, telemetry: Telemetry | None = None, vector_store: VectorStore | None = None) -> FeedbackInsightAgent",
       "source": "src/feedback_intelligence_agent/factory.py",
-      "line": 356,
+      "line": 359,
       "public": true,
       "is_async": false,
       "decorators": [],
       "summary": "Construct a fully wired feedback insight agent.",
-      "description": "When no telemetry emitter is supplied, one is built from the settings\n(a no-op unless telemetry is enabled via the environment). The agent is\nequipped with the default local tool registry built over the indexed\nfeedback chunks.",
+      "description": "When no telemetry emitter is supplied, one is built from the settings\n(a no-op unless telemetry is enabled via the environment). The agent is\nequipped with the default local tool registry built over the indexed\nfeedback chunks. An explicitly supplied store avoids loading or rebuilding\nthe configured backend, allowing callers to supply a coordinated snapshot.",
       "parameters": [
         {
           "name": "settings",
@@ -4709,6 +4735,13 @@
         {
           "name": "telemetry",
           "annotation": "Telemetry | None",
+          "default": "None",
+          "kind": "keyword-only",
+          "description": ""
+        },
+        {
+          "name": "vector_store",
+          "annotation": "VectorStore | None",
           "default": "None",
           "kind": "keyword-only",
           "description": ""
@@ -4730,7 +4763,7 @@
       "module": "feedback_intelligence_agent.factory",
       "signature": "build_agent_snapshot(settings: Settings, vector_store: VectorStore, *, previous: FeedbackInsightAgent) -> FeedbackInsightAgent",
       "source": "src/feedback_intelligence_agent/factory.py",
-      "line": 341,
+      "line": 344,
       "public": true,
       "is_async": false,
       "decorators": [],
@@ -4775,7 +4808,7 @@
       "module": "feedback_intelligence_agent.factory",
       "signature": "build_conversation_store(settings: Settings, *, principal_id: str | None = None) -> JsonConversationStore",
       "source": "src/feedback_intelligence_agent/factory.py",
-      "line": 64,
+      "line": 65,
       "public": true,
       "is_async": false,
       "decorators": [],
@@ -4813,7 +4846,7 @@
       "module": "feedback_intelligence_agent.factory",
       "signature": "build_human_feedback_store(settings: Settings) -> JsonHumanFeedbackStore",
       "source": "src/feedback_intelligence_agent/factory.py",
-      "line": 101,
+      "line": 102,
       "public": true,
       "is_async": false,
       "decorators": [],
@@ -4844,7 +4877,7 @@
       "module": "feedback_intelligence_agent.factory",
       "signature": "build_index(input_path: str | Path, index_path: str | Path, *, embedding_dim: int, telemetry: Telemetry | None = None) -> InMemoryVectorStore",
       "source": "src/feedback_intelligence_agent/factory.py",
-      "line": 134,
+      "line": 135,
       "public": true,
       "is_async": false,
       "decorators": [],
@@ -4896,7 +4929,7 @@
       "module": "feedback_intelligence_agent.factory",
       "signature": "build_job_store(settings: Settings) -> JsonJobStore",
       "source": "src/feedback_intelligence_agent/factory.py",
-      "line": 81,
+      "line": 82,
       "public": true,
       "is_async": false,
       "decorators": [],
@@ -4927,7 +4960,7 @@
       "module": "feedback_intelligence_agent.factory",
       "signature": "build_llm(settings: Settings) -> LLMProvider",
       "source": "src/feedback_intelligence_agent/factory.py",
-      "line": 258,
+      "line": 261,
       "public": true,
       "is_async": false,
       "decorators": [],
@@ -4961,9 +4994,9 @@
       "qualified_name": "feedback_intelligence_agent.factory.build_qdrant_index",
       "kind": "function",
       "module": "feedback_intelligence_agent.factory",
-      "signature": "build_qdrant_index(settings: Settings, *, telemetry: Telemetry | None = None) -> VectorStore",
+      "signature": "build_qdrant_index(settings: Settings, *, telemetry: Telemetry | None = None) -> QdrantVectorStore",
       "source": "src/feedback_intelligence_agent/factory.py",
-      "line": 165,
+      "line": 166,
       "public": true,
       "is_async": false,
       "decorators": [],
@@ -4986,7 +5019,7 @@
         }
       ],
       "returns": {
-        "annotation": "VectorStore",
+        "annotation": "QdrantVectorStore",
         "description": ""
       },
       "raises": [],
@@ -5001,7 +5034,7 @@
       "module": "feedback_intelligence_agent.factory",
       "signature": "build_report_store(settings: Settings) -> JsonInsightReportStore",
       "source": "src/feedback_intelligence_agent/factory.py",
-      "line": 94,
+      "line": 95,
       "public": true,
       "is_async": false,
       "decorators": [],
@@ -5032,7 +5065,7 @@
       "module": "feedback_intelligence_agent.factory",
       "signature": "build_retriever(settings: Settings, vector_store: VectorStore) -> Retriever",
       "source": "src/feedback_intelligence_agent/factory.py",
-      "line": 226,
+      "line": 229,
       "public": true,
       "is_async": false,
       "decorators": [],
@@ -5070,7 +5103,7 @@
       "module": "feedback_intelligence_agent.factory",
       "signature": "build_telemetry(settings: Settings) -> Telemetry",
       "source": "src/feedback_intelligence_agent/factory.py",
-      "line": 49,
+      "line": 50,
       "public": true,
       "is_async": false,
       "decorators": [],
@@ -5101,7 +5134,7 @@
       "module": "feedback_intelligence_agent.factory",
       "signature": "chunk_to_embedding_text(chunk: DocumentChunk) -> str",
       "source": "src/feedback_intelligence_agent/factory.py",
-      "line": 115,
+      "line": 116,
       "public": true,
       "is_async": false,
       "decorators": [],
@@ -5132,7 +5165,7 @@
       "module": "feedback_intelligence_agent.factory",
       "signature": "load_or_build_index(settings: Settings, *, telemetry: Telemetry | None = None) -> VectorStore",
       "source": "src/feedback_intelligence_agent/factory.py",
-      "line": 201,
+      "line": 204,
       "public": true,
       "is_async": false,
       "decorators": [],
@@ -11355,6 +11388,17 @@
       "line": 30
     },
     {
+      "name": "qdrant_ingestion_lock_path",
+      "env_var": "FEEDBACK_AGENT_QDRANT_INGESTION_LOCK_PATH",
+      "annotation": "Path | None",
+      "default": "None",
+      "required": false,
+      "constraints": {},
+      "description": "",
+      "sensitive": false,
+      "line": 31
+    },
+    {
       "name": "retriever_type",
       "env_var": "FEEDBACK_AGENT_RETRIEVER_TYPE",
       "annotation": "RetrieverType",
@@ -11363,7 +11407,7 @@
       "constraints": {},
       "description": "",
       "sensitive": false,
-      "line": 31
+      "line": 32
     },
     {
       "name": "dense_weight",
@@ -11376,7 +11420,7 @@
       },
       "description": "",
       "sensitive": false,
-      "line": 32
+      "line": 33
     },
     {
       "name": "lexical_weight",
@@ -11389,7 +11433,7 @@
       },
       "description": "",
       "sensitive": false,
-      "line": 33
+      "line": 34
     },
     {
       "name": "llm_provider",
@@ -11400,7 +11444,7 @@
       "constraints": {},
       "description": "",
       "sensitive": false,
-      "line": 34
+      "line": 35
     },
     {
       "name": "openai_api_key",
@@ -11411,7 +11455,7 @@
       "constraints": {},
       "description": "",
       "sensitive": true,
-      "line": 37
+      "line": 38
     },
     {
       "name": "openai_model",
@@ -11422,7 +11466,7 @@
       "constraints": {},
       "description": "",
       "sensitive": false,
-      "line": 38
+      "line": 39
     },
     {
       "name": "openai_base_url",
@@ -11433,7 +11477,7 @@
       "constraints": {},
       "description": "",
       "sensitive": false,
-      "line": 39
+      "line": 40
     },
     {
       "name": "anthropic_api_key",
@@ -11444,7 +11488,7 @@
       "constraints": {},
       "description": "",
       "sensitive": true,
-      "line": 42
+      "line": 43
     },
     {
       "name": "anthropic_model",
@@ -11455,7 +11499,7 @@
       "constraints": {},
       "description": "",
       "sensitive": false,
-      "line": 43
+      "line": 44
     },
     {
       "name": "bedrock_model",
@@ -11466,7 +11510,7 @@
       "constraints": {},
       "description": "",
       "sensitive": false,
-      "line": 44
+      "line": 45
     },
     {
       "name": "bedrock_region",
@@ -11477,7 +11521,7 @@
       "constraints": {},
       "description": "",
       "sensitive": false,
-      "line": 48
+      "line": 49
     },
     {
       "name": "bedrock_max_tokens",
@@ -11490,7 +11534,7 @@
       },
       "description": "",
       "sensitive": false,
-      "line": 49
+      "line": 50
     },
     {
       "name": "bedrock_temperature",
@@ -11503,7 +11547,7 @@
       },
       "description": "",
       "sensitive": false,
-      "line": 54
+      "line": 55
     },
     {
       "name": "llm_resilience_enabled",
@@ -11514,7 +11558,7 @@
       "constraints": {},
       "description": "",
       "sensitive": false,
-      "line": 59
+      "line": 60
     },
     {
       "name": "llm_timeout_seconds",
@@ -11527,7 +11571,7 @@
       },
       "description": "",
       "sensitive": false,
-      "line": 60
+      "line": 61
     },
     {
       "name": "llm_retry_max_attempts",
@@ -11540,7 +11584,7 @@
       },
       "description": "",
       "sensitive": false,
-      "line": 61
+      "line": 62
     },
     {
       "name": "llm_retry_backoff_seconds",
@@ -11553,7 +11597,7 @@
       },
       "description": "",
       "sensitive": false,
-      "line": 62
+      "line": 63
     },
     {
       "name": "llm_circuit_failure_threshold",
@@ -11566,7 +11610,7 @@
       },
       "description": "",
       "sensitive": false,
-      "line": 63
+      "line": 64
     },
     {
       "name": "llm_circuit_recovery_seconds",
@@ -11579,7 +11623,7 @@
       },
       "description": "",
       "sensitive": false,
-      "line": 64
+      "line": 65
     },
     {
       "name": "hallucination_judge_enabled",
@@ -11590,7 +11634,7 @@
       "constraints": {},
       "description": "",
       "sensitive": false,
-      "line": 65
+      "line": 66
     },
     {
       "name": "ollama_base_url",
@@ -11601,7 +11645,7 @@
       "constraints": {},
       "description": "",
       "sensitive": false,
-      "line": 66
+      "line": 67
     },
     {
       "name": "ollama_model",
@@ -11612,7 +11656,7 @@
       "constraints": {},
       "description": "",
       "sensitive": false,
-      "line": 69
+      "line": 70
     },
     {
       "name": "telemetry_enabled",
@@ -11623,7 +11667,7 @@
       "constraints": {},
       "description": "",
       "sensitive": false,
-      "line": 70
+      "line": 71
     },
     {
       "name": "telemetry_backend",
@@ -11634,7 +11678,7 @@
       "constraints": {},
       "description": "",
       "sensitive": false,
-      "line": 71
+      "line": 72
     },
     {
       "name": "telemetry_path",
@@ -11645,7 +11689,7 @@
       "constraints": {},
       "description": "",
       "sensitive": false,
-      "line": 72
+      "line": 73
     },
     {
       "name": "telemetry_service_name",
@@ -11656,7 +11700,7 @@
       "constraints": {},
       "description": "",
       "sensitive": false,
-      "line": 73
+      "line": 74
     },
     {
       "name": "conversation_store_path",
@@ -11667,7 +11711,7 @@
       "constraints": {},
       "description": "",
       "sensitive": false,
-      "line": 74
+      "line": 75
     },
     {
       "name": "job_store_path",
@@ -11678,7 +11722,7 @@
       "constraints": {},
       "description": "",
       "sensitive": false,
-      "line": 75
+      "line": 76
     },
     {
       "name": "report_store_path",
@@ -11689,7 +11733,7 @@
       "constraints": {},
       "description": "",
       "sensitive": false,
-      "line": 76
+      "line": 77
     },
     {
       "name": "human_feedback_store_path",
@@ -11700,7 +11744,7 @@
       "constraints": {},
       "description": "",
       "sensitive": false,
-      "line": 77
+      "line": 78
     },
     {
       "name": "active_learning_state_store_path",
@@ -11711,7 +11755,7 @@
       "constraints": {},
       "description": "",
       "sensitive": false,
-      "line": 78
+      "line": 79
     },
     {
       "name": "api_auth_enabled",
@@ -11722,7 +11766,7 @@
       "constraints": {},
       "description": "",
       "sensitive": false,
-      "line": 79
+      "line": 80
     },
     {
       "name": "api_reader_key",
@@ -11733,7 +11777,7 @@
       "constraints": {},
       "description": "",
       "sensitive": true,
-      "line": 80
+      "line": 81
     },
     {
       "name": "api_writer_key",
@@ -11744,7 +11788,7 @@
       "constraints": {},
       "description": "",
       "sensitive": true,
-      "line": 81
+      "line": 82
     },
     {
       "name": "api_admin_key",
@@ -11755,7 +11799,7 @@
       "constraints": {},
       "description": "",
       "sensitive": true,
-      "line": 82
+      "line": 83
     },
     {
       "name": "api_tenant_bindings",
@@ -11768,7 +11812,7 @@
       },
       "description": "",
       "sensitive": true,
-      "line": 83
+      "line": 84
     },
     {
       "name": "api_rate_limit_enabled",
@@ -11779,7 +11823,7 @@
       "constraints": {},
       "description": "",
       "sensitive": false,
-      "line": 84
+      "line": 85
     },
     {
       "name": "api_rate_limit_max_requests",
@@ -11792,7 +11836,7 @@
       },
       "description": "",
       "sensitive": false,
-      "line": 85
+      "line": 86
     },
     {
       "name": "api_rate_limit_window_seconds",
@@ -11805,7 +11849,7 @@
       },
       "description": "",
       "sensitive": false,
-      "line": 86
+      "line": 87
     },
     {
       "name": "email_smtp_host",
@@ -11816,7 +11860,7 @@
       "constraints": {},
       "description": "",
       "sensitive": false,
-      "line": 87
+      "line": 88
     },
     {
       "name": "email_smtp_port",
@@ -11830,7 +11874,7 @@
       },
       "description": "",
       "sensitive": false,
-      "line": 88
+      "line": 89
     },
     {
       "name": "email_from_address",
@@ -11841,7 +11885,7 @@
       "constraints": {},
       "description": "",
       "sensitive": false,
-      "line": 89
+      "line": 90
     },
     {
       "name": "email_smtp_username",
@@ -11852,7 +11896,7 @@
       "constraints": {},
       "description": "",
       "sensitive": false,
-      "line": 90
+      "line": 91
     },
     {
       "name": "email_smtp_password",
@@ -11863,7 +11907,7 @@
       "constraints": {},
       "description": "",
       "sensitive": true,
-      "line": 91
+      "line": 92
     },
     {
       "name": "email_smtp_use_tls",
@@ -11874,7 +11918,7 @@
       "constraints": {},
       "description": "",
       "sensitive": false,
-      "line": 92
+      "line": 93
     },
     {
       "name": "cors_allow_origins",
@@ -11885,7 +11929,7 @@
       "constraints": {},
       "description": "",
       "sensitive": false,
-      "line": 93
+      "line": 94
     }
   ],
   "private_objects": {

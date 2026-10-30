@@ -12,13 +12,13 @@
 Build (or refresh) a Qdrant-backed index from the configured data.
 \apifield{Usage}
 \begin{lstlisting}[style=usage, language=Python]
-build_qdrant_index(settings: Settings, *, telemetry: Telemetry | None = None) -> VectorStore
+build_qdrant_index(settings: Settings, *, telemetry: Telemetry | None = None) -> QdrantVectorStore
 \end{lstlisting}
 \apifield{Arguments}
 \begin{arglist}
   \item[\texttt{settings}] \texttt{Settings}, required.
   \item[\texttt{telemetry}] \texttt{Telemetry \textbar{} None}, default \texttt{None}, keyword-only.
 \end{arglist}
-\apifield{Value}\texttt{VectorStore}
+\apifield{Value}\texttt{QdrantVectorStore}
 \apifield{Details}The Qdrant store is imported lazily here so the optional \texttt{qdrant-\allowbreak{}client} dependency is only required when \texttt{FEEDBACK\_\allowbreak{}AGENT\_\allowbreak{}VECTOR\_\allowbreak{}STORE=qdrant}.
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}factory.\allowbreak{}py:165}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/1c86b0da13a924e224e4b977a2ec1e81756c4a52/src/feedback_intelligence_agent/factory.py#L165}{online}), module \cref{module:feedback_intelligence_agent.factory}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}factory.\allowbreak{}py:166}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/8b368cc9cacfeeb963e13557b856067186e3b59f/src/feedback_intelligence_agent/factory.py#L166}{online}), module \cref{module:feedback_intelligence_agent.factory}

@@ -171,7 +171,7 @@ Security & \texttt{.\allowbreak{}github/\allowbreak{}workflows/\allowbreak{}secu
 3 & Set up Python & \texttt{actions/\allowbreak{}setup-\allowbreak{}python@v7} & -- \\
 4 & Install Qdrant extra & -- & \texttt{poetry install -\allowbreak{}-\allowbreak{}with dev -\allowbreak{}-\allowbreak{}extras qdrant} \\
 5 & Wait for Qdrant readiness & -- & \texttt{curl -\allowbreak{}-\allowbreak{}fail -\allowbreak{}-\allowbreak{}retry 20 -\allowbreak{}-\allowbreak{}retry-\allowbreak{}connrefused -\allowbreak{}-\allowbreak{}retry-\allowbreak{}delay 1 http:/\allowbreak{}/\allowbreak{}localhost:6333/\allowbreak{}readyz} \\
-6 & Test Qdrant persistence and replacements & -- & \texttt{poetry run pytest tests/\allowbreak{}test\_\allowbreak{}qdrant\_\allowbreak{}store.\allowbreak{}py tests/\allowbreak{}test\_\allowbreak{}qdrant\_\allowbreak{}integration.\allowbreak{}py} \\
+6 & Test Qdrant persistence and replacements & -- & \texttt{poetry run pytest tests/\allowbreak{}test\_\allowbreak{}qdrant\_\allowbreak{}store.\allowbreak{}py tests/\allowbreak{}test\_\allowbreak{}qdrant\_\allowbreak{}integration.\allowbreak{}py tests/\allowbreak{}test\_\allowbreak{}qdrant\_\allowbreak{}record\_\allowbreak{}ingestion.\allowbreak{}py} \\
 \end{longtable}
 
 \subsection*{Job \texttt{windows-persistence}}

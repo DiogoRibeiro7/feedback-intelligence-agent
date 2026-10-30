@@ -20,7 +20,7 @@ A named, versioned prompt template with declared variables.
   \item[\texttt{changelog}] \texttt{str}, default \texttt{''}
 \end{arglist}
 \apifield{Details}\texttt{required\_\allowbreak{}variables} must be provided on every render. \texttt{optional\_\allowbreak{}variables} map variable names to default values used when the caller omits them. The union of both must exactly match the placeholders found in \texttt{template}.
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}prompt\_\allowbreak{}registry.\allowbreak{}py:42}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/1c86b0da13a924e224e4b977a2ec1e81756c4a52/src/feedback_intelligence_agent/prompt_registry.py#L42}{online}), dataclass, module \cref{module:feedback_intelligence_agent.prompt_registry}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}prompt\_\allowbreak{}registry.\allowbreak{}py:42}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/8b368cc9cacfeeb963e13557b856067186e3b59f/src/feedback_intelligence_agent/prompt_registry.py#L42}{online}), dataclass, module \cref{module:feedback_intelligence_agent.prompt_registry}
 
 \subsection{\texttt{render}}
 \label{method:feedback_intelligence_agent.prompt_registry.PromptTemplate.render}\index{Methods!render}
@@ -35,4 +35,4 @@ render(self, **variables: str) -> str
 \end{arglist}
 \apifield{Value}\texttt{str}
 \apifield{Raises}\texttt{PromptVariableError}
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}prompt\_\allowbreak{}registry.\allowbreak{}py:80}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/1c86b0da13a924e224e4b977a2ec1e81756c4a52/src/feedback_intelligence_agent/prompt_registry.py#L80}{online})
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}prompt\_\allowbreak{}registry.\allowbreak{}py:80}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/8b368cc9cacfeeb963e13557b856067186e3b59f/src/feedback_intelligence_agent/prompt_registry.py#L80}{online})
