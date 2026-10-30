@@ -2,6 +2,9 @@
 
 from __future__ import annotations
 
+from time import monotonic
+from uuid import UUID
+
 from feedback_intelligence_agent.agent import FeedbackInsightAgent
 from feedback_intelligence_agent.chunking import feedback_to_chunks, scoped_source_id
 from feedback_intelligence_agent.config import Settings
@@ -14,6 +17,10 @@ from feedback_intelligence_agent.factory import (
     chunk_to_embedding_text,
 )
 from feedback_intelligence_agent.index_persistence import index_write_lock
+from feedback_intelligence_agent.qdrant_coordination import (
+    qdrant_snapshot_revision,
+    qdrant_write_lock,
+)
 from feedback_intelligence_agent.record_ingestion import RecordIngestionResult
 from feedback_intelligence_agent.schemas import FeedbackRecord
 
@@ -21,11 +28,10 @@ from feedback_intelligence_agent.schemas import FeedbackRecord
 class QdrantAgentSnapshots:
     """Serve Qdrant through snapshots coordinated by one shared local lock path.
 
-    All workers and external writers must cooperate on that path. Every request
-    downloads the collection's chunks and vectors under the lock, then releases
-    it before answering. Retrieval and dataset tools share that snapshot, while
-    other workers can ingest and in-flight answers retain their selected data.
-    This mode trades remote search scalability for consistent local snapshots.
+    All workers and external writers must cooperate on that path. Snapshot reads
+    hold the lock and release it before answering. A positive cache TTL reuses
+    unchanged snapshots; cooperating writes invalidate them immediately through
+    a shared generation marker. Retrieval and tools share immutable local data.
     """
 
     def __init__(self, settings: Settings) -> None:
@@ -33,19 +39,32 @@ class QdrantAgentSnapshots:
             raise ValueError("Qdrant ingestion requires a shared lock path")
         self._settings = settings
         self._lock_path = settings.qdrant_ingestion_lock_path
-        with index_write_lock(self._lock_path):
+        # Startup can seed an empty collection, so invalidate before initializing.
+        with qdrant_write_lock(self._lock_path) as generation:
             telemetry = build_telemetry(settings)
             self._store = build_qdrant_index(settings, telemetry=telemetry)
             self._agent = build_agent(
                 settings, telemetry=telemetry, vector_store=self._store.snapshot()
             )
+            self._generation: UUID | None = generation
+            self._snapshot_loaded_at: float | None = monotonic()
 
     def get(self) -> FeedbackInsightAgent:
-        """Refresh retrieval and tools together without replacing provider state."""
-        with index_write_lock(self._lock_path):
+        """Reuse an unexpired, unchanged snapshot or refresh retrieval and tools together."""
+        with index_write_lock(self._lock_path) as canonical_path:
+            generation = qdrant_snapshot_revision(canonical_path)
+            if (
+                self._snapshot_loaded_at is not None
+                and generation == self._generation
+                and monotonic() - self._snapshot_loaded_at
+                < self._settings.qdrant_snapshot_ttl_seconds
+            ):
+                return self._agent
             snapshot = self._store.snapshot()
             agent = build_agent_snapshot(self._settings, snapshot, previous=self._agent)
             self._agent = agent
+            self._generation = generation
+            self._snapshot_loaded_at = monotonic()
             return agent
 
     def ingest(self, records: list[FeedbackRecord], tenant_id: str) -> RecordIngestionResult:
@@ -67,8 +86,11 @@ class QdrantAgentSnapshots:
             )
             snapshot.upsert_sources(chunks, vectors)
             agent = build_agent_snapshot(self._settings, snapshot, previous=self._agent)
-            removed = self._store.upsert_sources(chunks, vectors)
+            with qdrant_write_lock(self._lock_path):
+                removed = self._store.upsert_sources(chunks, vectors)
             self._agent = agent
+            # Read persisted vectors on the next query; Qdrant may normalize them.
+            self._snapshot_loaded_at = None
             updated = sum(scoped_source_id(record) in existing_sources for record in deduped)
             return RecordIngestionResult(
                 tenant_id=tenant_id,

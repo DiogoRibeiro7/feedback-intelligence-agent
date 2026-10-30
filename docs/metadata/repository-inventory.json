@@ -29,9 +29,9 @@
     ],
     "date_released": "2026-10-29",
     "python_requires": ">=3.10,<3.13",
-    "revision": "8b368cc9cacfeeb963e13557b856067186e3b59f",
-    "revision_short": "8b368cc9cacf",
-    "revision_date": "2026-10-30T10:53:58Z",
+    "revision": "99d2f89206b141b3e423ac8b168932d73e39a4fe",
+    "revision_short": "99d2f89206b1",
+    "revision_date": "2026-10-30T12:12:00Z",
     "packages": [
       {
         "include": "feedback_intelligence_agent",
@@ -43,8 +43,8 @@
     }
   },
   "files": {
-    "total": 232,
-    "excluded_generated_documentation": 330,
+    "total": 234,
+    "excluded_generated_documentation": 332,
     "by_category": {
       "build-configuration": 1,
       "build-interface": 1,
@@ -64,8 +64,8 @@
       "license": 1,
       "other": 2,
       "python-script": 3,
-      "python-source": 50,
-      "python-test": 53,
+      "python-source": 51,
+      "python-test": 54,
       "repository-configuration": 2,
       "repository-governance": 8,
       "test-fixture": 2
@@ -97,11 +97,11 @@
       },
       "Markdown": {
         "files": 17,
-        "lines": 3244
+        "lines": 3295
       },
       "Python": {
-        "files": 118,
-        "lines": 31751
+        "files": 120,
+        "lines": 32119
       },
       "TOML": {
         "files": 2,
@@ -113,7 +113,7 @@
       },
       "YAML": {
         "files": 16,
-        "lines": 775
+        "lines": 776
       }
     },
     "entries": [
@@ -129,7 +129,7 @@
         "category": "configuration-template",
         "language": null,
         "lines": null,
-        "bytes": 3642
+        "bytes": 3770
       },
       {
         "path": ".gitattributes",
@@ -198,8 +198,8 @@
         "path": ".github/workflows/ci.yml",
         "category": "ci-workflow",
         "language": "YAML",
-        "lines": 202,
-        "bytes": 5891
+        "lines": 203,
+        "bytes": 5935
       },
       {
         "path": ".github/workflows/dependency-review.yml",
@@ -254,8 +254,8 @@
         "path": "CHANGELOG.md",
         "category": "documentation",
         "language": "Markdown",
-        "lines": 208,
-        "bytes": 11034
+        "lines": 214,
+        "bytes": 11531
       },
       {
         "path": "CITATION.cff",
@@ -303,15 +303,15 @@
         "path": "README.md",
         "category": "documentation",
         "language": "Markdown",
-        "lines": 1472,
-        "bytes": 71590
+        "lines": 1516,
+        "bytes": 74189
       },
       {
         "path": "ROADMAP.md",
         "category": "documentation",
         "language": "Markdown",
-        "lines": 82,
-        "bytes": 3958
+        "lines": 83,
+        "bytes": 4064
       },
       {
         "path": "SECURITY.md",
@@ -800,8 +800,8 @@
         "path": "docs/tools/extract_dependencies.py",
         "category": "documentation-tool",
         "language": "Python",
-        "lines": 379,
-        "bytes": 13324
+        "lines": 380,
+        "bytes": 13359
       },
       {
         "path": "docs/tools/generate_docs.py",
@@ -1080,8 +1080,8 @@
         "path": "src/feedback_intelligence_agent/config.py",
         "category": "python-source",
         "language": "Python",
-        "lines": 123,
-        "bytes": 5645
+        "lines": 133,
+        "bytes": 6201
       },
       {
         "path": "src/feedback_intelligence_agent/data_contracts.py",
@@ -1238,11 +1238,18 @@
         "bytes": 3224
       },
       {
+        "path": "src/feedback_intelligence_agent/qdrant_coordination.py",
+        "category": "python-source",
+        "language": "Python",
+        "lines": 54,
+        "bytes": 2032
+      },
+      {
         "path": "src/feedback_intelligence_agent/qdrant_ingestion.py",
         "category": "python-source",
         "language": "Python",
-        "lines": 81,
-        "bytes": 4081
+        "lines": 103,
+        "bytes": 5049
       },
       {
         "path": "src/feedback_intelligence_agent/qdrant_store.py",
@@ -1616,6 +1623,13 @@
         "bytes": 2835
       },
       {
+        "path": "tests/test_qdrant_coordination.py",
+        "category": "python-test",
+        "language": "Python",
+        "lines": 119,
+        "bytes": 4795
+      },
+      {
         "path": "tests/test_qdrant_integration.py",
         "category": "python-test",
         "language": "Python",
@@ -1626,8 +1640,8 @@
         "path": "tests/test_qdrant_record_ingestion.py",
         "category": "python-test",
         "language": "Python",
-        "lines": 430,
-        "bytes": 17050
+        "lines": 592,
+        "bytes": 23615
       },
       {
         "path": "tests/test_qdrant_store.py",
@@ -2577,7 +2591,7 @@
             {
               "name": "Test atomic saves and concurrent updates",
               "uses": "",
-              "run": "poetry run pytest tests/test_index_persistence.py tests/test_index_updates.py tests/test_embeddings_and_store.py tests/test_record_ingestion.py tests/test_agent_snapshots.py",
+              "run": "poetry run pytest tests/test_index_persistence.py tests/test_index_updates.py tests/test_embeddings_and_store.py tests/test_record_ingestion.py tests/test_agent_snapshots.py tests/test_qdrant_coordination.py",
               "working_directory": ""
             }
           ]
@@ -3331,6 +3345,13 @@
       "parametrized_cases": 0
     },
     {
+      "path": "tests/test_qdrant_coordination.py",
+      "module_under_test": "qdrant_coordination",
+      "category": "unit",
+      "test_functions": 6,
+      "parametrized_cases": 2
+    },
+    {
       "path": "tests/test_qdrant_integration.py",
       "module_under_test": "qdrant_integration",
       "category": "unit",
@@ -3341,8 +3362,8 @@
       "path": "tests/test_qdrant_record_ingestion.py",
       "module_under_test": "qdrant_record_ingestion",
       "category": "unit",
-      "test_functions": 11,
-      "parametrized_cases": 3
+      "test_functions": 16,
+      "parametrized_cases": 10
     },
     {
       "path": "tests/test_qdrant_store.py",
@@ -3536,7 +3557,7 @@
     {
       "name": "FEEDBACK_AGENT_LLM_PROVIDER",
       "example": "local",
-      "comment": "Optional Qdrant backend (requires the 'qdrant' extra). FEEDBACK_AGENT_VECTOR_STORE=qdrant FEEDBACK_AGENT_QDRANT_URL=http://localhost:6333 FEEDBACK_AGENT_QDRANT_COLLECTION=feedback_intelligence Opt into API record ingestion only when all workers/writers share this local lock. Each query then downloads a full local snapshot; see README for limits and retries. FEEDBACK_AGENT_QDRANT_INGESTION_LOCK_PATH=.artifacts/qdrant-records LLM provider: local (default, no API key), openai, openai_responses, anthropic, bedrock, or ollama."
+      "comment": "Optional Qdrant backend (requires the 'qdrant' extra). FEEDBACK_AGENT_VECTOR_STORE=qdrant FEEDBACK_AGENT_QDRANT_URL=http://localhost:6333 FEEDBACK_AGENT_QDRANT_COLLECTION=feedback_intelligence Opt into API record ingestion only when all workers/writers share this local lock. Snapshot refresh downloads the full collection; see README for limits and retries. FEEDBACK_AGENT_QDRANT_INGESTION_LOCK_PATH=.artifacts/qdrant-records Optional cache lifetime (0 disables caching; requires coordinated Qdrant mode). FEEDBACK_AGENT_QDRANT_SNAPSHOT_TTL_SECONDS=5 LLM provider: local (default, no API key), openai, openai_responses, anthropic, bedrock, or ollama."
     },
     {
       "name": "OPENAI_API_KEY",

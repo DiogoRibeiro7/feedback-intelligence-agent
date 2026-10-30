@@ -1,7 +1,7 @@
 {
   "package": "feedback_intelligence_agent",
-  "module_count": 50,
-  "edge_count": 196,
+  "module_count": 51,
+  "edge_count": 198,
   "layer_order": [
     "interface",
     "application",
@@ -58,6 +58,7 @@
       "index_updates",
       "ingestion",
       "lakehouse",
+      "qdrant_coordination",
       "qdrant_store",
       "streaming_ingestion",
       "vector_store"
@@ -416,7 +417,7 @@
       "optional_dependencies": [],
       "lazy_imports": [],
       "typing_only_imports": [],
-      "fan_in": 5
+      "fan_in": 6
     },
     {
       "name": "index_updates",
@@ -582,11 +583,26 @@
       "fan_in": 2
     },
     {
+      "name": "qdrant_coordination",
+      "qualified_name": "feedback_intelligence_agent.qdrant_coordination",
+      "source": "src/feedback_intelligence_agent/qdrant_coordination.py",
+      "layer": "data",
+      "fan_out": 1,
+      "external_dependencies": [
+        "contextlib",
+        "pydantic"
+      ],
+      "optional_dependencies": [],
+      "lazy_imports": [],
+      "typing_only_imports": [],
+      "fan_in": 1
+    },
+    {
       "name": "qdrant_ingestion",
       "qualified_name": "feedback_intelligence_agent.qdrant_ingestion",
       "source": "src/feedback_intelligence_agent/qdrant_ingestion.py",
       "layer": "application",
-      "fan_out": 8,
+      "fan_out": 9,
       "external_dependencies": [],
       "optional_dependencies": [],
       "lazy_imports": [],
@@ -1752,6 +1768,12 @@
       "names": "SearchResult"
     },
     {
+      "source": "qdrant_coordination",
+      "target": "index_persistence",
+      "context": "eager",
+      "names": "index_write_lock, write_index_json"
+    },
+    {
       "source": "qdrant_ingestion",
       "target": "agent",
       "context": "eager",
@@ -1786,6 +1808,12 @@
       "target": "index_persistence",
       "context": "eager",
       "names": "index_write_lock"
+    },
+    {
+      "source": "qdrant_ingestion",
+      "target": "qdrant_coordination",
+      "context": "eager",
+      "names": "qdrant_snapshot_revision, qdrant_write_lock"
     },
     {
       "source": "qdrant_ingestion",
@@ -2050,12 +2078,12 @@
       "fan_out": 3
     },
     {
-      "module": "citations",
-      "fan_in": 5,
-      "fan_out": 1
+      "module": "index_persistence",
+      "fan_in": 6,
+      "fan_out": 0
     },
     {
-      "module": "data_contracts",
+      "module": "citations",
       "fan_in": 5,
       "fan_out": 1
     }

@@ -5,7 +5,7 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Literal
 
-from pydantic import Field, field_validator
+from pydantic import Field, field_validator, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 RetrieverType = Literal["dense", "lexical", "hybrid"]
@@ -29,6 +29,7 @@ class Settings(BaseSettings):
     qdrant_url: str = Field(default="http://localhost:6333")
     qdrant_collection: str = Field(default="feedback_intelligence")
     qdrant_ingestion_lock_path: Path | None = Field(default=None)
+    qdrant_snapshot_ttl_seconds: float = Field(default=0.0, ge=0.0, le=3600.0, allow_inf_nan=False)
     retriever_type: RetrieverType = "dense"
     dense_weight: float = Field(default=0.6, ge=0.0)
     lexical_weight: float = Field(default=0.4, ge=0.0)
@@ -105,6 +106,15 @@ class Settings(BaseSettings):
         if isinstance(value, str) and not value.strip():
             raise ValueError("qdrant_ingestion_lock_path cannot be blank")
         return value
+
+    @model_validator(mode="after")
+    def validate_qdrant_snapshot_cache(self) -> Settings:
+        """Require coordinated Qdrant mode when a snapshot cache is requested."""
+        if self.qdrant_snapshot_ttl_seconds > 0 and (
+            self.vector_store != "qdrant" or self.qdrant_ingestion_lock_path is None
+        ):
+            raise ValueError("qdrant_snapshot_ttl_seconds requires coordinated Qdrant mode")
+        return self
 
     @property
     def cors_origins(self) -> list[str]:

@@ -1769,6 +1769,18 @@
           "constraints": {}
         },
         {
+          "name": "qdrant_snapshot_ttl_seconds",
+          "annotation": "float",
+          "default": "0.0",
+          "required": false,
+          "description": "",
+          "constraints": {
+            "ge": "0.0",
+            "le": "3600.0",
+            "allow_inf_nan": "False"
+          }
+        },
+        {
           "name": "retriever_type",
           "annotation": "RetrieverType",
           "default": "'dense'",
@@ -2192,7 +2204,7 @@
           "module": "feedback_intelligence_agent.config",
           "signature": "validate_qdrant_ingestion_lock_path(cls, value: object) -> object",
           "source": "src/feedback_intelligence_agent/config.py",
-          "line": 103,
+          "line": 104,
           "public": true,
           "is_async": false,
           "decorators": [
@@ -2232,13 +2244,51 @@
           "see_also": []
         },
         {
+          "name": "validate_qdrant_snapshot_cache",
+          "qualified_name": "feedback_intelligence_agent.config.Settings.validate_qdrant_snapshot_cache",
+          "kind": "method",
+          "module": "feedback_intelligence_agent.config",
+          "signature": "validate_qdrant_snapshot_cache(self) -> Settings",
+          "source": "src/feedback_intelligence_agent/config.py",
+          "line": 111,
+          "public": true,
+          "is_async": false,
+          "decorators": [
+            "model_validator(mode='after')"
+          ],
+          "summary": "Require coordinated Qdrant mode when a snapshot cache is requested.",
+          "description": "",
+          "parameters": [
+            {
+              "name": "self",
+              "annotation": null,
+              "default": null,
+              "kind": "positional-or-keyword",
+              "description": ""
+            }
+          ],
+          "returns": {
+            "annotation": "Settings",
+            "description": ""
+          },
+          "raises": [
+            {
+              "exception": "ValueError",
+              "description": ""
+            }
+          ],
+          "examples": "",
+          "notes": "",
+          "see_also": []
+        },
+        {
           "name": "ensure_artifact_dir",
           "qualified_name": "feedback_intelligence_agent.config.Settings.ensure_artifact_dir",
           "kind": "method",
           "module": "feedback_intelligence_agent.config",
           "signature": "ensure_artifact_dir(self) -> None",
           "source": "src/feedback_intelligence_agent/config.py",
-          "line": 121,
+          "line": 131,
           "public": true,
           "is_async": false,
           "decorators": [],
@@ -2271,7 +2321,7 @@
           "module": "feedback_intelligence_agent.config",
           "signature": "cors_origins(self) -> list[str]",
           "source": "src/feedback_intelligence_agent/config.py",
-          "line": 110,
+          "line": 120,
           "public": true,
           "is_async": false,
           "decorators": [

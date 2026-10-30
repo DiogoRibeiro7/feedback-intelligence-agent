@@ -78,6 +78,7 @@ MODULE_LAYERS: dict[str, str] = {
     "data_contracts": "data",
     "vector_store": "data",
     "qdrant_store": "data",
+    "qdrant_coordination": "data",
     "lakehouse": "data",
     "streaming_ingestion": "data",
     "index_updates": "data",

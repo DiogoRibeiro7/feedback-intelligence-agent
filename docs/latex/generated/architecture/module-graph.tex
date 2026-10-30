@@ -17,18 +17,18 @@
   \node[mod] (napi) at (-1.50,0.00) {api};
   \node[mod] (ncli) at (1.50,0.00) {cli};
   \node[font=\scriptsize\bfseries, anchor=west] at (-4.70,0.00) {interface};
-  \node[mod] (nagent) at (-7.50,-2.00) {agent};
-  \node[mod] (nagentXsnapshots) at (-4.50,-2.00) {agent\_snapshots};
-  \node[mod] (nbenchmarking) at (-1.50,-2.00) {benchmarking};
-  \node[mod] (nexperiments) at (1.50,-2.00) {experiments};
-  \node[mod] (nfactory) at (4.50,-2.00) {factory};
-  \node[mod] (njobs) at (7.50,-2.00) {jobs};
-  \node[font=\scriptsize\bfseries, anchor=west] at (-10.70,-2.00) {application};
+  \node[mod] (nagent) at (-9.00,-2.00) {agent};
+  \node[mod] (nagentXsnapshots) at (-6.00,-2.00) {agent\_snapshots};
+  \node[mod] (nbenchmarking) at (-3.00,-2.00) {benchmarking};
+  \node[mod] (nexperiments) at (0.00,-2.00) {experiments};
+  \node[mod] (nfactory) at (3.00,-2.00) {factory};
+  \node[mod] (njobs) at (6.00,-2.00) {jobs};
+  \node[mod] (nqdrantXingestion) at (9.00,-2.00) {qdrant\_ingestion};
+  \node[font=\scriptsize\bfseries, anchor=west] at (-12.20,-2.00) {application};
   \node[mod] (nchunking) at (0.00,-4.00) {chunking};
   \node[font=\scriptsize\bfseries, anchor=west] at (-3.20,-4.00) {domain};
-  \node[mod] (nindexXupdates) at (-1.50,-6.00) {index\_updates};
-  \node[mod] (nvectorXstore) at (1.50,-6.00) {vector\_store};
-  \node[font=\scriptsize\bfseries, anchor=west] at (-4.70,-6.00) {data};
+  \node[mod] (nvectorXstore) at (0.00,-6.00) {vector\_store};
+  \node[font=\scriptsize\bfseries, anchor=west] at (-3.20,-6.00) {data};
   \node[mod] (ntelemetry) at (0.00,-8.00) {telemetry};
   \node[font=\scriptsize\bfseries, anchor=west] at (-3.20,-8.00) {infrastructure};
   \node[mod] (nconfig) at (-1.50,-10.00) {config};
@@ -39,6 +39,7 @@
   \draw[dep] (nagentXsnapshots) -- (nagent);
   \draw[dep] (nagentXsnapshots) -- (nconfig);
   \draw[dep] (nagentXsnapshots) -- (nfactory);
+  \draw[dep] (nagentXsnapshots) -- (nqdrantXingestion);
   \draw[dep] (nagentXsnapshots) -- (nschemas);
   \draw[dep] (nagentXsnapshots) -- (nvectorXstore);
   \draw[dep] (napi) -- (nagent);
@@ -58,7 +59,6 @@
   \draw[dep] (ncli) -- (nconfig);
   \draw[dep] (ncli) -- (nexperiments);
   \draw[dep] (ncli) -- (nfactory);
-  \draw[dep] (ncli) -- (nindexXupdates);
   \draw[dep] (ncli) -- (njobs);
   \draw[dep] (ncli) -- (nschemas);
   \draw[dep] (ncli) -- (ntelemetry);
@@ -74,15 +74,15 @@
   \draw[dep] (nfactory) -- (nschemas);
   \draw[dep] (nfactory) -- (ntelemetry);
   \draw[dep] (nfactory) -- (nvectorXstore);
-  \draw[dep] (nindexXupdates) -- (nchunking);
-  \draw[dep] (nindexXupdates) -- (nfactory);
-  \draw[dep] (nindexXupdates) -- (nschemas);
-  \draw[dep] (nindexXupdates) -- (ntelemetry);
-  \draw[dep] (nindexXupdates) -- (nvectorXstore);
   \draw[dep] (njobs) -- (nchunking);
   \draw[dep] (njobs) -- (nfactory);
   \draw[dep] (njobs) -- (ntelemetry);
   \draw[dep] (njobs) -- (nvectorXstore);
+  \draw[dep] (nqdrantXingestion) -- (nagent);
+  \draw[dep] (nqdrantXingestion) -- (nchunking);
+  \draw[dep] (nqdrantXingestion) -- (nconfig);
+  \draw[dep] (nqdrantXingestion) -- (nfactory);
+  \draw[dep] (nqdrantXingestion) -- (nschemas);
   \draw[dep] (nvectorXstore) -- (nschemas);
 \end{tikzpicture}%
 }
