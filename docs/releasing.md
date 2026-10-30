@@ -18,7 +18,7 @@ releases for compatible fixes. Keep migration guidance with each release.
 5. Regenerate the documentation using the current base revision, and run the
    checks in [CONTRIBUTING.md](../CONTRIBUTING.md), the MLflow integration tests,
    frontend audit/build, and package build.
-6. Run `poetry run python scripts/check_release.py --tag v0.6.0`, substituting
+6. Run `poetry run python scripts/check_release.py --tag v0.7.0`, substituting
    the intended version. CI checks agreement without a tag; the Release workflow
    also checks the tag on a tag-triggered run. The validator reads metadata
    without importing application code and supports Python 3.10+.

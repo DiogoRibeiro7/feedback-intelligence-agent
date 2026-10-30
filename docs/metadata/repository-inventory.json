@@ -1,7 +1,7 @@
 {
   "project": {
     "name": "feedback-intelligence-agent",
-    "version": "0.6.0",
+    "version": "0.7.0",
     "description": "A production-style AI engineering project with RAG, evaluation, FastAPI, and local deterministic LLM fallback.",
     "authors": [
       "Diogo Ribeiro <dfr@esmad.ipp.pt>"
@@ -27,11 +27,11 @@
       "evaluation",
       "FastAPI"
     ],
-    "date_released": "2026-10-29",
+    "date_released": "2026-10-30",
     "python_requires": ">=3.10,<3.13",
-    "revision": "99d2f89206b141b3e423ac8b168932d73e39a4fe",
-    "revision_short": "99d2f89206b1",
-    "revision_date": "2026-10-30T12:12:00Z",
+    "revision": "5c2bef33716855cb87a58aa08b6fe8f23758c4e0",
+    "revision_short": "5c2bef337168",
+    "revision_date": "2026-10-30T14:23:09Z",
     "packages": [
       {
         "include": "feedback_intelligence_agent",
@@ -43,7 +43,7 @@
     }
   },
   "files": {
-    "total": 234,
+    "total": 235,
     "excluded_generated_documentation": 332,
     "by_category": {
       "build-configuration": 1,
@@ -55,7 +55,7 @@
       "dataset": 1,
       "dependency-lock": 1,
       "deployment": 3,
-      "documentation": 15,
+      "documentation": 16,
       "documentation-latex": 48,
       "documentation-tool": 12,
       "editor-configuration": 1,
@@ -96,8 +96,8 @@
         "lines": 4142
       },
       "Markdown": {
-        "files": 17,
-        "lines": 3295
+        "files": 18,
+        "lines": 3448
       },
       "Python": {
         "files": 120,
@@ -254,8 +254,8 @@
         "path": "CHANGELOG.md",
         "category": "documentation",
         "language": "Markdown",
-        "lines": 214,
-        "bytes": 11531
+        "lines": 219,
+        "bytes": 11708
       },
       {
         "path": "CITATION.cff",
@@ -303,8 +303,8 @@
         "path": "README.md",
         "category": "documentation",
         "language": "Markdown",
-        "lines": 1516,
-        "bytes": 74189
+        "lines": 1518,
+        "bytes": 74337
       },
       {
         "path": "ROADMAP.md",
@@ -760,6 +760,13 @@
         "language": "Markdown",
         "lines": 107,
         "bytes": 5284
+      },
+      {
+        "path": "docs/releases/v0.7.0.md",
+        "category": "documentation",
+        "language": "Markdown",
+        "lines": 146,
+        "bytes": 7917
       },
       {
         "path": "docs/releasing.md",

@@ -4,6 +4,11 @@ All notable changes to this project are documented here.
 
 ## Unreleased
 
+## 0.7.0 - 2026-10-30
+
+See [upgrade notes](docs/releases/v0.7.0.md) for tenant access policies, record
+ingestion, shared-index refresh, and coordinated Qdrant configuration.
+
 ### Added
 
 - Optional Qdrant snapshot caching reuses unchanged retrieval and tool snapshots
@@ -15,7 +20,7 @@ All notable changes to this project are documented here.
 - Qdrant API record ingestion can be enabled with an explicit shared lock path.
   Tenant authorization, bounded batches, deduplication, PII redaction, and counts
   match JSON ingestion; preparation precedes writes and remote failures are retryable.
-- Coordinated Qdrant workers load immutable local snapshots for retrieval and tools
+- Coordinated Qdrant workers select immutable local snapshots for retrieval and tools
   on every query, stream, or chat request, preserving provider state and in-flight
   answers. This requires cooperating local locks and memory for the full collection;
   remote failures can leave partial updates, and independent hosts are not coordinated.

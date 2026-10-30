@@ -1505,7 +1505,9 @@ Citations:
 
 ## Citation
 
-For v0.6.0 compatibility changes, see the [upgrade notes](docs/releases/v0.6.0.md).
+For v0.7.0 tenant authorization, record ingestion, and snapshot configuration,
+see the [upgrade notes](docs/releases/v0.7.0.md). Upgrading from an earlier version
+also requires the [v0.6.0 migration notes](docs/releases/v0.6.0.md).
 Maintainers can follow the [release procedure](docs/releasing.md).
 
 Cite all versions by using the DOI

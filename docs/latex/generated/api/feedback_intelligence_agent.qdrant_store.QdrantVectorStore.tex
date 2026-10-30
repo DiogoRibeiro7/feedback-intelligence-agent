@@ -28,7 +28,7 @@ QdrantVectorStore(self, dim: int, *, url: str = 'http://localhost:6333', collect
   \item[\texttt{chunks}] Return all indexed chunks, reconstructed from point payloads.
 \end{arglist}
 \apifield{Details}The collection is created on demand using \texttt{Distance.\allowbreak{}COSINE} so the scoring orientation matches the in-memory store: higher scores mean more similar.
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}qdrant\_\allowbreak{}store.\allowbreak{}py:63}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/99d2f89206b141b3e423ac8b168932d73e39a4fe/src/feedback_intelligence_agent/qdrant_store.py#L63}{online}), class, module \cref{module:feedback_intelligence_agent.qdrant_store}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}qdrant\_\allowbreak{}store.\allowbreak{}py:63}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/5c2bef33716855cb87a58aa08b6fe8f23758c4e0/src/feedback_intelligence_agent/qdrant_store.py#L63}{online}), class, module \cref{module:feedback_intelligence_agent.qdrant_store}
 
 \subsection{\texttt{snapshot}}
 \label{method:feedback_intelligence_agent.qdrant_store.QdrantVectorStore.snapshot}\index{Methods!snapshot}
@@ -40,7 +40,7 @@ snapshot(self) -> InMemoryVectorStore
 \apifield{Value}\texttt{InMemoryVectorStore}
 \apifield{Raises}\texttt{QdrantStoreError}
 \apifield{Details}Callers must coordinate writers across the entire paginated read. This method does not supply a database transaction or lock external clients. The returned store makes no further Qdrant calls during retrieval.
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}qdrant\_\allowbreak{}store.\allowbreak{}py:139}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/99d2f89206b141b3e423ac8b168932d73e39a4fe/src/feedback_intelligence_agent/qdrant_store.py#L139}{online})
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}qdrant\_\allowbreak{}store.\allowbreak{}py:139}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/5c2bef33716855cb87a58aa08b6fe8f23758c4e0/src/feedback_intelligence_agent/qdrant_store.py#L139}{online})
 
 \subsection{\texttt{add}}
 \label{method:feedback_intelligence_agent.qdrant_store.QdrantVectorStore.add}\index{Methods!add}
@@ -54,7 +54,7 @@ add(self, chunks: list[DocumentChunk], vectors: npt.NDArray[np.float64]) -> None
   \item[\texttt{chunks}] \texttt{list[DocumentChunk]\allowbreak{}}, required.
   \item[\texttt{vectors}] \texttt{npt.\allowbreak{}NDArray[np.\allowbreak{}float64]\allowbreak{}}, required.
 \end{arglist}
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}qdrant\_\allowbreak{}store.\allowbreak{}py:172}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/99d2f89206b141b3e423ac8b168932d73e39a4fe/src/feedback_intelligence_agent/qdrant_store.py#L172}{online})
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}qdrant\_\allowbreak{}store.\allowbreak{}py:172}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/5c2bef33716855cb87a58aa08b6fe8f23758c4e0/src/feedback_intelligence_agent/qdrant_store.py#L172}{online})
 
 \subsection{\texttt{upsert\_sources}}
 \label{method:feedback_intelligence_agent.qdrant_store.QdrantVectorStore.upsert_sources}\index{Methods!upsert\_sources}
@@ -75,7 +75,7 @@ upsert_sources(self, chunks: list[DocumentChunk], vectors: npt.NDArray[np.float6
 This is not a transaction: readers can see intermediate state and a remote failure can leave a partial update. Retrying the identical batch converges. Callers must serialize concurrent writes to the same sources, including writes through other clients. Disjoint sources may be updated independently.
 
 Returns the number of previous chunks belonging to the supplied sources, including overwritten chunk IDs, matching the in-memory store's counts. An empty batch is a no-op, not a request to delete a source.
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}qdrant\_\allowbreak{}store.\allowbreak{}py:207}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/99d2f89206b141b3e423ac8b168932d73e39a4fe/src/feedback_intelligence_agent/qdrant_store.py#L207}{online})
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}qdrant\_\allowbreak{}store.\allowbreak{}py:207}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/5c2bef33716855cb87a58aa08b6fe8f23758c4e0/src/feedback_intelligence_agent/qdrant_store.py#L207}{online})
 
 \subsection{\texttt{search}}
 \label{method:feedback_intelligence_agent.qdrant_store.QdrantVectorStore.search}\index{Methods!search}
@@ -93,4 +93,4 @@ search(self, query_vector: npt.NDArray[np.float64], *, top_k: int = 4, filters: 
 \apifield{Value}\texttt{list[SearchResult]\allowbreak{}}
 \apifield{Raises}\texttt{ValueError}
 \apifield{Details}Local matching preserves case-insensitive and legacy metadata semantics without requiring a payload migration. Selective filters may scan many pages; each page is bounded, but there is no fixed candidate cutoff.
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}qdrant\_\allowbreak{}store.\allowbreak{}py:275}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/99d2f89206b141b3e423ac8b168932d73e39a4fe/src/feedback_intelligence_agent/qdrant_store.py#L275}{online})
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}qdrant\_\allowbreak{}store.\allowbreak{}py:275}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/5c2bef33716855cb87a58aa08b6fe8f23758c4e0/src/feedback_intelligence_agent/qdrant_store.py#L275}{online})
