@@ -5,7 +5,7 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Literal
 
-from pydantic import Field
+from pydantic import Field, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 RetrieverType = Literal["dense", "lexical", "hybrid"]
@@ -28,6 +28,7 @@ class Settings(BaseSettings):
     vector_store: VectorStoreType = "json"
     qdrant_url: str = Field(default="http://localhost:6333")
     qdrant_collection: str = Field(default="feedback_intelligence")
+    qdrant_ingestion_lock_path: Path | None = Field(default=None)
     retriever_type: RetrieverType = "dense"
     dense_weight: float = Field(default=0.6, ge=0.0)
     lexical_weight: float = Field(default=0.4, ge=0.0)
@@ -96,6 +97,14 @@ class Settings(BaseSettings):
             "http://127.0.0.1:5173,http://127.0.0.1:4173"
         )
     )
+
+    @field_validator("qdrant_ingestion_lock_path", mode="before")
+    @classmethod
+    def validate_qdrant_ingestion_lock_path(cls, value: object) -> object:
+        """Require an explicit nonblank path when opting into coordinated Qdrant ingestion."""
+        if isinstance(value, str) and not value.strip():
+            raise ValueError("qdrant_ingestion_lock_path cannot be blank")
+        return value
 
     @property
     def cors_origins(self) -> list[str]:

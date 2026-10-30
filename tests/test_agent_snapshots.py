@@ -21,11 +21,41 @@ from feedback_intelligence_agent.config import Settings
 from feedback_intelligence_agent.index_persistence import write_index_json
 from feedback_intelligence_agent.index_updates import update_json_index
 from feedback_intelligence_agent.schemas import FeedbackRecord, MetadataFilters
-from feedback_intelligence_agent.vector_store import VectorStore
+from feedback_intelligence_agent.vector_store import InMemoryVectorStore, VectorStore
 
 READ = {"X-Feedback-Agent-Key": "read-key"}
 WRITE = {"X-Feedback-Agent-Key": "write-key"}
 ADMIN = {"X-Feedback-Agent-Key": "admin-key"}
+
+
+def test_qdrant_coordination_requires_an_explicit_nonblank_path(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    variable = "FEEDBACK_AGENT_QDRANT_INGESTION_LOCK_PATH"
+    monkeypatch.delenv(variable, raising=False)
+    assert Settings(_env_file=None).qdrant_ingestion_lock_path is None
+    monkeypatch.setenv(variable, str(tmp_path / "coordinator"))
+    assert Settings(_env_file=None).qdrant_ingestion_lock_path == tmp_path / "coordinator"
+    for blank in ("", "   "):
+        monkeypatch.setenv(variable, blank)
+        with pytest.raises(ValueError, match="cannot be blank"):
+            Settings(_env_file=None)
+
+
+def test_build_agent_accepts_a_snapshot_without_loading_the_configured_backend(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    def unexpected(*args: object, **kwargs: object) -> None:
+        pytest.fail("An explicit snapshot must not load or rebuild the configured backend")
+
+    monkeypatch.setattr(factory_module, "load_or_build_index", unexpected)
+    agent = factory_module.build_agent(
+        Settings(
+            _env_file=None, vector_store="qdrant", llm_provider="local", telemetry_enabled=False
+        ),
+        vector_store=InMemoryVectorStore(dim=64),
+    )
+    assert agent.answer("What onboarding feedback exists?").citations == []
 
 
 def record(identifier: str = "new") -> FeedbackRecord:

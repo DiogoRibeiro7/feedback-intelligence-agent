@@ -1,4 +1,4 @@
-"""Request-time JSON index refresh with immutable, process-local agent snapshots."""
+"""Request-time index refresh with immutable, process-local agent snapshots."""
 
 from __future__ import annotations
 
@@ -8,6 +8,7 @@ from feedback_intelligence_agent.agent import FeedbackInsightAgent
 from feedback_intelligence_agent.config import Settings
 from feedback_intelligence_agent.factory import build_agent, build_agent_snapshot
 from feedback_intelligence_agent.index_persistence import index_write_lock
+from feedback_intelligence_agent.qdrant_ingestion import QdrantAgentSnapshots
 from feedback_intelligence_agent.record_ingestion import RecordIngestionResult, ingest_record_batch
 from feedback_intelligence_agent.schemas import FeedbackRecord
 from feedback_intelligence_agent.vector_store import InMemoryVectorStore
@@ -22,7 +23,7 @@ def _file_version(path: Path) -> _FileVersion:
 
 
 class IndexSnapshotUnavailableError(RuntimeError):
-    """The committed JSON index cannot currently supply a valid agent snapshot."""
+    """The configured index cannot currently supply a valid agent snapshot."""
 
 
 class AgentSnapshots:
@@ -33,11 +34,16 @@ class AgentSnapshots:
     writer preparing an update. Changed files are loaded and published under
     that same lock, serializing reloads with ingestion and preventing stale
     publication. Each request retains its selected agent for its whole answer.
-    Qdrant keeps its existing startup behavior without touching a JSON path.
+    Qdrant with a configured ingestion lock delegates to coordinated snapshots;
+    without it, Qdrant retains its startup behavior without touching a JSON path.
     """
 
     def __init__(self, settings: Settings) -> None:
         self._settings = settings
+        self._qdrant: QdrantAgentSnapshots | None = None
+        if settings.vector_store == "qdrant" and settings.qdrant_ingestion_lock_path is not None:
+            self._qdrant = QdrantAgentSnapshots(settings)
+            return
         self._state: tuple[FeedbackInsightAgent, _FileVersion | None]
         if settings.vector_store == "json":
             with index_write_lock(settings.index_path):
@@ -53,9 +59,11 @@ class AgentSnapshots:
         requests but raises for new requests. It never rebuilds from the CSV;
         the next request retries the committed file, even after preparation fails.
         """
-        if self._settings.vector_store != "json":
-            return self._state[0]
         try:
+            if self._qdrant is not None:
+                return self._qdrant.get()
+            if self._settings.vector_store != "json":
+                return self._state[0]
             agent, version = self._state
             if _file_version(self._settings.index_path) == version:
                 return agent
@@ -74,6 +82,8 @@ class AgentSnapshots:
 
     def ingest(self, records: list[FeedbackRecord], tenant_id: str) -> RecordIngestionResult:
         """Persist a tenant batch and publish its prepared snapshot before unlocking."""
+        if self._qdrant is not None:
+            return self._qdrant.ingest(records, tenant_id)
         if self._settings.vector_store != "json":
             raise ValueError("Record ingestion requires the JSON vector store")
         with index_write_lock(self._settings.index_path):
