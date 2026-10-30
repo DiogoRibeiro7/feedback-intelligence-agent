@@ -7,7 +7,7 @@
 
 \section{Test suite at a glance}
 
-The suite contains 50 test modules and 619 test functions, all executed by a single pytest invocation.
+The suite contains 51 test modules and 630 test functions, all executed by a single pytest invocation.
 
 \begin{longtable}{>{\raggedright\arraybackslash\small}p{0.45\textwidth} >{\small}r >{\small}r}
 \caption{Test modules and functions by category.}\label{tab:test-categories}\\
@@ -33,7 +33,7 @@ numerical / retrieval & 2 & 18 \\
 performance measurement & 1 & 16 \\
 retrieval regression & 1 & 5 \\
 snapshot regression & 1 & 3 \\
-unit & 39 & 428 \\
+unit & 40 & 439 \\
 \end{longtable}
 
 \section{Execution}
@@ -95,7 +95,8 @@ Test module & Primary subject & Category & Tests & Parametrised \\
 \texttt{tests/\allowbreak{}test\_\allowbreak{}privacy.\allowbreak{}py} & \texttt{privacy} & unit & 4 & 0 \\
 \texttt{tests/\allowbreak{}test\_\allowbreak{}prompt\_\allowbreak{}registry.\allowbreak{}py} & \texttt{prompt\_\allowbreak{}registry} & unit & 14 & 0 \\
 \texttt{tests/\allowbreak{}test\_\allowbreak{}prompt\_\allowbreak{}snapshot.\allowbreak{}py} & \texttt{prompts,\allowbreak{} prompt\_\allowbreak{}registry} & snapshot regression & 3 & 0 \\
-\texttt{tests/\allowbreak{}test\_\allowbreak{}qdrant\_\allowbreak{}store.\allowbreak{}py} & \texttt{qdrant\_\allowbreak{}store} & unit & 13 & 3 \\
+\texttt{tests/\allowbreak{}test\_\allowbreak{}qdrant\_\allowbreak{}integration.\allowbreak{}py} & \texttt{qdrant\_\allowbreak{}integration} & unit & 3 & 1 \\
+\texttt{tests/\allowbreak{}test\_\allowbreak{}qdrant\_\allowbreak{}store.\allowbreak{}py} & \texttt{qdrant\_\allowbreak{}store} & unit & 21 & 7 \\
 \texttt{tests/\allowbreak{}test\_\allowbreak{}query\_\allowbreak{}expansion.\allowbreak{}py} & \texttt{query\_\allowbreak{}expansion} & unit & 4 & 0 \\
 \texttt{tests/\allowbreak{}test\_\allowbreak{}rate\_\allowbreak{}limit.\allowbreak{}py} & \texttt{rate\_\allowbreak{}limit} & unit & 4 & 0 \\
 \texttt{tests/\allowbreak{}test\_\allowbreak{}record\_\allowbreak{}ingestion.\allowbreak{}py} & \texttt{record\_\allowbreak{}ingestion} & unit & 16 & 7 \\

@@ -23,7 +23,7 @@ HybridRetriever(self, dense: Retriever, lexical: Retriever, *, dense_weight: flo
 \end{arglist}
 \apifield{Raises}\texttt{ValueError}
 \apifield{Details}Each underlying retriever is queried for an enlarged candidate pool. Scores are min-max normalized per result list so the two scales are comparable, then combined as a weighted sum. Documents appearing in both lists are de-duplicated by chunk ID and receive contributions from both retrievers.
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}retrieval.\allowbreak{}py:56}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/6381d55ffc81161b9d963ccd83ce961509f444c0/src/feedback_intelligence_agent/retrieval.py#L56}{online}), class, module \cref{module:feedback_intelligence_agent.retrieval}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}retrieval.\allowbreak{}py:56}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/1c86b0da13a924e224e4b977a2ec1e81756c4a52/src/feedback_intelligence_agent/retrieval.py#L56}{online}), class, module \cref{module:feedback_intelligence_agent.retrieval}
 
 \subsection{\texttt{search}}
 \label{method:feedback_intelligence_agent.retrieval.HybridRetriever.search}\index{Methods!search}
@@ -40,4 +40,4 @@ search(self, question: str, *, top_k: int = 4, filters: MetadataFilters | None =
 \end{arglist}
 \apifield{Value}\texttt{list[SearchResult]\allowbreak{}}
 \apifield{Raises}\texttt{ValueError}
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}retrieval.\allowbreak{}py:84}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/6381d55ffc81161b9d963ccd83ce961509f444c0/src/feedback_intelligence_agent/retrieval.py#L84}{online})
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}retrieval.\allowbreak{}py:84}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/1c86b0da13a924e224e4b977a2ec1e81756c4a52/src/feedback_intelligence_agent/retrieval.py#L84}{online})

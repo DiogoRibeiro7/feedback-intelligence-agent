@@ -6,6 +6,12 @@ All notable changes to this project are documented here.
 
 ### Added
 
+- Qdrant source replacement removes obsolete chunks while preserving other tenants,
+  validates identities and vectors before writes, and supports retrying interrupted
+  replacements. Callers must serialize writers to the same source; updates are not atomic.
+- Qdrant integration CI uses a real server on Python 3.10 and 3.12 and cleans up
+  temporary test collections. Qdrant writes now wait for completion and reject
+  nonfinite vectors before sending requests.
 - API workers automatically reload changed JSON indexes before query, streaming,
   and chat requests, including updates from other workers, CLI tools, and ingestion
   jobs. Retrieval and dataset tools refresh together while preserving provider state.

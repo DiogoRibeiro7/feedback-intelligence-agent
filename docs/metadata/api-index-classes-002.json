@@ -29,7 +29,7 @@
         "RuntimeError"
       ],
       "source": "src/feedback_intelligence_agent/qdrant_store.py",
-      "line": 31,
+      "line": 35,
       "public": true,
       "decorators": [],
       "summary": "Raised when the Qdrant store cannot be configured or reached.",
@@ -47,7 +47,7 @@
       "module": "feedback_intelligence_agent.qdrant_store",
       "bases": [],
       "source": "src/feedback_intelligence_agent/qdrant_store.py",
-      "line": 58,
+      "line": 62,
       "public": true,
       "decorators": [],
       "summary": "Cosine-similarity vector store backed by a Qdrant collection.",
@@ -61,11 +61,11 @@
           "module": "feedback_intelligence_agent.qdrant_store",
           "signature": "add(self, chunks: list[DocumentChunk], vectors: npt.NDArray[np.float64]) -> None",
           "source": "src/feedback_intelligence_agent/qdrant_store.py",
-          "line": 134,
+          "line": 138,
           "public": true,
           "is_async": false,
           "decorators": [],
-          "summary": "Upsert chunks and their vectors into the collection.",
+          "summary": "Upsert chunk IDs and wait for completion; retain other chunks of each source.",
           "description": "",
           "parameters": [
             {
@@ -94,9 +94,54 @@
             "annotation": "None",
             "description": ""
           },
+          "raises": [],
+          "examples": "",
+          "notes": "",
+          "see_also": []
+        },
+        {
+          "name": "upsert_sources",
+          "qualified_name": "feedback_intelligence_agent.qdrant_store.QdrantVectorStore.upsert_sources",
+          "kind": "method",
+          "module": "feedback_intelligence_agent.qdrant_store",
+          "signature": "upsert_sources(self, chunks: list[DocumentChunk], vectors: npt.NDArray[np.float64]) -> int",
+          "source": "src/feedback_intelligence_agent/qdrant_store.py",
+          "line": 173,
+          "public": true,
+          "is_async": false,
+          "decorators": [],
+          "summary": "Replace complete tenant-scoped sources, including obsolete trailing chunks.",
+          "description": "Supply chunks produced by ``feedback_to_chunks`` with canonical source,\nchunk, tenant, and feedback identities. All input is validated before any\nremote mutation. New points are upserted with ``wait=True`` before obsolete\npoint IDs are deleted, also with ``wait=True``. Other sources are untouched.\n\nThis is not a transaction: readers can see intermediate state and a remote\nfailure can leave a partial update. Retrying the identical batch converges.\nCallers must serialize concurrent writes to the same sources, including\nwrites through other clients. Disjoint sources may be updated independently.\n\nReturns the number of previous chunks belonging to the supplied sources,\nincluding overwritten chunk IDs, matching the in-memory store's counts.\nAn empty batch is a no-op, not a request to delete a source.",
+          "parameters": [
+            {
+              "name": "self",
+              "annotation": null,
+              "default": null,
+              "kind": "positional-or-keyword",
+              "description": ""
+            },
+            {
+              "name": "chunks",
+              "annotation": "list[DocumentChunk]",
+              "default": null,
+              "kind": "positional-or-keyword",
+              "description": ""
+            },
+            {
+              "name": "vectors",
+              "annotation": "npt.NDArray[np.float64]",
+              "default": null,
+              "kind": "positional-or-keyword",
+              "description": ""
+            }
+          ],
+          "returns": {
+            "annotation": "int",
+            "description": ""
+          },
           "raises": [
             {
-              "exception": "ValueError",
+              "exception": "QdrantStoreError",
               "description": ""
             }
           ],
@@ -111,7 +156,7 @@
           "module": "feedback_intelligence_agent.qdrant_store",
           "signature": "search(self, query_vector: npt.NDArray[np.float64], *, top_k: int = 4, filters: MetadataFilters | None = None) -> list[SearchResult]",
           "source": "src/feedback_intelligence_agent/qdrant_store.py",
-          "line": 156,
+          "line": 241,
           "public": true,
           "is_async": false,
           "decorators": [],
@@ -170,7 +215,7 @@
           "module": "feedback_intelligence_agent.qdrant_store",
           "signature": "size(self) -> int",
           "source": "src/feedback_intelligence_agent/qdrant_store.py",
-          "line": 112,
+          "line": 116,
           "public": true,
           "is_async": false,
           "decorators": [
@@ -203,7 +248,7 @@
           "module": "feedback_intelligence_agent.qdrant_store",
           "signature": "chunks(self) -> list[DocumentChunk]",
           "source": "src/feedback_intelligence_agent/qdrant_store.py",
-          "line": 117,
+          "line": 121,
           "public": true,
           "is_async": false,
           "decorators": [
@@ -237,7 +282,7 @@
         "module": "feedback_intelligence_agent.qdrant_store",
         "signature": "__init__(self, dim: int, *, url: str = 'http://localhost:6333', collection_name: str = 'feedback_intelligence', client: QdrantClient | None = None) -> None",
         "source": "src/feedback_intelligence_agent/qdrant_store.py",
-        "line": 65,
+        "line": 69,
         "public": false,
         "is_async": false,
         "decorators": [],

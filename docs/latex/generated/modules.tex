@@ -53,7 +53,7 @@ Module & Lines & Objects & Summary \\
 \texttt{privacy} & 59 & 6 & Deterministic PII redaction helpers. \\
 \texttt{prompt\_\allowbreak{}registry} & 159 & 6 & Versioned prompt registry. \\
 \texttt{prompts} & 91 & 5 & Prompt construction utilities and the default prompt registry. \\
-\texttt{qdrant\_\allowbreak{}store} & 237 & 2 & Optional Qdrant-backed vector store. \\
+\texttt{qdrant\_\allowbreak{}store} & 351 & 2 & Optional Qdrant-backed vector store. \\
 \texttt{query\_\allowbreak{}expansion} & 93 & 5 & Deterministic query expansion for product-specific terminology. \\
 \texttt{rate\_\allowbreak{}limit} & 76 & 2 & Small in-memory fixed-window rate limiter for API deployments. \\
 \texttt{record\_\allowbreak{}ingestion} & 87 & 3 & Bounded record batches and live retrieval snapshots for JSON ingestion. \\
@@ -443,7 +443,7 @@ Prompt construction utilities and the default prompt registry.
 \label{module:feedback_intelligence_agent.qdrant_store}\index{Modules!qdrant\_store}
 
 Optional Qdrant-backed vector store.
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}qdrant\_\allowbreak{}store.\allowbreak{}py}, 237 lines
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}qdrant\_\allowbreak{}store.\allowbreak{}py}, 351 lines
 \apifield{Imports}\texttt{metadata\_\allowbreak{}filters}, \texttt{schemas}, \texttt{source\_\allowbreak{}ids}
 \apifield{Classes}\cref{class:feedback_intelligence_agent.qdrant_store.QdrantStoreError}, \cref{class:feedback_intelligence_agent.qdrant_store.QdrantVectorStore}
 \apifield{Details}The store mirrors the semantics of the default \texttt{InMemoryVectorStore} but persists vectors in a running Qdrant instance instead of a local JSON file. It satisfies the same \texttt{VectorStore} protocol, so the retrieval layer treats both stores identically.

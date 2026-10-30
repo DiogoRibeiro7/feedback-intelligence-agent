@@ -486,6 +486,36 @@ stores. When the collection is empty, the configured dataset is embedded and
 upserted automatically on first use. Using the Qdrant store without the extra
 installed fails fast with an actionable message explaining how to install it.
 
+Python integrations can replace a complete source document with
+`QdrantVectorStore.upsert_sources(chunks, vectors)`. Pass the full set of chunks
+produced by `feedback_to_chunks()` for each updated record, together with their
+embeddings. The method validates vector shapes, finite values, and canonical
+tenant/source/chunk identities before any remote mutation. It returns the number
+of previous chunks for those sources, including overwritten chunk IDs. It removes
+obsolete trailing chunks when text becomes shorter, preserves other sources and
+tenants, and treats an empty batch as a no-op. The existing `add()` method continues
+to upsert only the supplied chunk IDs.
+
+Replacement first upserts the new points, then deletes obsolete point IDs. Both
+operations use Qdrant's [`wait=true` completion option](https://qdrant.tech/documentation/manage-data/points/).
+This sequence is not an atomic transaction: readers may see intermediate state,
+and a remote failure can leave a partial update. Serialize all writers to the same
+sources, including other clients; retrying the identical batch completes an
+interrupted replacement. Disjoint sources can be updated independently. This
+storage primitive does not enable Qdrant ingestion through `/ingestion/records`,
+which still returns `409` for that backend, or refresh cached lexical/tool snapshots.
+
+CI runs the optional SDK against Qdrant 1.18.3 on Python 3.10 and 3.12. To run the
+same integration tests against your local Qdrant instance:
+
+```bash
+poetry install --with dev --extras qdrant
+FEEDBACK_AGENT_QDRANT_TEST=1 poetry run pytest tests/test_qdrant_store.py tests/test_qdrant_integration.py
+```
+
+Set `FEEDBACK_AGENT_QDRANT_URL` if the server is not at `http://localhost:6333`.
+Integration tests create unique collections and remove them afterward.
+
 ## Frontend demo
 
 A minimal, professional **TypeScript + Vite** demo UI lives in

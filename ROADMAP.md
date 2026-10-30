@@ -75,6 +75,7 @@ This roadmap is designed to evolve the repository from a compact portfolio proje
 - [x] Bind tenant access on query, report, and feedback routes to authenticated identities; reserve global ingestion for unrestricted administrators.
 - [x] Support tenant-specific JSON record ingestion without replacing other tenants' shared index data.
 - [x] Invalidate retrieval snapshots across API workers after external or shared-index updates.
+- [x] Add tenant-safe Qdrant source replacement and real-server integration tests.
 - [ ] Support tenant-specific record ingestion for Qdrant-backed deployments.
 - [x] Apply tenant and metadata filters to dataset aggregation tools.
 - [x] Make JSON index persistence atomic and serialize concurrent updates.
