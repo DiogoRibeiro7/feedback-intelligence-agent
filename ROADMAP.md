@@ -77,6 +77,7 @@ This roadmap is designed to evolve the repository from a compact portfolio proje
 - [x] Invalidate retrieval snapshots across API workers after external or shared-index updates.
 - [x] Add tenant-safe Qdrant source replacement and real-server integration tests.
 - [x] Support tenant-specific Qdrant record ingestion with a shared local writer lock and fresh worker snapshots.
+- [x] Cache coordinated Qdrant snapshots with bounded lifetimes and shared write-generation invalidation.
 - [ ] Add distributed coordination and scalable snapshot invalidation for Qdrant ingestion across independent hosts.
 - [x] Apply tenant and metadata filters to dataset aggregation tools.
 - [x] Make JSON index persistence atomic and serialize concurrent updates.

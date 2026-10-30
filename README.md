@@ -578,6 +578,7 @@ Environment variables:
 | `FEEDBACK_AGENT_QDRANT_URL` | `http://localhost:6333` | Qdrant endpoint used when `FEEDBACK_AGENT_VECTOR_STORE=qdrant`. |
 | `FEEDBACK_AGENT_QDRANT_COLLECTION` | `feedback_intelligence` | Qdrant collection name. |
 | `FEEDBACK_AGENT_QDRANT_INGESTION_LOCK_PATH` | unset | Opt into Qdrant API ingestion and local retrieval snapshots; every worker and writer must share this lock path. |
+| `FEEDBACK_AGENT_QDRANT_SNAPSHOT_TTL_SECONDS` | `0` | Coordinated API snapshot lifetime, 0–3600 seconds. Zero refreshes on every request; positive values require Qdrant and a shared lock path. |
 | `FEEDBACK_AGENT_RETRIEVER_TYPE` | `dense` | Retrieval strategy: `dense`, `lexical`, or `hybrid`. |
 | `FEEDBACK_AGENT_DENSE_WEIGHT` | `0.6` | Dense score weight used by the hybrid retriever. |
 | `FEEDBACK_AGENT_LEXICAL_WEIGHT` | `0.4` | Lexical (BM25) score weight used by the hybrid retriever. |
@@ -895,22 +896,26 @@ export FEEDBACK_AGENT_QDRANT_INGESTION_LOCK_PATH=/shared/feedback/qdrant-records
 The locking helper uses a sibling `qdrant-records.lock` file; retain it while
 workers are running. Every API worker serving the collection must use the same
 path on a filesystem that supports the existing local process locks. External
-writers must hold `index_write_lock(settings.qdrant_ingestion_lock_path)` across
-their complete update. Different paths or independent hosts do not coordinate;
+writers must use `qdrant_write_lock()` from `feedback_intelligence_agent.qdrant_coordination`
+across their complete update to invalidate snapshots before changing Qdrant.
+Different paths or independent hosts do not coordinate;
 this mode does not provide a distributed lock. Without the setting, Qdrant retains
 its existing remote retrieval behavior and record ingestion returns `409`. Blank
 paths are rejected during configuration.
 
-In this mode, each query, stream, or chat request downloads the complete collection's
+By default, each query, stream, or chat request downloads the complete collection's
 chunks and vectors under the shared lock, then builds one immutable local snapshot
-for dense, lexical, or hybrid retrieval and dataset tools. The lock is released
+for dense, lexical, or hybrid retrieval and dataset tools. An optional cache reuses
+that snapshot until a cooperating write invalidates it or its lifetime expires.
+The lock is released
 before answer generation. All workers see completed updates on their next request,
 including cooperating external updates. In-flight answers keep their original
 snapshot, and provider, circuit-breaker, telemetry, and policy objects are retained.
-An unavailable or invalid snapshot returns a generic `503`; the next request retries.
+An unavailable or invalid snapshot during refresh returns a generic `503`; the next
+request retries. Ingestion always reads current persisted data before preparing an update.
 
 This mode is intended for collections that fit comfortably in each worker's memory:
-it performs a full collection download and local index preparation per request,
+it performs a full collection download and local index preparation on each refresh,
 and lock acquisition can wait up to 60 seconds. Qdrant persists the data, while
 retrieval runs locally over the selected snapshot. It does not write a JSON index.
 
@@ -921,6 +926,45 @@ operations: a failure returns a generic `500` and can leave partial updates visi
 to later requests. Retry the identical batch to finish the replacement; successful
 updates preserve all other tenants. Startup still seeds an empty collection from
 the configured dataset, but request-time refresh never rebuilds from CSV.
+
+### Optional Qdrant snapshot cache
+
+Set `FEEDBACK_AGENT_QDRANT_SNAPSHOT_TTL_SECONDS=5` to reuse unchanged snapshots for
+up to five seconds. The default `0` preserves refresh on every request. Cache hits
+check the local write-generation marker under the shared lock and make no Qdrant
+request. Expiry uses a monotonic clock, and concurrent requests in one worker
+share a single refresh. A valid cache can serve during a Qdrant outage until it
+expires or a write invalidates it; failed refreshes never extend its lifetime.
+
+API writers and startup initialization atomically update
+`<lock-path>.revision.json` before any possible remote mutation. That small file
+contains only a format version and UUID generation, not feedback or vectors.
+Other workers reload on their next request even if the remote write failed partway.
+The handling worker also reloads persisted vectors after a successful write so
+its cache reflects Qdrant's normalization. Marker-persistence failures prevent
+remote mutations. Startup conservatively invalidates existing worker caches.
+
+External writers should use the same protocol:
+
+```python
+from feedback_intelligence_agent.qdrant_coordination import qdrant_write_lock
+
+with qdrant_write_lock("/shared/feedback/qdrant-records"):
+    store.upsert_sources(chunks, vectors)
+```
+
+Upgrade all API workers and external writers before relying on immediate cache
+invalidation. Older writers that hold only `index_write_lock()` still serialize
+updates, but positive-TTL caches observe those changes only after expiry. Direct
+Qdrant writes without the shared lock can also make paginated snapshots inconsistent.
+Keep the TTL at `0` if every request must read the latest backend state.
+
+Retain both `*.lock` files, including the revision file's persistence lock, while
+workers are running. A missing revision marker forces a refresh. A malformed one
+is not overwritten: queries return `503` and ingestion returns `500` until it is
+repaired or removed under `index_write_lock()`. This metadata protocol still uses
+local process locks; it does not coordinate independent hosts or make remote
+upsert and cleanup transactional.
 
 ## Asynchronous ingestion jobs
 

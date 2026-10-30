@@ -6,6 +6,12 @@ All notable changes to this project are documented here.
 
 ### Added
 
+- Optional Qdrant snapshot caching reuses unchanged retrieval and tool snapshots
+  until a cooperating write or configured expiry. The default zero TTL preserves
+  refresh on every request; positive lifetimes require coordinated Qdrant mode.
+- Shared generation markers invalidate other workers before remote writes, including
+  partial failures. External writers can use `qdrant_write_lock()`; legacy writers
+  become visible at cache expiry. Failed refreshes never extend stale cache lifetimes.
 - Qdrant API record ingestion can be enabled with an explicit shared lock path.
   Tenant authorization, bounded batches, deduplication, PII redaction, and counts
   match JSON ingestion; preparation precedes writes and remote failures are retryable.

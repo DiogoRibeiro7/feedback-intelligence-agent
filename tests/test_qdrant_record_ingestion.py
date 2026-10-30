@@ -19,12 +19,16 @@ from fastapi.testclient import TestClient
 
 import feedback_intelligence_agent.api as api_module
 import feedback_intelligence_agent.factory as factory_module
+import feedback_intelligence_agent.qdrant_coordination as coordination_module
+import feedback_intelligence_agent.qdrant_ingestion as ingestion_module
 from feedback_intelligence_agent.config import Settings
 from feedback_intelligence_agent.embeddings import HashingEmbeddingModel
 from feedback_intelligence_agent.index_persistence import index_write_lock
+from feedback_intelligence_agent.qdrant_coordination import qdrant_write_lock
 from feedback_intelligence_agent.qdrant_ingestion import QdrantAgentSnapshots
 from feedback_intelligence_agent.qdrant_store import QdrantVectorStore
 from feedback_intelligence_agent.schemas import DocumentChunk, FeedbackRecord, MetadataFilters
+from feedback_intelligence_agent.vector_store import InMemoryVectorStore
 
 qdrant = pytest.importorskip("qdrant_client")
 READ = {"X-Feedback-Agent-Key": "read-key"}
@@ -129,11 +133,15 @@ def query(client: TestClient) -> dict[str, Any]:
 
 
 @pytest.mark.parametrize("retriever", ["dense", "lexical", "hybrid"])
+@pytest.mark.parametrize("cache_ttl", [0, 30])
 def test_ingestion_refreshes_all_workers_preserves_tenants_and_removes_old_chunks(
-    context: Context, retriever: str
+    context: Context, retriever: str, cache_ttl: float
 ) -> None:
     context.settings.retriever_type = retriever
+    context.settings.qdrant_snapshot_ttl_seconds = cache_ttl
     first, second = context.app(), context.app()
+    query(first)
+    query(second)
     foreign = [
         point for point in context.points() if point["payload"]["source_id"] == "cobalt:shared"
     ]
@@ -217,7 +225,11 @@ def test_admin_scope_duplicates_redaction_and_retry(context: Context) -> None:
     assert "cobalt:new" not in {item["document_id"] for item in query(client)["citations"]}
 
 
-def test_stream_and_existing_chat_see_other_worker_updates(context: Context) -> None:
+@pytest.mark.parametrize("cache_ttl", [0, 30])
+def test_stream_and_existing_chat_see_other_worker_updates(
+    context: Context, cache_ttl: float
+) -> None:
+    context.settings.qdrant_snapshot_ttl_seconds = cache_ttl
     first, second = context.app(), context.app()
     initial = second.post(
         "/chat", json={"message": "What onboarding feedback exists?"}, headers=WRITE
@@ -252,7 +264,7 @@ def test_stream_and_existing_chat_see_other_worker_updates(context: Context) -> 
     }
 
 
-@pytest.mark.parametrize("failure", ["embedding", "prepare", "upsert"])
+@pytest.mark.parametrize("failure", ["embedding", "prepare", "revision", "upsert"])
 def test_precommit_failures_preserve_remote_data_and_hide_details(
     context: Context, monkeypatch: pytest.MonkeyPatch, failure: str
 ) -> None:
@@ -267,6 +279,8 @@ def test_precommit_failures_preserve_remote_data_and_hide_details(
             patch.setattr(HashingEmbeddingModel, "embed", fail)
         elif failure == "prepare":
             patch.setattr(factory_module, "build_retriever", fail)
+        elif failure == "revision":
+            patch.setattr(coordination_module, "write_index_json", fail)
         else:
             patch.setattr(QdrantVectorStore, "upsert_sources", fail)
         response = client.post("/ingestion/records", json={"records": [record()]}, headers=WRITE)
@@ -279,9 +293,11 @@ def test_precommit_failures_preserve_remote_data_and_hide_details(
     )
 
 
+@pytest.mark.parametrize("cache_ttl", [0, 30])
 def test_partial_remote_write_is_visible_and_retry_completes_cleanup(
-    context: Context, monkeypatch: pytest.MonkeyPatch
+    context: Context, monkeypatch: pytest.MonkeyPatch, cache_ttl: float
 ) -> None:
+    context.settings.qdrant_snapshot_ttl_seconds = cache_ttl
     first, second = context.app(), context.app()
     foreign = [
         point for point in context.points() if point["payload"]["source_id"] == "cobalt:shared"
@@ -420,6 +436,7 @@ def test_requires_opt_in_and_valid_tenant_batches(context: Context) -> None:
         == 409
     )
     assert context.points() == before
+
     with pytest.raises(ValueError, match="shared lock path"):
         QdrantAgentSnapshots(context.settings)
     context.settings.qdrant_ingestion_lock_path = context.settings.data_path.parent / "coordinator"
@@ -428,3 +445,148 @@ def test_requires_opt_in_and_valid_tenant_batches(context: Context) -> None:
         with pytest.raises(ValueError, match="batch tenant"):
             snapshots.ingest(records, "acme")
     assert context.points() == before
+
+
+@pytest.mark.parametrize("ttl", [0, 10])
+def test_snapshot_reuse_and_exact_ttl_boundary(
+    context: Context, monkeypatch: pytest.MonkeyPatch, ttl: float
+) -> None:
+    context.settings.qdrant_snapshot_ttl_seconds = ttl
+    clock = [100.0]
+    monkeypatch.setattr(ingestion_module, "monotonic", lambda: clock[0])
+    snapshots = QdrantAgentSnapshots(context.settings)
+    original = snapshots.get()
+    read_snapshot = QdrantVectorStore.snapshot
+    reads = 0
+
+    def counted(self: QdrantVectorStore) -> InMemoryVectorStore:
+        nonlocal reads
+        reads += 1
+        return read_snapshot(self)
+
+    monkeypatch.setattr(QdrantVectorStore, "snapshot", counted)
+    for _ in range(25):
+        current = snapshots.get()
+        assert (current is original) == (ttl > 0)
+    assert reads == (0 if ttl > 0 else 25)
+    if ttl > 0:
+        clock[0] = 109.99
+        assert snapshots.get() is original
+        clock[0] = 110.0
+        refreshed = snapshots.get()
+        assert refreshed is not original and reads == 1
+        assert snapshots.get() is refreshed and reads == 1
+        clock[0] = 120.0
+        assert snapshots.get() is not refreshed and reads == 2
+
+
+def test_only_one_concurrent_reload_per_worker_generation(
+    context: Context, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    context.settings.qdrant_snapshot_ttl_seconds = 30
+    snapshots = QdrantAgentSnapshots(context.settings)
+    original = snapshots.get()
+    read_snapshot = QdrantVectorStore.snapshot
+    reads = 0
+
+    def counted(self: QdrantVectorStore) -> InMemoryVectorStore:
+        nonlocal reads
+        reads += 1
+        return read_snapshot(self)
+
+    monkeypatch.setattr(QdrantVectorStore, "snapshot", counted)
+    with qdrant_write_lock(context.settings.qdrant_ingestion_lock_path):
+        pass
+    with ThreadPoolExecutor(max_workers=4) as executor:
+        agents = list(executor.map(lambda _: snapshots.get(), range(8)))
+    assert reads == 1 and agents[0] is not original
+    assert all(agent is agents[0] for agent in agents)
+
+
+@pytest.mark.parametrize("invalidate", [False, True])
+def test_external_writes_refresh_by_generation_or_expiry(
+    context: Context, monkeypatch: pytest.MonkeyPatch, invalidate: bool
+) -> None:
+    context.settings.qdrant_snapshot_ttl_seconds = 10
+    clock = [100.0]
+    monkeypatch.setattr(ingestion_module, "monotonic", lambda: clock[0])
+    client = context.app()
+    assert query(client)["citations"]
+    lock = qdrant_write_lock if invalidate else index_write_lock
+    with lock(context.settings.qdrant_ingestion_lock_path):
+        context.sdk.delete(
+            collection_name=context.settings.qdrant_collection,
+            points_selector=qdrant.models.Filter(),
+            wait=True,
+        )
+    if invalidate:
+        assert query(client)["citations"] == []
+    else:
+        assert query(client)["citations"]  # Legacy writers are visible at bounded expiry.
+        clock[0] = 110.0
+        assert query(client)["citations"] == []
+    assert context.points() == []
+
+
+@pytest.mark.parametrize("invalidate", [False, True])
+def test_failed_refresh_does_not_extend_cache_lifetime_or_accept_new_generation(
+    context: Context, monkeypatch: pytest.MonkeyPatch, invalidate: bool
+) -> None:
+    context.settings.qdrant_snapshot_ttl_seconds = 10
+    clock = [100.0]
+    monkeypatch.setattr(ingestion_module, "monotonic", lambda: clock[0])
+    client = context.app()
+
+    def fail(self: QdrantVectorStore) -> None:
+        raise RuntimeError("private backend details")
+
+    with monkeypatch.context() as patch:
+        patch.setattr(QdrantVectorStore, "snapshot", fail)
+        assert query(client)["citations"]  # A valid cache does not contact Qdrant.
+        if invalidate:
+            with qdrant_write_lock(context.settings.qdrant_ingestion_lock_path):
+                pass
+        else:
+            clock[0] = 110.0
+        for _ in range(2):
+            response = client.post(
+                "/query", json={"question": "Onboarding feedback?"}, headers=READ
+            )
+            assert response.status_code == 503
+            assert response.json() == {"detail": "Feedback index is temporarily unavailable"}
+    assert query(client)["citations"]
+
+
+@pytest.mark.parametrize("damage", ["missing", "corrupt"])
+def test_revision_damage_never_silently_accepts_a_cached_snapshot(
+    context: Context, monkeypatch: pytest.MonkeyPatch, damage: str
+) -> None:
+    context.settings.qdrant_snapshot_ttl_seconds = 30
+    client = context.app()
+    before = context.points()
+    revision = Path(f"{context.settings.qdrant_ingestion_lock_path}.revision.json")
+    with index_write_lock(context.settings.qdrant_ingestion_lock_path):
+        if damage == "missing":
+            revision.unlink()
+        else:
+            revision.write_text("private malformed marker", encoding="utf-8")
+    reads = 0
+    read_snapshot = QdrantVectorStore.snapshot
+
+    def counted(self: QdrantVectorStore) -> InMemoryVectorStore:
+        nonlocal reads
+        reads += 1
+        return read_snapshot(self)
+
+    monkeypatch.setattr(QdrantVectorStore, "snapshot", counted)
+    if damage == "corrupt":
+        response = client.post("/query", json={"question": "Onboarding feedback?"}, headers=READ)
+        assert response.status_code == 503 and reads == 0
+        response = client.post("/ingestion/records", json={"records": [record()]}, headers=WRITE)
+        assert response.status_code == 500
+        assert context.points() == before
+        assert revision.read_text(encoding="utf-8") == "private malformed marker"
+        with index_write_lock(context.settings.qdrant_ingestion_lock_path):
+            revision.unlink()
+        reads = 0
+    assert query(client)["citations"] and reads == 1
