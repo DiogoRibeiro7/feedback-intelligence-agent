@@ -20,7 +20,7 @@ OpenTelemetryTraceSink(self, service_name: str = LOGGER_NAME, *, tracer: OpenTel
   \item[\texttt{tracer}] \texttt{OpenTelemetryTracer \textbar{} None}, default \texttt{None}, keyword-only.
 \end{arglist}
 \apifield{Details}The OpenTelemetry API is imported lazily so the default install remains lightweight. The sink uses the process-global tracer provider, which lets deployments configure exporters with standard OpenTelemetry environment variables or instrumentation wrappers.
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}telemetry.\allowbreak{}py:155}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/1c86b0da13a924e224e4b977a2ec1e81756c4a52/src/feedback_intelligence_agent/telemetry.py#L155}{online}), class, module \cref{module:feedback_intelligence_agent.telemetry}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}telemetry.\allowbreak{}py:155}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/8b368cc9cacfeeb963e13557b856067186e3b59f/src/feedback_intelligence_agent/telemetry.py#L155}{online}), class, module \cref{module:feedback_intelligence_agent.telemetry}
 
 \subsection{\texttt{emit}}
 \label{method:feedback_intelligence_agent.telemetry.OpenTelemetryTraceSink.emit}\index{Methods!emit}
@@ -33,4 +33,4 @@ emit(self, event: TelemetryEvent) -> None
 \begin{arglist}
   \item[\texttt{event}] \texttt{TelemetryEvent}, required.
 \end{arglist}
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}telemetry.\allowbreak{}py:175}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/1c86b0da13a924e224e4b977a2ec1e81756c4a52/src/feedback_intelligence_agent/telemetry.py#L175}{online})
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}telemetry.\allowbreak{}py:175}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/8b368cc9cacfeeb963e13557b856067186e3b59f/src/feedback_intelligence_agent/telemetry.py#L175}{online})

@@ -122,7 +122,9 @@ jobs:
         run: curl --fail --retry 20 --retry-connrefused --retry-delay 1 http://localhost:6333/readyz
 
       - name: Test Qdrant persistence and replacements
-        run: poetry run pytest tests/test_qdrant_store.py tests/test_qdrant_integration.py
+        run: >-
+          poetry run pytest tests/test_qdrant_store.py tests/test_qdrant_integration.py
+          tests/test_qdrant_record_ingestion.py
 
   windows-persistence:
     name: Windows index persistence

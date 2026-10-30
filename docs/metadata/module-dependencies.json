@@ -1,7 +1,7 @@
 {
   "package": "feedback_intelligence_agent",
-  "module_count": 49,
-  "edge_count": 185,
+  "module_count": 50,
+  "edge_count": 196,
   "layer_order": [
     "interface",
     "application",
@@ -28,6 +28,7 @@
       "factory",
       "human_feedback",
       "jobs",
+      "qdrant_ingestion",
       "record_ingestion",
       "reports"
     ],
@@ -145,14 +146,14 @@
       "optional_dependencies": [],
       "lazy_imports": [],
       "typing_only_imports": [],
-      "fan_in": 8
+      "fan_in": 9
     },
     {
       "name": "agent_snapshots",
       "qualified_name": "feedback_intelligence_agent.agent_snapshots",
       "source": "src/feedback_intelligence_agent/agent_snapshots.py",
       "layer": "application",
-      "fan_out": 7,
+      "fan_out": 8,
       "external_dependencies": [],
       "optional_dependencies": [],
       "lazy_imports": [],
@@ -211,7 +212,7 @@
       "optional_dependencies": [],
       "lazy_imports": [],
       "typing_only_imports": [],
-      "fan_in": 5
+      "fan_in": 6
     },
     {
       "name": "citations",
@@ -253,7 +254,7 @@
       "optional_dependencies": [],
       "lazy_imports": [],
       "typing_only_imports": [],
-      "fan_in": 8
+      "fan_in": 9
     },
     {
       "name": "data_contracts",
@@ -297,7 +298,7 @@
       "optional_dependencies": [],
       "lazy_imports": [],
       "typing_only_imports": [],
-      "fan_in": 6
+      "fan_in": 7
     },
     {
       "name": "evaluation",
@@ -352,9 +353,10 @@
         "active_learning",
         "human_feedback",
         "jobs",
+        "qdrant_store",
         "reports"
       ],
-      "fan_in": 8
+      "fan_in": 9
     },
     {
       "name": "guardrails",
@@ -414,7 +416,7 @@
       "optional_dependencies": [],
       "lazy_imports": [],
       "typing_only_imports": [],
-      "fan_in": 4
+      "fan_in": 5
     },
     {
       "name": "index_updates",
@@ -580,11 +582,23 @@
       "fan_in": 2
     },
     {
+      "name": "qdrant_ingestion",
+      "qualified_name": "feedback_intelligence_agent.qdrant_ingestion",
+      "source": "src/feedback_intelligence_agent/qdrant_ingestion.py",
+      "layer": "application",
+      "fan_out": 8,
+      "external_dependencies": [],
+      "optional_dependencies": [],
+      "lazy_imports": [],
+      "typing_only_imports": [],
+      "fan_in": 1
+    },
+    {
       "name": "qdrant_store",
       "qualified_name": "feedback_intelligence_agent.qdrant_store",
       "source": "src/feedback_intelligence_agent/qdrant_store.py",
       "layer": "data",
-      "fan_out": 3,
+      "fan_out": 4,
       "external_dependencies": [
         "numpy",
         "qdrant_client"
@@ -594,7 +608,7 @@
       ],
       "lazy_imports": [],
       "typing_only_imports": [],
-      "fan_in": 1
+      "fan_in": 2
     },
     {
       "name": "query_expansion",
@@ -634,7 +648,7 @@
       "optional_dependencies": [],
       "lazy_imports": [],
       "typing_only_imports": [],
-      "fan_in": 2
+      "fan_in": 3
     },
     {
       "name": "reports",
@@ -712,7 +726,7 @@
       "optional_dependencies": [],
       "lazy_imports": [],
       "typing_only_imports": [],
-      "fan_in": 30
+      "fan_in": 31
     },
     {
       "name": "source_ids",
@@ -803,7 +817,7 @@
       "optional_dependencies": [],
       "lazy_imports": [],
       "typing_only_imports": [],
-      "fan_in": 8
+      "fan_in": 9
     }
   ],
   "edges": [
@@ -932,6 +946,12 @@
       "target": "index_persistence",
       "context": "eager",
       "names": "index_write_lock"
+    },
+    {
+      "source": "agent_snapshots",
+      "target": "qdrant_ingestion",
+      "context": "eager",
+      "names": "QdrantAgentSnapshots"
     },
     {
       "source": "agent_snapshots",
@@ -1445,6 +1465,12 @@
     },
     {
       "source": "factory",
+      "target": "qdrant_store",
+      "context": "typing",
+      "names": "QdrantVectorStore"
+    },
+    {
+      "source": "factory",
       "target": "query_expansion",
       "context": "eager",
       "names": "ProductTerminologyExpander"
@@ -1726,6 +1752,54 @@
       "names": "SearchResult"
     },
     {
+      "source": "qdrant_ingestion",
+      "target": "agent",
+      "context": "eager",
+      "names": "FeedbackInsightAgent"
+    },
+    {
+      "source": "qdrant_ingestion",
+      "target": "chunking",
+      "context": "eager",
+      "names": "feedback_to_chunks, scoped_source_id"
+    },
+    {
+      "source": "qdrant_ingestion",
+      "target": "config",
+      "context": "eager",
+      "names": "Settings"
+    },
+    {
+      "source": "qdrant_ingestion",
+      "target": "embeddings",
+      "context": "eager",
+      "names": "HashingEmbeddingModel"
+    },
+    {
+      "source": "qdrant_ingestion",
+      "target": "factory",
+      "context": "eager",
+      "names": "build_agent, build_agent_snapshot, build_qdrant_index, build_telemetry, chunk_to_embedding_text"
+    },
+    {
+      "source": "qdrant_ingestion",
+      "target": "index_persistence",
+      "context": "eager",
+      "names": "index_write_lock"
+    },
+    {
+      "source": "qdrant_ingestion",
+      "target": "record_ingestion",
+      "context": "eager",
+      "names": "RecordIngestionResult"
+    },
+    {
+      "source": "qdrant_ingestion",
+      "target": "schemas",
+      "context": "eager",
+      "names": "FeedbackRecord"
+    },
+    {
       "source": "qdrant_store",
       "target": "metadata_filters",
       "context": "eager",
@@ -1742,6 +1816,12 @@
       "target": "source_ids",
       "context": "eager",
       "names": "SourceIdMigrationError, encode_source_id, migrate_legacy_chunks"
+    },
+    {
+      "source": "qdrant_store",
+      "target": "vector_store",
+      "context": "eager",
+      "names": "InMemoryVectorStore"
     },
     {
       "source": "record_ingestion",
@@ -1931,7 +2011,7 @@
   "most_depended_upon": [
     {
       "module": "schemas",
-      "fan_in": 30,
+      "fan_in": 31,
       "fan_out": 1
     },
     {
@@ -1941,32 +2021,32 @@
     },
     {
       "module": "agent",
-      "fan_in": 8,
+      "fan_in": 9,
       "fan_out": 13
     },
     {
       "module": "config",
-      "fan_in": 8,
+      "fan_in": 9,
       "fan_out": 0
     },
     {
       "module": "factory",
-      "fan_in": 8,
+      "fan_in": 9,
       "fan_out": 22
     },
     {
       "module": "vector_store",
-      "fan_in": 8,
+      "fan_in": 9,
       "fan_out": 4
     },
     {
       "module": "embeddings",
-      "fan_in": 6,
+      "fan_in": 7,
       "fan_out": 0
     },
     {
       "module": "chunking",
-      "fan_in": 5,
+      "fan_in": 6,
       "fan_out": 3
     },
     {

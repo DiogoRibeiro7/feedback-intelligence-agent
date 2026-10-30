@@ -249,6 +249,38 @@ def test_qdrant_store_chunks_roundtrip(fake_qdrant: ModuleType) -> None:
     assert recovered_ids == ["fb-1::chunk-0", "fb-2::chunk-0"]
 
 
+def test_qdrant_snapshot_is_paginated_and_independent(fake_qdrant: ModuleType) -> None:
+    from feedback_intelligence_agent.qdrant_store import QdrantVectorStore
+
+    client = FakeQdrantClient()
+    store = QdrantVectorStore(dim=8, client=client)
+    assert store.snapshot().size == 0
+    chunks = _source_chunks(words=1030)
+    store.add(chunks, np.ones((len(chunks), 8)))
+    snapshot = store.snapshot()
+    assert snapshot.size == len(chunks) == 515
+    assert [call["offset"] for call in client.scroll_calls] == [None, None, 256, 512]
+    store.upsert_sources(_source_chunks(words=2), np.ones((1, 8)))
+    assert store.size == 1 and snapshot.size == 515
+
+
+@pytest.mark.parametrize(
+    "vector", [None, {"named": [1.0] * 8}, [1.0], [[1.0] * 8], [float("nan")] * 8]
+)
+def test_qdrant_snapshot_rejects_missing_or_invalid_vectors(
+    fake_qdrant: ModuleType, vector: object
+) -> None:
+    from feedback_intelligence_agent.qdrant_store import QdrantStoreError, QdrantVectorStore
+
+    client = FakeQdrantClient()
+    store = QdrantVectorStore(dim=8, client=client)
+    store.add(_source_chunks(words=2), np.ones((1, 8)))
+    next(iter(client.points.values())).vector = vector
+    with pytest.raises(QdrantStoreError):
+        store.snapshot()
+    assert len(client.upsert_calls) == 1
+
+
 def test_qdrant_store_validates_inputs(fake_qdrant: ModuleType) -> None:
     from feedback_intelligence_agent.qdrant_store import QdrantVectorStore
 

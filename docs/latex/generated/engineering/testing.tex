@@ -7,7 +7,7 @@
 
 \section{Test suite at a glance}
 
-The suite contains 51 test modules and 630 test functions, all executed by a single pytest invocation.
+The suite contains 52 test modules and 645 test functions, all executed by a single pytest invocation.
 
 \begin{longtable}{>{\raggedright\arraybackslash\small}p{0.45\textwidth} >{\small}r >{\small}r}
 \caption{Test modules and functions by category.}\label{tab:test-categories}\\
@@ -33,7 +33,7 @@ numerical / retrieval & 2 & 18 \\
 performance measurement & 1 & 16 \\
 retrieval regression & 1 & 5 \\
 snapshot regression & 1 & 3 \\
-unit & 40 & 439 \\
+unit & 41 & 454 \\
 \end{longtable}
 
 \section{Execution}
@@ -63,7 +63,7 @@ Test module & Primary subject & Category & Tests & Parametrised \\
 \endlastfoot
 \texttt{tests/\allowbreak{}test\_\allowbreak{}active\_\allowbreak{}learning.\allowbreak{}py} & \texttt{active\_\allowbreak{}learning} & unit & 4 & 0 \\
 \texttt{tests/\allowbreak{}test\_\allowbreak{}agent.\allowbreak{}py} & \texttt{agent} & unit & 9 & 0 \\
-\texttt{tests/\allowbreak{}test\_\allowbreak{}agent\_\allowbreak{}snapshots.\allowbreak{}py} & \texttt{agent\_\allowbreak{}snapshots} & unit & 7 & 3 \\
+\texttt{tests/\allowbreak{}test\_\allowbreak{}agent\_\allowbreak{}snapshots.\allowbreak{}py} & \texttt{agent\_\allowbreak{}snapshots} & unit & 9 & 3 \\
 \texttt{tests/\allowbreak{}test\_\allowbreak{}api.\allowbreak{}py} & \texttt{api} & integration (HTTP) & 52 & 5 \\
 \texttt{tests/\allowbreak{}test\_\allowbreak{}api\_\allowbreak{}tenant\_\allowbreak{}access.\allowbreak{}py} & \texttt{api\_\allowbreak{}tenant\_\allowbreak{}access} & integration (HTTP) & 19 & 9 \\
 \texttt{tests/\allowbreak{}test\_\allowbreak{}auth.\allowbreak{}py} & \texttt{auth} & unit & 15 & 1 \\
@@ -96,7 +96,8 @@ Test module & Primary subject & Category & Tests & Parametrised \\
 \texttt{tests/\allowbreak{}test\_\allowbreak{}prompt\_\allowbreak{}registry.\allowbreak{}py} & \texttt{prompt\_\allowbreak{}registry} & unit & 14 & 0 \\
 \texttt{tests/\allowbreak{}test\_\allowbreak{}prompt\_\allowbreak{}snapshot.\allowbreak{}py} & \texttt{prompts,\allowbreak{} prompt\_\allowbreak{}registry} & snapshot regression & 3 & 0 \\
 \texttt{tests/\allowbreak{}test\_\allowbreak{}qdrant\_\allowbreak{}integration.\allowbreak{}py} & \texttt{qdrant\_\allowbreak{}integration} & unit & 3 & 1 \\
-\texttt{tests/\allowbreak{}test\_\allowbreak{}qdrant\_\allowbreak{}store.\allowbreak{}py} & \texttt{qdrant\_\allowbreak{}store} & unit & 21 & 7 \\
+\texttt{tests/\allowbreak{}test\_\allowbreak{}qdrant\_\allowbreak{}record\_\allowbreak{}ingestion.\allowbreak{}py} & \texttt{qdrant\_\allowbreak{}record\_\allowbreak{}ingestion} & unit & 11 & 3 \\
+\texttt{tests/\allowbreak{}test\_\allowbreak{}qdrant\_\allowbreak{}store.\allowbreak{}py} & \texttt{qdrant\_\allowbreak{}store} & unit & 23 & 8 \\
 \texttt{tests/\allowbreak{}test\_\allowbreak{}query\_\allowbreak{}expansion.\allowbreak{}py} & \texttt{query\_\allowbreak{}expansion} & unit & 4 & 0 \\
 \texttt{tests/\allowbreak{}test\_\allowbreak{}rate\_\allowbreak{}limit.\allowbreak{}py} & \texttt{rate\_\allowbreak{}limit} & unit & 4 & 0 \\
 \texttt{tests/\allowbreak{}test\_\allowbreak{}record\_\allowbreak{}ingestion.\allowbreak{}py} & \texttt{record\_\allowbreak{}ingestion} & unit & 16 & 7 \\

@@ -6,6 +6,13 @@ All notable changes to this project are documented here.
 
 ### Added
 
+- Qdrant API record ingestion can be enabled with an explicit shared lock path.
+  Tenant authorization, bounded batches, deduplication, PII redaction, and counts
+  match JSON ingestion; preparation precedes writes and remote failures are retryable.
+- Coordinated Qdrant workers load immutable local snapshots for retrieval and tools
+  on every query, stream, or chat request, preserving provider state and in-flight
+  answers. This requires cooperating local locks and memory for the full collection;
+  remote failures can leave partial updates, and independent hosts are not coordinated.
 - Qdrant source replacement removes obsolete chunks while preserving other tenants,
   validates identities and vectors before writes, and supports retrying interrupted
   replacements. Callers must serialize writers to the same source; updates are not atomic.

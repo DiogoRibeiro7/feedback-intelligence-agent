@@ -23,20 +23,20 @@ Module & Lines & Objects & Summary \\
 \texttt{feedback\_\allowbreak{}intelligence\_\allowbreak{}agent} & 7 & 0 & Feedback Intelligence Agent package. \\
 \texttt{active\_\allowbreak{}learning} & 215 & 8 & Workflow state for active-learning follow-up items. \\
 \texttt{agent} & 522 & 3 & Agent orchestration for the feedback intelligence agent. \\
-\texttt{agent\_\allowbreak{}snapshots} & 84 & 2 & Request-time JSON index refresh with immutable, process-local agent snapshots. \\
+\texttt{agent\_\allowbreak{}snapshots} & 94 & 2 & Request-time index refresh with immutable, process-local agent snapshots. \\
 \texttt{api} & 751 & 1 & FastAPI application. \\
 \texttt{auth} & 181 & 8 & Optional API-key authorization for the FastAPI service. \\
 \texttt{benchmarking} & 286 & 13 & Latency and throughput benchmarks for the RAG pipeline. \\
 \texttt{chunking} & 92 & 3 & Text chunking utilities. \\
 \texttt{citations} & 65 & 4 & Citation construction shared by the agent and the deterministic LLM provider. \\
 \texttt{cli} & 1007 & 29 & Command-line interface for the feedback intelligence agent. \\
-\texttt{config} & 114 & 4 & Application configuration. \\
+\texttt{config} & 123 & 4 & Application configuration. \\
 \texttt{data\_\allowbreak{}contracts} & 244 & 7 & Data contracts and dataset validation for customer feedback CSV files. \\
 \texttt{email\_\allowbreak{}summaries} & 178 & 6 & Email summaries for saved insight reports. \\
 \texttt{embeddings} & 78 & 3 & Embedding models. \\
 \texttt{evaluation} & 417 & 18 & Offline evaluation for retrieval quality and answer quality. \\
 \texttt{experiments} & 347 & 14 & Repeatable experiment runner for comparing RAG configurations. \\
-\texttt{factory} & 379 & 14 & Factories for constructing the application components. \\
+\texttt{factory} & 389 & 14 & Factories for constructing the application components. \\
 \texttt{guardrails} & 220 & 8 & Deterministic safety guardrails for the feedback intelligence agent. \\
 \texttt{hallucination} & 285 & 9 & Hallucination checks for evidence-grounded answers. \\
 \texttt{human\_\allowbreak{}feedback} & 408 & 14 & Human review feedback on generated agent answers. \\
@@ -53,7 +53,8 @@ Module & Lines & Objects & Summary \\
 \texttt{privacy} & 59 & 6 & Deterministic PII redaction helpers. \\
 \texttt{prompt\_\allowbreak{}registry} & 159 & 6 & Versioned prompt registry. \\
 \texttt{prompts} & 91 & 5 & Prompt construction utilities and the default prompt registry. \\
-\texttt{qdrant\_\allowbreak{}store} & 351 & 2 & Optional Qdrant-backed vector store. \\
+\texttt{qdrant\_\allowbreak{}ingestion} & 81 & 1 & Coordinated Qdrant record ingestion and immutable API retrieval snapshots. \\
+\texttt{qdrant\_\allowbreak{}store} & 385 & 2 & Optional Qdrant-backed vector store. \\
 \texttt{query\_\allowbreak{}expansion} & 93 & 5 & Deterministic query expansion for product-specific terminology. \\
 \texttt{rate\_\allowbreak{}limit} & 76 & 2 & Small in-memory fixed-window rate limiter for API deployments. \\
 \texttt{record\_\allowbreak{}ingestion} & 87 & 3 & Bounded record batches and live retrieval snapshots for JSON ingestion. \\
@@ -104,9 +105,9 @@ Agent orchestration for the feedback intelligence agent.
 \section{\texttt{agent\_snapshots}}
 \label{module:feedback_intelligence_agent.agent_snapshots}\index{Modules!agent\_snapshots}
 
-Request-time JSON index refresh with immutable, process-local agent snapshots.
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}agent\_\allowbreak{}snapshots.\allowbreak{}py}, 84 lines
-\apifield{Imports}\texttt{agent}, \texttt{config}, \texttt{factory}, \texttt{index\_\allowbreak{}persistence}, \texttt{record\_\allowbreak{}ingestion}, \texttt{schemas}, \texttt{vector\_\allowbreak{}store}
+Request-time index refresh with immutable, process-local agent snapshots.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}agent\_\allowbreak{}snapshots.\allowbreak{}py}, 94 lines
+\apifield{Imports}\texttt{agent}, \texttt{config}, \texttt{factory}, \texttt{index\_\allowbreak{}persistence}, \texttt{qdrant\_\allowbreak{}ingestion}, \texttt{record\_\allowbreak{}ingestion}, \texttt{schemas}, \texttt{vector\_\allowbreak{}store}
 \apifield{Classes}\cref{class:feedback_intelligence_agent.agent_snapshots.IndexSnapshotUnavailableError}, \cref{class:feedback_intelligence_agent.agent_snapshots.AgentSnapshots}
 
 \apibreak
@@ -179,7 +180,7 @@ Command-line interface for the feedback intelligence agent.
 \label{module:feedback_intelligence_agent.config}\index{Modules!config}
 
 Application configuration.
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}config.\allowbreak{}py}, 114 lines
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}config.\allowbreak{}py}, 123 lines
 \apifield{Classes}\cref{class:feedback_intelligence_agent.config.Settings}
 \apifield{Constants}\texttt{RetrieverType}, \texttt{TelemetryBackend}, \texttt{VectorStoreType}
 
@@ -250,7 +251,7 @@ With the deterministic local LLM provider, \texttt{results.\allowbreak{}json} an
 \label{module:feedback_intelligence_agent.factory}\index{Modules!factory}
 
 Factories for constructing the application components.
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}factory.\allowbreak{}py}, 379 lines
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}factory.\allowbreak{}py}, 389 lines
 \apifield{Imports}\texttt{active\_\allowbreak{}learning}, \texttt{agent}, \texttt{chunking}, \texttt{config}, \texttt{embeddings}, \texttt{hallucination}, \texttt{human\_\allowbreak{}feedback}, \texttt{index\_\allowbreak{}persistence}, \texttt{ingestion}, \texttt{jobs}, \texttt{lexical\_\allowbreak{}search}, \texttt{llm}, \texttt{memory}, \texttt{qdrant\_\allowbreak{}store}, \texttt{query\_\allowbreak{}expansion}, \texttt{reports}, \texttt{resilience}, \texttt{retrieval}, \texttt{schemas}, \texttt{telemetry}, \texttt{tools}, \texttt{vector\_\allowbreak{}store}
 \apifield{Functions}\cref{func:feedback_intelligence_agent.factory.build_telemetry}, \cref{func:feedback_intelligence_agent.factory.build_conversation_store}, \cref{func:feedback_intelligence_agent.factory.build_job_store}, \cref{func:feedback_intelligence_agent.factory.build_report_store}, \cref{func:feedback_intelligence_agent.factory.build_human_feedback_store}, \cref{func:feedback_intelligence_agent.factory.build_active_learning_state_store}, \cref{func:feedback_intelligence_agent.factory.chunk_to_embedding_text}, \cref{func:feedback_intelligence_agent.factory.build_index}, \cref{func:feedback_intelligence_agent.factory.build_qdrant_index}, \cref{func:feedback_intelligence_agent.factory.load_or_build_index}, \cref{func:feedback_intelligence_agent.factory.build_retriever}, \cref{func:feedback_intelligence_agent.factory.build_llm}, \cref{func:feedback_intelligence_agent.factory.build_agent_snapshot}, \cref{func:feedback_intelligence_agent.factory.build_agent}
 
@@ -439,12 +440,21 @@ Prompt construction utilities and the default prompt registry.
 \apifield{Details}All production prompts are registered in \texttt{PROMPT\_\allowbreak{}REGISTRY} with a name, version, declared variables, and a changelog note. The agent always renders through the registry, so prompt changes are explicit, versioned, and covered by snapshot tests (see \texttt{tests/\allowbreak{}test\_\allowbreak{}prompt\_\allowbreak{}snapshot.\allowbreak{}py} and \texttt{docs/\allowbreak{}prompts.\allowbreak{}md}).
 
 \apibreak
+\section{\texttt{qdrant\_ingestion}}
+\label{module:feedback_intelligence_agent.qdrant_ingestion}\index{Modules!qdrant\_ingestion}
+
+Coordinated Qdrant record ingestion and immutable API retrieval snapshots.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}qdrant\_\allowbreak{}ingestion.\allowbreak{}py}, 81 lines
+\apifield{Imports}\texttt{agent}, \texttt{chunking}, \texttt{config}, \texttt{embeddings}, \texttt{factory}, \texttt{index\_\allowbreak{}persistence}, \texttt{record\_\allowbreak{}ingestion}, \texttt{schemas}
+\apifield{Classes}\cref{class:feedback_intelligence_agent.qdrant_ingestion.QdrantAgentSnapshots}
+
+\apibreak
 \section{\texttt{qdrant\_store}}
 \label{module:feedback_intelligence_agent.qdrant_store}\index{Modules!qdrant\_store}
 
 Optional Qdrant-backed vector store.
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}qdrant\_\allowbreak{}store.\allowbreak{}py}, 351 lines
-\apifield{Imports}\texttt{metadata\_\allowbreak{}filters}, \texttt{schemas}, \texttt{source\_\allowbreak{}ids}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}qdrant\_\allowbreak{}store.\allowbreak{}py}, 385 lines
+\apifield{Imports}\texttt{metadata\_\allowbreak{}filters}, \texttt{schemas}, \texttt{source\_\allowbreak{}ids}, \texttt{vector\_\allowbreak{}store}
 \apifield{Classes}\cref{class:feedback_intelligence_agent.qdrant_store.QdrantStoreError}, \cref{class:feedback_intelligence_agent.qdrant_store.QdrantVectorStore}
 \apifield{Details}The store mirrors the semantics of the default \texttt{InMemoryVectorStore} but persists vectors in a running Qdrant instance instead of a local JSON file. It satisfies the same \texttt{VectorStore} protocol, so the retrieval layer treats both stores identically.
 

@@ -29,9 +29,9 @@
     ],
     "date_released": "2026-10-29",
     "python_requires": ">=3.10,<3.13",
-    "revision": "1c86b0da13a924e224e4b977a2ec1e81756c4a52",
-    "revision_short": "1c86b0da13a9",
-    "revision_date": "2026-10-29T18:52:03Z",
+    "revision": "8b368cc9cacfeeb963e13557b856067186e3b59f",
+    "revision_short": "8b368cc9cacf",
+    "revision_date": "2026-10-30T10:53:58Z",
     "packages": [
       {
         "include": "feedback_intelligence_agent",
@@ -43,8 +43,8 @@
     }
   },
   "files": {
-    "total": 230,
-    "excluded_generated_documentation": 329,
+    "total": 232,
+    "excluded_generated_documentation": 330,
     "by_category": {
       "build-configuration": 1,
       "build-interface": 1,
@@ -64,8 +64,8 @@
       "license": 1,
       "other": 2,
       "python-script": 3,
-      "python-source": 49,
-      "python-test": 52,
+      "python-source": 50,
+      "python-test": 53,
       "repository-configuration": 2,
       "repository-governance": 8,
       "test-fixture": 2
@@ -93,15 +93,15 @@
       },
       "LaTeX": {
         "files": 47,
-        "lines": 4141
+        "lines": 4142
       },
       "Markdown": {
         "files": 17,
-        "lines": 3196
+        "lines": 3244
       },
       "Python": {
-        "files": 116,
-        "lines": 31114
+        "files": 118,
+        "lines": 31751
       },
       "TOML": {
         "files": 2,
@@ -113,7 +113,7 @@
       },
       "YAML": {
         "files": 16,
-        "lines": 773
+        "lines": 775
       }
     },
     "entries": [
@@ -129,7 +129,7 @@
         "category": "configuration-template",
         "language": null,
         "lines": null,
-        "bytes": 3200
+        "bytes": 3642
       },
       {
         "path": ".gitattributes",
@@ -198,8 +198,8 @@
         "path": ".github/workflows/ci.yml",
         "category": "ci-workflow",
         "language": "YAML",
-        "lines": 200,
-        "bytes": 5830
+        "lines": 202,
+        "bytes": 5891
       },
       {
         "path": ".github/workflows/dependency-review.yml",
@@ -254,8 +254,8 @@
         "path": "CHANGELOG.md",
         "category": "documentation",
         "language": "Markdown",
-        "lines": 201,
-        "bytes": 10445
+        "lines": 208,
+        "bytes": 11034
       },
       {
         "path": "CITATION.cff",
@@ -303,15 +303,15 @@
         "path": "README.md",
         "category": "documentation",
         "language": "Markdown",
-        "lines": 1432,
-        "bytes": 69088
+        "lines": 1472,
+        "bytes": 71590
       },
       {
         "path": "ROADMAP.md",
         "category": "documentation",
         "language": "Markdown",
-        "lines": 81,
-        "bytes": 3805
+        "lines": 82,
+        "bytes": 3958
       },
       {
         "path": "SECURITY.md",
@@ -674,8 +674,8 @@
         "path": "docs/latex/engineering/security.tex",
         "category": "documentation-latex",
         "language": "LaTeX",
-        "lines": 98,
-        "bytes": 5144
+        "lines": 99,
+        "bytes": 5220
       },
       {
         "path": "docs/latex/engineering/testing.tex",
@@ -800,8 +800,8 @@
         "path": "docs/tools/extract_dependencies.py",
         "category": "documentation-tool",
         "language": "Python",
-        "lines": 378,
-        "bytes": 13285
+        "lines": 379,
+        "bytes": 13324
       },
       {
         "path": "docs/tools/generate_docs.py",
@@ -1031,15 +1031,15 @@
         "path": "src/feedback_intelligence_agent/agent_snapshots.py",
         "category": "python-source",
         "language": "Python",
-        "lines": 84,
-        "bytes": 3988
+        "lines": 94,
+        "bytes": 4561
       },
       {
         "path": "src/feedback_intelligence_agent/api.py",
         "category": "python-source",
         "language": "Python",
         "lines": 751,
-        "bytes": 30384
+        "bytes": 30438
       },
       {
         "path": "src/feedback_intelligence_agent/auth.py",
@@ -1080,8 +1080,8 @@
         "path": "src/feedback_intelligence_agent/config.py",
         "category": "python-source",
         "language": "Python",
-        "lines": 114,
-        "bytes": 5155
+        "lines": 123,
+        "bytes": 5645
       },
       {
         "path": "src/feedback_intelligence_agent/data_contracts.py",
@@ -1122,8 +1122,8 @@
         "path": "src/feedback_intelligence_agent/factory.py",
         "category": "python-source",
         "language": "Python",
-        "lines": 379,
-        "bytes": 15505
+        "lines": 389,
+        "bytes": 15822
       },
       {
         "path": "src/feedback_intelligence_agent/guardrails.py",
@@ -1238,11 +1238,18 @@
         "bytes": 3224
       },
       {
+        "path": "src/feedback_intelligence_agent/qdrant_ingestion.py",
+        "category": "python-source",
+        "language": "Python",
+        "lines": 81,
+        "bytes": 4081
+      },
+      {
         "path": "src/feedback_intelligence_agent/qdrant_store.py",
         "category": "python-source",
         "language": "Python",
-        "lines": 351,
-        "bytes": 14505
+        "lines": 385,
+        "bytes": 16065
       },
       {
         "path": "src/feedback_intelligence_agent/query_expansion.py",
@@ -1388,8 +1395,8 @@
         "path": "tests/test_agent_snapshots.py",
         "category": "python-test",
         "language": "Python",
-        "lines": 297,
-        "bytes": 12350
+        "lines": 327,
+        "bytes": 13667
       },
       {
         "path": "tests/test_api.py",
@@ -1616,11 +1623,18 @@
         "bytes": 4735
       },
       {
+        "path": "tests/test_qdrant_record_ingestion.py",
+        "category": "python-test",
+        "language": "Python",
+        "lines": 430,
+        "bytes": 17050
+      },
+      {
         "path": "tests/test_qdrant_store.py",
         "category": "python-test",
         "language": "Python",
-        "lines": 700,
-        "bytes": 26630
+        "lines": 732,
+        "bytes": 27917
       },
       {
         "path": "tests/test_query_expansion.py",
@@ -2524,7 +2538,7 @@
             {
               "name": "Test Qdrant persistence and replacements",
               "uses": "",
-              "run": "poetry run pytest tests/test_qdrant_store.py tests/test_qdrant_integration.py",
+              "run": "poetry run pytest tests/test_qdrant_store.py tests/test_qdrant_integration.py tests/test_qdrant_record_ingestion.py",
               "working_directory": ""
             }
           ]
@@ -3096,7 +3110,7 @@
       "path": "tests/test_agent_snapshots.py",
       "module_under_test": "agent_snapshots",
       "category": "unit",
-      "test_functions": 7,
+      "test_functions": 9,
       "parametrized_cases": 3
     },
     {
@@ -3324,11 +3338,18 @@
       "parametrized_cases": 1
     },
     {
+      "path": "tests/test_qdrant_record_ingestion.py",
+      "module_under_test": "qdrant_record_ingestion",
+      "category": "unit",
+      "test_functions": 11,
+      "parametrized_cases": 3
+    },
+    {
       "path": "tests/test_qdrant_store.py",
       "module_under_test": "qdrant_store",
       "category": "unit",
-      "test_functions": 21,
-      "parametrized_cases": 7
+      "test_functions": 23,
+      "parametrized_cases": 8
     },
     {
       "path": "tests/test_query_expansion.py",
@@ -3515,7 +3536,7 @@
     {
       "name": "FEEDBACK_AGENT_LLM_PROVIDER",
       "example": "local",
-      "comment": "LLM provider: local (default, no API key), openai, openai_responses, anthropic, bedrock, or ollama."
+      "comment": "Optional Qdrant backend (requires the 'qdrant' extra). FEEDBACK_AGENT_VECTOR_STORE=qdrant FEEDBACK_AGENT_QDRANT_URL=http://localhost:6333 FEEDBACK_AGENT_QDRANT_COLLECTION=feedback_intelligence Opt into API record ingestion only when all workers/writers share this local lock. Each query then downloads a full local snapshot; see README for limits and retries. FEEDBACK_AGENT_QDRANT_INGESTION_LOCK_PATH=.artifacts/qdrant-records LLM provider: local (default, no API key), openai, openai_responses, anthropic, bedrock, or ollama."
     },
     {
       "name": "OPENAI_API_KEY",

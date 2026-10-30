@@ -501,16 +501,16 @@ operations use Qdrant's [`wait=true` completion option](https://qdrant.tech/docu
 This sequence is not an atomic transaction: readers may see intermediate state,
 and a remote failure can leave a partial update. Serialize all writers to the same
 sources, including other clients; retrying the identical batch completes an
-interrupted replacement. Disjoint sources can be updated independently. This
-storage primitive does not enable Qdrant ingestion through `/ingestion/records`,
-which still returns `409` for that backend, or refresh cached lexical/tool snapshots.
+interrupted replacement. Disjoint sources can be updated independently when using
+this storage primitive directly. For API ingestion and coordinated retrieval/tool
+refresh, opt into the shared-lock mode described under tenant record ingestion below.
 
 CI runs the optional SDK against Qdrant 1.18.3 on Python 3.10 and 3.12. To run the
 same integration tests against your local Qdrant instance:
 
 ```bash
 poetry install --with dev --extras qdrant
-FEEDBACK_AGENT_QDRANT_TEST=1 poetry run pytest tests/test_qdrant_store.py tests/test_qdrant_integration.py
+FEEDBACK_AGENT_QDRANT_TEST=1 poetry run pytest tests/test_qdrant_store.py tests/test_qdrant_integration.py tests/test_qdrant_record_ingestion.py
 ```
 
 Set `FEEDBACK_AGENT_QDRANT_URL` if the server is not at `http://localhost:6333`.
@@ -577,6 +577,7 @@ Environment variables:
 | `FEEDBACK_AGENT_VECTOR_STORE` | `json` | Vector store backend: `json` (default, local) or `qdrant`. |
 | `FEEDBACK_AGENT_QDRANT_URL` | `http://localhost:6333` | Qdrant endpoint used when `FEEDBACK_AGENT_VECTOR_STORE=qdrant`. |
 | `FEEDBACK_AGENT_QDRANT_COLLECTION` | `feedback_intelligence` | Qdrant collection name. |
+| `FEEDBACK_AGENT_QDRANT_INGESTION_LOCK_PATH` | unset | Opt into Qdrant API ingestion and local retrieval snapshots; every worker and writer must share this lock path. |
 | `FEEDBACK_AGENT_RETRIEVER_TYPE` | `dense` | Retrieval strategy: `dense`, `lexical`, or `hybrid`. |
 | `FEEDBACK_AGENT_DENSE_WEIGHT` | `0.6` | Dense score weight used by the hybrid retriever. |
 | `FEEDBACK_AGENT_LEXICAL_WEIGHT` | `0.4` | Lexical (BM25) score weight used by the hybrid retriever. |
@@ -817,7 +818,8 @@ When enabled, the configured LLM provider returns a support label
 ## Tenant record ingestion
 
 `POST /ingestion/records` merges 1–1,000 feedback records into the configured JSON
-index. It requires a tenant-bound writer or admin. An unrestricted admin can
+index or an explicitly coordinated Qdrant collection. It requires a tenant-bound
+writer or admin. An unrestricted admin can
 choose a batch `tenant_id`; omitting it uses `default`. Local deployments with
 authentication disabled also support this endpoint.
 
@@ -850,7 +852,7 @@ Repeated IDs within a batch keep the last record; retries replace the same
 tenant's source records. Other tenants' records and vectors remain intact.
 The existing chunking pipeline redacts PII before persistence.
 
-Updates hold the shared index writer lock while preparing a new retriever and
+JSON updates hold the shared index writer lock while preparing a new retriever and
 tool registry, atomically saving the index, and publishing the new agent
 snapshot. A preparation or persistence failure leaves the previous serving
 snapshot in place and returns a generic `500` response. Queries already running
@@ -859,14 +861,13 @@ lexical, or hybrid retrieval, streaming, chat, and aggregation tools see the
 updated data after a successful response. Provider and circuit-breaker objects
 are retained during refresh.
 
-This endpoint supports the JSON backend; Qdrant returns `409`. Each API worker
-automatically loads shared JSON index changes on its next query, streaming query,
+Each API worker automatically loads shared JSON index changes on its next query, streaming query,
 or chat request. This also covers CLI updates, full rebuilds, and completed
 ingestion jobs targeting the configured index. Records are persisted in the index,
 not appended to the source CSV: retain the original batches or update your source
 dataset before performing a full index rebuild.
 
-Workers check file identity, size, and nanosecond timestamps before selecting an
+JSON workers check file identity, size, and nanosecond timestamps before selecting an
 agent. An unchanged index requires only a filesystem stat; a changed index is
 loaded and prepared under the shared writer lock. Concurrent reloads within one
 worker reuse the same prepared snapshot. Requests that already selected an agent
@@ -879,8 +880,47 @@ new query, streaming, and chat requests return `503` with a generic message.
 They retry on the next request; restoring a valid index recovers service without
 a restart. Reload never silently rebuilds from the original CSV. `/health` and
 `/ready` retain their existing process/startup checks. Automatic reload covers
-cooperating atomic writers on a shared local filesystem; Qdrant and standalone
-agents constructed with `build_agent()` retain their existing behavior.
+cooperating atomic writers on a shared local filesystem. Standalone agents
+constructed with `build_agent()` retain their existing behavior.
+
+### Qdrant record ingestion
+
+Set an explicit lock path to enable this endpoint for Qdrant:
+
+```bash
+export FEEDBACK_AGENT_VECTOR_STORE=qdrant
+export FEEDBACK_AGENT_QDRANT_INGESTION_LOCK_PATH=/shared/feedback/qdrant-records
+```
+
+The locking helper uses a sibling `qdrant-records.lock` file; retain it while
+workers are running. Every API worker serving the collection must use the same
+path on a filesystem that supports the existing local process locks. External
+writers must hold `index_write_lock(settings.qdrant_ingestion_lock_path)` across
+their complete update. Different paths or independent hosts do not coordinate;
+this mode does not provide a distributed lock. Without the setting, Qdrant retains
+its existing remote retrieval behavior and record ingestion returns `409`. Blank
+paths are rejected during configuration.
+
+In this mode, each query, stream, or chat request downloads the complete collection's
+chunks and vectors under the shared lock, then builds one immutable local snapshot
+for dense, lexical, or hybrid retrieval and dataset tools. The lock is released
+before answer generation. All workers see completed updates on their next request,
+including cooperating external updates. In-flight answers keep their original
+snapshot, and provider, circuit-breaker, telemetry, and policy objects are retained.
+An unavailable or invalid snapshot returns a generic `503`; the next request retries.
+
+This mode is intended for collections that fit comfortably in each worker's memory:
+it performs a full collection download and local index preparation per request,
+and lock acquisition can wait up to 60 seconds. Qdrant persists the data, while
+retrieval runs locally over the selected snapshot. It does not write a JSON index.
+
+Ingestion validates the whole batch, deduplicates source records, redacts PII,
+embeds chunks, and prepares retrieval/tools before writing. Preparation failures
+leave Qdrant unchanged. The remote upsert and obsolete-chunk deletion are separate
+operations: a failure returns a generic `500` and can leave partial updates visible
+to later requests. Retry the identical batch to finish the replacement; successful
+updates preserve all other tenants. Startup still seeds an empty collection from
+the configured dataset, but request-time refresh never rebuilds from CSV.
 
 ## Asynchronous ingestion jobs
 

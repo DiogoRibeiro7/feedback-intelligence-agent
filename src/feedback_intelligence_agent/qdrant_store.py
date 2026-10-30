@@ -27,6 +27,7 @@ from feedback_intelligence_agent.source_ids import (
     encode_source_id,
     migrate_legacy_chunks,
 )
+from feedback_intelligence_agent.vector_store import InMemoryVectorStore
 
 if TYPE_CHECKING:  # pragma: no cover - import only for static type checking.
     from qdrant_client import QdrantClient
@@ -134,6 +135,39 @@ class QdrantVectorStore:
             if offset is None:
                 break
         return chunks
+
+    def snapshot(self) -> InMemoryVectorStore:
+        """Load chunks and vectors into an independent local retrieval snapshot.
+
+        Callers must coordinate writers across the entire paginated read. This
+        method does not supply a database transaction or lock external clients.
+        The returned store makes no further Qdrant calls during retrieval.
+        """
+        chunks: list[DocumentChunk] = []
+        vectors: list[npt.NDArray[np.float64]] = []
+        offset: Any = None
+        while True:
+            points, offset = self._client.scroll(
+                collection_name=self.collection_name,
+                with_payload=True,
+                with_vectors=True,
+                limit=256,
+                offset=offset,
+            )
+            for point in points:
+                if not isinstance(point.vector, list):
+                    raise QdrantStoreError("Qdrant snapshot requires unnamed dense vectors")
+                vector = np.asarray(point.vector, dtype=np.float64)
+                if vector.shape != (self.dim,) or not np.isfinite(vector).all():
+                    raise QdrantStoreError("Qdrant snapshot contains invalid dense vectors")
+                chunks.append(_payload_to_chunk(point.payload or {}))
+                vectors.append(vector)
+            if offset is None:
+                break
+        store = InMemoryVectorStore(dim=self.dim)
+        if chunks:
+            store.add(chunks, np.vstack(vectors))
+        return store
 
     def add(self, chunks: list[DocumentChunk], vectors: npt.NDArray[np.float64]) -> None:
         """Upsert chunk IDs and wait for completion; retain other chunks of each source."""

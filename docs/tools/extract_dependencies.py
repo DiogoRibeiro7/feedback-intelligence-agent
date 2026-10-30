@@ -45,6 +45,7 @@ MODULE_LAYERS: dict[str, str] = {
     "cli": "interface",
     "agent": "application",
     "agent_snapshots": "application",
+    "qdrant_ingestion": "application",
     "factory": "application",
     "jobs": "application",
     "record_ingestion": "application",

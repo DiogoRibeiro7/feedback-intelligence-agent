@@ -675,9 +675,9 @@ def create_app() -> FastAPI:
             for record in request.records
         ):
             raise HTTPException(status_code=403, detail="Records must belong to the batch tenant")
-        if settings.vector_store != "json":
+        if settings.vector_store == "qdrant" and settings.qdrant_ingestion_lock_path is None:
             raise HTTPException(
-                status_code=409, detail="Record ingestion requires the JSON vector store"
+                status_code=409, detail="Qdrant record ingestion requires a shared lock path"
             )
         records = [record.model_copy(update={"tenant_id": tenant_id}) for record in request.records]
         try:

@@ -43,6 +43,7 @@ if TYPE_CHECKING:
     from feedback_intelligence_agent.active_learning import JsonActiveLearningStateStore
     from feedback_intelligence_agent.human_feedback import JsonHumanFeedbackStore
     from feedback_intelligence_agent.jobs import JsonJobStore
+    from feedback_intelligence_agent.qdrant_store import QdrantVectorStore
     from feedback_intelligence_agent.reports import JsonInsightReportStore
 
 
@@ -162,7 +163,9 @@ def build_index(
     return vector_store
 
 
-def build_qdrant_index(settings: Settings, *, telemetry: Telemetry | None = None) -> VectorStore:
+def build_qdrant_index(
+    settings: Settings, *, telemetry: Telemetry | None = None
+) -> QdrantVectorStore:
     """Build (or refresh) a Qdrant-backed index from the configured data.
 
     The Qdrant store is imported lazily here so the optional ``qdrant-client``
@@ -353,16 +356,23 @@ def build_agent_snapshot(
     )
 
 
-def build_agent(settings: Settings, *, telemetry: Telemetry | None = None) -> FeedbackInsightAgent:
+def build_agent(
+    settings: Settings,
+    *,
+    telemetry: Telemetry | None = None,
+    vector_store: VectorStore | None = None,
+) -> FeedbackInsightAgent:
     """Construct a fully wired feedback insight agent.
 
     When no telemetry emitter is supplied, one is built from the settings
     (a no-op unless telemetry is enabled via the environment). The agent is
     equipped with the default local tool registry built over the indexed
-    feedback chunks.
+    feedback chunks. An explicitly supplied store avoids loading or rebuilding
+    the configured backend, allowing callers to supply a coordinated snapshot.
     """
     telemetry = telemetry or build_telemetry(settings)
-    vector_store = load_or_build_index(settings, telemetry=telemetry)
+    if vector_store is None:
+        vector_store = load_or_build_index(settings, telemetry=telemetry)
     retriever = build_retriever(settings, vector_store)
     llm = build_llm(settings)
     hallucination_checker = (

@@ -1,0 +1,50 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{QdrantAgentSnapshots}}
+\label{class:feedback_intelligence_agent.qdrant_ingestion.QdrantAgentSnapshots}\index{Classes!QdrantAgentSnapshots}
+
+Serve Qdrant through snapshots coordinated by one shared local lock path.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+QdrantAgentSnapshots(self, settings: Settings) -> None
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{settings}] \texttt{Settings}, required.
+\end{arglist}
+\apifield{Raises}\texttt{ValueError}
+\apifield{Details}All workers and external writers must cooperate on that path. Every request downloads the collection's chunks and vectors under the lock, then releases it before answering. Retrieval and dataset tools share that snapshot, while other workers can ingest and in-flight answers retain their selected data. This mode trades remote search scalability for consistent local snapshots.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}qdrant\_\allowbreak{}ingestion.\allowbreak{}py:21}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/8b368cc9cacfeeb963e13557b856067186e3b59f/src/feedback_intelligence_agent/qdrant_ingestion.py#L21}{online}), class, module \cref{module:feedback_intelligence_agent.qdrant_ingestion}
+
+\subsection{\texttt{get}}
+\label{method:feedback_intelligence_agent.qdrant_ingestion.QdrantAgentSnapshots.get}\index{Methods!get}
+Refresh retrieval and tools together without replacing provider state.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+get(self) -> FeedbackInsightAgent
+\end{lstlisting}
+\apifield{Value}\texttt{FeedbackInsightAgent}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}qdrant\_\allowbreak{}ingestion.\allowbreak{}py:43}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/8b368cc9cacfeeb963e13557b856067186e3b59f/src/feedback_intelligence_agent/qdrant_ingestion.py#L43}{online})
+
+\subsection{\texttt{ingest}}
+\label{method:feedback_intelligence_agent.qdrant_ingestion.QdrantAgentSnapshots.ingest}\index{Methods!ingest}
+Replace one tenant's records and publish the prepared snapshot on success.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+ingest(self, records: list[FeedbackRecord], tenant_id: str) -> RecordIngestionResult
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{records}] \texttt{list[FeedbackRecord]\allowbreak{}}, required.
+  \item[\texttt{tenant\_\allowbreak{}id}] \texttt{str}, required.
+\end{arglist}
+\apifield{Value}\texttt{RecordIngestionResult}
+\apifield{Raises}\texttt{ValueError}
+\apifield{Details}Validation, embedding, and snapshot preparation precede remote mutation. Remote failures can leave partial updates; retry the identical batch. Subsequent reads load the actual stored state, including partial writes.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}qdrant\_\allowbreak{}ingestion.\allowbreak{}py:51}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/8b368cc9cacfeeb963e13557b856067186e3b59f/src/feedback_intelligence_agent/qdrant_ingestion.py#L51}{online})
