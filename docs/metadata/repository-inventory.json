@@ -29,9 +29,9 @@
     ],
     "date_released": "2026-10-30",
     "python_requires": ">=3.10,<3.13",
-    "revision": "5c2bef33716855cb87a58aa08b6fe8f23758c4e0",
-    "revision_short": "5c2bef337168",
-    "revision_date": "2026-10-30T14:23:09Z",
+    "revision": "6535a020f449db4ed44aa84d8054e7c837c16b97",
+    "revision_short": "6535a020f449",
+    "revision_date": "2026-10-30T19:00:58Z",
     "packages": [
       {
         "include": "feedback_intelligence_agent",
@@ -97,7 +97,7 @@
       },
       "Markdown": {
         "files": 18,
-        "lines": 3448
+        "lines": 3453
       },
       "Python": {
         "files": 120,
@@ -248,21 +248,21 @@
         "category": "citation-metadata",
         "language": "JSON",
         "lines": 34,
-        "bytes": 1232
+        "bytes": 1303
       },
       {
         "path": "CHANGELOG.md",
         "category": "documentation",
         "language": "Markdown",
-        "lines": 219,
-        "bytes": 11708
+        "lines": 224,
+        "bytes": 11880
       },
       {
         "path": "CITATION.cff",
         "category": "citation-metadata",
         "language": "YAML",
         "lines": 22,
-        "bytes": 718
+        "bytes": 791
       },
       {
         "path": "CODE_OF_CONDUCT.md",

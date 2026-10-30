@@ -20,7 +20,7 @@ QdrantAgentSnapshots(self, settings: Settings) -> None
 \end{arglist}
 \apifield{Raises}\texttt{ValueError}
 \apifield{Details}All workers and external writers must cooperate on that path. Snapshot reads hold the lock and release it before answering. A positive cache TTL reuses unchanged snapshots; cooperating writes invalidate them immediately through a shared generation marker. Retrieval and tools share immutable local data.
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}qdrant\_\allowbreak{}ingestion.\allowbreak{}py:28}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/5c2bef33716855cb87a58aa08b6fe8f23758c4e0/src/feedback_intelligence_agent/qdrant_ingestion.py#L28}{online}), class, module \cref{module:feedback_intelligence_agent.qdrant_ingestion}
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}qdrant\_\allowbreak{}ingestion.\allowbreak{}py:28}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/6535a020f449db4ed44aa84d8054e7c837c16b97/src/feedback_intelligence_agent/qdrant_ingestion.py#L28}{online}), class, module \cref{module:feedback_intelligence_agent.qdrant_ingestion}
 
 \subsection{\texttt{get}}
 \label{method:feedback_intelligence_agent.qdrant_ingestion.QdrantAgentSnapshots.get}\index{Methods!get}
@@ -30,7 +30,7 @@ Reuse an unexpired, unchanged snapshot or refresh retrieval and tools together.
 get(self) -> FeedbackInsightAgent
 \end{lstlisting}
 \apifield{Value}\texttt{FeedbackInsightAgent}
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}qdrant\_\allowbreak{}ingestion.\allowbreak{}py:52}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/5c2bef33716855cb87a58aa08b6fe8f23758c4e0/src/feedback_intelligence_agent/qdrant_ingestion.py#L52}{online})
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}qdrant\_\allowbreak{}ingestion.\allowbreak{}py:52}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/6535a020f449db4ed44aa84d8054e7c837c16b97/src/feedback_intelligence_agent/qdrant_ingestion.py#L52}{online})
 
 \subsection{\texttt{ingest}}
 \label{method:feedback_intelligence_agent.qdrant_ingestion.QdrantAgentSnapshots.ingest}\index{Methods!ingest}
@@ -47,4 +47,4 @@ ingest(self, records: list[FeedbackRecord], tenant_id: str) -> RecordIngestionRe
 \apifield{Value}\texttt{RecordIngestionResult}
 \apifield{Raises}\texttt{ValueError}
 \apifield{Details}Validation, embedding, and snapshot preparation precede remote mutation. Remote failures can leave partial updates; retry the identical batch. Subsequent reads load the actual stored state, including partial writes.
-\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}qdrant\_\allowbreak{}ingestion.\allowbreak{}py:70}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/5c2bef33716855cb87a58aa08b6fe8f23758c4e0/src/feedback_intelligence_agent/qdrant_ingestion.py#L70}{online})
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}qdrant\_\allowbreak{}ingestion.\allowbreak{}py:70}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/6535a020f449db4ed44aa84d8054e7c837c16b97/src/feedback_intelligence_agent/qdrant_ingestion.py#L70}{online})
