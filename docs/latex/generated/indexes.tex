@@ -42,6 +42,7 @@
   \item[\texttt{privacy}] \cref{module:feedback_intelligence_agent.privacy}
   \item[\texttt{prompt\_\allowbreak{}registry}] \cref{module:feedback_intelligence_agent.prompt_registry}
   \item[\texttt{prompts}] \cref{module:feedback_intelligence_agent.prompts}
+  \item[\texttt{qdrant\_\allowbreak{}coordination}] \cref{module:feedback_intelligence_agent.qdrant_coordination}
   \item[\texttt{qdrant\_\allowbreak{}ingestion}] \cref{module:feedback_intelligence_agent.qdrant_ingestion}
   \item[\texttt{qdrant\_\allowbreak{}store}] \cref{module:feedback_intelligence_agent.qdrant_store}
   \item[\texttt{query\_\allowbreak{}expansion}] \cref{module:feedback_intelligence_agent.query_expansion}
@@ -356,6 +357,8 @@
   \item[\texttt{redact\_\allowbreak{}pii}] \cref{func:feedback_intelligence_agent.privacy.redact_pii}
   \item[\texttt{template\_\allowbreak{}placeholders}] \cref{func:feedback_intelligence_agent.prompt_registry.template_placeholders}
   \item[\texttt{build\_\allowbreak{}grounded\_\allowbreak{}prompt}] \cref{func:feedback_intelligence_agent.prompts.build_grounded_prompt}
+  \item[\texttt{qdrant\_\allowbreak{}snapshot\_\allowbreak{}revision}] \cref{func:feedback_intelligence_agent.qdrant_coordination.qdrant_snapshot_revision}
+  \item[\texttt{qdrant\_\allowbreak{}write\_\allowbreak{}lock}] \cref{func:feedback_intelligence_agent.qdrant_coordination.qdrant_write_lock}
   \item[\texttt{ingest\_\allowbreak{}record\_\allowbreak{}batch}] \cref{func:feedback_intelligence_agent.record_ingestion.ingest_record_batch}
   \item[\texttt{new\_\allowbreak{}report\_\allowbreak{}id}] \cref{func:feedback_intelligence_agent.reports.new_report_id}
   \item[\texttt{render\_\allowbreak{}report\_\allowbreak{}markdown}] \cref{func:feedback_intelligence_agent.reports.render_report_markdown}
@@ -449,6 +452,7 @@
   \item[\texttt{FEEDBACK\_\allowbreak{}AGENT\_\allowbreak{}QDRANT\_\allowbreak{}URL}] \texttt{str}
   \item[\texttt{FEEDBACK\_\allowbreak{}AGENT\_\allowbreak{}QDRANT\_\allowbreak{}COLLECTION}] \texttt{str}
   \item[\texttt{FEEDBACK\_\allowbreak{}AGENT\_\allowbreak{}QDRANT\_\allowbreak{}INGESTION\_\allowbreak{}LOCK\_\allowbreak{}PATH}] \texttt{Path \textbar{} None}
+  \item[\texttt{FEEDBACK\_\allowbreak{}AGENT\_\allowbreak{}QDRANT\_\allowbreak{}SNAPSHOT\_\allowbreak{}TTL\_\allowbreak{}SECONDS}] \texttt{float}
   \item[\texttt{FEEDBACK\_\allowbreak{}AGENT\_\allowbreak{}RETRIEVER\_\allowbreak{}TYPE}] \texttt{RetrieverType}
   \item[\texttt{FEEDBACK\_\allowbreak{}AGENT\_\allowbreak{}DENSE\_\allowbreak{}WEIGHT}] \texttt{float}
   \item[\texttt{FEEDBACK\_\allowbreak{}AGENT\_\allowbreak{}LEXICAL\_\allowbreak{}WEIGHT}] \texttt{float}

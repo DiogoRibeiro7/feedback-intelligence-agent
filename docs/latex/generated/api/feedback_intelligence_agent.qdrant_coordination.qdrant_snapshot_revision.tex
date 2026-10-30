@@ -1,0 +1,23 @@
+% !TEX root = ../main.tex
+% ---------------------------------------------------------------
+% GENERATED FILE - DO NOT EDIT.
+% Produced by docs/tools/render_reference.py from the repository source.
+% Regenerate with: make docs
+% ---------------------------------------------------------------
+
+\apibreak
+\section{\texttt{qdrant\_snapshot\_revision}}
+\label{func:feedback_intelligence_agent.qdrant_coordination.qdrant_snapshot_revision}\index{Functions!qdrant\_snapshot\_revision}
+
+Read the shared generation while the caller holds \texttt{index\_\allowbreak{}write\_\allowbreak{}lock}.
+\apifield{Usage}
+\begin{lstlisting}[style=usage, language=Python]
+qdrant_snapshot_revision(lock_path: str | Path) -> UUID | None
+\end{lstlisting}
+\apifield{Arguments}
+\begin{arglist}
+  \item[\texttt{lock\_\allowbreak{}path}] \texttt{str \textbar{} Path}, required.
+\end{arglist}
+\apifield{Value}\texttt{UUID \textbar{} None}
+\apifield{Details}A missing marker invalidates an existing generation. Malformed markers raise instead of silently accepting cached data or overwriting unrelated files.
+\apifield{Source}\texttt{src/\allowbreak{}feedback\_\allowbreak{}intelligence\_\allowbreak{}agent/\allowbreak{}qdrant\_\allowbreak{}coordination.\allowbreak{}py:27}~(\href{https://github.com/DiogoRibeiro7/feedback-intelligence-agent/blob/99d2f89206b141b3e423ac8b168932d73e39a4fe/src/feedback_intelligence_agent/qdrant_coordination.py#L27}{online}), module \cref{module:feedback_intelligence_agent.qdrant_coordination}
