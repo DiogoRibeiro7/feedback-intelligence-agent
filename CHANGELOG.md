@@ -4,6 +4,11 @@ All notable changes to this project are documented here.
 
 ## Unreleased
 
+### Changed
+
+- Clarify the software title in Zenodo and citation metadata to describe its
+  agentic retrieval-augmented generation approach to customer feedback analysis.
+
 ## 0.7.0 - 2026-10-30
 
 See [upgrade notes](docs/releases/v0.7.0.md) for tenant access policies, record
